@@ -229,7 +229,7 @@ svg.hi { display: block; width: 1em; height: 1em; flex: none; overflow: visible;
   #app #hud #reel-button + #fish-hint { left: auto; right: var(--col); bottom: calc(22px + var(--safe-bottom) + var(--sk) * 2.38 + 132px); }
   #app #hud.joystick-right #reel-button, #app #hud.joystick-right #reel-button + #fish-hint { right: auto; left: calc(18px + var(--safe-left)); }
 }
-body.indoors #app #hud .skills { display: none; }
+/* Combat controls remain available for cabin practice. */
 
 /* ------------------------------------------------------------------ Jumping and air combat (Settings switch; body.air-combat) */
 /* With the switch off none of this applies and the paw above is the one from before. With it on the paw is five buttons

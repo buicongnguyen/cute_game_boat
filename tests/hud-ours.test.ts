@@ -116,8 +116,8 @@ test('no frame cost: the sheet adds no animation, transition, blur or filter on 
   for (const rule of css.match(/[^{}]+\{[^{}]*filter:[^{}]*\}/g) ?? []) assert.match(rule, /:hover|:active|filter: none/, rule.slice(0, 80));
 });
 
-test('modes and the cottage keep working: hidden pieces stay hidden and Rescue lays the dock down as a belt', () => {
-  assert.match(css, /body\.indoors #app #hud \.skills \{ display: none; \}/);
+test('cottage practice stays visible and Rescue lays the dock down as a belt', () => {
+  assert.doesNotMatch(css, /body\.indoors #app #hud \.skills \{ display: none; \}/);
   // Our rules never set display on pieces that modes hide by display (the minimap, the tracker stack and its panels).
   for (const sel of ['.minimap', '.tracker-stack', '.tracker-panels', '#tracker-chip']) for (const rule of css.match(new RegExp(`#app #hud ${sel.replace('.', '\\.')}(?:, [^{]*)? \\{[^}]*\\}`, 'g')) ?? []) assert.doesNotMatch(rule, /display:/, rule.slice(0, 60));
   assert.match(css, /body\.in-rescue #app #hud \.top-actions \{\s*bottom: auto; display: flex; flex-wrap: wrap;/);

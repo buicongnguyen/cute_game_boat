@@ -1,3 +1,4 @@
+import { loadOpeningArt } from './opening-art.ts';
 import { assetUrl } from './asset-url.ts';
 import './mobile-game-init.mjs';
 import {cropBadgeAnchor} from './crop-cards.ts';
@@ -334,11 +335,11 @@ const goals=initGoals($('#hud'),{esc,openDialog});
 const inbox=initInbox({state:()=>state,save,esc,openDialog,closeDialog,modal:()=>modal||null,go:target=>{({quests,achievements:()=>{journalTab='achievements';quests();},bag:()=>{bagMode='bag';inventory();},insight:()=>openInsight('report'),map,shop,ranking:()=>{/* the "New game updates" entry: the board's News section */if(newsApi)newsApi.open();else if(rankingApi)rankingApi.open();else $<HTMLButtonElement>('#hud [data-action="ranking"]').click();},discovery:planets} as Record<string,()=>void>)[target]?.();}});
 const moreMenu=initMoreMenu();
 const refreshStaticLanguage=bindLanguage(app), refreshWorldLanguage=bindLanguage($('#world'));
-// Scenery is batched when a world is built, so give the small scenery kit a moment
-// to arrive first. A slow connection starts with the simple shapes instead.
+// Build the first visible scene with this version's scenery and the saved avatar.
 $('#title-screen').inert=true;
-await Promise.race([Promise.all([sceneryKit.load(),wildsKit.load()]),new Promise(resolve=>setTimeout(resolve,4000))]);
-$('#title-screen').inert=false;
+const openingStatus=document.createElement('p');openingStatus.setAttribute('role','status');openingStatus.textContent=t('Loading…');$('#title-screen .title-stack').append(openingStatus);
+await loadOpeningArt(lookOf(state));
+openingStatus.remove();$('#title-screen').inert=false;
 const graphics=loadGraphics(state.settings.lowGraphics);graphics.setResolution(state.settings.renderRes??'auto');
 let world: World;
 try { world = new World($('#world'), state, { antialias: !(graphics.mobile && devicePixelRatio >= 2) }); }
@@ -374,7 +375,7 @@ const combatView=new CombatView(world.scene);
 // Laser gaze beams, electric bolts and bursts, scorch marks and the ⚡ mark (skill-fx.ts), for the explorer and remote players alike.
 const skillFx=new SkillFx(world.scene,world.fx??null,{
   explorerAt:(x,z)=>Math.hypot(world.position.x-x,world.position.z-z)<1.5?world.player:[...world.remotePlayers.values()].find(r=>r.mesh.visible&&Math.hypot(r.pose.x-x,r.pose.z-z)<1.5)?.mesh??null,
-  ground:(x,z)=>world.interior?0:Math.max(0,terrainHeight(world.environment.layout,{x,z})),targets:()=>world.enemies,sound:kind=>tone(kind),
+  ground:(x,z)=>world.interior?0:Math.max(0,terrainHeight(world.environment.layout,{x,z})),targets:()=>world.interior?[]:world.enemies,sound:kind=>tone(kind),
   density:()=>world.fx?.density??1,isLocal:(x,z)=>Math.hypot(world.position.x-x,world.position.z-z)<1.5});
 combatView.electric=(x,y,z,dx,dz)=>skillFx.crackle(x,y,z,dx,dz);
 combatView.trail=(x,y,z,color)=>world.fx?.burst({x,z},{n:1,glow:true,color,size:.06,life:.38,speed:.25,up:.15,gravity:0,y:y-.15,spread:.1});
@@ -390,14 +391,14 @@ const combat=new CombatSimulation({
   dog:()=>{const g=world.guardDogs;return g&&started&&!visiting&&!fishGame&&!world.boarded&&dogMayToss(g.place,world.planet,world.position,!!world.interior)?{x:g.link.x,z:g.link.z,dmg:dogTossFactor(state.level),cd:DOG_TOSS_CD,guard:DOG_GUARD,target:world.selected?.kind==='enemy'?(world.selected as Enemy).id:null}:null;},
   // Pets fight only what fights you, and guard you (pet-guard.ts): your chosen creature, your health, and the guard's picture.
   focus:()=>world.selected?.kind==='enemy'?(world.selected as Enemy).id:null,health:()=>state.hp/Math.max(1,M.maxHp(state)),guarded:event=>petGuardView.show(event),surged:event=>{if(surgeLocal())surgeView.show(event);},
-  targets:()=>world.enemies,weapon:()=>M.weaponStats(state),stats:()=>M.activeStats(state),
+  targets:()=>world.interior?[]:world.enemies,weapon:()=>M.weaponStats(state),stats:()=>M.activeStats(state),
   move:(x,z)=>{const steps=Math.max(1,Math.ceil(Math.hypot(x,z)/.2));for(let i=0;i<steps;i++)world.move(x/steps,z/steps);},
   // A portal (backstab, teleport) passes through a boss's body (boss-feel.ts); walls still stop it.
   teleport:(x,z)=>{world.passBodies=true;try{const steps=Math.max(1,Math.ceil(Math.hypot(x,z)/.2));for(let i=0;i<steps;i++)world.move(x/steps,z/steps);}finally{world.passBodies=false;}},
   // The first own hit after a weapon swap does +20% (weapon-pair.ts); a pet's shot leaves the bonus waiting.
   hit:(target,impact)=>{const m=impact.helper?1:pair.takeBonus();if(m!==1)impact={...impact,amount:impact.amount*m};hit(target as Enemy,impact.amount,impact.stun,impact);},
   clearShot:(from,to)=>clearSegment(from,to,world.obstacles,{bounds:WORLD_BOUNDS,clearance:.05}),
-  effect:effect=>{castEffects?.push(effect);showEffect(effect);pondSplash.effect(effect);pokeEffect(effect);breakables.effect(effect);emitAction({kind:'effect',effect});},
+  effect:effect=>{castEffects?.push(effect);showEffect(effect);if(!world.interior){pondSplash.effect(effect);pokeEffect(effect);breakables.effect(effect);}emitAction({kind:'effect',effect});},
   heal:fraction=>{if(!actionHandler)state.hp=Math.min(M.maxHp(state),state.hp+M.maxHp(state)*fraction);},
   execute:(target,fraction)=>executeEnemy(target as Enemy,fraction),
   status:(target,kind,duration)=>{if(dungeonApi?.owns(target)||ctfApi?.owns(target)||rescueApi?.owns(target)){world.statusEnemy(target as Enemy,kind,duration);return;}if(actionHandler)return;if(!network.status?.(target.id,kind,duration))world.statusEnemy(target as Enemy,kind,duration);},
@@ -584,7 +585,7 @@ function profilePicker(){
 function pepperGift(){const show=()=>{if(modal||!started){setTimeout(show,700);return;}tone('quest');openDialog('welcome',t('Your first harvest!'),`<p class="intro">${esc(t('Hi boss! I am Pepper, the village cook. What a lovely first harvest!'))}</p><p>${esc(t('I won 10,000 energy in the lottery. It is yours: spend it on seeds and gear!'))}</p><div class="button-row"><button class="primary" data-action="close">${esc(t('Thank you, Pepper!'))}</button></div>`,t('YOUR COOK'),'🍳');};setTimeout(show,900);}
 /** The three welcome cards of an untouched save (welcome-cards.ts); closing them in any way saves them as seen. */
 const welcomeCards=initWelcomeCards({openDialog,closeDialog,go,modal:()=>modal||null,seen:()=>void perform('firstRunSeen',{id:'cards'},{quiet:true}),touch:isTouch,planets:()=>Object.keys(M.PLANETS).length,tone:kind=>tone(kind as Parameters<typeof tone>[0]),esc});
-async function start() {setTimeout(()=>void loadInsight().catch(()=>{}),5000);/* the Almanac's chunk, once play is under way: its scores join the save's snapshots and a waiting report card is offered */settle();showTrimNote();await migrateDogStays();const name=$<HTMLInputElement>('#name-input').value.trim().slice(0,20)||state.name;if(name!==state.name)await perform('settings',{name});started=true;$('#title-screen').hidden=true;$('#hud').hidden=false;const cards=welcomeCardsDue(state);if(cards)welcomeCards.show();welcomeBack??=initWelcomeBack({state:()=>state,newSave:(pending=>()=>pending)(state.welcome==='pending'),calm:()=>started&&!modal&&!uiBlocked()&&!placement&&!visiting&&!fishGame&&state.hp>0&&!fightNear(world.enemies,world.position.x,world.position.z,16)&&!dungeonApi?.active&&!ctfApi?.active&&!rescueApi?.active,colossusAsleep:()=>colossusLid(state.level)==='asleep',openDialog,closeDialog,modal:()=>modal||null,perform:(type,payload)=>perform(type,payload),toast:(text,icon)=>toast(text,icon),tone:kind=>tone(kind as Parameters<typeof tone>[0]),esc,saveKey:activeKey});world.readyTrail(()=>void compileAsyncSafe(world.renderer,world.scene,world.camera)); // warm the village's shaders off the first walk, and the weapon trail's off the first swing
+async function start() {setTimeout(()=>void loadInsight().catch(()=>{}),5000);/* the Almanac's chunk, once play is under way: its scores join the save's snapshots and a waiting report card is offered */settle();showTrimNote();await migrateDogStays();const name=$<HTMLInputElement>('#name-input').value.trim().slice(0,20)||state.name;if(name!==state.name)await perform('settings',{name});started=true;house.resume();$('#title-screen').hidden=true;$('#hud').hidden=false;const cards=welcomeCardsDue(state);if(cards)welcomeCards.show();welcomeBack??=initWelcomeBack({state:()=>state,newSave:(pending=>()=>pending)(state.welcome==='pending'),calm:()=>started&&!modal&&!uiBlocked()&&!placement&&!visiting&&!fishGame&&state.hp>0&&!fightNear(world.enemies,world.position.x,world.position.z,16)&&!dungeonApi?.active&&!ctfApi?.active&&!rescueApi?.active,colossusAsleep:()=>colossusLid(state.level)==='asleep',openDialog,closeDialog,modal:()=>modal||null,perform:(type,payload)=>perform(type,payload),toast:(text,icon)=>toast(text,icon),tone:kind=>tone(kind as Parameters<typeof tone>[0]),esc,saveKey:activeKey});world.readyTrail(()=>void compileAsyncSafe(world.renderer,world.scene,world.camera)); // warm the village's shaders off the first walk, and the weapon trail's off the first swing
   applyMovePad();save();updateHud();updateLabels();if(saved||!cards)toast(saved?t('Welcome back, {name}. Your garden missed you!',{name:state.name}):isTouch()?'Start small: tap a garden bed to plant your first carrot.':'Start small: click a garden bed to plant your first carrot.','🌱');showZone('Clover Village');}
 
 /** Beds that ripened while the game was closed: the helper harvests and replants each once (helper.ts catchUp). */
@@ -600,7 +601,7 @@ function updateHud() {
   setWidth($('#hp-fill'),`${state.hp/M.maxHp(state)*100}%`);setText($('#hp-text'),t(`${Math.ceil(state.hp)} / ${M.maxHp(state)}`));setWidth($('#xp-fill'),`${state.xp/M.xpNeeded(state.level)*100}%`);
   updateQuickEat();
   placeFlags.update();goals.update(state); // plants a flag on arrival; the badge redraws only when a goal changes (goals-ui.ts)
-  {const x=world.position.x,z=world.position.z;if(started&&world.state===state)tendCritters(world as unknown as CritterWorld,state,!actionHandler&&!visiting);applyCalm($('#hud'),calmHud(state,{fighting:fightNear(world.enemies,x,z),creatureNear:world.enemies.some(e=>e.hp>0&&Math.hypot(e.x-x,e.z-z)<10)}));} // the first minutes (first-run.ts)
+  {const x=world.position.x,z=world.position.z;if(started&&world.state===state)tendCritters(world as unknown as CritterWorld,state,!actionHandler&&!visiting);applyCalm($('#hud'),calmHud(state,{indoors:!!world.interior,fighting:!world.interior&&fightNear(world.enemies,x,z),creatureNear:!world.interior&&world.enemies.some(e=>e.hp>0&&Math.hypot(e.x-x,e.z-z)<10)}));} // the first minutes (first-run.ts)
   setText($('#xp-text'),`EXP ${Math.floor(state.xp)} / ${M.xpNeeded(state.level)}`);
   {const xpTitle=t(`${Math.floor(state.xp)} / ${M.xpNeeded(state.level)} experience`),xpNode=$('.experience');if(xpNode.getAttribute('title')!==xpTitle)xpNode.setAttribute('title',xpTitle);}
   const q=progressEntries(state,'story')[0],progress=q?.progress??0;
@@ -675,7 +676,7 @@ function interactPrompted(){const e=promptTarget();if(e&&world.inReach(e)){world
 // button shows > a swing. Only a fresh press uses, never a held one, and not within half a second of the last swing.
 let lastSwingAt=-Infinity,lastUseAt=-Infinity;
 /** A living creature is targeted, or one is within the weapon's reach. No allocation: it runs on the HUD tick. */
-function hostileNear(){const s=world.selected;if(s?.kind==='enemy'&&(s as Enemy).hp>0)return true;const w=M.weaponStats(state),x=world.position.x,z=world.position.z;
+function hostileNear(){if(world.interior)return false;const s=world.selected;if(s?.kind==='enemy'&&(s as Enemy).hp>0)return true;const w=M.weaponStats(state),x=world.position.x,z=world.position.z;
   for(const e of world.enemies)if(e.hp>0&&e.mesh.visible&&Math.hypot(e.x-x,e.z-z)<=attackRange(w,e.radius)+.5)return true;return false;}
 function attackUses(fresh:boolean){const p=promptTarget();return attackIntent({hostile:hostileNear(),usable:!!p&&p.kind!=='enemy'&&world.inReach(p),fresh,sinceSwing:(performance.now()-lastSwingAt)/1000})==='use';}
 /** A press of Attack (or F) that uses the thing beside the explorer instead of swinging: true when it was taken (the caller must not swing). */
@@ -1167,7 +1168,7 @@ function pokeEffect(e:CombatEffect){if(e.quiet||e.kind!=='ring'||!(e.radius>=1)|
 // Breakable trees and stones on the Ice planet (breakables.ts): solo the ledger here decides, online the server does.
 const breakables=mountBreakables({world,state:()=>state,online:()=>!!actionHandler,send:(id,source)=>emitAction({kind:'scenery',scenery:{id,source}}),addItem:(id,n)=>M.addItem(state,id as M.ItemId,n),changed:()=>{save();updateHud();},toast,tone,t:(k,v)=>t(k,v)});
 /** Attack with no creature in reach: the nearest breakable piece in front within the weapon's reach is struck (a swing, or a shot from a gun). */
-function chopScenery(){const weapon=M.weaponStats(state);if(weapon.kind==='rod')return false;const gun=weapon.kind==='gun',piece=breakables.chopTarget(world.position,world.facing,gun?Math.min(10,(weapon.range??8)+1):Math.max(1.6,weapon.range??1)+.6);if(!piece)return false;
+function chopScenery(){if(world.interior)return false;const weapon=M.weaponStats(state);if(weapon.kind==='rod')return false;const gun=weapon.kind==='gun',piece=breakables.chopTarget(world.position,world.facing,gun?Math.min(10,(weapon.range??8)+1):Math.max(1.6,weapon.range??1)+.6);if(!piece)return false;
   world.facing=Math.atan2(piece.x-world.position.x,piece.z-world.position.z);combatTimers.attackCooldown=(weapon.cd??.4)/Math.max(.2,1+M.activeStats(state).haste);world.playerAttack(weapon.kind);tone(gun?'shoot':weapon.kind==='sword'?'swing':'punch');
   if(gun)world.fx?.spark({x:piece.x,y:1.1,z:piece.z},1,.1);breakables.strike(piece.id,gun?'shot':'melee');return true;}
 const huntingView=new FishHuntingView(world.scene,fishingView);
@@ -1292,7 +1293,7 @@ function updateGuardian(dt:number){
     toast(state.gear.weapon==='harpoon'&&!state.gear.disguise?'The Lake Guardian has surfaced! Tap it to throw your harpoon.':'A glowing Lake Guardian is circling the lake. Only a harpoon can catch it.','🎏');
 }
 async function throwHarpoon(aim?:{x:number;z:number}){
-  if(!started||uiBlocked()||visiting||flight||fishGame||huntingPending||state.gear.weapon!=='harpoon'||state.gear.disguise||combatTimers.attackCooldown>0)return;
+  if(!started||uiBlocked()||visiting||world.interior||flight||fishGame||huntingPending||state.gear.weapon!=='harpoon'||state.gear.disguise||combatTimers.attackCooldown>0)return;
   updateHunting(0);const pond=huntingView.pond;if(!pond)return;
   if(state.hunting&&huntingView.now()-state.hunting.lastShotAt<FISH_HUNT_COOLDOWN_MS)return;
   const from={x:world.position.x,z:world.position.z},target=huntingView.nearest(aim??from,from,M.ITEMS.harpoon.weapon!.range);
@@ -1430,7 +1431,7 @@ void heroKit.load().then(()=>{if(heroKit.ready)world.refreshAvatars();});
 const heroFace=mountHeroFace(document.querySelector<HTMLElement>('#hud .avatar'),{spec:()=>heroKit.ready?{color:state.color,look:lookOf(state),gear:state.gear}:null,art:s=>world.avatarArt(s.gear,s.look),draw:s=>portraitShot(()=>world.portraitAvatar(s.color,s.gear,s.look)),busy:()=>world.selected?.kind==='enemy'||fightNear(world.enemies,world.position.x,world.position.z)});
 {const rebuild=world.refreshPlayer.bind(world);world.refreshPlayer=()=>{rebuild();heroFace.sync();};heroFace.sync();if(import.meta.env.DEV||import.meta.env.VITE_PERF_HOOK)Object.assign(window,{__face:heroFace});}
 // The cottage interior (house-ui.ts): the door, walking in and out, friends and their Dress panel.
-const house=initHouse({world,started:()=>started,visiting:()=>!!visiting,blocked:uiBlocked,perform:(type,payload)=>perform(type,payload),openDialog,closeDialog,modal:()=>modal,toast,tone:kind=>tone(kind as Parameters<typeof tone>[0]),ownGear:()=>{bagMode='wardrobe';inventory();},looks:()=>shop(),bench:()=>bench.open(),quests,soundOn:()=>syncAudio(state.settings).musicVolume>0,iconUrl:id=>`${iconUrl(`items/${id}.webp`)}`});
+const house=initHouse({world,started:()=>started,visiting:()=>!!visiting,blocked:uiBlocked,perform:(type,payload)=>perform(type,payload),openDialog,closeDialog,modal:()=>modal,toast,tone:kind=>tone(kind as Parameters<typeof tone>[0]),ownGear:()=>{bagMode='wardrobe';inventory();},looks:()=>shop(),bench:()=>bench.open(),quests,soundOn:()=>syncAudio(state.settings).musicVolume>0,iconUrl:id=>`${iconUrl(`items/${id}.webp`)}`,sceneChanged:()=>{const ground=[...cooldowns],air=[...airCooldowns],attack=combatTimers.attackCooldown;resetCombat();cooldowns.splice(0,4,...ground);airCooldowns.splice(0,4,...air);combatTimers.attackCooldown=attack;const scene=world.interior?.scene??world.scene;combatView.attach(scene);skillFx.attach(scene);}});
 // The bedroom mirror's Look shop (look-shop.ts): body styles bought with energy, previewed like gear try-on.
 // A tap on an indoor label picks its thing, like a tap on the thing (labels themselves never take pointer events).
 house.house.labelBox=id=>{const a=labelAnchors.get(id);return a&&!a.off&&!modal&&labelNodes.get(id)?.hidden===false?labelRect(a):null;};
@@ -1528,7 +1529,7 @@ function slamImpact(){
 }
 /** Standing still near a creature, the explorer fights it automatically, as in the reference. */
 function autoAttack(kind:string){
-  if(!started||uiBlocked()||visiting||fishGame||placement||kind==='rod'||questWalk.holds()||world.selected||world.destination||world.route.length||world.moving||world.keys.size||combat.locksMovement||combatTimers.attackCooldown>0)return;
+  if(!started||uiBlocked()||visiting||world.interior||fishGame||placement||kind==='rod'||questWalk.holds()||world.selected||world.destination||world.route.length||world.moving||world.keys.size||combat.locksMovement||combatTimers.attackCooldown>0)return;
   const reach=kind==='gun'?6:2.4,p=world.position;
   let best:Enemy|null=null,bestDistance=Infinity;
   for(const e of world.enemies){if(e.hp<=0||!e.mesh.visible)continue;const d=Math.hypot(e.x-p.x,e.z-p.z)-e.radius;if(d<reach&&d<bestDistance){best=e;bestDistance=d;}}
@@ -1623,8 +1624,8 @@ function syncAirCombat(){
 function jumpBlock(){
   if(!airOn())return 'idle' as const;
   const layout=world.environment?.layout,flying=world.playerFlying||!!M.activeStats(state).flying;
-  return canJump({playing:started&&!document.hidden,down:state.hp<=0,menu:uiBlocked(),cutscene:!!shipSequence?.busy||arriving,starship:!!flight||world.boarded,indoors:!!world.interior,fishing:!!fishGame||world.fishing!=='idle',placing:!!placement,
-    stunned:!!colossus?.locked||(!!ctfApi?.active&&!ctfApi.canAct),thrown:(world.playerLift??0)>0,swimming:!!layout&&inWater(layout,world.position)&&!flying||swim.blocksActions(),flying:world.playerFlying,riding:!!world.environment?.airborne||!!world.environment?.riding,casting:combat.locksMovement});
+  return canJump({playing:started&&!document.hidden,down:state.hp<=0,menu:uiBlocked(),cutscene:!!shipSequence?.busy||arriving,starship:!!flight||world.boarded,fishing:!!fishGame||world.fishing!=='idle',placing:!!placement,
+    stunned:!!colossus?.locked||(!!ctfApi?.active&&!ctfApi.canAct),thrown:(world.playerLift??0)>0,swimming:!world.interior&&(!!layout&&inWater(layout,world.position)&&!flying||swim.blocksActions()),flying:world.playerFlying,riding:!!world.environment?.airborne||!!world.environment?.riding,casting:combat.locksMovement});
 }
 /** One jump, if the explorer may: from the ground, or the next of the three in the air. */
 function tryJump(){
@@ -1905,6 +1906,7 @@ function airSwing(){
 combat.edge.crit=()=>{if(!airOn())return undefined;const from=strikeFrom??world.jump;return from.jumps>=1&&(strikeFrom!==null||from.height>0)?M.AIR_CRIT_DAMAGE:undefined;};
 /** `e`: the creature the explorer walked up to (tap, auto-attack); a press of the attack key or pad passes none. */
 function basicAttack(e?:Enemy){
+  if(world.interior)e=undefined;
   if(ctfApi?.active&&!ctfApi.canAct)return;
   if(swim.blocksActions())return; // no attacks while swimming (swim-rules.ts)
   if(!started||uiBlocked()||visiting)return;
@@ -1921,12 +1923,12 @@ function basicAttack(e?:Enemy){
     prepareCombatWeapon();const weapon=M.weaponStats(state),cd=(weapon.cd??.4)/Math.max(.2,1+M.activeStats(state).haste)*AIR.swing;
     // With paws or a blade the swing in the air is the spin of the moves (a gun keeps shooting).
     if(combat.edge.moves&&weapon.kind!=='gun'&&weapon.kind!=='rod'){airSwing();return;}
-    if(combat.basic(e,actionHandler?1:AIR.swing)){combatTimers.attackCooldown=cd;const volt=weapon.shot==='volt';world.playerAttack(weapon.kind,volt?'#bfefff':undefined);if(weapon.kind==='gun'&&!actionHandler)jump.stall(AIR_WEAPON.recoil);tone(volt?'zap':weapon.kind==='gun'?'shoot':weapon.kind==='sword'?'swing':'punch');emitAction({kind:'basic',targetId:e?.id});}
+    if(combat.basic(e,actionHandler?1:AIR.swing,!!world.interior)){combatTimers.attackCooldown=cd;const volt=weapon.shot==='volt';world.playerAttack(weapon.kind,volt?'#bfefff':undefined);if(weapon.kind==='gun'&&!actionHandler)jump.stall(AIR_WEAPON.recoil);tone(volt?'zap':weapon.kind==='gun'?'shoot':weapon.kind==='sword'?'swing':'punch');emitAction({kind:'basic',targetId:e?.id});}
     else if(!e&&weapon.kind!=='rod'){combatTimers.attackCooldown=cd*.6;world.playerAttack(weapon.kind);tone('swing');}
     return;
   }
   prepareCombatWeapon();
-  if(combat.basic(e)){const stats=M.activeStats(state),weapon=M.weaponStats(state);combatTimers.attackCooldown=(weapon.cd??.4)/Math.max(.2,1+stats.haste);const volt=weapon.shot==='volt',step=combat.edge.chain?combat.chainLast:-1;
+  if(combat.basic(e,1,!!world.interior)){const stats=M.activeStats(state),weapon=M.weaponStats(state);combatTimers.attackCooldown=(weapon.cd??.4)/Math.max(.2,1+stats.haste);const volt=weapon.shot==='volt',step=combat.edge.chain?combat.chainLast:-1;
     // The chain's three presses (five-rules.ts): cut, back-cut, overhead with a blade; jab, jab, hook with paws; the third lands heavier, and a gun's is a double shot.
     if(step<0)world.playerAttack(weapon.kind,volt?'#bfefff':undefined);else{world.playerAttack(weapon.kind,volt?'#bfefff':undefined,step as 0|1|2,step===2);if(step===2){world.fx?.shake(.07);if(weapon.kind==='gun')setTimeout(()=>tone(volt?'zap':'shoot'),90);}}
     tone(volt?'zap':weapon.kind==='gun'?'shoot':weapon.kind==='sword'?'swing':'punch');emitAction({kind:'basic',targetId:e?.id});}

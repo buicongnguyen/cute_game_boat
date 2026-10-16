@@ -182,5 +182,5 @@ test('off or online: no hit counter, no power strike, no charge, no streak, no c
   const f = FIGHTS[0], off = fight(f.boss, f.planet, f.at, f.level, f.gear, 'classic', 1, 1, { power: true }), plain = fight(f.boss, f.planet, f.at, f.level, f.gear, 'classic', 1, 1);
   assert.equal(off.powers, 0); assert.equal(off.seconds, plain.seconds); assert.equal(off.damage, plain.damage);
   // The basic attack itself is untouched by this feature.
-  assert.match(main, /if\(combat\.basic\(e\)\)\{const stats=M\.activeStats\(state\),weapon=M\.weaponStats\(state\);combatTimers\.attackCooldown=\(weapon\.cd\?\?\.4\)\/Math\.max\(\.2,1\+stats\.haste\);/);
+  assert.match(main, /if\(combat\.basic\(e,1,!!world\.interior\)\)\{const stats=M\.activeStats\(state\),weapon=M\.weaponStats\(state\);combatTimers\.attackCooldown=\(weapon\.cd\?\?\.4\)\/Math\.max\(\.2,1\+stats\.haste\);/);
 });

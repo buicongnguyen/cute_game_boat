@@ -104,3 +104,10 @@ test('every new string has Vietnamese in the pack', () => {
   const fold = readFileSync(new URL('../src/fold-lists.ts', import.meta.url), 'utf8');
   for (const m of fold.matchAll(/[^\w.]t\('([^']+)'/g)) assert.ok(Object.hasOwn(FIRST_VI, m[1]), m[1]);
 });
+
+test('the cabin exposes practice controls without marking a first fight', () => {
+  const s=M.newGame();s.firstRun={};
+  const view=calmHud(s,{indoors:true,fighting:false,creatureNear:false});
+  assert.equal(view.skills,true);assert.equal(view.attack,true);assert.equal(s.firstRun.fought,undefined);
+  assert.equal(calmHud(s,{fighting:false,creatureNear:false}).skills,false);
+});

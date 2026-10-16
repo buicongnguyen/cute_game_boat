@@ -58,3 +58,18 @@ Pepper now considers even one remaining ripe bed, still skipping a bed claimed b
 The Exchange box replaces the plant on the right of the cabin's lower exit and opens the existing Harvest market selling actions. Magic Mirror opens on Equipment, preserving every former shop category, buying, equipping and try-on action; Looks remains a second main tab. Switching back clears any unbought appearance preview. The outdoor market and outfitters, including their placement blockers, are removed. The introduction and station shortcuts lead indoors. Existing inventory, owned looks, equipment and saves remain compatible.
 
 Rebuild the Exchange box with art/build-boat-workbench.mjs, then compress house.glb. Verify with npm test, npm run build:pages, the cabin browser tests and tests/boat-exchange-browser.test.mjs (360/1440), then the live Pages smoke tests.
+
+
+## First-frame art, reference faces and cabin practice (2026-10-17)
+
+Player eyes, highlights, cheeks and smile now come from the sibling 3d_farmer_fish_sell models (source commit 9ca557b). The face generator transfers those head decals to each boat head size; Man uses the reference Boy face and Woman uses Girl. Neck geometry, body proportions, saved look IDs, equipment fits and original standing heights are retained. Regenerate with art/build-boat-faces.mjs (optional reference-model directory argument), then art/build-boat-looks.mjs, model compression and art/render-boat-look-icons.mjs.
+
+The outdoor deck now lies at y=0, matching the walking plane. A depth offset keeps the underlying coplanar grass from flickering through. Opening art finishes loading before the world is constructed; the title shows a loading message. Existing failed-download retries and fallback remain available when assets are unreachable. A saved cabin session resumes before the title disappears.
+
+Indoor skills, attack, jump and weapon swapping are visible, including for fresh saves. Guns can fire practice shots without a creature target. Indoor attacks cannot target outdoor enemies or harvest outdoor scenery. Projectiles and delayed attacks clear across the doorway, their visuals follow the current scene, and skill cooldowns are preserved.
+
+Two review passes:
+- Pass 1 checked rendering, first-scene readiness, floor coordinates, avatar geometry and indoor input. Fixed duplicate CSS hiding controls, new-player HUD gating, missing indoor projectile/effect scenes, jump cancellation and outdoor target/scenery leakage.
+- Pass 2 checked transitions, cooldowns, automatic targeting, saved-cabin resume and untargeted weapon behavior. Fixed doorway cooldown resets, outdoor auto-targeting, the one-frame outdoor resume and guns failing to fire during practice. Updated obsolete tests that expected hidden indoor controls or removed outdoor shops.
+
+Validation: full unit suite (2,169 passed), TypeScript and Pages production build. Targeted browser checks cover delayed opening art, cabin controls, all four skills, jumping, gun shots, matching-coordinate outdoor enemy protection, cooldown preservation and room transitions at 360 and 1440 pixels. Existing deck/cabin/shop/garden and asset-recovery browser checks also run before publication.

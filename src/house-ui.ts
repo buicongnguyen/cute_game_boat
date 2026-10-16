@@ -37,6 +37,8 @@ export interface HouseDeps {
   /** The diary opens today's tasks (main.ts quests). */
   quests?(): void;
   soundOn?(): boolean;
+  /** Clear ongoing attacks and move their visuals when crossing the cabin boundary. */
+  sceneChanged?(): void;
 }
 /** A save made inside resumes inside: this device remembers the explorer was in the cottage. */
 // Per save profile (profiles.ts): profile 1 saved indoors must not start profile 2 in the cottage.
@@ -82,7 +84,7 @@ export function initHouse(d: HouseDeps) {
   /** Fade to the warm dark, swap, fade back. */
   const transition = (swap: () => void) => { if (pending) return; pending = swap; fadeTarget = 1; };
   let wasInside = false;
-  const sync = () => { wasInside = house.inside; document.body.classList.toggle('indoors', house.inside); zoneName(); remember(house.inside && !d.visiting()); };
+  const sync = () => { d.sceneChanged?.(); wasInside = house.inside; document.body.classList.toggle('indoors', house.inside); zoneName(); remember(house.inside && !d.visiting()); };
   /** Stepping inside clears bad effects like landing home does (home-care.ts; the authority re-checks). */
   const cleanse = () => { if (d.visiting() || !hasDebuffs(world.state)) return; void d.perform('homeCleanse').then(n => { if (!n) return; world.fx?.burst({ x: world.position.x, z: world.position.z }, { n: 18, color: ['#ffffff', '#bff7ff', '#ffe9a8'], glow: true, size: .1, speed: 3, up: 4, y: 1 }); d.toast(t('Cleansed! Bad effects wash away at home.'), '✨'); }); };
   const enter = (instant = false) => {
@@ -126,10 +128,11 @@ export function initHouse(d: HouseDeps) {
     if (e !== hovered) { hovered = e; if (canvas) canvas.style.cursor = e ? 'pointer' : ''; }
     house.view.setHover(e ? house.boxOf(e) : null); // friends walk: their glow follows them
   };
+  const resume = () => { if (resumed) return; resumed = true; if (remembered() && !d.visiting() && world.planet === 'home') enter(true); };
   const frame = (dt: number) => {
     if ((hoverScan -= dt) <= 0) { hoverScan = .05; const e = house.inside && mouse && !d.blocked() && !pending ? house.pick(mouse.x, mouse.y) : null; if (e || hovered) hover(e); }
     if (!d.started()) return;
-    if (!resumed) { resumed = true; if (remembered() && !d.visiting() && world.planet === 'home') enter(true); }
+    resume();
     // Any change: a world rebuild (travel, visit, reset, the globe's flight) drops the interior without leave(), so a
     // check of house.inside alone never saw it and the indoor HUD stayed on.
     if (house.inside !== wasInside) sync();
@@ -192,7 +195,7 @@ export function initHouse(d: HouseDeps) {
     return false;
   };
   return {
-    house, life, interact, enter, leave, dress, label,
+    house, life, interact, enter, leave, dress, label, resume,
     get inside() { return house.inside; },
     /** The thing under the mouse indoors (desktop), for the label's hover look. */
     hovered: () => hovered,

@@ -219,7 +219,7 @@ test('gameplay timing is untouched by the new swing', () => {
   { const turn = spinTurn(.3, spinLead(.3, 0)) + SPIN.hold; assert.ok(Math.abs(Math.atan2(Math.sin(turn), Math.cos(turn))) < 1e-9, 'an air spin starts with the blade on the facing line'); }
   // Hits still land on the press: the attack functions call the combat rules first and only then start the animation.
   const main = readFileSync(new URL('../src/main.ts', import.meta.url), 'utf8');
-  assert.match(main, /if\(combat\.basic\(e\)\)\{const stats=M\.activeStats\(state\),weapon=M\.weaponStats\(state\);combatTimers\.attackCooldown=\(weapon\.cd\?\?\.4\)\/Math\.max\(\.2,1\+stats\.haste\);/, 'the basic attack and its cooldown are as they were');
+  assert.match(main, /if\(combat\.basic\(e,1,!!world\.interior\)\)\{const stats=M\.activeStats\(state\),weapon=M\.weaponStats\(state\);combatTimers\.attackCooldown=\(weapon\.cd\?\?\.4\)\/Math\.max\(\.2,1\+stats\.haste\);/, 'the basic attack and its cooldown are as they were');
   assert.match(main, /world\.hitFeedback\([^\n]*\);if\(!hazard\|\|impact\)tone\(impact\?\.critical\?'crit':[^;]*'hitHeavy':'hit'\);/, 'a hit still plays its sound (the call had slipped into a comment)');
   assert.match(main, /world\.readyTrail\(\(\)=>void compileAsyncSafe\(world\.renderer,world\.scene,world\.camera\)\);/, 'the trail\'s shader is compiled with the start-up warm-up');
 });

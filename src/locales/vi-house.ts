@@ -1,5 +1,6 @@
 /** The cottage interior and dressing rescued friends (house-ui.ts, house-session.ts). */
 export const VI_HOUSE: Record<string, string> = {
+  'Loading…': 'Đang tải…',
   'Outside': 'Ra ngoài',
   'Wardrobe': 'Tủ quần áo',
   'Mirror': 'Gương',

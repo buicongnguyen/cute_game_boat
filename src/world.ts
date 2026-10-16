@@ -2104,8 +2104,8 @@ export class World {
   onLanded?:(landing:Landing)=>void;
   update(dt:number,active:boolean,draw=true,simulateWorld=active||this.networkRole==='host') {
     this.onStep?.(dt);
-    // The jump runs on the world's clock. Indoors, aboard the ship, thrown by the Colossus or carried by the world it ends at once.
-    {const j=this.jump??=new JumpState();if(j.airborne&&(this.interior||this.boarded||(this.playerLift??0)>0||this.environment?.airborne))j.cancel();
+    // The jump runs on the world's clock. Aboard the ship, thrown by the Colossus or carried by the world it ends at once.
+    {const j=this.jump??=new JumpState();if(j.airborne&&(this.boarded||(this.playerLift??0)>0||this.environment?.airborne))j.cancel();
       if(active||simulateWorld){const landing=j.step(dt);if(landing){this.landT=.2;this.onLanded?.(landing);}}}
     this.environment??=new EnvironmentSimulation(createEnvironmentLayout(this.planet));this.enemyShots??=[];this.dynamicObstacles??=[];this.resourceTimers??=new Map();
     const environmentForFrame=this.environment;

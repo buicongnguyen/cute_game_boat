@@ -3,8 +3,8 @@
 .house-out { display: none; }
 body.indoors .home-button:not(.house-out) { display: none; }
 body.indoors .house-out { display: flex; }
-/* Indoors there is nothing to fight and no outdoor map. */
-body.indoors #hud .minimap, body.indoors #hud .skills { display: none; }
+/* Keep combat practice controls indoors; the outdoor map stays hidden. */
+body.indoors #hud .minimap { display: none; }
 /* Nor outdoor quests and bounties ("Wanted: Grey Wolf" in the bedroom): the study's diary has today's tasks. Buffs and quick eat stay. */
 body.indoors #hud .tracker-panels, body.indoors #tracker-chip { display: none; }
 /* The cottage's own control hint replaces the outdoor one ("Space attack"); phones hide both, as before. */

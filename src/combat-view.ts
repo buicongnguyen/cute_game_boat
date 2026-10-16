@@ -15,6 +15,8 @@ export class CombatView {
   /** A faint mote left behind a flying shot now and then (the world's pooled glow particles draw it). */
   trail?:(x:number,y:number,z:number,color:string)=>void;
   constructor(scene:T.Scene){this.scene=scene;}
+  /** A scene boundary ends existing shots before new attacks are drawn there. */
+  attach(scene:T.Scene){if(this.scene===scene)return;this.clear();this.scene=scene;}
   /** Effect geometry by shape and size, and finished effect meshes for reuse: no material or geometry is made or freed per swing (each new material relinked a shader). */
   private shapes=new Map<string,T.BufferGeometry>();private spare:T.Mesh[]=[];
   private shape(e:CombatEffect){const key=e.kind+':'+e.radius.toFixed(2)+':'+(e.width??.65).toFixed(2);let geometry=this.shapes.get(key);

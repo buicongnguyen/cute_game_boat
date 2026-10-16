@@ -18,4 +18,4 @@
   /* Jump and air combat: the paw is a 3.36-skill square; the button stands over its outer column, clear of the toes and the crown. */
   body.air-combat #app #hud .pair-swap { bottom: calc(22px + var(--safe-bottom, 0px) + var(--sk) * 3.15 + 10px); }
 }
-body.indoors #app #hud .pair-swap { display: none; }
+/* Combat controls remain available for cabin practice. */

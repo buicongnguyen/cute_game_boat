@@ -41,7 +41,7 @@ test('models whose first download fails appear after the automatic retry, withou
     const { page, tries } = await open(browser, n => n === 1);
     await page.waitForFunction(() => window.__zoo.world.entities.some(e => e.mesh.userData.refinedAsset === 'hatch'), null, { timeout: 30000 });
     const now = await page.evaluate(art);
-    assert.ok(now.refined >= 5, `buildings use their models (${now.refined})`); assert.ok(now.kitTrees); assert.equal(now.note, false);
+    assert.equal(now.refined, 1, 'the hatch uses its model; stores are now indoors'); assert.ok(now.kitTrees); assert.equal(now.note, false);
     assert.equal(tries.get('boat-hatch.glb'), 2, 'one failure, one retry');
   } finally { await browser.close(); }
 });
@@ -58,6 +58,6 @@ test('models still missing after the quick retries show a note, and tapping it b
     await page.waitForFunction(() => window.__zoo.world.entities.some(e => e.mesh.userData.refinedAsset === 'hatch'), null, { timeout: 30000 });
     await page.waitForSelector('#art-note', { state: 'hidden', timeout: 10000 });
     const now = await page.evaluate(art);
-    assert.ok(now.refined >= 5); assert.ok(now.kitTrees, 'trees too');
+    assert.equal(now.refined, 1, 'the hatch recovered'); assert.ok(now.kitTrees, 'trees too');
   } finally { await browser.close(); }
 });

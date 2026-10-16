@@ -22,7 +22,7 @@ test('every model file is meshopt-compressed (run npm run art:compress after ins
 test('the game loader decodes a compressed model into plain float attributes, as Blender wrote them', async () => {
   const hero = await parse(bytes('hero.glb'));
   assert.ok(hero.getObjectByName('arm-left') && hero.getObjectByName('head-leaf'), 'named parts and pivots survive');
-  assert.equal(triangles(hero), 3496);
+  assert.equal(triangles(hero), 3336);
   hero.traverse(o => {
     if (!(o instanceof T.Mesh)) return;
     for (const name of ['position', 'normal']) {

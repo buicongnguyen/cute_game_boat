@@ -120,6 +120,7 @@ export class SkillFx {
     this.root.add(this.decalMesh, this.glow.mesh, this.core.mesh);
     scene.add(this.root);
   }
+  attach(scene: T.Scene) { if (this.scene === scene) return; this.clear(); this.scene = scene; scene.add(this.root); }
   setEffects(fx: Effects | null) { this.fx = fx; }
   private makeBand() {
     const band = new T.Mesh(this.bandShape, new T.MeshBasicMaterial({ color: '#ff3a1a', map: bandCard(), transparent: true, opacity: .2, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -1 }));

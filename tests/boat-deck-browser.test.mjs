@@ -29,7 +29,9 @@ for (const width of [360, 1440]) test('boat hatch opens, enters, resumes indoors
     await page.waitForFunction(() => localStorage.getItem('cute-game-boat:zoo-garden-indoors') === '1');
     await page.reload();
     await page.waitForFunction(() => document.querySelector('#title-screen') && !document.querySelector('#title-screen').inert);
+    await page.evaluate(()=>{const title=document.querySelector('#title-screen');new MutationObserver(()=>{if(title.hidden)window.resumedInside=!!window.__zoo.world.interior;}).observe(title,{attributes:true,attributeFilter:['hidden']});});
     await page.click('#title-screen button.primary'); await dismissWelcome(page);
+    assert.equal(await page.evaluate(()=>window.resumedInside),true,'resume is already indoors when the title disappears');
     await page.waitForFunction(() => document.body.classList.contains('indoors'));
     await page.locator('.house-out:visible').click();
     await page.waitForFunction(() => !document.body.classList.contains('indoors'));

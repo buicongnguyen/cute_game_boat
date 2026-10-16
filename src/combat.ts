@@ -351,9 +351,17 @@ export class CombatSimulation {
     this.projectiles.push({...high,id:++this.serial,x:p.x+d.x*.6,z:p.z+d.z*.6,direction:d,speed:kind==='wave'||kind==='dragon'?13:kind==='bigbubble'?7:19,remaining:range,radius:kind==='bigbubble'?.8:.22,color:colorFor(kind),kind,multiplier:multiplier*this.power,hit:new Set(),pierce:kind==='wave'||kind==='dragon',stun:kind==='ice'?1.5:0,lift:kind==='bigbubble'?3:0,explosion:kind==='fireball'?2:0,...(this.basicCall?{basic:true}:{}),...extras});
   }
   /** `factor` scales the hit (an air swing, jump-rules.ts AIR.swing); the server never passes it. */
-  basic(target?:CombatTarget,factor=1){
+  basic(target?:CombatTarget,factor=1,practice=false){
     if(this.action||this.time<this.busyUntil)return false;const weapon=this.host.weapon();if(weapon.kind==='rod')return false;
-    target??=this.nearest(attackRange(weapon));if(!target)return false;
+    target??=this.nearest(attackRange(weapon));
+    // Cabin practice: fire along the current facing without inventing a creature target.
+    if(!target){
+      if(!practice||weapon.kind!=='gun')return false;
+      const count=Math.max(1,weapon.spread??1),angle=this.host.facing();
+      this.power=factor;this.basicCall=true;try{for(let i=0;i<count;i++)this.shoot(weapon.shot??'pea',angle+(count===1?0:(i/(count-1)-.5)*.6),count>1?.45:1,(weapon.range??8)+1);}
+      finally{this.power=1;this.basicCall=false;}
+      return true;
+    }
     const p=this.host.position();if(Math.hypot(target.x-p.x,target.z-p.z)>attackRange(weapon,target.radius))return false;
     const angle=this.aim(target);
     if(this.edge.chain&&!this.lift){this.chainHit(weapon,target,angle);this.surgePress(this.chainStep);return true;}

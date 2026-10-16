@@ -83,12 +83,12 @@ const FULL: CalmView = { skills: true, attack: true, eat: true };
  * What the fight corner shows (true = shown). Notes the first fight and the first food into the save so they stay.
  * `fighting`: a creature has noticed the explorer close by; `creatureNear`: any living creature close by.
  */
-export function calmHud(s: RunSave, at: { fighting: boolean; creatureNear: boolean }): CalmView {
+export function calmHud(s: RunSave, at: { fighting: boolean; creatureNear: boolean; indoors?: boolean }): CalmView {
   const run = s.firstRun;
   if (!run || s.level >= CALM_UNTIL_LEVEL) return FULL;
   if (!run.fought && (at.fighting || s.counters.kills > 0)) run.fought = 1;
   if (!run.food && foodCount(s.bag) > 0) run.food = 1;
-  return { skills: !!run.fought, attack: !!run.fought || at.creatureNear, eat: !!run.food };
+  return { skills: !!at.indoors || !!run.fought, attack: !!at.indoors || !!run.fought || at.creatureNear, eat: !!run.food };
 }
 /** Puts the view on the HUD as three classes (hud-first.css hides what is not shown yet). */
 export function applyCalm(hud: HTMLElement, view: CalmView) {

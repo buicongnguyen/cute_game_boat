@@ -25,5 +25,7 @@ test('wooden deck covers the safe zone but leaves the pond open and owns its tex
   assert.ok(hit(5, 0)); assert.ok(hit(19.9, 21.9)); assert.ok(!hit(20.1, 0));
   assert.ok(!hit(-7.5, 11.2), 'water remains visible'); assert.ok(hit(0, -8), 'hatch recess hides the grass');
   const mesh = deck.getObjectByName('deck-planks') as T.Mesh<T.BufferGeometry, T.MeshToonMaterial>;
+  assert.equal(mesh.position.y, 0, 'wood meets the walking plane');
+  assert.equal(mesh.material.polygonOffset, true, 'coplanar grass does not flicker through');
   assert.equal(mesh.material.map!.userData.owned, true, 'world rebuilds dispose the generated map');
 });

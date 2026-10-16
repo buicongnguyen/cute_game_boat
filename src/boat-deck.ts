@@ -42,8 +42,8 @@ export function woodenSafeDeck() {
   const shape = new T.Shape(); shape.moveTo(-HOME_SAFE.x, -HOME_SAFE.z); shape.lineTo(HOME_SAFE.x, -HOME_SAFE.z); shape.lineTo(HOME_SAFE.x, HOME_SAFE.z); shape.lineTo(-HOME_SAFE.x, HOME_SAFE.z); shape.closePath();
   // Shape y becomes world -z. The bank and water keep their original geometry and fishing bounds.
   const pond = new T.Path(); pond.absarc(-7.5, -11.2, 3.85, 0, Math.PI * 2, true); shape.holes.push(pond);
-  const deck = new T.Mesh(new T.ShapeGeometry(shape, 96).rotateX(-Math.PI / 2), toonMaterial({ map: plankTexture() }));
-  deck.name = 'deck-planks'; deck.position.y = .018; deck.receiveShadow = true; group.add(deck);
+  const deck = new T.Mesh(new T.ShapeGeometry(shape, 96).rotateX(-Math.PI / 2), toonMaterial({ map: plankTexture(), polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1 }));
+  deck.name = 'deck-planks'; deck.position.y = 0; deck.receiveShadow = true; group.add(deck);
   // A dark recess beneath the raised hatch rim covers the grass without changing navigation height.
   const shaft = new T.Mesh(new T.CircleGeometry(1.55, 48).rotateX(-Math.PI / 2), toonMaterial({ color: '#171b29' }));
   shaft.name = 'hatch-shaft'; shaft.position.set(0, .024, -8); group.add(shaft);

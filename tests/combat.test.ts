@@ -24,3 +24,10 @@ test('flight leaves ranged and airborne hazards vulnerable while shield protecti
 test('dash protection ends after its movement completes',()=>{const a=arena();a.simulation.skill(1);assert.equal(a.simulation.invulnerable,true);a.run(.3);assert.equal(a.simulation.invulnerable,false);});
 test('eye laser sweeps from left to right without reacquiring the nearest target',()=>{const a=arena();const center=a.enemy('center',0,6),left=a.enemy('left',Math.sin(-.65)*8,Math.cos(-.65)*8),right=a.enemy('right',Math.sin(.65)*8,Math.cos(.65)*8);center.radius=left.radius=right.radius=.1;a.enemy('behind',0,-6);a.simulation.disguise('dz_superhero',2);a.run(.3);assert.deepEqual(a.hits.map(h=>h.id),['left']);a.run(1);assert.deepEqual(a.hits.map(h=>h.id),['left','center','right']);assert.ok(a.hits.every(h=>h.impact.amount===10));});
 test('eye laser limits repeated hits on large targets and pauses with combat',()=>{const a=arena();const target=a.enemy('large',0,5);target.radius=6;a.simulation.disguise('dz_superhero',2);a.run(2,false);assert.equal(a.hits.length,0);a.run(1.3);assert.equal(a.hits.length,5);});
+test('practice shots use facing, obey walls and leave normal untargeted attacks unchanged',()=>{
+ const a=arena({kind:'gun',range:10,shot:'pea',spread:3});a.host.face(Math.PI/2);
+ assert.equal(a.simulation.basic(),false);assert.equal(a.simulation.projectiles.length,0);
+ assert.equal(a.simulation.basic(undefined,1,true),true);assert.equal(a.simulation.projectiles.length,3);
+ assert.ok(a.simulation.projectiles.every(p=>p.direction.x>.9));
+ a.host.clearShot=()=>false;a.run(.1);assert.equal(a.simulation.projectiles.length,0);assert.equal(a.hits.length,0);
+});
