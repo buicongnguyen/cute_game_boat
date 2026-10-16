@@ -129,3 +129,44 @@ test('an ordinary deep catch still reveals its full species model and retains it
   const next = slotted(inside).find(f => f.slot === fish.slot)!;
   assert.equal(next.species, fish.species); assert.equal(next.deep, true);
 });
+
+
+test('approaching and leaving a pond preserves decorative fish and the visible species roster', () => {
+  const {scene, view, inside, pond} = fixture(huntingPonds('home')[0]), world = {}, owner = {};
+  const hunting = new FishHuntingView(scene, view), player = new T.Vector3(pond.x, 0, pond.z + pond.rz + 1);
+  const models = () => (hunting as unknown as {fish: Array<{id:string;obj:T.Group}>}).fish;
+  const roster = () => [...inside.fish.filter(f=>f.obj.visible).map(f=>f.species), ...models().filter(f=>f.obj.visible).map(f=>f.id)].sort();
+  view.update(0,0,player,player,null); const original = roster();
+  for (let pass=0;pass<3;pass++) {
+    hunting.update(.6,pond,undefined,true,world,owner);view.update(0,pass,player,player,null);
+    assert.deepEqual(roster(),original,'getting close does not hide the big decorative fish or add species');
+    assert.ok(inside.fish.filter(f=>f.slot===undefined).every(f=>f.obj.visible));
+    hunting.update(0,null,undefined,true,world,owner);view.update(0,pass,player,player,null);
+    assert.deepEqual(roster(),original,'walking away restores the same fish');
+  }
+});
+
+test('a caught fish stays absent when leaving the shore until its restock deadline', t => {
+  const now = 1_800_000_000_000;t.mock.method(Date,'now',()=>now);
+  const {scene,view,inside,pond}=fixture(huntingPonds('home')[0]),world={},owner={};
+  const hunting=new FishHuntingView(scene,view),player=new T.Vector3(pond.x,0,pond.z);
+  const key=fishHuntKey(pond.id,0),state={lastShotAt:now,readyAt:{[key]:now+18000},caught:{[key]:1}};
+  hunting.update(0,pond,state,true,world,owner);hunting.update(0,null,state,true,world,owner);
+  view.update(1,1,player,player,null);const caught=slotted(inside).find(f=>f.slot===0)!;
+  assert.equal(caught.obj.visible,false,'leaving cannot immediately reveal the replacement fish');
+  view.update(16,17,player,player,null);assert.equal(caught.obj.visible,false);
+  view.update(1.1,18.1,player,player,null);assert.equal(caught.obj.visible,true);
+  assert.equal(caught.species,fishHuntTargets(pond,now,state)[0].id);
+});
+
+
+test('rod fishing never attracts an invisible fish still waiting to restock', t => {
+  t.mock.method(Math,'random',()=>0);
+  const {view,inside,pond}=fixture(huntingPonds('home')[0]);
+  const fish=slotted(inside)[0];
+  view.adoptPoses(pond.id,slotted(inside).map(f=>({slot:f.slot!,id:f.species,x:pond.x,z:pond.z,heading:0,readyIn:18})));
+  view.begin(pond,new T.Vector3(),pond);view.approachDistance(fish.species);
+  assert.ok(inside.interest);assert.equal(inside.interest.slot,undefined,'a fresh visitor comes instead of the caught slot');
+  view.update(0,0,new T.Vector3(),new T.Vector3(pond.x,0,pond.z),null);
+  assert.equal(inside.interest.obj.visible,true);
+});

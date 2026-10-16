@@ -1,3 +1,4 @@
+import { HOME_POND } from './pond-shape.ts';
 import { withinHome, GATE_BEDS } from './safe-zone.ts';
 import { ITEMS, CROPS, PLANETS, RECIPES, DISGUISES, FISH, FISH_WEIGHTS, LOOT_TABLES, UPGRADES, STARTING_PLOTS, MAX_EXTRA_PLOTS, LEGACY_MAX_PLOTS, MAX_DECORATIONS, STORY_STEPS, canonicalItem, type ItemId, type Inventory, type GearSlot, type CropId, type PlanetId, type BuffKey, type BuffDef, type WeaponDef } from './content.ts';
 import { createProgression, normalizeProgression, recordEvent, progressEntries, claimProgress, type ProgressionState } from './progression.ts';
@@ -359,9 +360,9 @@ export function fertilize(s: SaveState, index: number, timeOrItem: number | stri
  * starship pad, workshop, kitchen, well, village trees (crown, not just trunk), the fence-side bushes and the pond.
  * The animal pen (farm.ts PEN) is checked as a rectangle in bedClear.
  */
-export const HOME_CLEARANCE: readonly { x: number; z: number; r: number }[] = [
+export const HOME_CLEARANCE: readonly { x: number; z: number; r: number; rect?: {x:number;z:number} }[] = [
     { x: 0, z: -8, r: 3.2 },
-    { x: 13.5, z: -3, r: 2 }, { x: -7.5, z: 11.2, r: 3.6 },
+    { x: 13.5, z: -3, r: 2 }, { x: HOME_POND.x, z: HOME_POND.z, r: HOME_POND.rx + .3, rect: {x: HOME_POND.rx + .3, z: HOME_POND.rz + .3} },
     ...[[-13, -8], [-14, 7], [3, -13], [10, -11], [14, 5], [-2, 15]].map(([x, z]) => ({ x, z, r: 1.2 })),
     ...Array.from({ length: 16 }, (_, i) => { const a = (i + .5) / 16 * Math.PI * 2; return { x: Math.cos(a) * 16.4, z: Math.sin(a) * 16.4, r: .8 }; }),
 ];
@@ -418,7 +419,7 @@ export function bedClear(x: number, z: number, rotation = 0) {
     const half = Number.isFinite(rotation) ? bedSpan(rotation) : NaN;
     if (!Number.isFinite(x) || !Number.isFinite(z) || !withinHome(x, z, half + .6)) return false;
     if (Math.abs(x) < half + TRAIL_HALF || Math.abs(z) < half + TRAIL_HALF) return false;
-    return HOME_CLEARANCE.every(o => Math.hypot(Math.max(0, Math.abs(o.x - x) - half), Math.max(0, Math.abs(o.z - z) - half)) >= o.r);
+    return HOME_CLEARANCE.every(o => o.rect ? Math.abs(o.x-x) >= o.rect.x+half || Math.abs(o.z-z) >= o.rect.z+half : Math.hypot(Math.max(0, Math.abs(o.x - x) - half), Math.max(0, Math.abs(o.z - z) - half)) >= o.r);
 }
 /** Whether two beds' bounding squares keep apart (2 cm between square frames; a turned bed's square is larger). */
 function bedsApart(ax: number, az: number, ar: number, bx: number, bz: number, br: number) { return Math.max(Math.abs(ax - bx), Math.abs(az - bz)) >= Math.max(BED_GAP, bedSpan(ar) + bedSpan(br) + .02); }

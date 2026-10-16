@@ -1,5 +1,5 @@
 /** Shared home-pond outline for water, fishing and movement. Other lakes stay round. */
-export const HOME_POND = { x: -7.5, z: 11.2, rx: 3.3, rz: 2.4, rectangular: true } as const;
+export const HOME_POND = { x: -7.5, z: 11.2, rx: 4, rz: 2.9, rectangular: true } as const;
 export interface WaterShape { x: number; z: number; r: number; rz?: number; rectangular?: boolean }
 const clamp = (v:number, r:number) => Math.max(-r,Math.min(r,v));
 /** Signed distance from water (negative inside). */

@@ -46,7 +46,7 @@ export class FishHuntingView {
       this.clearFish(); this.pond = null;
     }
     if (pond?.id !== this.pond?.id || this.kitReady !== kitReady) {
-      if (this.pond && pond?.id !== this.pond.id) this.fishing.adoptPoses?.(this.pond.id, this.fish.map(f => ({ slot: f.slot, x: f.obj.position.x, z: f.obj.position.z, heading: f.obj.rotation.y, id: f.id })));
+      if (this.pond && pond?.id !== this.pond.id) this.fishing.adoptPoses?.(this.pond.id, this.fish.map(f => ({ slot: f.slot, x: f.obj.position.x, z: f.obj.position.z, heading: f.obj.rotation.y, id: f.id, readyIn: Math.max(0, (hunting?.readyAt[fishHuntKey(this.pond!.id, f.slot)] ?? 0) - this.now()) / 1000 })));
       if (pond && pond.id !== this.pond?.id) { this.from = new Map((this.fishing.ordinaryPoses?.(pond.id) ?? []).map(p => [p.slot, p])); this.blend = this.from.size ? 0 : 1; }
       this.clearFish(); this.pond = pond; this.kitReady = kitReady;
       if (!pond) { this.shot = null; this.projectile.visible = false; }

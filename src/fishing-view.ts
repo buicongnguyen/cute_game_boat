@@ -23,7 +23,7 @@ function silhouetteBody(model: T.Group): T.BufferGeometry | null {
 /** Swimmable water of one pond, in world units. */
 export interface PondView { id: string; x: number; z: number; rx: number; rz: number; surface: number; waterId: string; rectangular?: boolean }
 /** Stable stocking slot; decorative fish and temporary rod visitors never take a slot. */
-export interface FishPose { slot: number; x: number; z: number; heading: number; id?: string }
+export interface FishPose { slot: number; x: number; z: number; heading: number; id?: string; readyIn?: number }
 type FishState = 'swim' | 'approach' | 'nibble' | 'bite' | 'hooked' | 'flee';
 interface Swimmer {
   obj: T.Group; tail: T.Object3D | null; pond: PondView; species: string; heading: number; speed: number; depth: number; wag: number;
@@ -34,6 +34,8 @@ interface Swimmer {
   /** A big fish in the deep part of the water: drawn only as a dark shadow until it is landed. */
   deep?:boolean;
   slot?:number;
+  /** Local animation-clock deadline carried back from a harpoon catch. */
+  availableAt?:number;
 }
 interface Leap { obj: T.Group; from: T.Vector3; target: () => T.Vector3; t: number; done: () => void; bank?: {at:T.Vector3;anchor:T.Vector3} }
 
@@ -299,6 +301,7 @@ export class FishingView {
         const appearance = this.makeSwimmingFish(p.id);
         this.root.remove(f.obj); this.root.add(appearance.obj); Object.assign(f, appearance, { species: p.id });
       }
+      f.availableAt = this.clock + (p.readyIn ?? 0);
       f.obj.position.y = f.pond.surface - f.depth;
       const at = this.inside(f.pond, p.x, p.z, 1); f.obj.position.x = at.x; f.obj.position.z = at.z; f.heading = p.heading; f.obj.rotation.y = p.heading; f.goal = null; });
     // A rod catch may still be waiting to restock when the harpoon changes that slot's species.
@@ -332,7 +335,7 @@ export class FishingView {
     if (this.interest && this.interest.state !== 'swim') this.flee(this.interest);
     // The mystery was called for this cast (fishing.ts attractMystery): it comes from wherever it hovers, even mid-retreat.
     const hidden=mystery?this.fish.find(f=>f.mystery&&f.pond.id===pond.id&&(f.state==='swim'||f.state==='flee')):null;
-    const same = this.fish.filter(f => !f.mystery&&f.pond.id === pond.id && f.state === 'swim' && f.species === species);
+    const same = this.fish.filter(f => !f.mystery&&f.pond.id === pond.id && f.state === 'swim' && this.clock >= (f.availableAt ?? 0) && f.species === species);
     const fish = hidden??(same.length && Math.random() < .6 ? same[Math.floor(Math.random() * same.length)] : this.addFish(pond, species, true));
     fish.state = 'approach'; fish.t = 0; this.interest = fish; this.species = species;
     return Math.hypot(fish.obj.position.x - this.castTo.x, fish.obj.position.z - this.castTo.z);
@@ -510,7 +513,8 @@ export class FishingView {
   }
 
   private updateFish(fish: Swimmer, dt: number, time: number, near: boolean) {
-    if (fish.pond.id === this.huntingPondId && !fish.mystery) { fish.obj.visible = false; return; }
+    // Hunting replaces only canonical slots; decorative deep fish keep swimming at every distance.
+    if ((fish.pond.id === this.huntingPondId && !fish.mystery && fish.slot !== undefined) || this.clock < (fish.availableAt ?? 0)) { fish.obj.visible = false; return; }
     fish.obj.visible = near;
     if(fish.mark){fish.mark.position.y=1.1+Math.abs(Math.sin(time*3+fish.wig))*.25;fish.mark.material.opacity=fish.state==='swim'?1:.35;}
     if (!near && fish.state === 'swim') return;

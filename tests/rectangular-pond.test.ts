@@ -7,26 +7,31 @@ import {blocked,clearSegment,findRoute} from '../src/navigation.ts';
 import {modeAt,shorePoint} from '../src/swim-rules.ts';
 import {bankCatchSpot} from '../src/bank-catch.ts';
 import {FishingView} from '../src/fishing-view.ts';
+import {bedClear} from '../src/model.ts';
 import {World} from '../src/world.ts';
 const pond={...HOME_POND,r:HOME_POND.rx};
 test('home pond water and collider share a rectangular outline, including corners',()=>{
  const w=Object.assign(Object.create(World.prototype),{planet:'home',root:new T.Group(),entities:[],obstacles:[]}) as World;
  w.makePond(pond.x,pond.z,pond.r,'home');const e=w.entities[0];e.mesh.updateMatrixWorld(true);
  const water=e.mesh.getObjectByName('pond-water') as T.Mesh;
- const ray=new T.Raycaster();ray.set(new T.Vector3(pond.x+3.1,5,pond.z+2.2),new T.Vector3(0,-1,0));
- assert.ok(ray.intersectObject(water).length);assert.ok(blocked({x:pond.x+3.1,z:pond.z+2.2},w.obstacles));
- assert.equal(blocked({x:pond.x,z:pond.z+3},w.obstacles),false,'short bank is dry, not the old circle');
- const from={x:pond.x-4,z:pond.z},to={x:pond.x+4,z:pond.z};assert.equal(clearSegment(from,to,w.obstacles),false);
+ const ray=new T.Raycaster();ray.set(new T.Vector3(pond.x+pond.r-.2,5,pond.z+pond.rz-.2),new T.Vector3(0,-1,0));
+ assert.ok(ray.intersectObject(water).length);assert.ok(blocked({x:pond.x+pond.r-.2,z:pond.z+pond.rz-.2},w.obstacles));
+ assert.equal(blocked({x:pond.x,z:pond.z+pond.rz+.7},w.obstacles),false,'short bank is dry, not the old circle');
+ const from={x:pond.x-pond.r-1,z:pond.z},to={x:pond.x+pond.r+1,z:pond.z};assert.equal(clearSegment(from,to,w.obstacles),false);
  const route=findRoute(from,to,w.obstacles,{gridSize:.25});assert.ok(route.length);let last=from;for(const p of route){assert.ok(clearSegment(last,p,w.obstacles));last=p;}
 });
+test('garden beds stay off the expanded water and its corners',()=>{
+ assert.equal(bedClear(pond.x+pond.r+.5,pond.z+pond.rz-.1),false);
+ assert.equal(bedClear(pond.x,pond.z+pond.rz+.5),false);
+});
 test('casts, early pulls and swim exits agree at every rectangular edge and corner',()=>{
- for(const [dx,dz] of [[4,0],[-4,0],[0,3.1],[0,-3.1],[4,3.1],[-4,-3.1]]){
+ for(const [dx,dz] of [[pond.r+1,0],[-pond.r-1,0],[0,pond.rz+1],[0,-pond.rz-1],[pond.r+1,pond.rz+1],[-pond.r-1,-pond.rz-1]]){
   const player={x:pond.x+dx,z:pond.z+dz};const {cast,shore}=planCast(pond,player,{x:pond.x+dx*2,z:pond.z+dz*2});
   assert.ok(waterEdge(pond,cast.x,cast.z)<=-CAST.edgeGap+1e-6);assert.ok(Math.hypot(cast.x-shore.x,cast.z-shore.z)<=CAST.max+1e-6);
   assert.ok(waterEdge(pond,shore.x,shore.z)>=CAST.shoreGap-1e-6);const exit=shorePoint(pond,player.x,player.z);assert.equal(modeAt([pond],exit.x,exit.z).mode,'land');
   assert.ok(earlyPull(pond,waterShore(pond,player.x,player.z,-.05),player).reeledIn);
  }
- assert.equal(modeAt([pond],pond.x,pond.z).mode,'swim');assert.equal(modeAt([pond],pond.x,pond.z+3).mode,'land');
+ assert.equal(modeAt([pond],pond.x,pond.z).mode,'swim');assert.equal(modeAt([pond],pond.x,pond.z+pond.rz+1).mode,'land');
 });
 test('bank catches choose dry ground, persist through recasts, then clear when walking away',()=>{
  const scene=new T.Scene(),view=new FishingView(scene,{burst(){},ring(){}} as never,{ready:false} as never,()=>{});

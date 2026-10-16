@@ -27,7 +27,7 @@ const point = (p: unknown): p is Point => !!p && typeof p === 'object' && Number
 
 /** Same geometry and stable entity IDs as World.makePond and rod-fishing validation. */
 export function huntingPonds(planet: string): HuntPond[] {
-  const raw = planet === 'home' ? [[-7.5, 11.2, 3.3], [10, 52, 9], [40, 105, 11], [-70, 35, 8], [-105, -30, 7]] : HUNT_PLANETS.includes(planet) ? Array.from({ length: 4 }, (_, i) => [Math.cos(i * Math.PI / 2 + .4) * (38 + i * 17), Math.sin(i * Math.PI / 2 + .4) * (38 + i * 17), 6 + i * .6]) : [];
+  const raw = planet === 'home' ? [[HOME_POND.x, HOME_POND.z, HOME_POND.rx], [10, 52, 9], [40, 105, 11], [-70, 35, 8], [-105, -30, 7]] : HUNT_PLANETS.includes(planet) ? Array.from({ length: 4 }, (_, i) => [Math.cos(i * Math.PI / 2 + .4) * (38 + i * 17), Math.sin(i * Math.PI / 2 + .4) * (38 + i * 17), 6 + i * .6]) : [];
   return raw.map(([x, z, r], i) => ({ id: `${planet}:fish:${i}`, x, z, rx: r, rz: planet==='home'&&i===0?HOME_POND.rz:r, ...(planet==='home'&&i===0?{rectangular:true}:{}), surface: .3, waterId: planet === 'home' ? Math.hypot(x, z) < 18 ? 'home' : zoneAt({ x, z }) === 'swamp' ? 'swamp' : 'lake' : planet }));
 }
 export function huntingPondAt(planet: string, x: number, z: number): HuntPond | null { return huntingPonds(planet).find(p => Math.hypot(p.x - x, p.z - z) < .01) ?? null; }

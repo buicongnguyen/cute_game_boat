@@ -654,7 +654,7 @@ export class World {
       for(const p of HOME_GATES){const g=this.kit('gate')??group(cyl('#b18c59',.14,.14,3.1,-1.7,1.55),cyl('#b18c59',.14,.14,3.1,1.7,1.55),box('#edc57a',3.75,.2,.2,0,3));g.name='village-gate';g.position.set(p.x,0,p.z);g.rotation.y=p.rot;this.root.add(g);}
       this.villageTrees=[[-13,-8],[-14,7],[3,-13],[10,-11],[14,5],[-2,15]].map(([x,z])=>this.tree(x,z,.75,true,rng)); // kept: a swing shakes them (village-fun.ts)
       // The home pond first, so fence-side bushes keep off its water.
-      this.makePond(-7.5,11.2,3.3);
+      this.makePond(HOME_POND.x,HOME_POND.z,HOME_POND.rx);
       // Walk-through dressing inside the fence. It adds no obstacles, so every player's map stays identical.
       if(sceneryKit.ready)for(let i=0;i<16;i++){const a=(i+.5)/16*Math.PI*2,x=Math.cos(a)*16.4,z=Math.sin(a)*16.4;
         if(this.entities.some(e=>Math.hypot(x-e.x,z-e.z)<e.radius+1.4)||this.obstacles.some(o=>Math.hypot(x-o.x,z-o.z)<o.r+.9))continue;
