@@ -27,7 +27,7 @@ for(const width of [360,1440])test('boat rooms, storage, crafting, green gate be
   await use('craft');assert.match(await page.locator('#dialog-title').innerText(),/workbench/i);await page.locator('[data-action="forge-menu"]').click();assert.match(await page.locator('#dialog-title').innerText(),/forge|strengthen/i);await close();
   await use('cook');assert.match(await page.locator('#dialog-title').innerText(),/stove/i);await close();
   await use('house-bench');assert.match(await page.locator('#dialog-title').innerText(),/upgrade/i);await close();
-  await use('house-mirror');await page.locator('[data-look-option="tiny"]').click();
+  await use('house-mirror');await page.locator('[data-action="mirror-looks"]').click();await page.locator('[data-look-option="tiny"]').click();
   await page.waitForFunction(()=>window.__zoo.world.player.userData.look?.includes('-tiny-'));
   const scale=await page.evaluate(()=>window.__zoo.world.player.getObjectByName('arm-left')?.scale.x);assert.ok(scale>.7&&scale<1,'short avatar uses scaled Tall rig');
   const attack=await page.evaluate(()=>{const w=window.__zoo.world,a=w.player.getObjectByName('arm-left'),before=a.scale.toArray();w.punchT=.2;w.punchKind=0;w.punchArm=0;w.animatePlayer(.01);w.punchT=0;w.animatePlayer(.01);return {before,after:a.scale.toArray()};});assert.deepEqual(attack.after,attack.before,'punch returns to the short rig scale');

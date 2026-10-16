@@ -1,3 +1,4 @@
+import { withinHome } from './safe-zone.ts';
 import { growUp, GROWTH_JOBS_PER_DAY } from './growth.ts';
 import * as M from './model.ts';
 import { CALL_MS, onBreak } from './helper-state.ts';
@@ -101,8 +102,7 @@ export function changeOutfit(s: M.SaveState, id: FriendId, pick: number): boolea
   return changed;
 }
 /** The safe village (environments.ts zoneAt 'home'). */
-export const VILLAGE_RADIUS = 18;
-export const inVillage = (p: { x: number; z: number }) => Math.hypot(p.x, p.z) < VILLAGE_RADIUS;
+export const inVillage = (p: { x: number; z: number }) => withinHome(p.x, p.z);
 /** Friends still following the explorer reach home: they go to their posts. Only at home, inside the village. */
 export function arriveHome(s: M.SaveState, at: { x: number; z: number }): FriendId[] {
   if (s.planet !== 'home' || !inVillage(at)) return [];
@@ -161,9 +161,8 @@ export function nextFriendTask(s: M.SaveState, id: FriendId, from: { x: number; 
   const f = friendOf(s, id); if (!working(s, f, now)) return null;
   if (f.role === 'garden') return bedTask(s, from, now, true, skipBed, heldBed);
   if (f.role === 'farm') return animalTask(s, from, now, f.autoFeed === true, skipAnimal);
-  // The cook shops for the pot, not for the beds: a bed only once two are ripe (one trip for a basket, so she no
-  // longer shadows the gardener bed by bed), farm products only when no farmer is working them.
-  if (s.plots.filter(p => ripe(p, now) && M.canAddItem(s, p.crop!)).length >= 2) { const bed = bedTask(s, from, now, false, skipBed); if (bed) return bed; }
+  // Gather even the last ripe bed, while leaving the gardener's claimed bed alone.
+  const bed = bedTask(s, from, now, false, skipBed); if (bed) return bed;
   return working(s, friendOf(s, 'clover'), now) ? null : animalTask(s, from, now, false, skipAnimal);
 }
 

@@ -24,9 +24,10 @@ test('the cook changes into a different hat, outfit and boots from what the expl
   assert.equal(F.changeOutfit(M.newGame(), 'pepper', .5), false, 'a friend who is not rescued');
 });
 
-test('the cook does not shadow the gardener: a single ripe bed is left alone, two make a trip', () => {
+test('the cook collects the last ripe bed but leaves a gardener-claimed bed alone', () => {
   const s = M.newGame(); const T0 = Date.now(), done = (i: number) => { s.plots[i].crop = 'radish'; s.plots[i].plantedAt = T0 - M.CROPS.radish.duration - 400_000; };
   s.friends = [{ id: 'pepper', role: 'cook', rescuedAt: 1, gear: {}, home: true }];
-  done(0); assert.equal(F.nextFriendTask(s, 'pepper', { x: 0, z: 0 }, T0), null);
+  done(0); assert.deepEqual(F.nextFriendTask(s, 'pepper', { x: 0, z: 0 }, T0), {kind:'harvest',index:0});
+  assert.equal(F.nextFriendTask(s, 'pepper', { x: 0, z: 0 }, T0, 0), null);
   done(1); assert.equal(F.nextFriendTask(s, 'pepper', { x: 0, z: 0 }, T0)?.kind, 'harvest');
 });

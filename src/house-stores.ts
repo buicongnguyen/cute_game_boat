@@ -7,13 +7,15 @@
  * main.ts openDialog applies this only while the explorer is inside.
  */
 export interface IndoorStore { title: string; kicker: string; icon: string; purpose: string }
-export const INDOOR_STORES: Record<'cook' | 'craft' | 'travel' | 'wardrobe' | 'looks' | 'bench', IndoorStore> = {
+export const INDOOR_STORES: Record<'cook' | 'craft' | 'travel' | 'wardrobe' | 'looks' | 'bench' | 'shop' | 'sell', IndoorStore> = {
+  shop: { title: 'Magic Mirror', kicker: 'BEDROOM · AT HOME', icon: '🪞', purpose: 'Buy equipment, seeds and supplies, or choose your appearance in Looks.' },
+  sell: { title: 'Exchange box', kicker: 'LIVING ROOM · AT HOME', icon: '📦', purpose: 'Exchange your harvest, fish and spare materials for energy.' },
   cook: { title: 'Cottage stove', kicker: 'KITCHEN · AT HOME', icon: '🍳', purpose: 'Cook your harvest and catch here in the cabin kitchen.' },
   craft: { title: 'Craft-room workbench', kicker: 'CRAFT ROOM · AT HOME', icon: '🪚', purpose: 'Craft equipment and supplies here. Use Strengthen weapons to open the forge.' },
   travel: { title: 'Study globe', kicker: 'STUDY · AT HOME', icon: '🌍', purpose: 'Plan your next trip here. The starship takes off from its pad in the village.' },
-  wardrobe: { title: 'Wardrobe', kicker: 'BEDROOM · AT HOME', icon: '👗', purpose: 'Change what you wear: only your clothes, pets and gear. Buy new ones at the Little outfitters in the village.' },
+  wardrobe: { title: 'Wardrobe', kicker: 'BEDROOM · AT HOME', icon: '👗', purpose: 'Change what you wear: only your clothes, pets and gear. Buy new ones at the Magic Mirror in the bedroom.' },
   bench: { title: 'Upgrade bench', kicker: 'CRAFT ROOM · AT HOME', icon: '⚒️', purpose: 'Level up your gear, weapons and fighting skills here in the cabin.' },
-  looks: { title: 'Mirror · Looks', kicker: 'BEDROOM · AT HOME', icon: '🪞', purpose: 'Body, height, ears and animal hoods. Hats, outfits and weapons are sold at the Little outfitters and worn from the wardrobe.' },
+  looks: { title: 'Magic Mirror', kicker: 'BEDROOM · AT HOME', icon: '🪞', purpose: 'Choose your body, height, ears and hood. Switch to Equipment to buy gear and supplies.' },
 };
 /** The indoor dress of a panel opened inside the cottage, or null (outdoors, or a panel with no indoor twin). */
 export function indoorStore(type: string, inside: boolean, fromWardrobe = false): IndoorStore | null {

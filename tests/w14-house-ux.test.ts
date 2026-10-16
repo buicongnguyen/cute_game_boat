@@ -114,12 +114,13 @@ test('indoor stores are their own places, in English and Vietnamese', () => {
   assert.equal(indoorStore('cook', false), null, 'the village kitchen keeps its own title');
   assert.equal(indoorStore('bag', true), null, 'the bag button indoors is still the backpack');
   assert.equal(indoorStore('bag', true, true), INDOOR_STORES.wardrobe);
-  assert.equal(indoorStore('shop', true), null);
+  assert.equal(indoorStore('shop', true), INDOOR_STORES.shop);
+  assert.equal(indoorStore('sell', true), INDOOR_STORES.sell);
   for (const type of ['cook', 'craft', 'travel', 'looks']) assert.ok(indoorStore(type, true), type);
   const titles = Object.values(INDOOR_STORES).map(s => s.title);
-  assert.equal(new Set(titles).size, titles.length);
+  assert.equal(new Set(titles).size, titles.length - 1, 'Equipment and Looks share the Magic Mirror');
   for (const outdoor of ['A warm meal for the trail', 'Made with a little magic', 'Starship Sprout', 'Your explorer & backpack', 'Mirror, mirror', 'Little outfitters']) assert.ok(!titles.includes(outdoor), outdoor);
-  assert.ok(INDOOR_STORES.looks.purpose.includes('Body, height, ears and animal hoods'));
+  assert.ok(INDOOR_STORES.looks.purpose.includes('Switch to Equipment'));
   assert.ok(purposeHtml(INDOOR_STORES.cook).includes('store-purpose'));
   assert.equal(wardrobeItem({ slot: 'hat' }), true); assert.equal(wardrobeItem({}), false); assert.equal(wardrobeItem(undefined), false);
   setLanguage('vi');

@@ -61,7 +61,7 @@ export function initLookShop(d: LookShopDeps) {
     const kit = heroKitFor(id); if (!kit.ready && !kit.requested) void kit.load().then(() => { if (w.tryOnLook === id) w.refreshPlayer(); });
   };
   function open() {
-    d.openDialog('looks', t('Mirror, mirror'), lookShopHtml(w.state, draft()), t('LOOKS'), '🪞');
+    d.openDialog('looks', t('Magic Mirror'), lookShopHtml(w.state, draft()), t('LOOKS'), '🪞');
     document.querySelector('#dialog-layer')?.classList.add('trying-on'); // the explorer stays in view beside (or above) the builder
     centreChosen(); paint();
   }

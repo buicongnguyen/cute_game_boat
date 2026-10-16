@@ -50,3 +50,11 @@ The Trophy wall lists missing/rescued friends and their rescue locations, replac
 All body/height choices have a smaller smile; boy/man faces gain fine outer lashes, while the existing girl/woman lashes remain. Facial patches no longer produce jagged outline spikes; the head silhouette stays outlined. Rebuild faces on the original Tall/Grown source GLBs with art/build-boat-faces.mjs, then rebuild short heights with art/build-boat-looks.mjs, compress all hero GLBs, and regenerate the look icons. The face generator records its version to prevent applying the mouth reduction twice.
 
 Validation: full unit/save/model suite, Pages build (including TypeScript), 360/1440 cabin and deck browser checks, downstairs garden/friend/bookshelf/wishing/introduction browser checks, repeated cabin transitions and indoor HUD checks, and production Pages smoke tests.
+
+## Exchange box, Magic Mirror and Pepper (2026-10-17)
+
+Pepper now considers even one remaining ripe bed, still skipping a bed claimed by Sprout. Friend arrival and idle decisions use the shared rectangular home boundary. Regression checks cover a lone fruit tree at all four outer corners and actual walking/harvesting beyond the old circle.
+
+The Exchange box replaces the plant on the right of the cabin's lower exit and opens the existing Harvest market selling actions. Magic Mirror opens on Equipment, preserving every former shop category, buying, equipping and try-on action; Looks remains a second main tab. Switching back clears any unbought appearance preview. The outdoor market and outfitters, including their placement blockers, are removed. The introduction and station shortcuts lead indoors. Existing inventory, owned looks, equipment and saves remain compatible.
+
+Rebuild the Exchange box with art/build-boat-workbench.mjs, then compress house.glb. Verify with npm test, npm run build:pages, the cabin browser tests and tests/boat-exchange-browser.test.mjs (360/1440), then the live Pages smoke tests.

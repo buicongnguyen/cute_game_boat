@@ -639,4 +639,13 @@ export const VI_UI: Record<string, string> = {
   "Keyboard controls": "Phím điều khiển",
   "Show keyboard controls": "Hiện phím điều khiển",
   "Hide keyboard controls": "Ẩn phím điều khiển",
+  "Magic Mirror": "Gương thần kỳ",
+  "Exchange box": "Hộp trao đổi",
+  "Exchange": "Trao đổi",
+  "Buy and sell inside the cabin": "Mua bán trong khoang nhà",
+  "Sell your harvest at the Exchange box beside the exit. Visit the Magic Mirror in the bedroom for equipment, seeds and new looks.": "Bán nông sản tại Hộp trao đổi cạnh cửa ra. Ghé Gương thần kỳ trong phòng ngủ để mua trang bị, hạt giống và đổi diện mạo.",
+  "Buy equipment, seeds and supplies, or choose your appearance in Looks.": "Mua trang bị, hạt giống và vật dụng, hoặc chọn diện mạo trong mục Ngoại hình.",
+  "Exchange your harvest, fish and spare materials for energy.": "Đổi nông sản, cá và vật liệu dư lấy năng lượng.",
+  "Choose your body, height, ears and hood. Switch to Equipment to buy gear and supplies.": "Chọn vóc dáng, chiều cao, tai và mũ trùm. Chuyển sang Trang bị để mua đồ và vật dụng.",
+  "Change what you wear: only your clothes, pets and gear. Buy new ones at the Magic Mirror in the bedroom.": "Đổi quần áo, thú cưng và trang bị. Mua đồ mới tại Gương thần kỳ trong phòng ngủ.",
 };

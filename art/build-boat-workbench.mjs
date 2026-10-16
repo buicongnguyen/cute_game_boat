@@ -57,5 +57,20 @@ const gem=new T.Mesh(new T.OctahedronGeometry(.29),new T.MeshStandardMaterial({c
 const stand=new T.Mesh(new T.CylinderGeometry(.32,.38,.08,12),new T.MeshStandardMaterial({color:'#e6c572'}));stand.position.set(0,.78,0);cabinet.add(stand);
 for(const side of [-1,1]){const star=new T.Mesh(new T.OctahedronGeometry(.09),new T.MeshStandardMaterial({color:'#fff0bc',emissive:'#cda05b',emissiveIntensity:.2}));star.position.set(side*.38,1.52,.08);cabinet.add(star);}
 (scene.children.length===1&&scene.children[0].name==='Scene'?scene.children[0]:scene).add(cabinet);
+// Exchange box by the cabin exit: polished oak, teal panels, brass bands and a parcel emblem.
+scene.getObjectByName('exchange_box')?.removeFromParent();
+const exchange=new T.Group();exchange.name='exchange_box';
+const eb=(c,w,h,d,x,y,z,rz=0)=>{const g=new T.BoxGeometry(w,h,d);g.rotateZ(rz);const m=new T.Mesh(g,new T.MeshStandardMaterial({color:c,roughness:.55}));m.position.set(x,y,z);exchange.add(m);};
+eb('#825134',1.3,.68,.8,0,.46,0);
+for(const x of [-.51,.51])for(const z of [-.28,.28])eb('#65412c',.13,.22,.13,x,.11,z);
+for(const x of [-.42,0,.42])eb('#3c8a83',.38,.49,.035,x,.49,.42);
+for(const y of [.21,.76])eb('#ecc776',1.36,.07,.86,0,y,0);
+for(const x of [-.64,.64])eb('#d4a557',.07,.59,.87,x,.49,0);
+for(let i=0;i<5;i++)eb(i%2?'#c88c4e':'#dfab65',.27,.09,.88,-.54+i*.27,.83,0);
+eb('#264f50',.56,.3,.035,0,.49,.45);eb('#f2d48d',.24,.19,.045,0,.49,.48);eb('#fff1bf',.035,.19,.05,0,.49,.51);eb('#fff1bf',.24,.035,.05,0,.49,.51);
+// Two small wrapped parcels sit on the lid; the surface stays below the room's sightline.
+eb('#edc17d',.36,.26,.29,-.28,1.005,-.08);eb('#fff0bd',.05,.27,.30,-.28,1.005,-.08);
+eb('#d99079',.27,.2,.25,.23,.975,.07);eb('#f9e2a5',.28,.04,.26,.23,.99,.07);
+(scene.children.length===1&&scene.children[0].name==='Scene'?scene.children[0]:scene).add(exchange);
 const outputScene=new T.Scene();const kitRoot=scene.children.length===1&&scene.children[0].name==='Scene'?scene.children[0]:scene;outputScene.add(...kitRoot.children);
 const out=await new GLTFExporter().parseAsync(outputScene,{binary:true});fs.writeFileSync(file,Buffer.from(out));console.log('Rebuilt indoor workbench; run art:compress next.');

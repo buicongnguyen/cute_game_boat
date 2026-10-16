@@ -148,3 +148,13 @@ test('every friend line has Vietnamese copy', async () => {
     assert.match(UI.lockedHint('clover'), /Gấu Vua/); for (const [a, b] of Object.values(UI.RESCUE_LINES)) { assert.ok(VI_FRIENDS[a], a); assert.ok(VI_FRIENDS[b], b); }
   } finally { setLanguage('en'); }
 });
+
+test('Pepper harvests a lone fruit tree throughout the expanded rectangular village', () => {
+  for(const at of [{x:18,z:18},{x:-18,z:18},{x:18,z:-18},{x:-18,z:-18}]) {
+    const s=rescued('pepper');s.plots.forEach(p=>p.crop=null);Object.assign(s.plots[0],at);ripe(s,0,'apple');
+    assert.ok(F.inVillage(at));assert.ok(Math.hypot(at.x,at.z)>18);
+    assert.deepEqual(F.nextFriendTask(s,'pepper',{x:0,z:0},T0),{kind:'harvest',index:0});
+    assert.ok(F.friendWork(s,'pepper',{kind:'harvest',index:0},T0));
+  }
+  assert.equal(F.inVillage({x:20,z:0}),false);assert.equal(F.inVillage({x:0,z:22}),false);
+});

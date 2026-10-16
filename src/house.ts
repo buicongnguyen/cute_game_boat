@@ -108,7 +108,7 @@ const FURNITURE_PLAN: Placement[] = [
   { kit: 'chair', x: 2.6, z: 1.85, rot: Math.PI, block: [.45, .45] },
   { kit: 'chair', x: 2.6, z: .15, block: [.45, .45] },
   { kit: 'bookshelf', x: 4.76, z: 1.6, rot: -Q, block: [1.2, .4] },
-  { kit: 'plant_big', x: 4.4, z: 5.9, block: [.6, .6] },
+  { kit: 'exchange_box', x: 4.2, z: 5.5, block: [1.3, .8] },
   { kit: 'plant_big', x: -4.4, z: 5.9, block: [.6, .6] },
   { kit: 'plant_small', x: 2.3, z: -1.6, block: [.3, .3] },
   { kit: 'welcome_mat', x: 0, z: 5.75 },

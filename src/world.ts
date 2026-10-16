@@ -643,8 +643,6 @@ export class World {
     if(planet==='home'){
       this.root.add(woodenSafeDeck());
       this.addEntity('home','Cabin hatch','⚓',this.house(),0,-8,2.2);this.obstacle(0,-8,1.7);
-      this.addEntity('sell','Harvest market','🧺',this.stall('#f291a9','sell'),9,2.5,2);this.obstacle(9,2.5,1.7);
-      const shop=this.stall('#68bcc7','shop');shop.rotation.y=-2.4;this.addEntity('shop','Equipment shop','🛍️',shop,9.6,10.6,2);this.obstacle(9.6,10.6,1.7);
       this.addEntity('travel','Starship station','🚀',this.rocket(),13.5,-3,2);this.obstacle(13.5,-3,1.5);
       for(let i=0;i<this.state.plots.length;i++)this.makePlot(i);
       this.buildPen();
