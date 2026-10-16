@@ -1,3 +1,4 @@
+import { waterEdge } from '../src/pond-shape.ts';
 import { inSafeZone } from '../src/safe-zone.ts';
 import {createHash,randomUUID,randomInt} from 'node:crypto';
 import * as Game from '../src/model.ts';
@@ -27,7 +28,7 @@ const distance=(a,b)=>Math.hypot(a.x-b.x,a.z-b.z);
 const farmActions=new Set(['plant','plantAll','harvest','harvestAll','fertilize','expandGarden','buyBedKit','storeBed','upgradeBed','moveBed','placeDecoration','moveDecoration','removeDecoration','buildPen','buyAnimal','feedAnimal','feedAll','collectProducts','expandPen','buildSpeciesPen','buyHelper','setHelperPaused','setHelperSeed','setAutoPlant','clearBedChoices','helperHarvest','helperPlant','rest','houseUse','cook','cookDish','cookSellProduce','friendsArrive','callHelper','callFriend','friendOutfit','welcomeStart','setFriendPaused','setFriendAutoFeed','friendWork','friendsCatchUp','helperCatchUp','giveFriendGear','takeFriendGear','friendLook','ackStored']);
 const farmHelperActions=new Set(['buyFarmHelper','setFarmHelperPaused','setFarmHelperAutoFeed','farmHelperCollect','farmHelperFeed','farmHelperCatchUp','upgradeFarmRestock','setFarmRestock','farmHelperRestock']);
 export function waterNodes(planet){
-  return huntingPonds(planet).map(pond=>({x:pond.x,z:pond.z,r:pond.rx,water:pond.waterId}));
+  return huntingPonds(planet).map(pond=>({x:pond.x,z:pond.z,r:pond.rx,rz:pond.rz,rectangular:pond.rectangular,water:pond.waterId}));
 }
 function requireNear(peer,at,range=4){if(!peer||peer.visit||!point(at)||distance(peer.pose,at)>range)fail(409,'Move closer to use that.');}
 function strike(account,key,required,now){account.resourceHits??={};const hit=account.resourceHits[key]||{hits:0,at:0};if(now-hit.at<250)fail(429,'Wait for your next strike.');hit.hits++;hit.at=now;if(hit.hits<required){account.resourceHits[key]=hit;return {hits:hit.hits,required};}delete account.resourceHits[key];return null;}
@@ -138,7 +139,7 @@ export function createActionService({store,getPeer,getWorld=()=>null,afterCommit
       }else if(data.type==='fishStart'){
         const rod=Game.ITEMS[p.rodId]?.weapon;
         if(!peer||peer.visit||!rod||rod.kind!=='rod'||!state.bag[p.rodId]||!point(p.cast))fail(409,'Bring a fishing rod to the water.');
-        const water=waterNodes(state.planet).find(node=>node.water===p.water&&distance(node,p.cast)<node.r&&distance(node,peer.pose)<=node.r+3.05&&distance(p.cast,peer.pose)<=8);
+        const water=waterNodes(state.planet).find(node=>node.water===p.water&&waterEdge(node,p.cast.x,p.cast.z)<0&&waterEdge(node,peer.pose.x,peer.pose.z)<=3.05&&distance(p.cast,peer.pose)<=8);
         if(!water)fail(409,'Move to the pond before casting.');
         if(account.fishingTicket&&now-account.fishingTicket.startedAt<180000)fail(409,'Finish or cancel your current cast first.');
         // The mystery shadow is the server's call, made only while fishing (fishing.ts attractMystery): each cast's attract

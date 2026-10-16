@@ -16,6 +16,7 @@ import { bakeCoverAtlas, coverCards, tickCoverCards, type CoverAtlas } from './c
 import { buildGround, shadeField, type GroundDetail } from './ground.ts';
 import { makeDeckHatch, HATCH_SCALE, woodenSafeDeck } from './boat-deck.ts';
 import { inSafeZone, safeClearance, homeFence, HOME_GATES } from './safe-zone.ts';
+import { HOME_POND } from './pond-shape.ts';
 import { buildPond } from './pond-view.ts';
 import { circlesAt, holdsHero, ignoreRetarget, nearRay, pickCircle, pickScale, RAYCAST_ONLY, type PickCircle } from './picking.ts';
 import * as T from 'three';
@@ -88,7 +89,7 @@ import {ShadowSwitch} from './shadow-switch.ts';
 
 export interface Entity { id: string; kind: string; name: string; icon: string; mesh: T.Group; x: number; z: number; radius: number; index?: number;waterId?:string;animalUid?:number;
   /** Swimmable water of a pond: half-extents of its ellipse and the height of the surface. */
-  pond?:{rx:number;rz:number;surface:number} }
+  pond?:{rx:number;rz:number;surface:number;rectangular?:boolean} }
 /** Scratch values of the blade's swing (animatePlayer, updateTrail). `BLADE_BEND`: how far short of straight the blade runs on from the arm. */
 const SWING_POSE:SwingPose={angle:0,blend:0,settling:false,emit:false,twist:0,lean:0},BLADE_BEND=.45,SPIN_AXIS=[0,1,0] as const;
 const PUNCH_POSE:PunchPose={raise:0,stretch:1,fist:1,twist:0,lean:0,step:0},REACT_POSE=newReactionPose();
@@ -719,13 +720,14 @@ export class World {
     // A round pond like the reference's waters (radius = water line): one smooth bank mesh (deep bed, shallows,
     // sandy lip, sand fading into the grass) and a translucent water disc whose edge the lip hides (pond-view.ts).
     const id=waterId??(this.planet==='home'?Math.hypot(x,z)<18?'home':zoneAt({x,z})==='swamp'?'swamp':'lake':this.planet),surface=.3,r=radius;
-    const {group:pond}=buildPond(r,surface,id);
-    for(let i=0;i<5;i++){const a=i*2.4+.7,d=r*(.38+(i%3)*.17),pad=cyl('#4fbf3a',.3,.3,.03,Math.cos(a)*d,surface+.02,Math.sin(a)*d,12);pad.scale.z=.85;pond.add(pad);if(i%2===0)pond.add(ball('#ff8fc4',.1,Math.cos(a)*d,surface+.08,Math.sin(a)*d));}
+    const rectangle=this.planet==='home'&&x===HOME_POND.x&&z===HOME_POND.z&&r===HOME_POND.rx, rz=rectangle?HOME_POND.rz:r;
+    const {group:pond}=buildPond(r,surface,id,rectangle?rz:undefined);
+    for(let i=0;i<5;i++){const a=i*2.4+.7,d=rz*(.38+(i%3)*.17),pad=cyl('#4fbf3a',.3,.3,.03,Math.cos(a)*d,surface+.02,Math.sin(a)*d,12);pad.scale.z=.85;pond.add(pad);if(i%2===0)pond.add(ball('#ff8fc4',.1,Math.cos(a)*d,surface+.08,Math.sin(a)*d));}
     // Keep the water unobstructed so fish remain visible; fishing takes place on the bank.
     pond.traverse(o=>{o.castShadow=false;});
-    const entity=this.addEntity('fish',this.planet==='home'?'Fishing pond':'Planetary fishing pool','🎣',pond,x,z,radius);entity.waterId=id;entity.pond={rx:r,rz:r,surface};
+    const entity=this.addEntity('fish',this.planet==='home'?'Fishing pond':'Planetary fishing pool','🎣',pond,x,z,radius);entity.waterId=id;entity.pond={rx:r,rz,surface,...(rectangle?{rectangular:true}:{})};
     // Solid up to the sandy lip: the explorer fishes from the shore, 0.6 m outside the water line.
-    this.obstacles.push({x,z,r:r+.15,water:true} as Obstacle); // tagged: swimmers cross it, shots fly over it (swim-rules.ts)
+    this.obstacles.push({x,z,r:rectangle?Math.hypot(r,rz)+.15:r+.15,water:true,...(rectangle?{rect:{x:r+.15,z:rz+.15}}:{})} as Obstacle); // tagged: swimmers cross it, shots fly over it (swim-rules.ts)
   }
   chibi(color: string) {
     const c=group();

@@ -92,7 +92,8 @@ function waterMaterial(key: string) {
 }
 
 /** The bank and water of a round pond of water radius `r` whose surface is at `surface`. */
-export function buildPond(r: number, surface: number, waterId: string) {
+export function buildPond(r: number, surface: number, waterId: string, rectangleDepth?: number) {
+  if (rectangleDepth) return buildRectangularPond(r, rectangleDepth, surface, waterId);
   const look = pondLook(waterId), colour = (c: Ring[2]) => Array.isArray(c) ? scratch.set(look[c[0]]).lerp(other.set(look[c[1]]), c[2]).clone() : new T.Color(look[c]);
   const at = (o: number | ((r: number) => number)) => Math.max(0, r + (typeof o === 'function' ? o(r) : o));
   const bank = ringMesh(BANK.map(([o, y, c, alpha]) => ({ radius: at(o), y, color: colour(c), alpha })), bankMaterial(waterId));
@@ -106,4 +107,14 @@ export function buildPond(r: number, surface: number, waterId: string) {
   water.name = 'pond-water'; water.renderOrder = 1; water.castShadow = false; water.receiveShadow = false;
   const group = new T.Group(); group.name = 'pond'; group.add(bank, water);
   return { group, bank, water, look };
+}
+
+/** Rectangular family pond: clear turquoise water over a sandy bed, as in the reference game. */
+function buildRectangularPond(rx:number,rz:number,surface:number,waterId:string) {
+ const look=pondLook(waterId),group=new T.Group();group.name='pond';
+ const bank=new T.Mesh(new T.PlaneGeometry(rx*2+.9,rz*2+.9).rotateX(-Math.PI/2),toonMaterial({color:look.sand}));
+ bank.name='pond-bank';bank.position.y=.015;bank.receiveShadow=true;bank.raycast=()=>{};
+ const water=new T.Mesh(new T.PlaneGeometry(rx*2,rz*2).rotateX(-Math.PI/2),toonMaterial({color:'#5fd0f5',transparent:true,opacity:.65,depthWrite:false}));
+ water.name='pond-water';water.position.y=surface;water.renderOrder=1;group.add(bank,water);
+ return {group,bank,water,look};
 }

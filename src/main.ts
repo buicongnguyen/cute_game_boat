@@ -1,3 +1,5 @@
+import { bankCatchSpot } from './bank-catch.ts';
+import { waterEdge } from './pond-shape.ts';
 import { loadOpeningArt } from './opening-art.ts';
 import { assetUrl } from './asset-url.ts';
 import './mobile-game-init.mjs';
@@ -1148,7 +1150,7 @@ let mysteryCaller=newMysteryCaller();
 function mysteryGotAway(f:FishingRound){if(!f.mysteryOut)return;f.mysteryOut=false;if(mysteryMissed(mysteryCaller))fishingView.dropMystery(f.pondId);}
 // Ponds burst and fish leap when a big move lands on the water (pond-splash.ts): looks only, nothing is saved or sent.
 const pondSplash=new PondSplash({root:()=>world.interior?null:world.scene,fx:()=>world.fx??null,now:()=>world.time,reduced:()=>!!globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches,
-  ponds:()=>world.interior?[]:world.outdoorEntities.filter(e=>e.kind==='fish'&&e.pond).map(e=>({id:e.id,x:e.x,z:e.z,r:e.pond!.rx,surface:e.pond!.surface,waterId:e.waterId??state.planet})),
+  ponds:()=>world.interior?[]:world.outdoorEntities.filter(e=>e.kind==='fish'&&e.pond).map(e=>({id:e.id,x:e.x,z:e.z,r:e.pond!.rx,rz:e.pond!.rz,rectangular:e.pond!.rectangular,surface:e.pond!.surface,waterId:e.waterId??state.planet})),
   fish:species=>fishKit.ready?fishingView.makeFish(species):null,species:waterId=>{const pool=(M.FISH_WEIGHTS[waterId]??M.FISH_WEIGHTS.home).filter(([id])=>M.FISH[id]?.rarity!=='junk');return pool[Math.floor(Math.random()*pool.length)]?.[0]??'fish_carp';}});
 // Swings and skills in the village get a harmless, playful answer (village-fun.ts): leaves shake from a tree, dust from a fence or a stall, hearts from a friend.
 const villageFun=new VillageFun(()=>world.fx??null,()=>world.time);
@@ -1235,7 +1237,9 @@ const rodTip=new Vector3();
 /** Indoors the ponds are "far away": no ambient ripples (fx draws in the cottage's scene then, so they would ring among the furniture). */
 const FAR_AWAY=new Vector3(1e4,0,1e4);
 function tipPosition(){const tip=world.player.getObjectByName('rod-tip');if(tip){world.player.updateWorldMatrix(true,true);tip.getWorldPosition(rodTip);}else rodTip.set(world.position.x,1.4,world.position.z);return rodTip;}
-function pondView(e:Entity):PondView{return {id:e.id,x:e.x,z:e.z,rx:e.pond!.rx,rz:e.pond!.rz,surface:e.pond!.surface,waterId:e.waterId??state.planet};}
+function catchGround(pond:{x:number;z:number;rx:number;rz:number;rectangular?:boolean}){return bankCatchSpot(world.position,{...pond,r:pond.rx},state.counters.fish??0,(x,z)=>world.blocked(x,z));}
+function pondEdge(e:Entity){return e.pond?waterEdge({x:e.x,z:e.z,r:e.pond.rx,rz:e.pond.rz,rectangular:e.pond.rectangular},world.position.x,world.position.z):Infinity;}
+function pondView(e:Entity):PondView{return {id:e.id,x:e.x,z:e.z,rx:e.pond!.rx,rz:e.pond!.rz,rectangular:e.pond!.rectangular,surface:e.pond!.surface,waterId:e.waterId??state.planet};}
 function stockPonds(){pondSplash.clear();villageFun.clear();fishingView.attach(world.scene);fishingView.populate(world.outdoorEntities.filter(e=>e.kind==='fish'&&e.pond).map(pondView),waterId=>(M.FISH_WEIGHTS[waterId]??M.FISH_WEIGHTS.home).flatMap(([id,weight])=>Array(Math.max(1,Math.min(6,Math.round(weight/8)))).fill(id)),waterId=>{const pool=(M.FISH_WEIGHTS[waterId]??M.FISH_WEIGHTS.home).filter(([id])=>M.FISH[id].rarity!=='junk');return pool[Math.floor(Math.random()*pool.length)]?.[0]??'fish_carp';},pondStock);}
 // Rod fish follow the harpoon slots' species so picking up hunting gear by the shore keeps the pond's look.
 function pondStock(pond:PondView){const hunt=huntingPondAt(state.planet,pond.x,pond.z);return hunt?fishHuntTargets(hunt,0,state.hunting).map(t=>t.id):null;}
@@ -1257,7 +1261,7 @@ function updateContextWeapon(){
   if(!started||visiting||uiBlocked()||document.hidden)return;
   if(gearState!==state||gearPlanet!==state.planet){gearState=state;gearPlanet=state.planet;gearWater=false;combatGearUntil=0;}
   let shore=Infinity;
-  for(const pond of world.entities)if(pond.kind==='fish'&&pond.pond)shore=Math.min(shore,Math.hypot(pond.x-world.position.x,pond.z-world.position.z)-pond.radius);
+  for(const pond of world.entities)if(pond.kind==='fish'&&pond.pond)shore=Math.min(shore,pondEdge(pond));
   // A one-metre buffer keeps tiny movements on the boundary from swapping gear repeatedly.
   gearWater=shore<=(gearWater?4:3);
   const fighting=!fishGame&&(world.selected?.kind==='enemy'||fightNear(world.enemies,world.position.x,world.position.z)||performance.now()<combatGearUntil);
@@ -1266,7 +1270,7 @@ function updateContextWeapon(){
 function updateHunting(dt:number){
   if(huntingPending&&(huntingPending.owner!==state||huntingPending.scene!==world.root))huntingPending=null;
   const enabled=started&&!uiBlocked()&&!document.hidden&&!visiting&&!flight&&!fishGame&&state.hp>0&&!state.gear.disguise&&state.gear.weapon==='harpoon';
-  const entity=enabled?world.entities.filter(e=>e.kind==='fish'&&e.pond&&Math.hypot(e.x-world.position.x,e.z-world.position.z)<=e.radius+3)
+  const entity=enabled?world.entities.filter(e=>e.kind==='fish'&&e.pond&&pondEdge(e)<=3)
     .sort((a,b)=>Math.hypot(a.x-world.position.x,a.z-world.position.z)-a.radius-(Math.hypot(b.x-world.position.x,b.z-world.position.z)-b.radius))[0]:null;
   const pond=entity?huntingPondAt(state.planet,entity.x,entity.z):null;
   huntingView.update(dt,pond,state.hunting,fishKit.ready,world.root,state);
@@ -1308,13 +1312,13 @@ async function throwHarpoon(aim?:{x:number;z:number}){
     huntingView.syncClock(result.serverNow);huntingView.throw(from,point);
     world.playerAttack('gun');combatTimers.attackCooldown=FISH_HUNT_COOLDOWN_MS/1000;tone('shoot');
     world.fx?.ring({...point,y:pond.surface+.02},{color:result.hit?'#ffe66d':'#bfe9ff',from:.15,to:.7,life:.5});
-    if(result.hit){const item=M.ITEMS[result.id];floating(`${item.icon} ${t(item.name)} · ${formatSize(result.size)}`,point.x,point.z,'item');tone('success');}
+    if(result.hit){fishingView.landHunted(result.id,{...point,surface:pond.surface},world.position,catchGround(pond));const item=M.ITEMS[result.id];floating(`${item.icon} ${t(item.name)} · ${formatSize(result.size)}`,point.x,point.z,'item');tone('success');}
     else floating(t('Missed! Aim at a fish.'),point.x,point.z,'xp');
   }finally{if(huntingPending===scope)huntingPending=null;}
 }
 function fish(pond?:Entity|null){
   pond??=world.entities.filter(e=>e.kind==='fish'&&e.pond).sort((a,b)=>Math.hypot(a.x-world.position.x,a.z-world.position.z)-a.radius-(Math.hypot(b.x-world.position.x,b.z-world.position.z)-b.radius))[0]??null;
-  if(!pond?.pond||Math.hypot(pond.x-world.position.x,pond.z-world.position.z)>pond.radius+3){toast('Walk up to a pond to cast your line.','🎣');return;}
+  if(!pond?.pond||pondEdge(pond)>3){toast('Walk up to a pond to cast your line.','🎣');return;}
   if(swim.mode()!=='land'){toast('Step out onto the shore to fish.','🎣');return;}
   if(state.gear.weapon==='harpoon'&&!state.gear.disguise){const tap=world.pondTap?.id===pond.id?world.pondTap:undefined;world.pondTap=null;void throwHarpoon(tap);return;}
   const rodId=contextGear.forFishing(state);
@@ -1324,7 +1328,7 @@ function fish(pond?:Entity|null){
   const rod=M.ITEMS[rodId].weapon!;
   fishPond=pond;fishingWater=pond.waterId??state.planet;
   // The tap on the water picks the cast point, near or far (the reference's plan()); a recast reuses the last spot.
-  const water={x:pond.x,z:pond.z,r:pond.pond.rx},tap=world.pondTap?.id===pond.id?world.pondTap:lastCast?.id===pond.id?lastCast:water;world.pondTap=null;
+  const water={x:pond.x,z:pond.z,r:pond.pond.rx,rz:pond.pond.rz,rectangular:pond.pond.rectangular},tap=world.pondTap?.id===pond.id?world.pondTap:lastCast?.id===pond.id?lastCast:water;world.pondTap=null;
   const {cast}=planCast(water,world.position,tap);lastCast={id:pond.id,...cast};
   const weights=M.FISH_WEIGHTS[fishingWater]??M.FISH_WEIGHTS.home,stats=M.activeStats(state),input=new FishingInput();input.ready=true;
   // Each fish that swims up is chosen then, with the worm/rod/luck bonus on rare and legendary fish.
@@ -1398,6 +1402,7 @@ async function finishFishingCatch(f:FishingRound){
     const reward=result,item=M.ITEMS[reward.id],caught=M.FISH[reward.id];
     if(!online&&!change(()=>reward.mystery?M.grantMysteryCatch(state,reward.id,reward.size,reward.supergiant):M.grantCatch(state,reward.id,reward.size,reward.huge))){if(current()){fishingView.cancel();toast('There is no room for this catch.','🎒');}return;}
     if(!current())return;
+    const bank=fishingView.pond?catchGround(fishingView.pond):null;
     fishingView.land(()=>world.position,()=>{
       if(!current())return;tone('success');
       world.fx?.burst(world.position,{n:18,color:['#bfe9ff','#ffffff','#ffe66d'],glow:true,speed:4,up:6});
@@ -1408,7 +1413,7 @@ async function finishFishingCatch(f:FishingRound){
       if(reward.mystery)toast(reward.supergiant?'The mysterious shadow was a supergiant fish!':'A treasure was hiding beneath the question mark!',item.icon);
       else if(caught?.rarity==='legendary')toast(t('Legendary catch! {name}, {size}.',{name:t(caught.name),size:formatSize(reward.size)}),'👑');
       if(!fishGame){showReel(true,'cast');recastUntil=performance.now()+6000;}
-    },{id:reward.id,supergiant:reward.supergiant,icon:item.icon,fish:!!caught});
+    },{id:reward.id,supergiant:reward.supergiant,icon:item.icon,fish:!!caught},bank);
 }
 
 

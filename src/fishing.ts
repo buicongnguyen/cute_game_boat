@@ -1,3 +1,4 @@
+import { clampWater, waterEdge, waterShore } from './pond-shape.ts';
 /**
  * The reference's fishing rules (zoo-pet.store bundle, class `zh` @861404–@873700), as a pure,
  * seedable simulation. The view (fishing-view.ts) only draws what this decides.
@@ -8,7 +9,7 @@
 export type FishingPhase = 'cast'|'wait'|'approach'|'nibble'|'bite'|'hooked'|'caught'|'escaped';
 export interface Point { x:number; z:number }
 /** A round body of water (the reference's waters are circles). */
-export interface Water extends Point { r:number }
+export interface Water extends Point { r:number; rz?:number; rectangular?:boolean }
 /** The next fish to come, chosen when it sets off toward the bobber, like the reference's attract(). */
 export interface FishPick { id:string; power:number }
 export interface FishingOptions<P extends FishPick=FishPick> {
@@ -84,6 +85,13 @@ export const lineSnaps=(seed:number,index:number,chance:number)=>lineRoll(seed,i
  * shore point, or set 1.8 m from it toward the middle when the tap was closer than that.
  */
 export function planCast(water:Water, player:Point, tap:Point){
+  if(water.rectangular){
+    const shore=waterShore(water,player.x,player.z,CAST.shoreGap);let cast=clampWater(water,tap.x,tap.z,CAST.edgeGap);
+    const d=Math.hypot(cast.x-shore.x,cast.z-shore.z);
+    if(d>CAST.max)cast={x:shore.x+(cast.x-shore.x)*CAST.max/d,z:shore.z+(cast.z-shore.z)*CAST.max/d};
+    if(d<CAST.min){const n=Math.hypot(water.x-shore.x,water.z-shore.z);cast=clampWater(water,shore.x+(water.x-shore.x)*CAST.min/n,shore.z+(water.z-shore.z)*CAST.min/n,CAST.edgeGap);}
+    return {shore,cast};
+  }
   let dx=player.x-water.x, dz=player.z-water.z; const d=Math.hypot(dx,dz);
   if(d<.1){dx=0;dz=1;}else{dx/=d;dz/=d;}
   const shore={x:water.x+dx*(water.r+CAST.shoreGap),z:water.z+dz*(water.r+CAST.shoreGap)};
@@ -99,7 +107,7 @@ export function planCast(water:Water, player:Point, tap:Point){
 export function earlyPull(water:Water, cast:Point, player:Point){
   const dx=player.x-cast.x,dz=player.z-cast.z,d=Math.hypot(dx,dz)||1;
   const moved={x:cast.x+dx/d*CAST.early,z:cast.z+dz/d*CAST.early};
-  return {cast:moved,reeledIn:Math.hypot(moved.x-water.x,moved.z-water.z)>water.r-CAST.reelInGap};
+  return {cast:moved,reeledIn:waterEdge(water,moved.x,moved.z)>-CAST.reelInGap};
 }
 
 /** The rare-fish bonus at each approach (attract @868468): a worm 0.8, plus rod quality − 0.3, plus luck. */
@@ -258,8 +266,9 @@ export const newMysteryCaller=():MysteryCaller=>({lastCallAt:0});
 /** A spot 2.5–3.2 m from the bobber, kept inside the water when the pond is known (tries a few directions, then pulls it in). */
 export function mysterySpot(cast:Point,random:()=>number=Math.random,water?:Water):Point{
   const [lo,hi]=MYSTERY.near,d=lo+random()*(hi-lo),a0=random()*Math.PI*2;
-  for(let i=0;i<8;i++){const a=a0+i*Math.PI/4,p={x:cast.x+Math.cos(a)*d,z:cast.z+Math.sin(a)*d};if(!water||Math.hypot(p.x-water.x,p.z-water.z)<=water.r-.4)return p;}
+  for(let i=0;i<8;i++){const a=a0+i*Math.PI/4,p={x:cast.x+Math.cos(a)*d,z:cast.z+Math.sin(a)*d};if(!water||waterEdge(water,p.x,p.z)<=-.4)return p;}
   const a=a0,p={x:cast.x+Math.cos(a)*d,z:cast.z+Math.sin(a)*d};if(!water)return p;
+  if(water.rectangular)return clampWater(water,p.x,p.z,.4);
   const from=Math.hypot(p.x-water.x,p.z-water.z)||1,inner=Math.max(.2,water.r-.4);return {x:water.x+(p.x-water.x)/from*inner,z:water.z+(p.z-water.z)/from*inner};
 }
 /**

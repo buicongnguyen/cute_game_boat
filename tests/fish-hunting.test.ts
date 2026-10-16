@@ -11,7 +11,7 @@ function intent(now = NOW, slot = 0): FishHuntIntent { return { weaponId: 'harpo
 function miss(now = NOW): FishHuntIntent { const shot = intent(now), dx = shot.aim.x - pond.x, dz = shot.aim.z - pond.z, d = Math.hypot(dx, dz); shot.aim = { x: pond.x - dx / d * pond.rx * .9, z: pond.z - dz / d * pond.rz * .9 }; return shot; }
 
 test('canonical hunt ponds retain the world geometry, IDs and ordinary fish counts', () => {
-  assert.deepEqual(huntingPonds('home').map(p => [p.id, p.x, p.z, p.rx, p.rz]), [['home:fish:0', -7.5, 11.2, 3.3, 3.3], ['home:fish:1', 10, 52, 9, 9], ['home:fish:2', 40, 105, 11, 11], ['home:fish:3', -70, 35, 8, 8], ['home:fish:4', -105, -30, 7, 7]]);
+  assert.deepEqual(huntingPonds('home').map(p => [p.id, p.x, p.z, p.rx, p.rz]), [['home:fish:0', -7.5, 11.2, 3.3, 2.4], ['home:fish:1', 10, 52, 9, 9], ['home:fish:2', 40, 105, 11, 11], ['home:fish:3', -70, 35, 8, 8], ['home:fish:4', -105, -30, 7, 7]]);
   assert.deepEqual(huntingPondAt('home', pond.x, pond.z), pond); assert.equal(huntingPondAt('ice', pond.x, pond.z), null);
   for (const planet of ['home', 'candy', 'ice', 'toy', 'jungle', 'shadow']) for (const water of huntingPonds(planet)) {
     const targets = fishHuntTargets(water, NOW); assert.equal(targets.length, FISH_PER_WATER[water.waterId]);

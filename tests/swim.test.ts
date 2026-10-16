@@ -113,7 +113,7 @@ test('the movement sync only carries the two water modes', () => {
 
 test('the pond collider is tagged as water, so swimmers cross it and shots fly over it', () => {
   const world = readFileSync(new URL('../src/world.ts', import.meta.url), 'utf8');
-  assert.match(world, /this\.obstacles\.push\(\{x,z,r:r\+\.15,water:true\}/);
+  assert.match(world, /this\.obstacles\.push\(\{x,z,r:.*water:true/);
   assert.match(world, /clearSegment\(from,shot\.mesh\.position,this\.shotObstacles\(\)/);
   assert.match(world, /const obstacles=this\.moverObstacles\(\),options=this\.navigationOptions\(\.36,allowVoid\)/);
 });

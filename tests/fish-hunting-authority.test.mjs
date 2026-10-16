@@ -26,7 +26,7 @@ async function fixture(t) {
 }
 
 test('fish hunting and rod authority share exactly the same supported pond geometry', () => {
-  for (const planet of ['home', 'candy', 'ice', 'toy', 'jungle', 'shadow', 'ocean', 'cloud', 'lava']) assert.deepEqual(waterNodes(planet), huntingPonds(planet).map(p => ({ x: p.x, z: p.z, r: p.rx, water: p.waterId })));
+  for (const planet of ['home', 'candy', 'ice', 'toy', 'jungle', 'shadow', 'ocean', 'cloud', 'lava']) assert.deepEqual(waterNodes(planet), huntingPonds(planet).map(p => ({ x: p.x, z: p.z, r: p.rx, rz:p.rz, rectangular:p.rectangular, water: p.waterId })));
 });
 
 test('authoritative hit ignores claimed reward, commits once, and receipt replay returns a current synchronization clock', async t => {

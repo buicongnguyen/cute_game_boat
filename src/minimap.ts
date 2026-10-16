@@ -33,7 +33,7 @@ export interface MapView {
   /** False while the animal pen is only a marked plot (drawn as a small square, not the yard). */
   penBuilt?: boolean;
   planet: PlanetId; layout: EnvironmentLayout; position: { x: number; z: number }; facing: number;
-  entities: readonly (MapThing & { pond?: { rx: number; rz: number } })[]; enemies: readonly MapCreature[];
+  entities: readonly (MapThing & { pond?: { rx: number; rz: number; rectangular?:boolean } })[]; enemies: readonly MapCreature[];
   /** Ready garden beds (world positions). */
   ready: readonly { x: number; z: number }[];
   remotes: readonly { x: number; z: number }[];
@@ -128,7 +128,7 @@ export function drawTerrain(ctx: Ctx, view: Pick<MapView, 'planet' | 'layout' | 
   }
   // Ponds and lakes (their fishing spots carry the water's half-extents).
   ctx.fillStyle = '#4cb8f0';
-  for (const e of view.entities) if (e.pond) { const p = mapPoint(e.x, e.z); ctx.beginPath(); ctx.ellipse(p.x, p.y, Math.max(1.5, e.pond.rx * s), Math.max(1.2, e.pond.rz * s), 0, 0, TAU); ctx.fill(); }
+  for (const e of view.entities) if (e.pond) { const p = mapPoint(e.x, e.z); ctx.beginPath(); if(e.pond.rectangular)ctx.rect(p.x-e.pond.rx*s,p.y-e.pond.rz*s,e.pond.rx*s*2,e.pond.rz*s*2);else ctx.ellipse(p.x, p.y, Math.max(1.5, e.pond.rx * s), Math.max(1.2, e.pond.rz * s), 0, 0, TAU); ctx.fill(); }
 }
 
 /** One arrival flag on the map: a pole with a pennant in the explorer's colour, outlined in ink, its foot on the spot. */

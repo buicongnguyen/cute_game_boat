@@ -1,3 +1,4 @@
+import { waterEdge, clampWater } from './pond-shape.ts';
 import type * as T from 'three';
 import type { Effects } from './fx.ts';
 import type { CombatEffect } from './combat.ts';
@@ -30,20 +31,21 @@ export const SPLASH = {
   ring: 2.6, ringDelay: .16,
 } as const;
 
-export interface SplashPond { id: string | number; x: number; z: number; /** Radius of the water line. */ r: number; surface: number; waterId: string }
+export interface SplashPond { id: string | number; x: number; z: number; /** Radius of the water line. */ r: number; rz?:number; rectangular?:boolean; surface: number; waterId: string }
 export interface SplashHit { pond: SplashPond; /** Where on the water the burst rises. */ x: number; z: number }
 
 /** The point of the pond nearest to (x, z), kept a little inside its water line; the centre itself when (x, z) is on the water. */
 export function waterPoint(p: SplashPond, x: number, z: number): { x: number; z: number } {
+  if(p.rectangular)return clampWater(p,x,z,.3);
   const dx = x - p.x, dz = z - p.z, d = Math.hypot(dx, dz), inside = p.r * .7;
   return d <= inside ? { x, z } : { x: p.x + dx / d * inside, z: p.z + dz / d * inside };
 }
 /** A round area at (x, z) touches the pond. */
-export const ringTouches = (p: SplashPond, x: number, z: number, radius: number) => Math.hypot(x - p.x, z - p.z) <= radius + p.r;
+export const ringTouches = (p: SplashPond, x: number, z: number, radius: number) => waterEdge(p,x,z)<=radius;
 /** A straight run (a rush) from (x, z) along `facing` for `length` m, `half` m wide each side, touches the pond: returns the nearest point of the run, or null. */
 export function pathTouches(p: SplashPond, x: number, z: number, facing: number, length: number, half: number): { x: number; z: number } | null {
   const sx = Math.sin(facing), sz = Math.cos(facing), along = Math.max(0, Math.min(length, (p.x - x) * sx + (p.z - z) * sz)), nx = x + sx * along, nz = z + sz * along;
-  return Math.hypot(p.x - nx, p.z - nz) <= p.r + half ? { x: nx, z: nz } : null;
+  return waterEdge(p,nx,nz)<=half ? { x: nx, z: nz } : null;
 }
 /** Which ponds a combat effect of the explorer's own reaches (a big area landing or a rush), and where each bursts. */
 export function effectHits(ponds: readonly SplashPond[], e: CombatEffect): SplashHit[] {

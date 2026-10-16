@@ -1,5 +1,5 @@
 export interface Point { x: number; z: number }
-export interface Obstacle extends Point { r: number }
+export interface Obstacle extends Point { r: number; rect?: { x:number; z:number } }
 /** maxIterations caps the A* search (default 50000), so a goal that cannot be reached costs a bounded amount of time. */
 export interface NavigationOptions {clearance?:number;bounds?:number;gridSize?:number;walkable?:(point:Point)=>boolean;maxIterations?:number}
 export const WORLD_BOUNDS=148;
@@ -46,7 +46,7 @@ export function nearbyObstacles(obstacles:Obstacle[],x:number,z:number,reach:num
 
 export function blocked(point: Point, obstacles: Obstacle[],options:NavigationOptions={}) {
   const clearance=options.clearance??CLEARANCE;
-  return Math.abs(point.x)>(options.bounds??49) || Math.abs(point.z)>(options.bounds??49) || options.walkable?.(point)===false || someObstacleNear(obstacles,point.x,point.z,point.x,point.z,clearance,o=>{const ox=point.x-o.x,oz=point.z-o.z,r=o.r+clearance;return r>0&&ox*ox+oz*oz<r*r;}); // squared compare: Math.hypot is the slow path of this per-creature, per-frame check
+  return Math.abs(point.x)>(options.bounds??49) || Math.abs(point.z)>(options.bounds??49) || options.walkable?.(point)===false || someObstacleNear(obstacles,point.x,point.z,point.x,point.z,clearance,o=>{const ox=point.x-o.x,oz=point.z-o.z,r=o.r+clearance;if(o.rect)return Math.abs(ox)<o.rect.x+clearance&&Math.abs(oz)<o.rect.z+clearance;return r>0&&ox*ox+oz*oz<r*r;}); // squared compare: Math.hypot is the slow path of this per-creature, per-frame check
 }
 
 export function clearSegment(from: Point, to: Point, obstacles: Obstacle[],options:NavigationOptions={}) {
@@ -55,6 +55,13 @@ export function clearSegment(from: Point, to: Point, obstacles: Obstacle[],optio
   if(options.walkable){const steps=Math.ceil(Math.sqrt(lengthSquared)/.5);for(let i=1;i<steps;i++)if(!options.walkable({x:from.x+dx*i/steps,z:from.z+dz*i/steps}))return false;}
   const clearance=options.clearance??CLEARANCE;
   return !someObstacleNear(obstacles,Math.min(from.x,to.x),Math.min(from.z,to.z),Math.max(from.x,to.x),Math.max(from.z,to.z),clearance,obstacle => {
+    if(obstacle.rect){
+      let lo=0,hi=1;
+      for(const [start,delta,center,half] of [[from.x,dx,obstacle.x,obstacle.rect.x+clearance],[from.z,dz,obstacle.z,obstacle.rect.z+clearance]]){
+        if(Math.abs(delta)<1e-9){if(Math.abs(start-center)>=half)return false;continue;}
+        const a=(center-half-start)/delta,b=(center+half-start)/delta;lo=Math.max(lo,Math.min(a,b));hi=Math.min(hi,Math.max(a,b));if(lo>=hi)return false;
+      }return hi>lo;
+    }
     const t = lengthSquared ? Math.max(0, Math.min(1, ((obstacle.x-from.x)*dx+(obstacle.z-from.z)*dz)/lengthSquared)) : 0;
     const ox=from.x+t*dx-obstacle.x,oz=from.z+t*dz-obstacle.z,r=obstacle.r+clearance;return r>0&&ox*ox+oz*oz<r*r;
   });

@@ -1,3 +1,5 @@
+import { waterEdge } from '../src/pond-shape.ts';
+import { bankCatchSpot } from '../src/bank-catch.ts';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
@@ -16,7 +18,7 @@ import { fightNear } from '../src/hud-combat.ts';
 // are intercepted so assertions can inspect which gear reaches each action.
 const source = await readFile(new URL('../src/main.ts', import.meta.url), 'utf8');
 const ast = ts.createSourceFile('main.ts', source, ts.ScriptTarget.Latest, true);
-const names = ['applyContextWeapon', 'prepareCombatWeapon', 'updateContextWeapon', 'fish', 'pondView', 'endFishing', 'updateFishing', 'finishFishingCatch', 'basicAttack', 'skillList', 'skill', 'mysteryGotAway', 'movesOn', 'ownSkills'];
+const names = ['applyContextWeapon', 'prepareCombatWeapon', 'updateContextWeapon', 'fish', 'pondView', 'pondEdge', 'catchGround', 'endFishing', 'updateFishing', 'finishFishingCatch', 'basicAttack', 'skillList', 'skill', 'mysteryGotAway', 'movesOn', 'ownSkills'];
 const declarations = names.map(name => {
   const node = ast.statements.find(node => ts.isFunctionDeclaration(node) && node.name?.text === name);
   assert.ok(node, `main.ts must provide the actual ${name} controller`);
@@ -37,7 +39,7 @@ function fixture(...items) {
   const pond = { id: 'pond', kind: 'fish', x: 0, z: 0, radius: 2, pond: { rx: 2, rz: 2, surface: 0 }, waterId: 'home' };
   const combatTimers = new CombatTimers();
   const ctx = vm.createContext({
-    M, ContextGearSelection, FishingSimulation, FishingInput, planCast, selectCatch, catchWeight, attractMystery, mysteryMissed, mysteryLanded, mysteryCaller: newMysteryCaller(),
+    waterEdge, bankCatchSpot, M, ContextGearSelection, FishingSimulation, FishingInput, planCast, selectCatch, catchWeight, attractMystery, mysteryMissed, mysteryLanded, mysteryCaller: newMysteryCaller(),
     BASE_SKILLS, SPECIALS, MOVE_SKILLS, fightNear, recordEvent: M.recordEvent, esc: v => String(v),
     state, gearState: state, gearPlanet: state.planet, gearWater: false, combatGearUntil: 0,actionHandler:null,ctfApi:null,swim:{blocksActions:()=>false,mode:()=>'land'},
     contextGear: new ContextGearSelection(), started: true, visiting: null, blocked: false,

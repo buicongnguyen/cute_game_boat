@@ -1,3 +1,4 @@
+import { dropTree } from './dispose-tree.ts';
 import * as T from 'three';
 import type { KitLibrary } from './assets.ts';
 import type { Effects } from './fx.ts';
@@ -20,7 +21,7 @@ function silhouetteBody(model: T.Group): T.BufferGeometry | null {
 }
 
 /** Swimmable water of one pond, in world units. */
-export interface PondView { id: string; x: number; z: number; rx: number; rz: number; surface: number; waterId: string }
+export interface PondView { id: string; x: number; z: number; rx: number; rz: number; surface: number; waterId: string; rectangular?: boolean }
 /** Stable stocking slot; decorative fish and temporary rod visitors never take a slot. */
 export interface FishPose { slot: number; x: number; z: number; heading: number; id?: string }
 type FishState = 'swim' | 'approach' | 'nibble' | 'bite' | 'hooked' | 'flee';
@@ -34,7 +35,7 @@ interface Swimmer {
   deep?:boolean;
   slot?:number;
 }
-interface Leap { obj: T.Group; from: T.Vector3; target: () => T.Vector3; t: number; done: () => void }
+interface Leap { obj: T.Group; from: T.Vector3; target: () => T.Vector3; t: number; done: () => void; bank?: {at:T.Vector3;anchor:T.Vector3} }
 
 const between = (min: number, max: number) => min + Math.random() * (max - min);
 const turn = (from: number, to: number, amount: number) => from + Math.atan2(Math.sin(to - from), Math.cos(to - from)) * Math.min(1, amount);
@@ -122,6 +123,7 @@ export class FishingView {
   private seen = { nibbles: 0, missed: 0, early: 0, fled: 0 };
   private interest: Swimmer | null = null; private species = '';
   private leaps: Leap[] = [];
+  private bankFish: {obj:T.Group;at:T.Vector3;anchor:T.Vector3;age:number}[] = [];
   private scratch = new T.Vector3();
   private readonly segments = 18;
   private respawns: Array<{ pond: PondView; at: number; species: string; slot?: number }> = [];
@@ -182,6 +184,7 @@ export class FishingView {
     for (const d of this.dressing) this.root.remove(d);
     this.fish = []; this.dressing = []; this.respawns = []; this.ripples.clear();
     for(const leap of this.leaps)this.root.remove(leap.obj);this.leaps=[];
+    for(const fish of this.bankFish)dropTree(fish.obj);this.bankFish=[];
     this.mysterySpecies=mysterySpecies??(waterId=>pool(waterId).find(id=>id!=='boot')??'fish_perch');
     this.ponds=ponds;
     if (this.kit.ready) { const fresh = this.makeBobber(); this.root.remove(this.bobber); this.bobber = fresh; this.bobber.visible = false; this.root.add(fresh); }
@@ -199,7 +202,8 @@ export class FishingView {
         for (let i = 0; i < count2; i++) {
           const piece = this.kit.ready ? this.kit.instance(name) : null; if (!piece) continue;
           const a = (i + .3) / count2 * Math.PI * 2 + pond.x, d = onEdge ? pond.rx + .3 : pond.rx * .55;
-          piece.position.set(pond.x + Math.cos(a) * d, onEdge ? .12 : pond.surface + .01, pond.z + Math.sin(a) * d);
+          const factor=pond.rectangular?1/Math.max(Math.abs(Math.cos(a)),Math.abs(Math.sin(a))):1;
+          piece.position.set(pond.x + Math.cos(a) * d*factor, onEdge ? .12 : pond.surface + .01, pond.z + Math.sin(a) * (onEdge?pond.rz+.3:pond.rz*.55)*factor);
           // Lily pads and reeds lie flat or are thin: their shadows would cost a pass and add nothing.
           piece.traverse(o => { o.castShadow = false; });
           piece.rotation.y = a; this.root.add(piece); this.dressing.push(piece);
@@ -304,6 +308,7 @@ export class FishingView {
   }
 
   private inside(pond: PondView, x: number, z: number, margin = .82) {
+    if(pond.rectangular)return {x:Math.max(pond.x-pond.rx*margin,Math.min(pond.x+pond.rx*margin,x)),z:Math.max(pond.z-pond.rz*margin,Math.min(pond.z+pond.rz*margin,z))};
     const u = (x - pond.x) / (pond.rx * margin), v = (z - pond.z) / (pond.rz * margin), d = Math.hypot(u, v);
     return d <= 1 ? { x, z } : { x: pond.x + u / d * pond.rx * margin, z: pond.z + v / d * pond.rz * margin };
   }
@@ -353,8 +358,13 @@ export class FishingView {
     const fish = this.interest; this.cancel(); if (fish) fish.speed = 4.5;
   }
 
-  /** The catch leaps out of the water in an arc and lands in the explorer's arms; a new fish swims in 12 s later. */
-  land(target: () => T.Vector3, done: () => void,reveal?:{id:string;supergiant?:boolean;icon?:string;fish?:boolean}) {
+  /** Harpoon rewards use the same shoreline presentation without disturbing the rod's swimmer/restock state. */
+  landHunted(species:string,from:{x:number;z:number;surface:number},player:T.Vector3,ground:{x:number;z:number}|null){
+    if(!ground)return;const obj=this.makeFish(species).obj;this.root.add(obj);
+    this.leaps.push({obj,from:new T.Vector3(from.x,from.surface,from.z),target:()=>player,t:0,done:()=>{},bank:{at:new T.Vector3(ground.x,.12*obj.scale.x+.03,ground.z),anchor:player.clone()}});
+  }
+  /** The catch leaps onto nearby dry ground; the earned reward is already safe in the bag. */
+  land(target: () => T.Vector3, done: () => void,reveal?:{id:string;supergiant?:boolean;icon?:string;fish?:boolean}, ground?:{x:number;z:number}|null) {
     const fish = this.interest, pond = this.pond;
     let obj: T.Group;
     if (fish) { this.fish.splice(this.fish.indexOf(fish), 1); obj = fish.obj; }
@@ -367,7 +377,7 @@ export class FishingView {
     this.fx.burst(from, { n: 20, color: ['#ffffff', '#9fe3ff'], glow: true, speed: 5, up: 7, y: 0 });
     this.fx.ring(from, { color: '#ffffff', to: 2, life: .5, y: (pond?.surface ?? 0) + .02 });
     this.sound('catch');
-    this.leaps.push({ obj, from, target, t: 0, done });
+    this.leaps.push({ obj, from, target, t: 0, done, bank: ground&&reveal?.fish!==false ? {at:new T.Vector3(ground.x,.12*obj.scale.x+.03,ground.z),anchor:target().clone()}:undefined });
     this.cancel();
   }
 
@@ -384,6 +394,12 @@ export class FishingView {
     for (const fish of this.fish) this.updateFish(fish, dt, time, Math.hypot(player.x - fish.pond.x, player.z - fish.pond.z) < 45);
     this.ambientRipples(player);
     this.updateLeaps(dt);
+    for(let i=this.bankFish.length-1;i>=0;i--){
+      const f=this.bankFish[i];f.age+=dt;
+      if(Math.hypot(player.x-f.anchor.x,player.z-f.anchor.z)>7){dropTree(f.obj);this.bankFish.splice(i,1);continue;}
+      const flop=Math.max(0,1-f.age/2.5);f.obj.position.copy(f.at);f.obj.position.y+=Math.abs(Math.sin(f.age*15))*.06*flop;
+      f.obj.rotation.x=Math.sin(f.age*17)*.08*flop;f.obj.rotation.z=Math.PI/2+Math.sin(f.age*13)*.1*flop;
+    }
     if (!this.active || !sim || !this.pond) return;
     this.t += dt;
     const pond = this.pond, bob = this.bobber.position;
@@ -523,10 +539,14 @@ export class FishingView {
   private updateLeaps(dt: number) {
     for (let i = this.leaps.length - 1; i >= 0; i--) {
       const leap = this.leaps[i]; leap.t += dt / .65;
-      const k = Math.min(1, leap.t), to = leap.target().clone(); to.y += 1.2;
+      const k = Math.min(1, leap.t), to = leap.bank?.at ?? leap.target().clone().add(new T.Vector3(0,1.2,0));
       leap.obj.position.lerpVectors(leap.from, to, k); leap.obj.position.y += Math.sin(k * Math.PI) * 2.2;
       leap.obj.rotation.x += dt * 9; leap.obj.rotation.y += dt * 5;
-      if (k >= 1) { this.root.remove(leap.obj); this.leaps.splice(i, 1); leap.done(); }
+      if (k >= 1) {
+        if(leap.bank){leap.obj.position.copy(leap.bank.at);leap.obj.rotation.set(0,Math.atan2(leap.bank.at.x-leap.from.x,leap.bank.at.z-leap.from.z),Math.PI/2);this.bankFish.push({obj:leap.obj,...leap.bank,age:0});while(this.bankFish.length>12)dropTree(this.bankFish.shift()!.obj);}
+        else this.root.remove(leap.obj);
+        this.leaps.splice(i, 1); leap.done();
+      }
     }
   }
 

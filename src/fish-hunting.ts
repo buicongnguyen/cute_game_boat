@@ -1,3 +1,4 @@
+import { HOME_POND, waterEdge } from './pond-shape.ts';
 import { FISH, FISH_WEIGHTS, ITEMS } from './content.ts';
 import { FISH_PER_WATER } from './fishing.ts';
 import { zoneAt } from './environments.ts';
@@ -16,7 +17,7 @@ export const FISH_HUNT_HIT_RADIUS = .9;
 const HUNT_PLANETS = ['home', 'candy', 'ice', 'toy', 'jungle', 'shadow'];
 const MAX_TIME = Number.MAX_SAFE_INTEGER - FISH_HUNT_RESTOCK_MS;
 interface Point { x: number; z: number }
-export interface HuntPond extends Point { id: string; rx: number; rz: number; surface: number; waterId: string }
+export interface HuntPond extends Point { id: string; rx: number; rz: number; surface: number; waterId: string; rectangular?: boolean }
 export interface FishHuntTarget extends Point { slot: number; id: string; size: number; facing: number }
 export interface HuntingState { lastShotAt: number; readyAt: Record<string, number>; /** Fish caught per slot: seeds the species that restocks there. */ caught?: Record<string, number>; /** Distinguishes an initial zero timestamp from a shot at time zero. */ hasShot?: boolean; /** When this explorer last caught the Lake Guardian (lake-guardian.ts: one per 6 h). */ guardianAt?: number }
 export interface FishHuntIntent { weaponId: string; pondId: string; slot: number; aim: Point }
@@ -27,7 +28,7 @@ const point = (p: unknown): p is Point => !!p && typeof p === 'object' && Number
 /** Same geometry and stable entity IDs as World.makePond and rod-fishing validation. */
 export function huntingPonds(planet: string): HuntPond[] {
   const raw = planet === 'home' ? [[-7.5, 11.2, 3.3], [10, 52, 9], [40, 105, 11], [-70, 35, 8], [-105, -30, 7]] : HUNT_PLANETS.includes(planet) ? Array.from({ length: 4 }, (_, i) => [Math.cos(i * Math.PI / 2 + .4) * (38 + i * 17), Math.sin(i * Math.PI / 2 + .4) * (38 + i * 17), 6 + i * .6]) : [];
-  return raw.map(([x, z, r], i) => ({ id: `${planet}:fish:${i}`, x, z, rx: r, rz: r, surface: .3, waterId: planet === 'home' ? Math.hypot(x, z) < 18 ? 'home' : zoneAt({ x, z }) === 'swamp' ? 'swamp' : 'lake' : planet }));
+  return raw.map(([x, z, r], i) => ({ id: `${planet}:fish:${i}`, x, z, rx: r, rz: planet==='home'&&i===0?HOME_POND.rz:r, ...(planet==='home'&&i===0?{rectangular:true}:{}), surface: .3, waterId: planet === 'home' ? Math.hypot(x, z) < 18 ? 'home' : zoneAt({ x, z }) === 'swamp' ? 'swamp' : 'lake' : planet }));
 }
 export function huntingPondAt(planet: string, x: number, z: number): HuntPond | null { return huntingPonds(planet).find(p => Math.hypot(p.x - x, p.z - z) < .01) ?? null; }
 export const fishHuntKey = (pondId: string, slot: number) => `${pondId}:${slot}`;
@@ -86,7 +87,7 @@ export function huntFish(s: SaveState, intent: FishHuntIntent, from: Point, now 
   const guardian = intent.slot === GUARDIAN_SLOT;
   const target = guardian ? guardianTarget(pond, now, s.hunting) : fishHuntTarget(pond, intent.slot, now, s.hunting); if (!target) return null;
   const key = fishHuntKey(pond.id, target.slot), readyAt = guardian ? 0 : s.hunting?.readyAt[key] ?? 0;
-  if (now < readyAt || Math.hypot((intent.aim.x - pond.x) / pond.rx, (intent.aim.z - pond.z) / pond.rz) > 1 || Math.hypot(from.x - pond.x, from.z - pond.z) > pond.rx + 3.05 || Math.hypot(from.x - intent.aim.x, from.z - intent.aim.z) > Math.min(16, weapon.range)) return null;
+  if (now < readyAt || waterEdge({...pond,r:pond.rx},intent.aim.x,intent.aim.z)>0 || waterEdge({...pond,r:pond.rx},from.x,from.z)>3.05 || Math.hypot(from.x - intent.aim.x, from.z - intent.aim.z) > Math.min(16, weapon.range)) return null;
   const hit = Math.hypot(target.x - intent.aim.x, target.z - intent.aim.z) <= (guardian ? GUARDIAN_HIT_RADIUS : FISH_HUNT_HIT_RADIUS);
   // A failed inventory grant keeps both the fish and the shot available.
   if (hit && !grantCatch(s, target.id, target.size, false)) return null;

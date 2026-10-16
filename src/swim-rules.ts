@@ -1,3 +1,4 @@
+import { waterEdge, waterShore } from './pond-shape.ts';
 /**
  * Crossing water (owner-approved design, Oct 2026): the rules alone, no Three.js, so tests run them directly.
  *
@@ -9,7 +10,7 @@
  *
  * Creatures never step in (their scenery keeps the pond solid), so they wait at the shore, and shots fly over water.
  */
-export interface Pool { id?: string; x: number; z: number; r: number; /** A pond that must stay a barrier (none today). */ noSwim?: boolean }
+export interface Pool { id?: string; x: number; z: number; r: number; rz?: number; rectangular?: boolean; /** A pond that must stay a barrier (none today). */ noSwim?: boolean }
 export type SwimMode = 'land' | 'wade' | 'swim';
 
 export const SWIM = {
@@ -45,7 +46,7 @@ export const deepEdge = (pool: Pool) => Math.max(pool.r * SWIM.deepCore, pool.r 
 /** The pond the point is in or beside (the nearest by edge distance), and how far past its stop line the point is. */
 export function nearestPool(pools: readonly Pool[], x: number, z: number): { pool: Pool; d: number } | null {
   let best: { pool: Pool; d: number } | null = null, gap = Infinity;
-  for (const pool of pools) { const d = Math.hypot(x - pool.x, z - pool.z), g = d - pool.r; if (g < gap) { gap = g; best = { pool, d }; } }
+  for (const pool of pools) { const g = waterEdge(pool,x,z), d = g + pool.r; if (g < gap) { gap = g; best = { pool, d }; } }
   return best;
 }
 
@@ -58,6 +59,7 @@ export function modeAt(pools: readonly Pool[], x: number, z: number, margin = 0)
 
 /** The point on the shore nearest to (x, z), just outside where the collider stops the explorer. */
 export function shorePoint(pool: Pool, x: number, z: number, extra = .12) {
+  if(pool.rectangular)return waterShore(pool,x,z,SWIM.lip+SWIM.clearance+extra);
   const dx = x - pool.x, dz = z - pool.z, d = Math.hypot(dx, dz) || 1, r = shoreStop(pool) + extra;
   return { x: pool.x + dx / d * r, z: pool.z + dz / d * r };
 }
@@ -66,7 +68,7 @@ export function shorePoint(pool: Pool, x: number, z: number, extra = .12) {
 export function pushesIn(pool: Pool, x: number, z: number, dirX: number, dirZ: number) {
   const dx = pool.x - x, dz = pool.z - z, d = Math.hypot(dx, dz), n = Math.hypot(dirX, dirZ);
   if (!n || !d || pool.noSwim) return false;
-  if (d > shoreStop(pool) + SWIM.shoreReach) return false;
+  if (waterEdge(pool,x,z) > SWIM.lip + SWIM.clearance + SWIM.shoreReach) return false;
   return (dx * dirX + dz * dirZ) / (d * n) >= SWIM.aim;
 }
 
@@ -142,7 +144,7 @@ export class SwimState {
       if (pool && pushesIn(pool, x, z, input.pushX, input.pushZ)) pushing = true;
       const press = input.press;
       if (!pushing && pool && press && press.age <= SWIM.pressFresh) {
-        const inWater = Math.hypot(press.x - pool.x, press.z - pool.z) < pool.r;
+        const inWater = waterEdge(pool,press.x,press.z)<0;
         if (inWater && pushesIn(pool, x, z, press.x - x, press.z - z)) { pushing = true; to = { x: press.x, z: press.z }; }
       }
       this.pushT = pushing ? this.pushT + dt : 0;

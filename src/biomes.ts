@@ -1,3 +1,4 @@
+import { HOME_POND, waterShore } from './pond-shape.ts';
 import type { PlanetId } from './model.ts';
 import { terrainHeight, zoneAt, type EnvironmentLayout } from './environments.ts';
 
@@ -202,7 +203,7 @@ export function planDecor({ planet, layout, random, free, ponds = [], clearings 
   // Reeds around each pond's sandy rim (the ponds are round, as in the reference).
   for (const pond of ponds) {
     const count = pond.r < 4 ? 4 : pond.r >= 7 && planet === 'home' ? 16 : 5;
-    for (let i = 0; i < count; i++) { const a = random() * Math.PI * 2, x = pond.x + Math.cos(a) * (pond.r + .7), z = pond.z + Math.sin(a) * (pond.r + .7); place('reeds', x, z, 0); }
+    for (let i = 0; i < count; i++) { const a = random() * Math.PI * 2, x = pond.x + Math.cos(a) * (pond.r + .7), z = pond.z + Math.sin(a) * (pond.r + .7); const at=planet==='home'&&pond.x===HOME_POND.x&&pond.z===HOME_POND.z?waterShore({...HOME_POND,r:HOME_POND.rx},x,z,.7):{x,z};place('reeds', at.x, at.z, 0); }
   }
   if (planet === 'home') {
     // Inside the village fence: flowers, grass and bushes around the buildings and trails.

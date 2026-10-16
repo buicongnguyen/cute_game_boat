@@ -1,3 +1,5 @@
+import { waterEdge } from '../src/pond-shape.ts';
+import { bankCatchSpot } from '../src/bank-catch.ts';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
@@ -7,16 +9,16 @@ import * as M from '../src/model.ts';
 import { FISH_HUNT_COOLDOWN_MS, huntingPondAt, huntingPonds, fishHuntTargets } from '../src/fish-hunting.ts';
 
 const source = await readFile(new URL('../src/main.ts', import.meta.url), 'utf8'), ast = ts.createSourceFile('main.ts', source, ts.ScriptTarget.Latest, true);
-const statements = ast.statements.filter(n => ts.isFunctionDeclaration(n) && ['updateHunting', 'throwHarpoon'].includes(n.name?.text) || ts.isVariableStatement(n) && n.declarationList.declarations.some(d => /^hunting(?!View)/.test(d.name.getText(ast))));
+const statements = ast.statements.filter(n => ts.isFunctionDeclaration(n) && ['updateHunting', 'throwHarpoon', 'pondEdge', 'catchGround'].includes(n.name?.text) || ts.isVariableStatement(n) && n.declarationList.declarations.some(d => /^hunting(?!View)/.test(d.name.getText(ast))));
 const compiled = ts.transpileModule(statements.map(n => n.getText(ast)).join('\n'), { compilerOptions: { target: ts.ScriptTarget.ES2022 } }).outputText;
 function fixture() {
   const state = M.newGame(); state.bag.harpoon = 1; state.gear.weapon = 'harpoon';
   const pond = huntingPonds('home')[0], calls = [], effects = [], resolvers = [], now = 1_000_000;
   const button = { hidden: true, classList: { values: new Set(), contains(s) { return this.values.has(s); }, toggle(s, on) { if (on) this.values.add(s); else this.values.delete(s); } } };
   const huntingView = { pond: null, targets: [], now: () => now, syncClock: () => effects.push('clock'), throw: () => effects.push('throw'), update(_dt, p) { this.pond = p; this.targets = p ? fishHuntTargets(p, now) : []; }, nearest() { return this.targets[0] ?? null; } };
-  const context = { M, huntingPondAt, FISH_HUNT_COOLDOWN_MS, huntingView, state, started: true, visiting: null, flight: null, fishGame: null,
+  const context = { waterEdge, bankCatchSpot, M, huntingPondAt, FISH_HUNT_COOLDOWN_MS, huntingView, fishingView:{landHunted:()=>{}}, state, started: true, visiting: null, flight: null, fishGame: null,
     blocked: false, uiBlocked: () => ctx.blocked, document: { hidden: false }, fishKit: { ready: false }, combatTimers: { attackCooldown: 0 },
-    world: { root: {}, entities: [{ ...pond, kind: 'fish', radius: pond.rx, pond }], position: { x: pond.x, z: pond.z + pond.rz + .6 }, route: [], ring: { visible: true }, playerAttack: () => effects.push('attack'), fx: { ring: () => effects.push('ring') } },
+    world: { blocked:()=>false, root: {}, entities: [{ ...pond, kind: 'fish', radius: pond.rx, pond }], position: { x: pond.x, z: pond.z + pond.rz + .6 }, route: [], ring: { visible: true }, playerAttack: () => effects.push('attack'), fx: { ring: () => effects.push('ring') } },
     $: selector => selector === '#reel-button' ? button : { textContent: '' }, showReel: (on, mode) => { button.hidden = !on; button.classList.toggle('hunt', mode === 'hunt'); },
     perform: (type, payload) => { calls.push({ type, payload }); return new Promise(resolve => resolvers.push(resolve)); }, toast: () => {}, tone: () => effects.push('tone'), floating: () => effects.push('floating'), t: s => s, formatSize: size => String(size) };
   const ctx = vm.createContext(context); vm.runInContext(compiled, ctx);

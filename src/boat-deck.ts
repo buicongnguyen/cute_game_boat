@@ -1,4 +1,5 @@
 import * as T from 'three';
+import { HOME_POND } from './pond-shape.ts';
 import { toonMaterial } from './toon.ts';
 import { HOME_SAFE } from './safe-zone.ts';
 
@@ -41,7 +42,8 @@ export function woodenSafeDeck() {
   const group = new T.Group(); group.name = 'wooden-safe-deck'; group.userData.environment = true;
   const shape = new T.Shape(); shape.moveTo(-HOME_SAFE.x, -HOME_SAFE.z); shape.lineTo(HOME_SAFE.x, -HOME_SAFE.z); shape.lineTo(HOME_SAFE.x, HOME_SAFE.z); shape.lineTo(-HOME_SAFE.x, HOME_SAFE.z); shape.closePath();
   // Shape y becomes world -z. The bank and water keep their original geometry and fishing bounds.
-  const pond = new T.Path(); pond.absarc(-7.5, -11.2, 3.85, 0, Math.PI * 2, true); shape.holes.push(pond);
+  const p=HOME_POND,x=p.x,z=-p.z,rx=p.rx+.45,rz=p.rz+.45;
+  const pond = new T.Path(); pond.moveTo(x-rx,z-rz);pond.lineTo(x-rx,z+rz);pond.lineTo(x+rx,z+rz);pond.lineTo(x+rx,z-rz);pond.closePath();shape.holes.push(pond);
   const deck = new T.Mesh(new T.ShapeGeometry(shape, 96).rotateX(-Math.PI / 2), toonMaterial({ map: plankTexture(), polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1 }));
   deck.name = 'deck-planks'; deck.position.y = 0; deck.receiveShadow = true; group.add(deck);
   // A dark recess beneath the raised hatch rim covers the grass without changing navigation height.

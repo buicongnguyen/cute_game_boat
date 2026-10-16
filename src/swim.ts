@@ -59,7 +59,7 @@ export function mountSwim(host: SwimHost): SwimApi {
 
   const poolsNow = () => {
     const list = w.entities;
-    if (list !== poolsFrom || list.length !== poolsLen) { poolsFrom = list; poolsLen = list.length; pools = list.filter(e => e.kind === 'fish' && e.pond).map(e => ({ id: e.id, x: e.x, z: e.z, r: e.pond!.rx })); }
+    if (list !== poolsFrom || list.length !== poolsLen) { poolsFrom = list; poolsLen = list.length; pools = list.filter(e => e.kind === 'fish' && e.pond).map(e => ({ id: e.id, x: e.x, z: e.z, r: e.pond!.rx, rz:e.pond!.rz, rectangular:e.pond!.rectangular })); }
     return pools;
   };
   const push = () => {
