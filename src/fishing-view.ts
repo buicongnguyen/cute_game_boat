@@ -1,3 +1,4 @@
+import { PACK_DISTANCE } from './bank-catch.ts';
 import { dropTree } from './dispose-tree.ts';
 import * as T from 'three';
 import type { KitLibrary } from './assets.ts';
@@ -126,6 +127,7 @@ export class FishingView {
   private interest: Swimmer | null = null; private species = '';
   private leaps: Leap[] = [];
   private bankFish: {obj:T.Group;at:T.Vector3;anchor:T.Vector3;age:number}[] = [];
+  private bankAnchor: T.Vector3 | null = null;
   private scratch = new T.Vector3();
   private readonly segments = 18;
   private respawns: Array<{ pond: PondView; at: number; species: string; slot?: number }> = [];
@@ -186,7 +188,7 @@ export class FishingView {
     for (const d of this.dressing) this.root.remove(d);
     this.fish = []; this.dressing = []; this.respawns = []; this.ripples.clear();
     for(const leap of this.leaps)this.root.remove(leap.obj);this.leaps=[];
-    for(const fish of this.bankFish)dropTree(fish.obj);this.bankFish=[];
+    for(const fish of this.bankFish)dropTree(fish.obj);this.bankFish=[];this.bankAnchor=null;
     this.mysterySpecies=mysterySpecies??(waterId=>pool(waterId).find(id=>id!=='boot')??'fish_perch');
     this.ponds=ponds;
     if (this.kit.ready) { const fresh = this.makeBobber(); this.root.remove(this.bobber); this.bobber = fresh; this.bobber.visible = false; this.root.add(fresh); }
@@ -361,10 +363,27 @@ export class FishingView {
     const fish = this.interest; this.cancel(); if (fish) fish.speed = 4.5;
   }
 
+  /** One fishing spot owns the whole catch, as in the reference game's packBankCatch. */
+  private catchAnchor(player:T.Vector3) {
+    this.packBankCatch(player);
+    this.bankAnchor ??= player.clone();
+    return this.bankAnchor.clone();
+  }
+  /** Rewards are already saved; packing removes only their shore presentation, including pending landings. */
+  private packBankCatch(player:T.Vector3) {
+    if (!this.bankAnchor || Math.hypot(player.x-this.bankAnchor.x,player.z-this.bankAnchor.z)<=PACK_DISTANCE) return;
+    this.bankAnchor=null;
+    for(const fish of this.bankFish)dropTree(fish.obj);
+    this.bankFish=[];
+    const pending=this.leaps.filter(leap=>leap.bank);
+    this.leaps=this.leaps.filter(leap=>!leap.bank);
+    for(const leap of pending){dropTree(leap.obj);leap.done();}
+  }
+
   /** Harpoon rewards use the same shoreline presentation without disturbing the rod's swimmer/restock state. */
   landHunted(species:string,from:{x:number;z:number;surface:number},player:T.Vector3,ground:{x:number;z:number}|null){
-    if(!ground)return;const obj=this.makeFish(species).obj;this.root.add(obj);
-    this.leaps.push({obj,from:new T.Vector3(from.x,from.surface,from.z),target:()=>player,t:0,done:()=>{},bank:{at:new T.Vector3(ground.x,.12*obj.scale.x+.03,ground.z),anchor:player.clone()}});
+    if(!ground)return;const anchor=this.catchAnchor(player),obj=this.makeFish(species).obj;this.root.add(obj);
+    this.leaps.push({obj,from:new T.Vector3(from.x,from.surface,from.z),target:()=>player,t:0,done:()=>{},bank:{at:new T.Vector3(ground.x,.12*obj.scale.x+.03,ground.z),anchor}});
   }
   /** The catch leaps onto nearby dry ground; the earned reward is already safe in the bag. */
   land(target: () => T.Vector3, done: () => void,reveal?:{id:string;supergiant?:boolean;icon?:string;fish?:boolean}, ground?:{x:number;z:number}|null) {
@@ -380,7 +399,8 @@ export class FishingView {
     this.fx.burst(from, { n: 20, color: ['#ffffff', '#9fe3ff'], glow: true, speed: 5, up: 7, y: 0 });
     this.fx.ring(from, { color: '#ffffff', to: 2, life: .5, y: (pond?.surface ?? 0) + .02 });
     this.sound('catch');
-    this.leaps.push({ obj, from, target, t: 0, done, bank: ground&&reveal?.fish!==false ? {at:new T.Vector3(ground.x,.12*obj.scale.x+.03,ground.z),anchor:target().clone()}:undefined });
+    const bank=ground&&reveal?.fish!==false ? {at:new T.Vector3(ground.x,.12*obj.scale.x+.03,ground.z),anchor:this.catchAnchor(target())}:undefined;
+    this.leaps.push({ obj, from, target, t: 0, done, bank });
     this.cancel();
   }
 
@@ -396,10 +416,10 @@ export class FishingView {
     }
     for (const fish of this.fish) this.updateFish(fish, dt, time, Math.hypot(player.x - fish.pond.x, player.z - fish.pond.z) < 45);
     this.ambientRipples(player);
+    this.packBankCatch(player);
     this.updateLeaps(dt);
     for(let i=this.bankFish.length-1;i>=0;i--){
       const f=this.bankFish[i];f.age+=dt;
-      if(Math.hypot(player.x-f.anchor.x,player.z-f.anchor.z)>7){dropTree(f.obj);this.bankFish.splice(i,1);continue;}
       const flop=Math.max(0,1-f.age/2.5);f.obj.position.copy(f.at);f.obj.position.y+=Math.abs(Math.sin(f.age*15))*.06*flop;
       f.obj.rotation.x=Math.sin(f.age*17)*.08*flop;f.obj.rotation.z=Math.PI/2+Math.sin(f.age*13)*.1*flop;
     }

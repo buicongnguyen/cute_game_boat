@@ -41,6 +41,12 @@ for(const width of [360,1440])test('rectangular pond casts and caught fish rest 
   const fish=await page.evaluate(()=>window.__zoo.fishingView.bankFish.map(f=>({x:f.obj.position.x,z:f.obj.position.z,roll:f.obj.rotation.z})));
   assert.equal(fish.length,4);assert.ok(fish.every(f=>Math.abs(f.roll-Math.PI/2)<.11));
   if(process.env.BOAT_SHOT_DIR)await page.screenshot({path:process.env.BOAT_SHOT_DIR+'/rectangular-pond-'+width+'.png'});
+  const bagBefore=await page.evaluate(()=>Object.fromEntries(Object.entries(window.__zoo.state.bag).filter(([id])=>id.startsWith('fish_'))));
+  await page.evaluate(()=>{const w=window.__zoo.world;w.position.z+=2.6;w.destination=null;w.route=[];});
+  await page.waitForFunction(()=>window.__zoo.fishingView.bankFish.length===0&&window.__zoo.fishingView.leaps.every(f=>!f.bank));
+  await page.evaluate(()=>{window.__zoo.world.position.set(-7.5,0,15);});await page.waitForTimeout(800);
+  assert.equal(await page.evaluate(()=>window.__zoo.fishingView.bankFish.length),0,'packed fish stay off the floor when returning');
+  assert.deepEqual(await page.evaluate(()=>Object.fromEntries(Object.entries(window.__zoo.state.bag).filter(([id])=>id.startsWith('fish_')))),bagBefore,'packing does not lose or duplicate earned catches');
   assert.deepEqual(errors,[]);
  }finally{await browser.close();}
 });

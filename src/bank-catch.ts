@@ -1,4 +1,6 @@
 import { waterEdge, waterShore, type WaterShape } from './pond-shape.ts';
+/** Reference game: pack the entire catch after leaving the fishing spot by 2.5 metres. */
+export const PACK_DISTANCE = 2.5;
 /** Pick dry nearby ground for a cosmetic catch; rewards are committed before this animation. */
 export function bankCatchSpot(player:{x:number;z:number},pond:WaterShape,slot:number,blocked:(x:number,z:number)=>boolean) {
  const anchor=waterEdge(pond,player.x,player.z)<.65?waterShore(pond,player.x,player.z,.85):player;
