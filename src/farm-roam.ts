@@ -110,15 +110,32 @@ export function spotNear(area: RoamArea, rng: () => number, w: Roamer, x: number
   }
   return null;
 }
+/** Find nearby usable ground after growth, a map change, or a crowded spawn. Never relax world collision. */
+function recoverySpot(area: RoamArea, kind: RoamKind, young: boolean, x: number, z: number, others: readonly Roamer[]) {
+  const me = { kind, young }, r = roamRadius(me);
+  let fallback: { x: number; z: number } | null = null;
+  for (let ring = 0; ring <= Math.ceil(area.radius * 4); ring++) {
+    const distance = ring * .5, count = Math.max(1, Math.ceil(distance * Math.PI * 4));
+    for (let i = 0; i < count; i++) {
+      const a = i / count * TAU, gx = x + Math.sin(a) * distance, gz = z + Math.cos(a) * distance;
+      if (Math.hypot(gx, gz) >= area.radius - r || area.blocked(gx, gz, r)) continue;
+      const at = { x: gx, z: gz }; fallback ??= at;
+      if (others.every(o => Math.hypot(o.x - gx, o.z - gz) >= spacing(me, o))) return at;
+    }
+    // A cramped area may not fit ideal social spacing, but bodies must still fit the map.
+    if (fallback && distance >= 6) return fallback;
+  }
+  return fallback;
+}
 /** A free starting spot in the yard (or near it). */
 export function spawnSpot(area: RoamArea, rng: () => number, kind: RoamKind, young: boolean, others: readonly Roamer[] = []) {
   const h = area.home, r = roamRadius({ kind, young }), me = { kind, young };
   for (let i = 0; i < 40; i++) {
     const a = rng() * TAU, d = Math.sqrt(rng()) * (1 + i / 20), x = h.x + Math.sin(a) * h.rx * d, z = h.z + Math.cos(a) * h.rz * d;
-    // The first tries also keep clear of the animals already out (a whole herd loaded at once spreads over the yard).
-    if (Math.hypot(x, z) < area.radius - r && !area.blocked(x, z, r) && (i >= 30 || others.every(o => Math.hypot(o.x - x, o.z - z) >= spacing(me, o)))) return { x, z };
+    // Keep a whole herd loaded at once spread over the yard.
+    if (Math.hypot(x, z) < area.radius - r && !area.blocked(x, z, r) && others.every(o => Math.hypot(o.x - x, o.z - z) >= spacing(me, o))) return { x, z };
   }
-  return { x: h.x, z: h.z + h.rz * .5 };
+  return recoverySpot(area, kind, young, h.x, h.z, others) ?? { x: h.x, z: h.z };
 }
 export function newRoamer(uid: number, kind: RoamKind, young: boolean, at: { x: number; z: number }, rng: () => number): Roamer {
   return { uid, kind, young, x: at.x, z: at.z, heading: rng() * TAU, goalX: at.x, goalZ: at.z, speed: 0, walking: false, rest: kind === 'cow' ? 'graze' : 'peck', restT: 1 + rng() * 4,
@@ -164,8 +181,9 @@ function pickGoal(w: Roamer, all: readonly Roamer[], area: RoamArea, rng: () => 
   if (w.kind === 'dog' && area.leash) { leashGoal(w, area, area.leash, rng, free); return; }
   if (w.kind !== 'dog' && w.trip > w.tripLimit && !inHomeYard(area, w.x, w.z) && !w.homeward) {
     // Home to a free spot of the yard, not its centre: animals coming back never pile up in one place.
-    w.homeward = true; w.dest = { x: h.x, z: h.z };
+    w.homeward = true; w.dest = null;
     for (let i = 0; i < 8; i++) { const a = rng() * TAU, d = Math.sqrt(rng()) * .8, x = h.x + Math.sin(a) * h.rx * d, z = h.z + Math.cos(a) * h.rz * d; if (!area.blocked(x, z, r) && free(x, z)) { w.dest = { x, z }; break; } }
+    if (!w.dest) w.homeward = false;
   }
   if (!w.dest && !w.young && w.kind !== 'dog' && rng() < (w.kind === 'cow' ? .35 : .25)) {
     // A far trip: any open spot in the village.
@@ -177,6 +195,8 @@ function pickGoal(w: Roamer, all: readonly Roamer[], area: RoamArea, rng: () => 
     if (Math.hypot(w.dest.x - w.x, w.dest.z - w.z) < 1.2 || (w.homeward && inHomeYard(area, w.x, w.z, -.5))) { w.dest = null; w.homeward = false; }
     else if (!(g = legToward(w, area, w.dest.x, w.dest.z))) { w.dest = null; w.homeward = false; }
   }
+  // Shelters can move after a route was planned. Recheck the next leg against the current map.
+  if (g && !segmentClear(area, w.x, w.z, g.x, g.z, r)) { g = null; w.path = []; w.dest = null; w.homeward = false; }
   if (!g && w.young) {
     let mom: Roamer | null = null, best = Infinity;
     for (const o of all) if (o.kind === w.kind && !o.young) { const d = Math.hypot(o.x - w.x, o.z - w.z); if (d < best) { best = d; mom = o; } }
@@ -216,6 +236,16 @@ function leashGoal(w: Roamer, area: RoamArea, leash: { x: number; z: number; r: 
 /** One step of one animal: flee the explorer, rest, or walk its clear segment; keep a little apart from the others. */
 export function stepRoamer(w: Roamer, all: readonly Roamer[], area: RoamArea, rng: () => number, dt: number, player: { x: number; z: number } | null, grid?: RoamGrid) {
   const cow = w.kind === 'cow', r = roamRadius(w);
+  if ((w.checkT -= dt) <= 0) {
+    w.checkT = .75 + rng() * .5;
+    if (area.blocked(w.x, w.z, r) || Math.hypot(w.x, w.z) >= area.radius - r) {
+      const at = recoverySpot(area, w.kind, w.young, w.x, w.z, all.filter(o => o !== w));
+      if (at) {
+        w.x = w.goalX = at.x; w.z = w.goalZ = at.z; w.path = []; w.dest = null; w.homeward = false;
+        w.speed = 0; w.walking = false; w.restT = .2; w.shuffle = 0;
+      }
+    }
+  }
   w.flee = Math.max(0, w.flee - dt);
   if (player && w.kind === 'dog' && w.flee <= 0) {
     // A friendly dog never scurries off: resting, it turns to watch the explorer who comes close.
@@ -278,6 +308,11 @@ export function stepRoamer(w: Roamer, all: readonly Roamer[], area: RoamArea, rn
       w.x += Math.sin(w.heading) * w.speed * dt; w.z += Math.cos(w.heading) * w.speed * dt;
     }
   }
+  if (area.blocked(w.x, w.z, r) || Math.hypot(w.x, w.z) >= area.radius - r) {
+    w.x = px; w.z = pz; w.speed = 0;
+    if (w.walking) { w.path = []; w.dest = null; w.homeward = false; startRest(w, rng, area); w.restT = Math.min(w.restT, 1); }
+    else w.shuffle = 0;
+  }
   // Personal space: overlap is pushed out (each of a pair takes half, a hen gives way to a cow), so spacing holds
   // even when goals meet. Exactly stacked animals part by id.
   for (const o of around(w, w.x, w.z, all, grid, nearStep)) {
@@ -285,11 +320,11 @@ export function stepRoamer(w: Roamer, all: readonly Roamer[], area: RoamArea, rn
     if (d >= need) continue;
     if (d < 1e-3) { const a = (w.uid * 2.399) % TAU; dx = Math.sin(a); dz = Math.cos(a); d = 1; }
     const share = w.kind === o.kind ? .5 : cow ? .15 : .85, push = Math.min((need - Math.hypot(w.x - o.x, w.z - o.z)) * share, dt * 3);
-    w.x += dx / d * push; w.z += dz / d * push;
-  }
-  // The world wins: a move into anything (a bed just placed, an arc off the checked line) is undone and the walk ends;
-  // one already standing somewhere blocked may walk out.
-  if ((w.x !== px || w.z !== pz) && (Math.hypot(w.x, w.z) > area.radius - r || area.blocked(w.x, w.z, r)) && !area.blocked(px, pz, r)) {
-    w.x = px; w.z = pz; w.speed = 0; if (w.walking) { startRest(w, rng, area); if (!cow) w.restT = Math.min(w.restT, .6 + rng()); } else w.shuffle = 0;
+    const mx = dx / d * push, mz = dz / d * push;
+    // Slide along the edge when the full separation vector runs into a wall or pen prop.
+    for (const [sx, sz] of [[mx, mz], [mx, 0], [0, mz]]) {
+      const x = w.x + sx, z = w.z + sz;
+      if (Math.hypot(x, z) < area.radius - r && !area.blocked(x, z, r) && Math.hypot(x - o.x, z - o.z) > Math.hypot(w.x - o.x, w.z - o.z)) { w.x = x; w.z = z; break; }
+    }
   }
 }

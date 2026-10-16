@@ -1,4 +1,5 @@
 import * as T from 'three';
+import { findRoute } from './navigation.ts';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { bakeModel, farmKit } from './assets.ts';
 import { toonMaterial } from './toon.ts';
@@ -319,6 +320,9 @@ export class FarmPenView {
   setArea(area: RoamArea) {
     this.baseArea = area;
     this.area = { ...area, leash: this.leash(), blocked: (x,z,r) => area.blocked(x,z,r) || !!this.speciesPens?.dog && Math.hypot(x-this.speciesPens.dog.x,z-this.speciesPens.dog.z) < r+.45 };
+    if (this.speciesPens?.dog) this.area.route = (x,z,bx,bz,r) => findRoute({x,z},{x:bx,z:bz},[],{
+      clearance:0,bounds:area.radius,gridSize:.5,maxIterations:6000,walkable:p=>!this.area.blocked(p.x,p.z,r),
+    });
   }
   /** Rebuild shelter props only when the saved placement changes, not every animation frame. */
   setSpeciesPens(pens: FarmState['speciesPens']) {

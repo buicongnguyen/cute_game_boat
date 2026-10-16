@@ -63,3 +63,19 @@ test('animal robot panels show the price and explicit opt-in feeding in English 
   try { setLanguage('vi'); const translated = farmHelperPanel(s, '/helper.webp'); assert.match(translated, /Rô-bốt/); assert.match(translated, /Tự động cho ăn/); assert.doesNotMatch(translated, />Automatic feeding</); assert.match(farmHelperRow(s), /Rô-bốt chăm vật nuôi/); }
   finally { setLanguage('en'); }
 });
+
+
+test('animal robot routes around garden props and approaches a small animal beside one', t => {
+ t.mock.method(HelperView.prototype, 'present', () => {});
+ for(const goal of [{x:FARM_HELPER_HOME.x,z:1.8},{x:FARM_HELPER_HOME.x,z:3.17}]){
+  const s=game(),a=M.buyAnimal(s,'chicken',1_000_000)!;
+  const now=M.adultAt(a)+M.productDuration(a),view=new FarmHelperView(),context={};let worked=false;
+  const obstacles=[{x:FARM_HELPER_HOME.x,z:4,r:.55}];
+  const frame={state:s,context,act:true,pending:false,now,obstacles,position:()=>goal,work:()=>{assert.ok(Math.hypot(view.x-goal.x,view.z-goal.z)<.75);worked=true;return true;}};
+  for(let i=0;i<500&&!worked;i++){
+   view.update(.1,frame);
+   assert.ok(Math.hypot(view.x-obstacles[0].x,view.z-obstacles[0].z)>=.85-1e-6,'helper never crosses a pen prop');
+  }
+  assert.ok(worked,'helper reaches the animal');
+ }
+});

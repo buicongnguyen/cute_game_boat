@@ -5,12 +5,13 @@
  * rescued friends. Before the kit arrives (and in Node tests) simple boxes stand in for the furniture.
  */
 import * as T from 'three';
+import { meadowGeometry } from './cabin-meadow.ts';
+import { friendRoute } from './house-routes.ts';
 import { CABIN_GARDEN, GARDEN_DOOR } from './cabin-garden.ts';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { KitLibrary, heroKit, wearKit, weaponKit, petKit, modelUrl } from './assets.ts';
 import { toonMaterial } from './toon.ts';
-import { FURNITURE, FRIEND_SPOTS, HOUSE, ROOMS, WALL, WALLS, roomAt, walkable, spreadActivity, type Placement, type Point } from './house.ts';
-import { findRoute } from './navigation.ts';
+import { FURNITURE, FRIEND_SPOTS, HOUSE, ROOMS, WALL, WALLS, roomAt, spreadActivity, type Placement, type Point } from './house.ts';
 import { friendModel, friendSignature } from './friend-view.ts';
 import { dropTree } from './dispose-tree.ts';
 import { friendStage } from './growth.ts';
@@ -50,10 +51,7 @@ export function shellPieces(): T.BufferGeometry[] {
   for (let z = g.z0; z < g.z1; z += 2) out.push(slab(width, .1, 2, (g.x0 + g.x1) / 2, -.08, z + 1, z % 4 === 0 ? '#8dbb70' : '#94c477'));
   // A path and small flower beds make the garden entrance readable from the kitchen.
   for (let i = 0; i < 4; i++) out.push(slab(1.15, .06, .6, GARDEN_DOOR.x, -.01, b.z1 + .5 + i * .85, '#e6d6a6'));
-  for (const x of [g.x0 + .6, g.x1 - .6]) for (let z = g.z0 + 1; z < g.z1; z += 4) {
-    out.push(slab(.55, .18, 1.1, x, .02, z, '#699a53'));
-    for (let i = 0; i < 3; i++) out.push(slab(.17, .15, .17, x + (i % 2) * .2 - .1, .18, z + (i - 1) * .3, i % 2 ? '#fff1ad' : '#f4c2ce'));
-  }
+  out.push(meadowGeometry());
   out.push(slab(b.x1 - b.x0 + .6, .5, b.z1 - b.z0 + .6, (b.x0 + b.x1) / 2, -.33, (b.z0 + b.z1) / 2, BASE));
   for (const room of ROOMS) {
     const r = room.rect, w = r.x1 - r.x0, d = r.z1 - r.z0;
@@ -124,10 +122,10 @@ export class HouseView {
    * Each friend's walk to its next hangout, round the walls and through the doorways (house.ts walkable): planned once
    * per move (every SCHEDULE_SECONDS), so friends no longer cross walls on a straight line between rooms.
    */
-  private walks = new Map<FriendId, { to: FriendView['spot']; points: Point[]; next: number }>();
+  private walks = new Map<FriendId, { to: FriendView['spot']; points: Point[]; next: number; retryAt: number }>();
   private planWalk(v: FriendView) {
-    const from = { x: v.group.position.x, z: v.group.position.z }, route = findRoute(from, v.spot, [], { walkable, gridSize: .5, bounds: 16, clearance: 0, maxIterations: 4000 });
-    const walk = { to: v.spot, points: route.length ? route : [{ x: v.spot.x, z: v.spot.z }], next: 0 }; this.walks.set(v.id, walk); return walk;
+    const from = { x: v.group.position.x, z: v.group.position.z }, route = friendRoute(from, v.spot);
+    const walk = { to: v.spot, points: route, next: 0, retryAt: this.clock + 2 }; this.walks.set(v.id, walk); return walk;
   }
   constructor() {
     this.scene.background = new T.Color('#608b59');
@@ -260,7 +258,8 @@ export class HouseView {
     this.door.rotation.y = -this.doorOpen * 1.7;
     for (const v of this.friends.values()) {
       const body = v.group.children[0], t = time + v.seed, g = v.group;
-      let walk = this.walks.get(v.id); if (!walk || walk.to !== v.spot) walk = this.planWalk(v);
+      let walk = this.walks.get(v.id); if (!walk || walk.to !== v.spot || !walk.points.length && time >= walk.retryAt) walk = this.planWalk(v);
+      if (!walk.points.length) continue; // Wait for a valid route; never cross walls on failure.
       // Waypoint by waypoint; the last one is the hangout itself.
       let goal = walk.points[Math.min(walk.next, walk.points.length - 1)], dx = goal.x - g.position.x, dz = goal.z - g.position.z, far = Math.hypot(dx, dz);
       while (far <= .05 && walk.next < walk.points.length - 1) { walk.next++; goal = walk.points[walk.next]; dx = goal.x - g.position.x; dz = goal.z - g.position.z; far = Math.hypot(dx, dz); }

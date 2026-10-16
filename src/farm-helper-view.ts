@@ -1,5 +1,5 @@
 import { CABIN_PEN, gardenGround } from './cabin-garden.ts';
-import { findRoute, clearSegment } from './navigation.ts';
+import { findRoute, clearSegment, blocked, approach, type Obstacle } from './navigation.ts';
 import * as M from './model.ts';
 import { HelperView } from './helper-view.ts';
 import { helperOf, nextTask, stillDue, type FarmHelperTask } from './farm-helper.ts';
@@ -9,6 +9,7 @@ interface Frame {
   state: M.SaveState | null; context: unknown; act: boolean; pending: boolean; now: number;
   position(uid: number): { x: number; z: number } | undefined;
   work(task: FarmHelperTask): boolean;
+  obstacles?: Obstacle[];
 }
 
 /** Same six rigid helper.glb parts as the gardener; visitors only see a harmless patrol. */
@@ -49,15 +50,17 @@ export class FarmHelperView {
     const target = this.task && f.position(this.task.uid);
     if (this.task && !target) { this.task = null; this.mode = 'idle'; }
     if (this.mode !== 'work') {
-      const goal = target ?? FARM_HELPER_HOME;
+      const obstacles = f.obstacles ?? [];
+      const options = { clearance: .3, bounds: 30, gridSize: .5, walkable: (p:{x:number;z:number}) => gardenGround(p.x,p.z,.3), maxIterations: 6000 };
+      const goal = target && blocked(target, obstacles, options)
+        ? approach(this, target, 0, obstacles, .65, options) ?? target : target ?? FARM_HELPER_HOME;
       let next = goal;
-      const options = { bounds: 30, gridSize: .5, walkable: (p:{x:number;z:number}) => gardenGround(p.x,p.z,.3), maxIterations: 6000 };
-      if (!clearSegment(this,goal,[],options)) {
-        const end=this.path.at(-1); if(!end||Math.hypot(end.x-goal.x,end.z-goal.z)>1.5)this.path=findRoute(this,goal,[],options);
+      if (!clearSegment(this,goal,obstacles,options)) {
+        const end=this.path.at(-1); if(!end||Math.hypot(end.x-goal.x,end.z-goal.z)>1.5||this.path[0]&&!clearSegment(this,this.path[0],obstacles,options))this.path=findRoute(this,goal,obstacles,options);
         while(this.path.length&&Math.hypot(this.path[0].x-this.x,this.path[0].z-this.z)<.15)this.path.shift();
         next=this.path[0]??this;
       } else this.path=[];
-      const dx = next.x - this.x, dz = next.z - this.z, distance = Math.hypot(dx, dz), stand = next===goal?(target ? .72 : .04):.02;
+      const dx = next.x - this.x, dz = next.z - this.z, distance = Math.hypot(dx, dz), stand = next===goal?(target && goal===target ? .72 : .04):.02;
       if (distance > stand + .001) {
         const step = Math.min(distance - stand, dt * 1.7); this.x += dx / distance * step; this.z += dz / distance * step; this.mode = 'walk';
         this.facing += Math.atan2(Math.sin(Math.atan2(dx, dz) - this.facing), Math.cos(Math.atan2(dx, dz) - this.facing)) * Math.min(1, dt * 10);
