@@ -13,6 +13,8 @@ import type { HouseSession, ActivityEntity } from './house-session.ts';
 import { TalkBag, lineFor, exchangeFor, bossLine, bossSelfLine } from './house-talk.ts';
 import type { RoomId } from './house.ts';
 import { ACTIVITIES, activity, collectionLog, cooldownLeft, decorPlacements, decorSignature, friendLabel, trophies, photos, type Activity, type UseResult } from './house-activities.ts';
+import { FRIENDS, FRIEND_IDS, CAGES, cageState } from './friends.ts';
+import { lockedHint } from './friend-ui.ts';
 import { PLANETS, type BuffDef } from './content.ts';
 import * as T from 'three';
 import { activityBox } from './house-hotspots.ts';
@@ -143,15 +145,20 @@ export function initHouseLife(d: LifeDeps) {
   const trophyWall = () => {
     const s = world.state, cups = s.bosses ?? [], friends = photos(s);
     const planetName = (key: string) => { const [p, type] = key.split(':'); const def = (PLANETS as Record<string, { name: string; icon: string }>)[p]; return `${def?.icon ?? '🏆'} ${esc(t((type ?? p).replace(/_/g, ' ')))} <small>${esc(t(def?.name ?? p))}</small>`; };
+    const missing = FRIEND_IDS.filter(id => cageState(s, id) !== 'rescued');
+    const rescueBoard = '<div class="house-log-total"><b>' + (FRIEND_IDS.length - missing.length) + '/' + FRIEND_IDS.length + '</b><span>' + t('Friends safe') + '</span></div>'
+      + '<p class="intro">' + t('Find the missing friends in the outdoor areas, free them from their cages, and bring them home.') + '</p>'
+      + '<h4 class="house-h">' + t('Missing friends') + '</h4>'
+      + (missing.length ? '<ul class="house-list">' + missing.map(id => '<li data-missing-friend="' + id + '"><strong>🔎 ' + esc(t(FRIENDS[id].name)) + '</strong> · ' + esc(t(PLANETS[CAGES[id].planet].name)) + '<p>' + esc(cageState(s, id) === 'open' ? t('The cage is open. Visit this friend to bring them home.') : lockedHint(id)) + '</p></li>').join('') + '</ul>' : '<p>' + t('Everyone is safe. All your friends have been found!') + '</p>');
     d.tone('pop');
-    d.openDialog('house-trophies', t('Trophy wall'), `<p class="intro">${t('Every boss you beat puts a cup on the shelf; every friend you rescue hangs a photo by the fire.')}</p>`
+    d.openDialog('house-trophies', t('Trophy wall'), rescueBoard + `<p class="intro">${t('Every boss you beat puts a cup on the shelf; every friend you rescue hangs a photo by the fire.')}</p>`
       + `<h4 class="house-h">🏆 ${t('Bosses beaten')} · ${cups.length}</h4>${cups.length ? `<ul class="house-list">${cups.map(c => `<li>${planetName(c)}</li>`).join('')}</ul>` : `<p class="fineprint">${t('No trophies yet. Beat a boss in the wild!')}</p>`}`
       + `<h4 class="house-h">📷 ${t('Friends rescued')} · ${friends.length}</h4>${friends.length ? `<ul class="house-list">${friends.map(f => `<li>🤝 ${esc(t(friendLabel(f)))}</li>`).join('')}</ul>` : `<p class="fineprint">${t('Rescue a friend from a cage to hang their photo.')}</p>`}`, t('LIVING ROOM'), '🏆');
   };
   const collectionPanel = () => {
     const log = collectionLog(world.state);
     d.tone('pop');
-    d.openDialog('house-collection', t('Collection log'), `<div class="house-log-total"><b>${log.pct}%</b><span>${t('of the encyclopaedia complete')}</span></div>`
+    d.openDialog('house-collection', t('Bookshelf'), `<div class="button-row"><button class="primary" data-action="bookshelf-colossus">🌋 ${t('Colossus settings')}</button></div><p class="fineprint">${t('Enable or disable the Colossus, or choose its strength.')}</p><h4>${t('Collection log')}</h4><div class="house-log-total"><b>${log.pct}%</b><span>${t('of the encyclopaedia complete')}</span></div>`
       + log.rows.map(r => `<div class="house-log-row"><span class="house-log-icon">${r.icon}</span><div><strong>${esc(t(r.label))}</strong><div class="house-bar"><i style="width:${r.pct}%"></i></div></div><b>${r.have}/${r.total}</b></div>`).join(''), t('STUDY'), '📚');
   };
 
@@ -207,5 +214,5 @@ export function initHouseLife(d: LifeDeps) {
   prompt.addEventListener('click', () => { if (near && !d.blocked()) void use(near); });
   /** Taps on activity entities (house-ui's interact calls this first). */
   const interact = (e: Entity) => { const id = (e as ActivityEntity).activity; const a = id ? activity(id) : undefined; if (!a || e.kind !== 'house-use') return false; void use(a); return true; };
-  return { frame, interact, use, nearest: () => near, music, trophies: () => trophies(world.state) };
+  return { frame, interact, use, bookshelf: collectionPanel, nearest: () => near, music, trophies: () => trophies(world.state) };
 }

@@ -49,10 +49,10 @@ test('placement refuses blocked spots and spots outside the fence', () => {
   assert.equal(M.bedSpotOk(s, -13.46, 2.39), true, 'one grid step west of the garden: smaller beds fit closer');
   assert.equal(M.bedSpotOk(s, -11, 2.39), false, 'on a starting bed');
   assert.equal(M.bedSpotOk(s, -12.3, 2.99), false, 'overlapping a starting bed');
-  assert.equal(M.bedSpotOk(s, M.PEN.x, M.PEN.z), false, 'the animal pen');
-  assert.equal(M.bedSpotOk(s, M.PEN.x, M.PEN.z + M.PEN.hd + .9), false, 'the path around the pen');
+  assert.equal(M.bedSpotOk(s, M.PEN.x, M.PEN.z), true, 'the pen moved downstairs');
+  assert.equal(M.bedSpotOk(s, M.PEN.x, M.PEN.z + M.PEN.hd + .9), true, 'the old pen path is now clear');
   assert.equal(M.bedSpotOk(s, 0, -8), false, 'the cottage');
-  assert.equal(M.bedSpotOk(s, -7, -11), false, 'the well');
+  assert.equal(M.bedSpotOk(s, -7, -11), true, 'the well was removed');
   assert.equal(M.bedSpotOk(s, 0, 5), false, 'a stepping-stone trail');
   assert.equal(M.bedSpotOk(s, -20.5, 4), false, 'past the fence');
   assert.equal(M.bedSpotOk(s, 30, 30), false, 'far outside');
@@ -140,7 +140,7 @@ test('old saves move to the smaller beds: starting beds onto the new grid, game-
   assert.deepEqual(r.plots.slice(0, 9).map(p => ({ x: p.x, z: p.z })), Array.from({ length: 9 }, (_, i) => M.defaultBed(i)));
   assert.equal(r.plots[4].crop, crop); assert.equal(r.plots[9].crop, crop); assert.equal(r.plots[9].plantedAt, 5, 'crops and timers stay with their beds');
   assert.deepEqual([r.plots[12].x, r.plots[12].z, r.plots[12].rotation], [-4.1, 5.2, Math.PI / 4], 'a hand-placed bed keeps its spot');
-  assert.ok(M.clearOfPen(r.plots[13].x!, r.plots[13].z!, M.BED_HALF), 'the bed on the new pen moved');
+  assert.deepEqual([r.plots[13].x, r.plots[13].z], [M.PEN.x, M.PEN.z], 'the old pen site is free and hand-placed beds stay');
   const span = (p: M.Plot) => M.BED_HALF * (Math.abs(Math.cos(p.rotation ?? 0)) + Math.abs(Math.sin(p.rotation ?? 0)));
   r.plots.forEach((a, i) => { if (i >= 9) assert.ok(M.bedClear(a.x!, a.z!, a.rotation ?? 0), `bed ${i} clear`); r.plots.forEach((b, j) => { if (j > i) assert.ok(Math.max(Math.abs(a.x! - b.x!), Math.abs(a.z! - b.z!)) >= Math.max(M.BED_GAP, span(a) + span(b)), `beds ${i} and ${j} apart`); }); });
   // Game-placed beds now sit on the garden grid, nearer the garden than before.

@@ -51,3 +51,14 @@ test('the cache is bounded', () => {
   for (let i = 0; i < HULL_CACHE_MAX + 20; i++) addOutlines(person(i * .01 + 1), { merge: true });
   assert.equal(hullCacheSize(), HULL_CACHE_MAX);
 });
+
+// The dark eye/lash/mouth patches must not grow an extra inverted hull across the face.
+test('face window preserves the head silhouette and does not contaminate cached full hulls', () => {
+  clearHullCache();
+  const geometry = new T.SphereGeometry(.59, 24, 16); geometry.translate(0,.47,0);
+  const make = (face: boolean) => { const head = new T.Group(); if(face)head.userData.outlineFaceWindow={radius:.59,cy:.47};head.add(new T.Mesh(geometry,new T.MeshToonMaterial()));addOutlines(head,{merge:true});return hullOf(head).geometry; };
+  const full=make(false), face=make(true), again=make(true);
+  assert.equal(face,again);assert.notEqual(full,face);
+  assert.ok(face.index!.count < full.index!.count);
+  full.computeBoundingBox();face.computeBoundingBox();assert.deepEqual(face.boundingBox!.min,full.boundingBox!.min);assert.equal(face.boundingBox!.max.x,full.boundingBox!.max.x);assert.equal(face.boundingBox!.max.y,full.boundingBox!.max.y);
+});

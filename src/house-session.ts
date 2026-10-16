@@ -7,6 +7,7 @@
  * at home it waits by the animal pen (pet-pen.ts).
  */
 import * as T from 'three';
+import { CABIN_GARDEN, cabinWalkable } from './cabin-garden.ts';
 import { groundAt } from './camera-rig.ts';
 import type { Entity, World } from './world.ts';
 import { FRIEND_SPOTS, HOUSE, furnitureObstacles, walkable, roomAt } from './house.ts';
@@ -16,7 +17,7 @@ import { friendsOf, type Friend, type FriendId } from './friends.ts';
 import { activityBox, doorBox, friendBox, labelSpot, pickHotspot, screenRect, type Box3D, type Hotspot, type ScreenRect } from './house-hotspots.ts';
 
 /** The parts of World the house touches (tests pass a real World built without WebGL). */
-export type HouseHost = Pick<World, 'scene' | 'root' | 'player' | 'companion' | 'marker' | 'ring' | 'remoteRoot' | 'fx' | 'entities' | 'obstacles' | 'position' | 'destination' | 'route' | 'selected' | 'cameraTarget' | 'cameraFocus' | 'zoom' | 'facing' | 'interior' | 'state'> & Partial<Pick<World, 'camera'>> & { resize(): void };
+export type HouseHost = Pick<World, 'scene' | 'root' | 'player' | 'companion' | 'marker' | 'ring' | 'remoteRoot' | 'fx' | 'entities' | 'obstacles' | 'position' | 'destination' | 'route' | 'selected' | 'cameraTarget' | 'cameraFocus' | 'zoom' | 'facing' | 'interior' | 'state'> & Partial<Pick<World, 'camera' | 'cabinPen' | 'cabinPenObstacles'>> & { resize(): void };
 export interface FriendEntity extends Entity { friendId: FriendId }
 export interface ActivityEntity extends Entity { activity: ActivityId }
 
@@ -26,6 +27,10 @@ export interface ActivityEntity extends Entity { activity: ActivityId }
  */
 export function houseFocus(p: { x: number; z: number }, aspect: number, zoom: number, out = new T.Vector3()) {
   const b = HOUSE.bounds;
+  if (p.x < b.x0 || p.x > b.x1 || p.z < b.z0 || p.z > b.z1) {
+    const g = CABIN_GARDEN;
+    return out.set(Math.max(g.x0 + 2, Math.min(g.x1 - 2, p.x)), 0, Math.max(g.z0 + 3, Math.min(g.z1 - 2, p.z - 1.5)));
+  }
   // Frame the entrance near the bottom on arrival, then follow into the deeper cabins.
   // A ground-only whole-house fit clips tall furniture at the screen edges at the lower pitch.
   const front = b.z1 - groundAt(aspect, zoom, 0, -.76).z;
@@ -58,7 +63,7 @@ export class HouseSession {
     this.saved = { entities: host.entities, obstacles: host.obstacles, zoom: host.zoom };
     this.syncFriends();
     host.entities = this.entities(); host.obstacles = this.obstacles();
-    host.interior = { scene: this.view.scene, root: this.view.root, walkable, drop: () => this.drop(), adopt: () => this.adopt(), outdoor: this.saved.entities, pick: (x, y) => this.pick(x, y) };
+    host.interior = { scene: this.view.scene, root: this.view.root, walkable: cabinWalkable, drop: () => this.drop(), adopt: () => this.adopt(), outdoor: this.saved.entities, pick: (x, y) => this.pick(x, y) };
     this.adopt();
     this.view.scene.add(host.marker, host.ring, host.remoteRoot); host.fx?.attach(this.view.scene);
     host.position.set(HOUSE.spawn.x, 0, HOUSE.spawn.z); host.facing = Math.PI; host.destination = null; host.route = []; host.selected = null;
@@ -77,6 +82,7 @@ export class HouseSession {
   private drop() {
     const host = this.host, saved = this.saved; if (!host || !saved) return;
     this.saved = null;
+    host.cabinPen?.mesh.removeFromParent();
     if (host.entities.some(e => e.mesh.parent === this.view.root)) { host.entities = saved.entities; host.obstacles = saved.obstacles; }
     if (host.player.parent === this.view.root) host.root.add(host.player);
     if (host.companion.parent === this.view.root) host.root.add(host.companion);
@@ -101,6 +107,7 @@ export class HouseSession {
       const e = add('friend', friendName(view.id), '🧑‍🌾', view.group, view.spot.x, view.spot.z, .55, 'house:friend:' + view.id) as FriendEntity;
       e.friendId = view.id;
     }
+    const pen = this.host?.cabinPen; if (pen) { this.view.root.add(pen.mesh); out.push(pen); }
     // The door hinge sits off its centre: keep its tap circle on the doorway.
     this.view.door.position.set(.53, 0, HOUSE.bounds.z1);
     return out;
@@ -109,6 +116,7 @@ export class HouseSession {
   /** The visible box of a tappable thing inside (house-hotspots.ts): furniture from the kit, the door, a friend where they stand. */
   boxOf(e: Entity): Box3D | null {
     const a = (e as ActivityEntity).activity; if (a) return activityBox(a);
+    if (e.kind === 'pen') return { x0: e.x - 2, x1: e.x + 2, z0: e.z - 1.8, z1: e.z + 1.8, y0: 0, y1: 1.5 };
     if (e.kind === 'house-door') return doorBox();
     return e.kind === 'friend' ? friendBox(e.mesh) : null;
   }
@@ -127,7 +135,7 @@ export class HouseSession {
     return pickHotspot(this.spots, x, y);
   }
   /** Furniture only: friends walk between hangouts, so they are not fixed obstacles. */
-  private obstacles() { return furnitureObstacles(); }
+  private obstacles() { return [...furnitureObstacles(), ...(this.host?.cabinPenObstacles?.() ?? [])]; }
   /** Friends shown match the save; re-run after a give or take, or a rescue. */
   syncFriends(list: Friend[] = this.host ? friendsOf(this.host.state).filter(f => f.home) : []) {
     const before = [...this.view.friends.values()].map(v => v.group);

@@ -74,7 +74,7 @@ export function hullCacheSize() { return hulls.size; }
 export function clearHullCache() { for (const g of hulls.values()) g.dispose(); hulls.clear(); }
 function hullKey(meshes: T.Mesh[]) {
   let key = '';
-  for (const mesh of meshes) { mesh.updateMatrix(); key += mesh.geometry.uuid + '@' + mesh.matrix.elements.join(',') + ';'; }
+  for (const mesh of meshes) { mesh.updateMatrix(); key += JSON.stringify(mesh.parent?.userData.outlineFaceWindow ?? null) + ':' + mesh.geometry.uuid + '@' + mesh.matrix.elements.join(',') + ';'; }
   return key;
 }
 function buildHull(meshes: T.Mesh[]) {
@@ -84,6 +84,17 @@ function buildHull(meshes: T.Mesh[]) {
     if (mesh.geometry.index) geometry.setIndex(mesh.geometry.index.clone());
     if (geometry.index) geometry = geometry.toNonIndexed();
     mesh.updateMatrix(); geometry.applyMatrix4(mesh.matrix);
+    // Fine face patches already have their own dark colour. Expanding their back faces
+    // produces spikes across eyes and mouths; retain the head silhouette around them.
+    const window = mesh.parent?.userData.outlineFaceWindow as { radius: number; cy: number } | undefined;
+    if (window) {
+      const p = geometry.getAttribute('position'), kept: number[] = [], {radius, cy} = window;
+      const inFace = (i: number) => p.getZ(i) > radius * .45 && Math.abs(p.getX(i)) < radius * .9 && Math.abs(p.getY(i) - cy) < radius * .6;
+      for (let i = 0; i < p.count; i += 3) if (!(inFace(i) && inFace(i + 1) && inFace(i + 2))) {
+        for (let j = i; j < i + 3; j++) kept.push(p.getX(j), p.getY(j), p.getZ(j));
+      }
+      geometry.setAttribute('position', new T.Float32BufferAttribute(kept, 3));
+    }
     return geometry;
   });
   const merged = mergeGeometries(pieces, false); pieces.forEach(p => p.dispose());

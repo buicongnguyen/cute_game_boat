@@ -13,7 +13,7 @@ import { TITANS } from './titan-content.ts';
 import { FRIENDS, FRIEND_IDS } from './friends-state.ts';
 import { spreadActivity, type Point, type RoomId } from './house.ts';
 
-export type ActivityId = 'storage' | 'sofa' | 'fire' | 'trophies' | 'radio' | 'stove' | 'tea' | 'workbench' | 'bench' | 'easel' | 'bed' | 'wardrobe' | 'mirror' | 'bath' | 'duck' | 'sink' | 'globe' | 'books' | 'diary';
+export type ActivityId = 'wishing' | 'storage' | 'sofa' | 'fire' | 'trophies' | 'radio' | 'stove' | 'tea' | 'workbench' | 'bench' | 'easel' | 'bed' | 'wardrobe' | 'mirror' | 'bath' | 'duck' | 'sink' | 'globe' | 'books' | 'diary';
 /** buff: a rule in this file; open: an existing panel (main.ts routes kind 'cook'/'craft'/'travel'); fun: sound and sparkle only. */
 export type ActivityKind = 'buff' | 'open' | 'fun' | 'paint';
 export interface Activity {
@@ -55,9 +55,10 @@ const ACTIVITIES_PLAN: Activity[] = [
   { id: 'bath', room: 'bath', icon: '🛁', verb: 'Take a bath', name: 'Bathtub', at: { x: -.75, z: -5.8 }, y: .6, kind: 'buff', entity: 'house-use', cooldownMin: 5, buff: { speed: .2, time: 150 }, note: 'Fresh: +20% movement speed' },
   { id: 'duck', room: 'bath', icon: '🦆', verb: 'Squeak', name: 'Duck', at: { x: .15, z: -5.85 }, y: .6, kind: 'fun', entity: 'house-use' },
   { id: 'sink', room: 'bath', icon: '🫧', verb: 'Wash up', name: 'Sink', at: { x: 2.35, z: -6.1 }, y: .9, kind: 'buff', entity: 'house-use', cooldownMin: 3, buff: { luck: .1, time: 150 }, note: 'Sparkling clean: +10% luck' },
+  { id: 'wishing', room: 'craft', icon: '💎', verb: 'Make a wish', name: 'Wishing cabinet', at: { x: 9.2, z: 4.6 }, y: 1.1, kind: 'open', entity: 'upgrade' },
   // Study: the globe is the star map, the bookshelf the collection log, the diary today's tasks.
   { id: 'globe', room: 'study', icon: '🌍', verb: 'Star map', name: 'Globe', at: { x: 3.8, z: -5.9 }, y: 1.0, kind: 'open', entity: 'travel' },
-  { id: 'books', room: 'study', icon: '📚', verb: 'Collection log', name: 'Bookshelf', at: { x: 9.2, z: -4.4 }, y: 1.2, kind: 'open', entity: 'house-use' },
+  { id: 'books', room: 'study', icon: '📚', verb: 'Bookshelf', name: 'Bookshelf', at: { x: 9.2, z: -4.4 }, y: 1.2, kind: 'open', entity: 'house-use' },
   { id: 'diary', room: 'study', icon: '📔', verb: 'Diary', name: 'Diary', at: { x: 6.5, z: -6.0 }, y: 1.0, kind: 'open', entity: 'house-use' },
 ];
 /** Spread with the rest of the plan (house.ts SPACE), so each activity stays at its piece of furniture. */

@@ -360,8 +360,8 @@ export function fertilize(s: SaveState, index: number, timeOrItem: number | stri
  * The animal pen (farm.ts PEN) is checked as a rectangle in bedClear.
  */
 export const HOME_CLEARANCE: readonly { x: number; z: number; r: number }[] = [
-    { x: 0, z: -8, r: 3.2 }, { x: 9, z: 2.5, r: 2 }, { x: 9.6, z: 10.6, r: 2 }, { x: 8.5, z: -7, r: 1.5 },
-    { x: 13.5, z: -3, r: 2 }, { x: -7, z: -11, r: 1.4 }, { x: -7.5, z: 11.2, r: 3.6 },
+    { x: 0, z: -8, r: 3.2 }, { x: 9, z: 2.5, r: 2 }, { x: 9.6, z: 10.6, r: 2 },
+    { x: 13.5, z: -3, r: 2 }, { x: -7.5, z: 11.2, r: 3.6 },
     ...[[-13, -8], [-14, 7], [3, -13], [10, -11], [14, 5], [-2, 15]].map(([x, z]) => ({ x, z, r: 1.2 })),
     ...Array.from({ length: 16 }, (_, i) => { const a = (i + .5) / 16 * Math.PI * 2; return { x: Math.cos(a) * 16.4, z: Math.sin(a) * 16.4, r: .8 }; }),
 ];
@@ -417,7 +417,7 @@ const bedSpan = (rotation = 0) => BED_HALF * (Math.abs(Math.cos(rotation)) + Mat
 export function bedClear(x: number, z: number, rotation = 0) {
     const half = Number.isFinite(rotation) ? bedSpan(rotation) : NaN;
     if (!Number.isFinite(x) || !Number.isFinite(z) || !withinHome(x, z, half + .6)) return false;
-    if (Math.abs(x) < half + TRAIL_HALF || Math.abs(z) < half + TRAIL_HALF || !clearOfPen(x, z, half)) return false;
+    if (Math.abs(x) < half + TRAIL_HALF || Math.abs(z) < half + TRAIL_HALF) return false;
     return HOME_CLEARANCE.every(o => Math.hypot(Math.max(0, Math.abs(o.x - x) - half), Math.max(0, Math.abs(o.z - z) - half)) >= o.r);
 }
 /** Whether two beds' bounding squares keep apart (2 cm between square frames; a turned bed's square is larger). */
@@ -573,7 +573,7 @@ export function bedSpotOk(s: SaveState, x: number, z: number, rotation = 0, movi
  * Whether a decoration may stand here (clear of beds, other decorations and the animal pen, inside the fence); obstacles are the world's.
  * `moving` is the uid of a decoration being moved: it does not block its own new spot, as in moveDecoration.
  */
-export function decorSpotOk(s: SaveState, x: number, z: number, moving?: string) { return s.planet === 'home' && placementFree(s, x, z, 1.9, moving) && clearOfPen(x, z, .3, .2) && !inYard(x, z, .5); }
+export function decorSpotOk(s: SaveState, x: number, z: number, moving?: string) { return s.planet === 'home' && placementFree(s, x, z, 1.9, moving); }
 /**
  * "Expand garden" (reference buyPlot): at the cap nothing happens; with a garden bed kit already in the bag the player
  * just places it; otherwise 60 + 20 x extra beds of energy buys one. The kit is spent only when the bed is placed.

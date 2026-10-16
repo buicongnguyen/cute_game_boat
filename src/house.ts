@@ -79,7 +79,7 @@ export const BIG_ROOM: RoomId = 'living';
 /** Doorway gaps (1.6 m) between rooms, as [wall, gap]. */
 const WALLS_PLAN: Wall[] = [
   { axis: 'x', at: -7, from: -10, to: 10, height: WALL.full, gaps: [] },
-  { axis: 'x', at: 6.5, from: -10, to: 10, height: WALL.low, gaps: [[-.85, .85]] },
+  { axis: 'x', at: 6.5, from: -10, to: 10, height: WALL.low, gaps: [[-9.6, -7.6], [-.85, .85]] },
   { axis: 'x', at: -2, from: -10, to: 10, height: WALL.low, gaps: [[-4.6, -3], [-.3, 1.3], [3.2, 4.8]] },
   { axis: 'z', at: -10, from: -7, to: 6.5, height: WALL.full, gaps: [] },
   { axis: 'z', at: 10, from: -7, to: 6.5, height: WALL.full, gaps: [] },
@@ -129,7 +129,7 @@ const FURNITURE_PLAN: Placement[] = [
   { kit: 'easel', x: 7.2, z: -.9, rot: .4, block: [.7, .6] },
   { kit: 'rug_rect', x: 7.5, z: 3.0, rot: Q, scale: .8 },
   { kit: 'yarn_basket', x: 8.6, z: 4.9, block: [.6, .6] },
-  { kit: 'bookshelf', x: 9.76, z: 4.6, rot: -Q, block: [1.2, .4] },
+  { kit: 'wishing_cabinet', x: 9.76, z: 4.6, rot: -Q, block: [1.2, .4] },
   { kit: 'plant_big', x: 5.6, z: -1.35, block: [.6, .6] },
   // Bedroom: bed against the back wall, wardrobe and mirror (both open your own gear).
   { kit: 'rug_round', x: -6.4, z: -4.2, scale: .7 },

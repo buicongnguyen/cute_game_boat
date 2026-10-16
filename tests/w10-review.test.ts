@@ -178,9 +178,9 @@ test('14. mergeEars marks the earless head shared, so disposing one explorer kee
 });
 
 // 15. LOW: no getBoundingClientRect per frame for the discovery pill.
-test('15. positionLabels computes the discovery pill rect from its left/top and cached size', () => {
+test('15. outdoor discovery badge is removed without adding layout reads to positionLabels', () => {
   const main = readFileSync(new URL('../src/main.ts', import.meta.url), 'utf8'), body = main.slice(main.indexOf('function positionLabels(){'), main.indexOf('/** Sparkles, the XP number'));
-  assert.doesNotMatch(body, /getBoundingClientRect/); assert.equal(body.split('offsetWidth').length, 2); assert.ok(body.includes('new ResizeObserver'), 'sized by a ResizeObserver after layout, never by a forced layout read (wave 11)'); assert.match(body, /clearOfHud\(pill,hudPanels\)/);
+  assert.doesNotMatch(body, /getBoundingClientRect/); assert.doesNotMatch(main, /id="discovery-progress"/);
 });
 
 // 16. LOW: one checker texture for the toy planet.

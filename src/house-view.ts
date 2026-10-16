@@ -5,6 +5,7 @@
  * rescued friends. Before the kit arrives (and in Node tests) simple boxes stand in for the furniture.
  */
 import * as T from 'three';
+import { CABIN_GARDEN, GARDEN_DOOR } from './cabin-garden.ts';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { KitLibrary, heroKit, wearKit, weaponKit, petKit, modelUrl } from './assets.ts';
 import { toonMaterial } from './toon.ts';
@@ -44,6 +45,15 @@ const glowing = (m: T.Material) => (m as T.MeshToonMaterial).emissive?.getHex() 
 /** Floors (planks or tiles in two shades), walls coloured per room on each face, low walls capped. */
 export function shellPieces(): T.BufferGeometry[] {
   const out: T.BufferGeometry[] = [], b = HOUSE.bounds;
+  const g = CABIN_GARDEN, width = g.x1 - g.x0, depth = g.z1 - g.z0;
+  out.push(slab(width + .5, .48, depth + .5, (g.x0 + g.x1) / 2, -.4, 0, '#4f7846'));
+  for (let z = g.z0; z < g.z1; z += 2) out.push(slab(width, .1, 2, (g.x0 + g.x1) / 2, -.08, z + 1, z % 4 === 0 ? '#8dbb70' : '#94c477'));
+  // A path and small flower beds make the garden entrance readable from the kitchen.
+  for (let i = 0; i < 4; i++) out.push(slab(1.15, .06, .6, GARDEN_DOOR.x, -.01, b.z1 + .5 + i * .85, '#e6d6a6'));
+  for (const x of [g.x0 + .6, g.x1 - .6]) for (let z = g.z0 + 1; z < g.z1; z += 4) {
+    out.push(slab(.55, .18, 1.1, x, .02, z, '#699a53'));
+    for (let i = 0; i < 3; i++) out.push(slab(.17, .15, .17, x + (i % 2) * .2 - .1, .18, z + (i - 1) * .3, i % 2 ? '#fff1ad' : '#f4c2ce'));
+  }
   out.push(slab(b.x1 - b.x0 + .6, .5, b.z1 - b.z0 + .6, (b.x0 + b.x1) / 2, -.33, (b.z0 + b.z1) / 2, BASE));
   for (const room of ROOMS) {
     const r = room.rect, w = r.x1 - r.x0, d = r.z1 - r.z0;
@@ -73,7 +83,7 @@ function fallbackPiece(p: Placement): { plain: T.BufferGeometry[]; glow: T.Buffe
   const m = placementMatrix(p), hues: Record<string, string> = { sofa: '#24b3b0', armchair: '#ffc23a', bed: '#f2668e', fireplace: '#cf5b3e', bookshelf: '#c77a3a', wardrobe: '#a98bff', fridge: '#6ccbff', bathtub: '#f2f8ff' };
   if (p.kit === 'window') { const g = new T.BoxGeometry(1.1, 1.1, .1); g.translate(0, 1.5, -.05); return { plain: [], glow: [baked(g, '#ffe7a0', m)] }; }
   if (!p.block) return { plain: [], glow: [] };
-  const h = p.kit === 'wardrobe' || p.kit === 'bookshelf' || p.kit === 'fridge' ? 1.9 : p.kit === 'fireplace' ? 1.2 : .7, g = new T.BoxGeometry(p.block[0], h, p.block[1]); g.translate(0, h / 2, 0);
+  const h = p.kit === 'wishing_cabinet' || p.kit === 'wardrobe' || p.kit === 'bookshelf' || p.kit === 'fridge' ? 1.9 : p.kit === 'fireplace' ? 1.2 : .7, g = new T.BoxGeometry(p.block[0], h, p.block[1]); g.translate(0, h / 2, 0);
   return { plain: [baked(g, hues[p.kit] ?? '#e8a862', m)], glow: [] };
 }
 
@@ -120,7 +130,7 @@ export class HouseView {
     const walk = { to: v.spot, points: route.length ? route : [{ x: v.spot.x, z: v.spot.z }], next: 0 }; this.walks.set(v.id, walk); return walk;
   }
   constructor() {
-    this.scene.background = new T.Color('#2a1d1a');
+    this.scene.background = new T.Color('#608b59');
     this.hemi = new T.HemisphereLight('#fff3df', '#b07a52', 1.55);
     this.sun = new T.DirectionalLight('#ffe9c8', 1.7); this.sun.position.set(4, 14, 9); this.sun.target.position.set(0, 0, 0); this.sun.castShadow = true;
     const b = HOUSE.bounds, cam = this.sun.shadow.camera; Object.assign(cam, { left: -15, right: 15, top: 13, bottom: -13, near: 1, far: 40 }); cam.updateProjectionMatrix();

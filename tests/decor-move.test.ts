@@ -53,7 +53,7 @@ test('the move spot rule is the placement rule without the item\'s own old spot'
   assert.equal(D.moveSpotOk(s, target, 5.5, 5, 0), true);
   assert.equal(D.moveSpotOk(s, target, 8, 5.2, 0), false, 'on top of the lamp');
   assert.equal(D.moveSpotOk(s, target, 40, 0, 0), false, 'outside the fence');
-  assert.equal(D.moveSpotOk(s, target, M.PEN.x, M.PEN.z, 0), false, 'inside the animal yard');
+  assert.equal(D.moveSpotOk(s, target, M.PEN.x, M.PEN.z, 0), true, 'the old outdoor yard is now clear');
   assert.equal(D.moveSpotOk(s, target, M.bedPosition(s, 0).x, M.bedPosition(s, 0).z, 0), false, 'on a bed');
   // A bed: its own square never blocks it, its neighbours do.
   const bed = { kind: 'bed', index: 0 } as const, at = M.bedPosition(s, 0), next = M.bedPosition(s, 1);
@@ -113,7 +113,7 @@ test('a bed moves with its growing crop: crop, planting time, growing time and p
   // Onto another bed, onto a trail, into the pen: refused, nothing changes.
   const before = structuredClone(s), other = M.bedPosition(s, 0);
   assert.throws(() => act(s, 'moveBed', { index: 2, x: other.x, z: other.z, rotation: 0 }), (error: Error) => error.message === 'That spot is taken. Choose a free spot.');
-  assert.equal(M.moveBed(s, 2, 0, 6), false); assert.equal(M.moveBed(s, 2, M.PEN.x, M.PEN.z), false); assert.equal(M.moveBed(s, 2, 1.5, NaN), false);
+  assert.equal(M.moveBed(s, 2, 0, 6), false); assert.equal(M.moveBed(s, 2, 0, -8), false); assert.equal(M.moveBed(s, 2, 1.5, NaN), false);
   assert.deepEqual(s, before);
 });
 

@@ -111,7 +111,7 @@ test('the world hands your dog between pen and follower by zone and planet; othe
   assert.equal(dogs.place, 'follow'); assert.ok(farmView.isDogAway); assert.equal(dogs.view.count, 1);
   assert.ok(Math.hypot(dogs.link.x - host.position.x, dogs.link.z - host.position.z) < 2.5);
   // Indoors counts as home even if the stored x/z are the cottage's.
-  host.interior = {}; run(.2); assert.equal(dogs.place, 'return'); host.interior = null; run(.2); assert.equal(dogs.place, 'follow');
+  host.interior = {}; run(.2); assert.equal(dogs.place, 'pen'); host.interior = null; run(.2); assert.equal(dogs.place, 'follow');
   // Another planet: it lands beside you.
   host.planet = 'candy'; host.farmView = undefined as unknown as FarmPenView; host.position.set(-40, 0, 12); run(.5);
   assert.equal(dogs.place, 'follow'); assert.ok(Math.hypot(dogs.link.x + 40, dogs.link.z - 12) < 2.5);

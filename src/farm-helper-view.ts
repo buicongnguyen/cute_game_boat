@@ -1,8 +1,10 @@
+import { CABIN_PEN, gardenGround } from './cabin-garden.ts';
+import { findRoute, clearSegment } from './navigation.ts';
 import * as M from './model.ts';
 import { HelperView } from './helper-view.ts';
 import { helperOf, nextTask, stillDue, type FarmHelperTask } from './farm-helper.ts';
 
-export const FARM_HELPER_HOME = { x: M.PEN.x + M.PEN.hw - .5, z: M.PEN.z + M.PEN.hd + .45 };
+export const FARM_HELPER_HOME = { x: CABIN_PEN.x + 1, z: CABIN_PEN.z + 2.5 };
 interface Frame {
   state: M.SaveState | null; context: unknown; act: boolean; pending: boolean; now: number;
   position(uid: number): { x: number; z: number } | undefined;
@@ -18,9 +20,10 @@ export class FarmHelperView {
   task: FarmHelperTask | null = null;
   private state: M.SaveState | null = null;
   private context: unknown;
+  private path: {x:number;z:number}[] = [];
   private wait = 0; private workLeft = 0; private patrol = 0;
   constructor() { this.group.name = 'animal-pen-helper'; }
-  reset() { this.x = FARM_HELPER_HOME.x; this.z = FARM_HELPER_HOME.z; this.mode = 'idle'; this.task = null; this.wait = 0; this.workLeft = 0; }
+  reset() { this.x = FARM_HELPER_HOME.x; this.z = FARM_HELPER_HOME.z; this.mode = 'idle'; this.task = null; this.wait = 0; this.workLeft = 0; this.path = []; }
   update(dt: number, f: Frame) {
     const s = f.state;
     if (s !== this.state || f.context !== this.context) { this.reset(); this.state = s; this.context = f.context; }
@@ -46,11 +49,19 @@ export class FarmHelperView {
     const target = this.task && f.position(this.task.uid);
     if (this.task && !target) { this.task = null; this.mode = 'idle'; }
     if (this.mode !== 'work') {
-      const goal = target ?? FARM_HELPER_HOME, dx = goal.x - this.x, dz = goal.z - this.z, distance = Math.hypot(dx, dz), stand = target ? .72 : .04;
-      if (distance > stand) {
+      const goal = target ?? FARM_HELPER_HOME;
+      let next = goal;
+      const options = { bounds: 30, gridSize: .5, walkable: (p:{x:number;z:number}) => gardenGround(p.x,p.z,.3), maxIterations: 6000 };
+      if (!clearSegment(this,goal,[],options)) {
+        const end=this.path.at(-1); if(!end||Math.hypot(end.x-goal.x,end.z-goal.z)>1.5)this.path=findRoute(this,goal,[],options);
+        while(this.path.length&&Math.hypot(this.path[0].x-this.x,this.path[0].z-this.z)<.15)this.path.shift();
+        next=this.path[0]??this;
+      } else this.path=[];
+      const dx = next.x - this.x, dz = next.z - this.z, distance = Math.hypot(dx, dz), stand = next===goal?(target ? .72 : .04):.02;
+      if (distance > stand + .001) {
         const step = Math.min(distance - stand, dt * 1.7); this.x += dx / distance * step; this.z += dz / distance * step; this.mode = 'walk';
         this.facing += Math.atan2(Math.sin(Math.atan2(dx, dz) - this.facing), Math.cos(Math.atan2(dx, dz) - this.facing)) * Math.min(1, dt * 10);
-      } else if (this.task && !f.pending && !h.paused) { this.mode = 'work'; this.workLeft = f.act ? .8 : 1.6; }
+      } else if (this.task && next === goal && !f.pending && !h.paused) { this.mode = 'work'; this.workLeft = f.act ? .8 : 1.6; }
       else this.mode = 'idle';
     }
     this.robot.present(dt, { visible: true, x: this.x, z: this.z, facing: this.facing, mode: this.mode, work: this.task?.kind === 'feed' ? 'plant' : 'harvest' });

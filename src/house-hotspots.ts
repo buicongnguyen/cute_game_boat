@@ -17,6 +17,7 @@ export interface ScreenRect { left: number; top: number; right: number; bottom: 
 
 /** The furniture each activity is: [kit, x, z] of its FURNITURE placement (the diary is the desk, the books the shelf). */
 const PIECES: Record<ActivityId, Array<[string, number, number]>> = {
+  wishing: [['wishing_cabinet', 9.76, 4.6]],
   storage: [['storage_chest', -9.05, -6.35]],
   sofa: [['sofa', -1.9, -1.38]], fire: [['fireplace', -4.62, 1.7]], trophies: [['trophy_shelf', 2.25, -1.9]], radio: [['radio', 3.0, .85]],
   stove: [['stove', -9.58, 2.4]], tea: [['kettle', -9.5, .05]], workbench: [['workbench', 9.6, .3]], bench: [['upgrade_bench', 9.55, 2.6]], easel: [['easel', 7.2, -.9]],
@@ -26,6 +27,7 @@ const PIECES: Record<ActivityId, Array<[string, number, number]>> = {
 };
 /** Heights (and sizes of pieces without a collision footprint) for the stand-in boxes before the kit arrives. */
 const GUESS: Record<string, { h: number; w?: number; d?: number }> = {
+  wishing_cabinet: { h: 1.9 },
   sofa: { h: .95 }, fireplace: { h: 1.3 }, trophy_shelf: { h: .45, w: 1.5, d: .3 }, radio: { h: .3, w: .45, d: .25 }, stove: { h: 1 },
   kettle: { h: .3, w: .3, d: .3 }, workbench: { h: 1 }, upgrade_bench: { h: 1.1 }, easel: { h: 1.6 }, bed: { h: .8 }, wardrobe: { h: 2 }, mirror: { h: 1.75 },
   bathtub: { h: .65 }, duck: { h: .2, w: .25, d: .25 }, sink: { h: 1 }, globe: { h: 1.1 }, bookshelf: { h: 1.9 }, desk: { h: .8 }, books: { h: .15, w: .35, d: .25 },

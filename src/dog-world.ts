@@ -1,4 +1,5 @@
 import type * as T from 'three';
+import { HOUSE } from './house.ts';
 import { coatOf, PEN, type SaveState } from './model.ts';
 import { dogWorn } from './pet-slots.ts';
 import { farmKit, type FarmPenView } from './farm-view.ts';
@@ -47,8 +48,10 @@ export class GuardDogs {
       // A new world (a landing, a visit ending): a dog out with you lands beside you.
       if (this.planet !== h.planet && this.link.place !== 'pen') { const at = trailSpot(h.position, h.facing); this.link.x = at.x; this.link.z = at.z; this.link.speed = 0; }
       const follow = dogWorn(h.state.gear) && dogFollows(h.planet, h.position, !!h.interior); // only a dog worn as a pet comes along
-      const leash = pen ? leashSpot(PEN, h.state.farm?.speciesPens?.dog) : null;
-      const place = stepDog(this.link, dt, follow, h.position, h.facing, pen && this.link.place === 'pen' ? pen.dogSpot() : null, leash);
+      if (h.interior) { this.link.place = 'pen'; pen?.setDogAway(false); }
+      // The farm is downstairs; the outdoor companion meets you at the hatch.
+      const leash = pen ? HOUSE.outside : null;
+      const place = stepDog(this.link, dt, follow, h.position, h.facing, pen && this.link.place === 'pen' ? (h.interior ? pen.dogSpot() : { ...HOUSE.outside, heading: 0 }) : null, leash);
       // Sent home from far away (a respawn at home): it is simply back at its pen.
       if (place === 'return' && leash && Math.hypot(this.link.x - leash.x, this.link.z - leash.z) > DOG_FAR * 1.6) { this.link.place = 'pen'; this.link.x = leash.x; this.link.z = leash.z; }
       pen?.setDogAway(this.link.place !== 'pen', this.link);

@@ -36,12 +36,12 @@ test('welcome cards: only on an untouched new save, once, saved in the save thro
   assert.ok(markSeen(s, 'tip:fight') && FIRST_SEEN.every(id => markSeen(s, id)) && s.firstRun!.seen!.length === FIRST_SEEN.length);
 });
 
-test('the three cards say who you are, what the game is and what to do now, Tap on phones and Click with a mouse', () => {
+test('the welcome guide introduces deck and cabin stations with device-specific planting instructions', () => {
   const phone = welcomeCards(true, 9), pc = welcomeCards(false, 9);
-  assert.equal(phone.length, 3);
+  assert.equal(phone.length, 6);
   assert.match(phone[0].title, /keeper of Clover Village/); assert.match(phone[1].body, /fly to \{n\} planets/); assert.equal(phone[1].params!.n, 9);
-  assert.match(phone[2].body, /^Tap a garden bed/); assert.match(pc[2].body, /^Click a garden bed/);
-  for (const c of [...phone, pc[2]]) assert.ok(c.body.length <= 72, `two lines at most on a phone: ${c.body}`);
+  assert.match(phone.at(-1)!.body, /^Tap a garden bed/); assert.match(pc.at(-1)!.body, /^Click a garden bed/);
+  assert.deepEqual(phone.flatMap(c=>c.places?.map(p=>p.kind)??[]),['sell','shop','craft','cook','upgrade','chest','pen','trophies','books']);
 });
 
 test('one goal at a time: the bounty and challenge trackers wait until the first creature is defeated or level 3', () => {

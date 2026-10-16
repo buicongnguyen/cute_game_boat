@@ -45,5 +45,17 @@ chestBox('#dcb15f',1.29,.08,.84,0,.12,0);
 for(const x of [-.46,.46])chestBox('#e2bb67',.09,.5,.83,x,.32,0);
 chestBox('#f0c875',.17,.2,.04,0,.49,.425);chestBox('#634e39',.04,.07,.05,0,.48,.45);
 (scene.children.length===1&&scene.children[0].name==='Scene'?scene.children[0]:scene).add(chest);
+// The craft-room wishing cabinet: teal lacquer, brass trim and a softly glowing crystal.
+scene.getObjectByName('wishing_cabinet')?.removeFromParent();
+const cabinet=new T.Group();cabinet.name='wishing_cabinet';
+const cb=(c,w,h,d,x,y,z)=>{const m=new T.Mesh(new T.BoxGeometry(w,h,d),new T.MeshStandardMaterial({color:c,roughness:.55}));m.position.set(x,y,z);cabinet.add(m);};
+cb('#236b70',1.2,.66,.5,0,.38,0);cb('#16464f',1.12,1.12,.08,0,1.22,-.22);
+for(const x of [-.52,.52]){cb('#dabb6a',.065,1.72,.09,x,.92,.22);cb('#845b3b',.1,.16,.38,x,.08,0);}
+for(const y of [.18,.69,1.76])cb('#e7c878',1.25,.065,.55,0,y,0);
+for(const x of [-.27,.27]){cb('#36898a',.46,.4,.025,x,.41,.265);cb('#e7c878',.055,.055,.055,x*.35,.43,.3);}
+const gem=new T.Mesh(new T.OctahedronGeometry(.29),new T.MeshStandardMaterial({color:'#9ce4f2',emissive:'#669bd8',emissiveIntensity:.45,roughness:.2}));gem.position.set(0,1.19,.03);gem.scale.y=1.4;cabinet.add(gem);
+const stand=new T.Mesh(new T.CylinderGeometry(.32,.38,.08,12),new T.MeshStandardMaterial({color:'#e6c572'}));stand.position.set(0,.78,0);cabinet.add(stand);
+for(const side of [-1,1]){const star=new T.Mesh(new T.OctahedronGeometry(.09),new T.MeshStandardMaterial({color:'#fff0bc',emissive:'#cda05b',emissiveIntensity:.2}));star.position.set(side*.38,1.52,.08);cabinet.add(star);}
+(scene.children.length===1&&scene.children[0].name==='Scene'?scene.children[0]:scene).add(cabinet);
 const outputScene=new T.Scene();const kitRoot=scene.children.length===1&&scene.children[0].name==='Scene'?scene.children[0]:scene;outputScene.add(...kitRoot.children);
 const out=await new GLTFExporter().parseAsync(outputScene,{binary:true});fs.writeFileSync(file,Buffer.from(out));console.log('Rebuilt indoor workbench; run art:compress next.');

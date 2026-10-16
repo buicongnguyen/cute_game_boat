@@ -40,3 +40,13 @@ Tiny, Chibi and Teen retain their former standing heights but use uniformly scal
 Rebuild the appearance overrides with `node art/build-boat-looks.mjs` (targets are recorded in `art/boat-height-targets.json`). Rebuild cabin tools/chest with `node --experimental-strip-types art/build-boat-workbench.mjs`, then compress `public/assets/models/house.glb`. Generate thumbnails against a running dev server with `art/render-boat-look-icons.mjs` and `PLAYWRIGHT_MODULE` pointing to Playwright. Apply these boat overrides again after running the original Blender generators.
 
 Validation includes `npm test`, `npm run build:pages`, the layout/save/tree-bed tests, 360 px and 1440 px cabin browser checks, hatch enter/reload/exit checks, and the production Pages smoke checks. Browser station checks perform a storage transfer, open crafting and forge, cooking, upgrades and Mirror, verify camera framing and scaled punching, and expose the gate bed Move control.
+
+## Cabin garden, stations and faces (2026-10-17)
+
+The downstairs cabin now has a rectangular green garden reached through the kitchen-side front doorway. A compact pen sits on the left lawn; its animals and helper route around the cabin. Existing animal ownership, production, species-pen positions and inventory are retained; the saved pen coordinates are mapped into the new garden for display.
+
+The Trophy wall lists missing/rescued friends and their rescue locations, replacing the outdoor discovery counter. The study Bookshelf keeps the collection log and now opens the Colossus controls formerly at the removed outdoor Ember Well. The lower-right bookshelf beside the workbench is now a teal-and-brass Wishing cabinet opening the existing wishing upgrades; the outdoor crystal is removed. The six-card introduction and Help > Cabin guide lead to the actual deck and cabin stations, walking through the hatch when needed.
+
+All body/height choices have a smaller smile; boy/man faces gain fine outer lashes, while the existing girl/woman lashes remain. Facial patches no longer produce jagged outline spikes; the head silhouette stays outlined. Rebuild faces on the original Tall/Grown source GLBs with art/build-boat-faces.mjs, then rebuild short heights with art/build-boat-looks.mjs, compress all hero GLBs, and regenerate the look icons. The face generator records its version to prevent applying the mouth reduction twice.
+
+Validation: full unit/save/model suite, Pages build (including TypeScript), 360/1440 cabin and deck browser checks, downstairs garden/friend/bookshelf/wishing/introduction browser checks, repeated cabin transitions and indoor HUD checks, and production Pages smoke tests.

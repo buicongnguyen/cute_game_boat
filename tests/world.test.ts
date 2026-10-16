@@ -1,3 +1,4 @@
+import { HouseSession } from '../src/house-session.ts';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import * as T from 'three';
@@ -155,8 +156,9 @@ test('a farm animal tap carries only its own UID while the pen remains a separat
  Object.defineProperty(globalThis,'innerWidth',{value:800,configurable:true});Object.defineProperty(globalThis,'innerHeight',{value:600,configurable:true});
  t.after(()=>{if(oldWidth)Object.defineProperty(globalThis,'innerWidth',oldWidth);else Reflect.deleteProperty(globalThis,'innerWidth');if(oldHeight)Object.defineProperty(globalThis,'innerHeight',oldHeight);else Reflect.deleteProperty(globalThis,'innerHeight');});
  const w=world();w.state.level=20;w.state.energy=1000;w.state.farm.built=true;const animal=M.buyAnimal(w.state,'cow',Date.now()-600000)!;M.buyAnimal(w.state,'chicken',Date.now()-600000);w.build('home');
+ w.resize=()=>{}; const cabin=new HouseSession();cabin.enter(w);
  w.farmView!.update(w.state.farm.animals,.1,1,Date.now());const at=w.farmView!.positionOf(animal.uid)!;
- w.camera.position.set(at.x,20,at.z+12);w.camera.lookAt(at.x,.6,at.z);w.camera.updateMatrixWorld(true);w.root.updateMatrixWorld(true);
+ w.camera.position.set(at.x,20,at.z+12);w.camera.lookAt(at.x,.6,at.z);w.camera.updateMatrixWorld(true);w.farmView!.update(w.state.farm.animals,.1,1.1,Date.now());cabin.view.root.updateMatrixWorld(true);
  const pixel=new T.Vector3(at.x,.6,at.z).project(w.camera),picked=w.pickEntity((pixel.x+1)*400,(1-pixel.y)*300)!;
  assert.equal(picked.kind,'animal');assert.equal(picked.animalUid,animal.uid);assert.equal(picked.name,'Cow');
  let interaction:typeof picked|null=null;w.onInteract=e=>{interaction=e;};w.position.set(at.x,0,at.z);w.select(picked);assert.equal(interaction,picked);
@@ -330,13 +332,11 @@ test('a host message for another planet cannot leave undefeatable creatures on t
   assert.equal(peer.enemies.filter(e=>e.hp>0).length,0,'nothing alive is left for the minimap to draw');
 });
 
-test('the well by the storage chest is the Ember Well: one interactive entity that opens the Colossus lid dialog (our own story, not in the reference)',()=>{
+test('the deck has no Ember Well or animal pen; the pen belongs to the cabin garden',()=>{
   const w=world();w.build('home');
-  let well:T.Object3D|undefined;w.root.traverse(o=>{if(o.userData.prop==='well')well=o;});
-  assert.ok(well,'the well is built');
-  const near=w.entities.filter(e=>Math.hypot(e.x-well!.position.x,e.z-well!.position.z)<1.5);
-  assert.equal(near.length,1,'exactly one entity sits on the well');
-  assert.equal(near[0].kind,'well');assert.equal(well!.userData.entity,near[0]);
+  assert.equal(w.entities.some(e=>e.kind==='well'||e.kind==='pen'),false);
+  assert.equal(w.cabinPen?.mesh.parent,null);
+  assert.ok(w.cabinPen);
 });
 
 test('Titan summon recalls living mobile creatures, stacks their attack and never creates or revives one',()=>{

@@ -39,7 +39,8 @@ export function mountGardenGuide(host: GardenGuideHost) {
     frame(dt: number) {
       time += dt;
       const s = host.state(), on = host.active() && !host.off?.();
-      const near = on && needsGardenGuide(s) ? nearestEmptyBed(s.plots, host.bedAt, host.world.position) : null, at = host.world.position;
+      const scene=host.world.interior?.scene??host.world.scene;if(group.parent!==scene)scene.add(group);
+      const near = on && !host.world.interior && needsGardenGuide(s) ? nearestEmptyBed(s.plots, host.bedAt, host.world.position) : null, at = host.world.position;
       const bed = near && Math.hypot(near.x - at.x, near.z - at.z) <= GARDEN_GUIDE.reach ? near : null; // out in the wilds it would only point off screen
       const goal: GuideGoal | null = bed ? { x: bed.x, z: bed.z, label: isTouch() ? '🌱 Tap a bed to plant' : '🌱 Click a bed to plant' } : on ? host.goal?.() ?? null : null;
       group.visible = !!goal; pointer.hidden = !goal;

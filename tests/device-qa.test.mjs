@@ -80,7 +80,7 @@ test('indoors the HUD says Cottage and the discovery pill is hidden', { skip, ti
   await start(page);
   await page.evaluate(() => { const w = window.__zoo.world; w.position.set(2.6, 0, 10); w.cameraTarget.copy(w.position); }); await page.waitForTimeout(600);
   await page.evaluate(() => { window.__zoo.world.position.set(0, 0, -4); window.__zoo.house.enter(true); }); await page.waitForTimeout(1200);
-  const r = await page.evaluate(() => { const p = document.querySelector('#discovery-progress'), b = p.getBoundingClientRect(); return { zone: document.querySelector('#zone-name').textContent, shown: !p.hidden && getComputedStyle(p).visibility !== 'hidden' && b.width > 0, bottom: b.bottom }; });
+  const r = await page.evaluate(() => { const p = document.querySelector('#discovery-progress'), b = p?.getBoundingClientRect() ?? {width:0,bottom:0}; return { zone: document.querySelector('#zone-name').textContent, shown: !!p && !p.hidden && getComputedStyle(p).visibility !== 'hidden' && b.width > 0, bottom: b.bottom }; });
   assert.equal(r.zone, 'Cottage'); assert.equal(r.shown, false, 'no discovery pill indoors');
   await page.evaluate(() => window.__zoo.house.leave()); await page.waitForTimeout(1200);
   assert.notEqual(await page.evaluate(() => document.querySelector('#zone-name').textContent), 'Cottage');

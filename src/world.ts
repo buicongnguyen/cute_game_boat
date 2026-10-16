@@ -34,6 +34,7 @@ import { QUALITY, type QualityProfile } from './graphics.ts';
 import { CropCards, CROP_PRESENTATION_SCALE, SOIL_Y, cropStage, popScale, stageScale, type BedCrop } from './crop-cards.ts';
 import { GardenBeds } from './garden-beds.ts';
 import { PlacementGhost } from './placement-ghost.ts';
+import { CABIN_PEN, gardenGround } from './cabin-garden.ts';
 import { FarmPenView, farmKit, PEN_PROPS, BACK_FENCE, BACK_FENCE_Z } from './farm-view.ts';
 import { GuardDogs } from './dog-world.ts';
 import { PetCompanion } from './pet-world.ts';
@@ -551,24 +552,27 @@ export class World {
    * are the entity's mesh, the animals ride inside it). The yard is open, so only the props and the back fence block
    * walking; the explorer can stroll among the animals, which step aside.
    */
+  cabinPen?: Entity;
   private buildPen(){
-    const view=this.farmView=new FarmPenView(),{x,z}=M.PEN,built=M.penBuilt(this.state);
+    const view=this.farmView=new FarmPenView(7,{origin:CABIN_PEN,compact:CABIN_PEN.scale}),{x,z}=CABIN_PEN,built=M.penBuilt(this.state);
     // Until it is bought the pen is a marked plot with a sign (still one entity to tap); a visit shows the host's.
-    this.addEntity('pen',built?'Animal pen':'Animal pen site','🐔',view.statics,x,z,2.6);
-    view.setBuilt(built);view.setSpeciesPens(this.state.farm?.speciesPens);if(built)this.penObstacles();
-    view.setArea(this.roamArea());view.setCamera(this.camera);this.roamKeep=[];
+    this.cabinPen=this.addEntity('pen',built?'Animal pen':'Animal pen site','🐔',view.statics,x,z,1.8);
+    this.entities=this.entities.filter(e=>e!==this.cabinPen);view.statics.removeFromParent();
+    view.setBuilt(built);view.setSpeciesPens(this.state.farm?.speciesPens);
+    view.setArea(this.roamArea());view.setCamera(this.camera);this.roamKeep=this.cabinPenObstacles();
     this.penKeepClock=0;
     if(!farmKit.ready)void farmKit.load().then(()=>{if(farmKit.ready&&this.farmView===view)view.refresh();});
   }
-  private penObstacles(){
-    const {x,z}=M.PEN;
-    for(const p of PEN_PROPS)this.obstacle(x+p.x,z+p.z,p.r*.85);
-    for(const fx of BACK_FENCE)for(let i=-3;i<=3;i++)this.obstacle(x+fx+i/3,z+BACK_FENCE_Z,.3);
+  cabinPenObstacles(){
+    if(!this.farmView?.isBuilt)return [];
+    const {x,z,scale}=CABIN_PEN;
+    return [...PEN_PROPS.map(p=>({x:x+p.x*scale,z:z+p.z*scale,r:p.r*scale*.85})),
+      ...BACK_FENCE.flatMap(fx=>[-3,-2,-1,0,1,2,3].map(i=>({x:x+(fx+i/3)*scale,z:z+BACK_FENCE_Z*scale,r:.22})))];
   }
   /** After the pen is bought: the yard, coop and props pop up in place and start blocking. */
   showPenBuilt(){
     const view=this.farmView;if(!view||view.isBuilt||!M.penBuilt(this.state))return false;
-    view.setBuilt(true,true);view.setSpeciesPens(this.state.farm?.speciesPens);this.penObstacles();this.penKeepClock=0;
+    view.setBuilt(true,true);view.setSpeciesPens(this.state.farm?.speciesPens);if(this.interior)this.obstacles.push(...this.cabinPenObstacles());this.penKeepClock=0;
     const e=this.entities.find(v=>v.kind==='pen');if(e)e.name='Animal pen';return true;
   }
   private penKeepClock?:number;private roamKeep:{x:number;z:number;r:number}[]=[];
@@ -584,22 +588,12 @@ export class World {
    * any other obstacle (the obstacle grid). Trails are fine to cross. Animals never block the player.
    */
   roamArea():RoamArea{
-    const {x,z}=M.PEN;
-    return {home:{x,z,rx:M.YARD.rx,rz:M.YARD.rz},radius:15.2,
-      blocked:(px,pz,r)=>{const list=this.roamObstacles();return someObstacleNear(list,px,pz,px,pz,r,o=>Math.hypot(px-o.x,pz-o.z)<o.r+r);},
-      // A long trip searches a 1 m grid once (bounded), like a creature's route.
-      route:(ax,az,bx,bz,r)=>findRoute({x:ax,z:az},{x:bx,z:bz},this.roamObstacles(),{clearance:r,bounds:16,gridSize:1,maxIterations:2500,walkable:p=>Math.hypot(p.x,p.z)<15.2-r})};
+    const {x,z,scale}=CABIN_PEN;
+    const blocked=(px:number,pz:number,r:number)=>!gardenGround(px,pz,r)||this.roamKeep.some(o=>Math.hypot(px-o.x,pz-o.z)<o.r+r);
+    return {home:{x,z,rx:M.YARD.rx*scale,rz:M.YARD.rz*scale},radius:30,blocked,
+      route:(ax,az,bx,bz,r)=>findRoute({x:ax,z:az},{x:bx,z:bz},this.cabinPenObstacles(),{clearance:r,bounds:30,gridSize:.5,maxIterations:6000,walkable:p=>gardenGround(p.x,p.z,r)})};
   }
-  /** The animals' keep-out circles in the village: beds (by their frame), the pond with its bank, the pad, every building and decoration, the pen's props. */
-  penKeepOut(){
-    const out:{x:number;z:number;r:number}[]=[];
-    for(const e of this.outdoorEntities){
-      if(e.kind==='pen'||e.kind==='enemy'||e.kind==='dropped'||Math.hypot(e.x,e.z)>17)continue;
-      out.push({x:e.x,z:e.z,r:e.kind==='plot'?M.BED_HALF*1.45:e.kind==='fish'?e.radius+.6:e.kind==='travel'?e.radius+.8:e.kind==='decoration'?.75:e.radius*.9});
-    }
-    if(this.farmView?.isBuilt)for(const p of PEN_PROPS)out.push({x:M.PEN.x+p.x,z:M.PEN.z+p.z,r:p.r});
-    return out;
-  }
+  penKeepOut(){return this.cabinPenObstacles();}
   /** The beds' draw calls, for tests and probes. */
   get bedDraws(){return this.gardenBeds?.draws??0;}
   /** A placed decoration or bed being moved (decor-move.ts): hidden while its ghost is out, and a decoration stops blocking. */
@@ -651,11 +645,9 @@ export class World {
       this.addEntity('home','Cabin hatch','⚓',this.house(),0,-8,2.2);this.obstacle(0,-8,1.7);
       this.addEntity('sell','Harvest market','🧺',this.stall('#f291a9','sell'),9,2.5,2);this.obstacle(9,2.5,1.7);
       const shop=this.stall('#68bcc7','shop');shop.rotation.y=-2.4;this.addEntity('shop','Equipment shop','🛍️',shop,9.6,10.6,2);this.obstacle(9.6,10.6,1.7);
-      this.addEntity('upgrade','Energy crystal','💎',this.crystal(),8.5,-7,1.5);this.obstacle(8.5,-7,1.4);
       this.addEntity('travel','Starship station','🚀',this.rocket(),13.5,-3,2);this.obstacle(13.5,-3,1.5);
       for(let i=0;i<this.state.plots.length;i++)this.makePlot(i);
       this.buildPen();
-      const well=group(cyl('#a0a8a2',1,1,.8,0,.4,0,10),cyl('#63c5ed',.72,.72,.05,0,.83),box('#957651',.12,2.2,.12,-.85,1.5),box('#957651',.12,2.2,.12,.85,1.5),box('#cc9f78',2.4,.15,1.8,0,2.6));well.userData.prop='well';this.addEntity('well','Ember well','🪨',well,-7,-11,1.6);this.obstacle(-7,-11,1.2);
       for(const p of homeFence()){
         const g=this.kit('fence')??group(box('#b18459',.16,1,.16,-1,.5),box('#b18459',.16,1,.16,1,.5),box('#edbe77',2.1,.12,.1,0,.4),box('#edbe77',2.1,.12,.1,0,.8));g.position.set(p.x,0,p.z);g.rotation.y=p.rot;this.root.add(g);
         for(const d of [-.6,0,.6])this.obstacle(p.x+Math.cos(p.rot)*d,p.z-Math.sin(p.rot)*d,.42);
@@ -828,6 +820,8 @@ export class World {
     if(gear.side&&isGun(gear.side))this.pairHand(c,gear.side);
     // Up to two pets beside them (pet-slots.ts): the first on the left as ever, the second on the right; with their dog out (drawn by dog-world.ts on the left) the one pet takes the right.
     for(let i=0;i<2;i++){const id=M.companionId(gear,i);if(!id)break;const pet=this.petFor(id);pet.name='remote-pet';pet.position.set(i||M.dogWorn(gear)?1:-1,0,-.6);c.add(pet);}
+    const faceHead=c.getObjectByName('head');
+    if(base.ready&&!id&&faceHead){const q=fit.head?.scale[0]??1;faceHead.userData.outlineFaceWindow={radius:.59*q,cy:.47*q};}
     addOutlines(c,{merge:true});
     return c;
   }
@@ -1240,14 +1234,12 @@ export class World {
   /** What a tap at this pixel picks: the reference's screen-space circles, then a raycast over the few entities near the tap ray. */
   pickEntity(clientX:number,clientY:number):Entity|null {
     // Indoors a tap picks by each thing's own screen box or its label (house-hotspots.ts), not the outdoor buildings' circles.
-    if(this.interior?.pick){const e=this.interior.pick(clientX,clientY);return e&&this.validTarget(e)?e:null;}
+    if(this.interior?.pick){this.raycaster.setFromCamera(new T.Vector2(clientX/innerWidth*2-1,1-clientY/innerHeight*2),this.camera);const uid=this.farmView?.pickAnimal(this.raycaster);if(uid!=null){const a=this.animalTarget(uid);if(a&&this.validTarget(a))return a;}const e=this.interior.pick(clientX,clientY);return e&&this.validTarget(e)?e:null;}
     const scale=pickScale(innerHeight,this.zoom),circles:Array<PickCircle&{entity:Entity}>=[];
     for(const e of this.entities)if(!RAYCAST_ONLY.has(e.kind)&&this.validTarget(e)){const c=pickCircle(e.kind,e.radius,(e as Enemy).boss,e.kind==='enemy'?this.modelHeight(e):0);circles.push({x:e.x,y:e.mesh.position.y+c.h,z:e.z,radius:c.r*scale,entity:e});}
     // Instanced animals have independent identities even though their body meshes are shared.
-    if(this.farmView&&!this.interior)for(const a of this.farmView.positions()){const cow=a.kind==='cow',entity=this.animalTarget(a.uid);if(entity)circles.push({x:a.x,y:a.expired?.3:cow?.8:.3,z:a.z,radius:(a.expired?36:cow?(a.adult?70:52):(a.adult?42:32))*scale,entity});}
     const held=circlesAt(circles,this.camera,innerWidth,innerHeight,clientX,clientY);
     this.raycaster.setFromCamera(new T.Vector2(clientX/innerWidth*2-1,1-clientY/innerHeight*2),this.camera);
-    const animalUid=this.interior?undefined:this.farmView?.pickAnimal(this.raycaster);if(animalUid!==undefined&&animalUid!==null){const animal=this.animalTarget(animalUid);if(animal)return animal;}
     // A ripe crop stands up toward the bed behind, whose circle can hold its top: the bed or crop under the finger wins.
     if(held[0]?.entity.kind==='plot'){const beds=this.entities.filter(e=>e.kind==='plot'&&nearRay(this.raycaster.ray,e.x,0,e.z,e.radius)).map(e=>e.mesh);const bed=beds.length?this.raycastEntity(beds):null;if(bed)return bed;}
     // Circles of a pack overlap: when several hold the tap, a real body under the finger beats the deepest circle.
@@ -1280,7 +1272,7 @@ export class World {
   private validTarget(e:Entity) {
     if(e.kind==='animal'){
       const at=e.animalUid===undefined?null:this.farmView?.positionOf(e.animalUid);if(!at||!this.state.farm?.animals.some(a=>a.uid===e.animalUid))return false;
-      e.x=at.x;e.z=at.z;e.mesh.position.set(e.x,0,e.z);return this.planet==='home'&&!this.interior;
+      e.x=at.x;e.z=at.z;e.mesh.position.set(e.x,0,e.z);return this.planet==='home'&&!!this.interior&&this.farmView?.statics.parent===this.interior.root;
     }
     return this.entities.includes(e)&&e.mesh.parent===(this.interior?.root??this.root)&&e.mesh.visible&&(e.kind!=='enemy'||(e as Enemy).hp>0);
   }
@@ -2211,7 +2203,7 @@ export class World {
     this.followSun();this.updateSky();
     for(let i=this.particles.length-1;i>=0;i--){const p=this.particles[i];p.life-=dt;p.velocity.y-=dt*7;p.mesh.position.addScaledVector(p.velocity,dt);p.mesh.scale.setScalar(Math.max(0,p.life/p.max));if(p.life<=0){this.scene.remove(p.mesh);p.mesh.geometry.dispose();this.particles.splice(i,1);}}
     this.animateCrops(dt);
-    if(this.farmView&&this.planet==='home'){this.farmView.setSpeciesPens(this.state.farm?.speciesPens);if((this.penKeepClock=(this.penKeepClock??0)-dt)<=0){this.penKeepClock=1;this.roamKeep=this.penKeepOut();}this.farmView.update(this.state.farm?.animals??[],dt,this.time,Date.now(),this.position);}
+    if(this.farmView&&this.planet==='home'){this.farmView.setSpeciesPens(this.state.farm?.speciesPens);if((this.penKeepClock=(this.penKeepClock??0)-dt)<=0){this.penKeepClock=1;this.roamKeep=this.penKeepOut();}this.farmView.update(this.state.farm?.animals??[],dt,this.time,Date.now(),this.interior?this.position:undefined);}
     (this.guardDogs??=new GuardDogs()).update(this,dt);
     this.updateTarget(dt);
     this.fx?.update(dt);

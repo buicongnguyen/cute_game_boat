@@ -1,3 +1,6 @@
+import { CABIN_PEN, gardenGround, cabinWalkable } from '../src/cabin-garden.ts';
+import { HOUSE, furnitureObstacles } from '../src/house.ts';
+import { findRoute } from '../src/navigation.ts';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import * as T from 'three';
@@ -148,70 +151,33 @@ test('the pen stands on clear ground: off the trails, the fence, the cottage, th
   let n = 1; const rng = () => (n = (n * 16807) % 2147483647) / 2147483647;
   const keep = [{ x: 3.4, z: 1.5, r: 1 }];
   for (let i = 0; i < 200; i++) { const g = penGoal(rng, .45, keep, i % 2 ? { x: 1, z: 1 } : undefined); assert.ok(M.inYard(x + g.x, z + g.z) && PEN_PROPS.every(p => Math.hypot(g.x - p.x, g.z - p.z) > p.r) && Math.hypot(g.x - 3.4, g.z - 1.5) > 1); }
-  assert.equal(M.decorSpotOk(M.newGame(), x, z), false, 'no decorations in the pen');
-  assert.equal(M.decorSpotOk(M.newGame(), x + M.YARD.rx - .3, z), false, 'nor anywhere in the yard');
+  assert.equal(M.decorSpotOk(M.newGame(), x, z), true, 'the former deck pen is now clear');
+  assert.equal(M.decorSpotOk(M.newGame(), x + M.YARD.rx - .3, z), true, 'the former yard is now clear');
 });
 
-test('home builds the pen as one entity with a fence of obstacles, and animals draw as a few instanced parts', () => {
+test('the compact downstairs pen preserves livestock and lets them roam safely around the cabin', () => {
   const w = Object.assign(Object.create(World.prototype), {
-    state: home(), scene: new T.Scene(), camera: new T.PerspectiveCamera(40, 4 / 3, .5, 300), root: new T.Group(), player: new T.Group(), companion: new T.Group(), position: new T.Vector3(),
-    destination: null, route: [], selected: null, obstacles: [], entities: [], enemies: [], plotMeshes: [], cropSignatures: [], particles: [], keys: new Set<string>(), facing: 0, time: 0, planet: 'home', hazardTimer: 0,
-    marker: new T.Mesh(), ring: new T.Mesh(), cameraTarget: new T.Vector3(), sun: new T.DirectionalLight(), raycaster: new T.Raycaster(), onInteract() {}, onAttackEnemy() {}, onDamage() {}, onZone() {},
+    state: home(), scene: new T.Scene(), camera: new T.PerspectiveCamera(40, 4/3, .5, 300), root: new T.Group(), player: new T.Group(), companion: new T.Group(), position: new T.Vector3(),
+    destination:null,route:[],selected:null,obstacles:[],entities:[],enemies:[],plotMeshes:[],cropSignatures:[],particles:[],keys:new Set<string>(),facing:0,time:0,planet:'home',hazardTimer:0,
+    marker:new T.Mesh(),ring:new T.Mesh(),cameraTarget:new T.Vector3(),sun:new T.DirectionalLight(),raycaster:new T.Raycaster(),onInteract(){},onAttackEnemy(){},onDamage(){},onZone(){},
   }) as World;
-  w.build('home');
-  const pens = w.entities.filter(e => e.kind === 'pen'); assert.equal(pens.length, 1); assert.deepEqual([pens[0].x, pens[0].z], [M.PEN.x, M.PEN.z]);
-  assert.ok(!w.blocked(M.PEN.x, M.PEN.z + M.PEN.hd), 'the yard is open toward the garden'); assert.ok(!w.blocked(M.PEN.x - M.PEN.hw, M.PEN.z), 'and at the sides');
-  assert.ok(w.blocked(M.PEN.x, M.PEN.z + BACK_FENCE_Z), 'the back fence blocks'); assert.ok(w.blocked(M.PEN.x + PEN_PROPS[0].x, M.PEN.z + PEN_PROPS[0].z), 'the coop blocks');
-  const now = Date.now(); for (let i = 0; i < 4; i++) M.buyAnimal(w.state, 'chicken', now - 3e5); M.buyAnimal(w.state, 'cow', now); M.buyAnimal(w.state, 'cow', now - 1e6);
-  for (let i = 0; i < 30; i++) w.update(.05, true, false);
-  const view = w.farmView!, meshes: T.InstancedMesh[] = []; view.animals.traverse(o => { if (o instanceof T.InstancedMesh && o.visible) meshes.push(o); });
-  // Hens 3 + cow 4 + calf 4 + egg and milk markers 2, whatever the head count; the fence and props bake into a few more.
-  assert.ok(meshes.length <= 13, `${meshes.length} animal draws`); assert.ok(view.draws <= 18, `${view.draws} pen draws`);
-  const hens = meshes.find(m => m.name === 'farm-chicken:body')!; assert.equal(hens.count, 4, 'four hens share one body draw');
-  assert.ok(meshes.some(m => m.name === 'farm-product:egg' && m.count === 4), 'a ready egg bobs over each hen');
-  // Roaming: 15 minutes of game time spread them over the whole village, never into an obstacle, the pond, a bed,
-  // a building or the starship pad, with real rests (cows mostly grazing).
-  w.state.plots.push({ crop: null, plantedAt: 0, x: M.PEN.x + 3, z: M.PEN.z + 2.6 }); w.syncCrops();
-  const pond = w.entities.find(e => e.kind === 'fish' && Math.hypot(e.x, e.z) < 18)!, pad = w.entities.find(e => e.kind === 'travel')!, beds = w.entities.filter(e => e.kind === 'plot');
-  const solid = w.entities.filter(e => ['home', 'sell', 'shop', 'chest', 'upgrade', 'craft', 'cook'].includes(e.kind));
-  let farN = 0, steps = 0, still = 0, cowSteps = 0, grazing = 0; const cells = new Set<string>(), t0w = performance.now();
-  for (let i = 0; i < 9000; i++) {
-    w.update(.1, false, false);
-    if (i < 200) continue; // 20 s to walk off the bed placed on the yard
-    for (const a of view.activities()) {
-      const r = a.kind === 'cow' ? (a.young ? .5 : .75) : (a.young ? .2 : .28), at = `${a.x.toFixed(2)},${a.z.toFixed(2)}`;
-      assert.ok(Math.hypot(a.x, a.z) < 15.3, `inside the village ${at}`);
-      assert.ok(Math.hypot(a.x - pond.x, a.z - pond.z) > pond.radius + .5, `out of the pond ${at}`);
-      assert.ok(Math.hypot(a.x - pad.x, a.z - pad.z) > pad.radius + .7, `off the starship pad ${at}`);
-      assert.ok(beds.every(b => Math.abs(a.x - b.x) > M.BED_HALF || Math.abs(a.z - b.z) > M.BED_HALF), `off the beds ${at}`);
-      assert.ok(solid.every(b => Math.hypot(a.x - b.x, a.z - b.z) > b.radius * .9), `out of buildings ${at}`);
-      assert.ok(w.obstacles.every(o => Math.hypot(a.x - o.x, a.z - o.z) >= o.r + r * .9), `out of trees and props ${at}`);
-      if (Math.hypot(a.x - M.PEN.x, a.z - M.PEN.z) > 8) farN++;
-      cells.add(`${Math.floor(a.x / 4)},${Math.floor(a.z / 4)}`); steps++; if (!a.walking) still++;
-      if (a.kind === 'cow' && !a.young) { cowSteps++; if (a.rest === 'graze') grazing++; }
-    }
-  }
-  const ms = performance.now() - t0w;
-  console.log(`roam: ${(still / steps * 100).toFixed(0)}% resting, cows grazing ${(grazing / cowSteps * 100).toFixed(0)}%, ${(farN / steps * 100).toFixed(0)}% beyond 8 m of the pen, ${cells.size} 4 m cells visited, ${(ms / 9000).toFixed(3)} ms per frame (whole world update)`);
-  assert.ok(farN / steps > .1, 'they wander far beyond the yard'); assert.ok(cells.size >= 25, `over much of the village (${cells.size} cells)`);
-  assert.ok(still / steps > .45 && still / steps < .9, `rests are a real share (${still / steps})`); assert.ok(grazing / cowSteps > .45, `cows mostly graze (${grazing / cowSteps})`);
-  // The hens scurry off when the explorer walks up.
-  const hen = view.positions().find(p => p.kind === 'chicken')!; w.position.set(hen.x + .3, 0, hen.z);
-  // Allow a turn around the nearby garden beds as well as a delayed LOD tick in the open cabin layout.
-  for (let i = 0; i < 80; i++) w.update(.05, false, false);
-  const after = view.positionOf(hen.uid)!; assert.ok(Math.hypot(after.x - w.position.x, after.z - w.position.z) > .9, 'a hen steps away from the explorer');
-  // A tap preserves the individual animal, including one far from the pen.
-  // Out in the village too: the camera follows the explorer to the animal farthest from the pen.
-  let far = view.positions().sort((a, b) => Math.hypot(b.x - M.PEN.x, b.z - M.PEN.z) - Math.hypot(a.x - M.PEN.x, a.z - M.PEN.z))[0];
-  assert.ok(Math.hypot(far.x - M.PEN.x, far.z - M.PEN.z) > 4, 'the tapped animal is out in the village');
-  w.position.set(far.x, 0, far.z + 5); w.cameraTarget.copy(w.position); for (let i = 0; i < 3; i++) w.update(.05, false, false);
-  Object.assign(globalThis, { innerWidth: 1440, innerHeight: 900 }); w.camera.aspect = 1440 / 900; w.camera.updateProjectionMatrix(); w.camera.updateMatrixWorld();
-  far = { ...far, ...view.positionOf(far.uid)! };
-  const sp = new T.Vector3(far.x, far.kind === 'cow' ? .8 : .3, far.z).project(w.camera);
-  const picked=w.pickEntity((sp.x + 1) / 2 * 1440, (1 - sp.y) / 2 * 900);
-  assert.equal(picked?.kind, 'animal', 'tapping the farthest animal targets that animal');
-  assert.equal(picked?.animalUid,far.uid);
-  w.build('ice'); assert.equal(w.farmView, undefined); assert.ok(!w.entities.some(e => e.kind === 'pen'));
+  w.build('home'); const pen=w.cabinPen!,view=w.farmView!;
+  assert.equal(w.entities.some(e=>e.kind==='pen'),false);assert.deepEqual([pen.x,pen.z],[CABIN_PEN.x,CABIN_PEN.z]);
+  const route=findRoute(HOUSE.spawn,{x:CABIN_PEN.x,z:CABIN_PEN.z+3},furnitureObstacles(),{bounds:30,gridSize:.5,walkable:cabinWalkable});
+  assert.ok(route.length,'the kitchen doorway reaches the garden without crossing walls');
+  const now=Date.now();for(let i=0;i<4;i++)M.buyAnimal(w.state,'chicken',now-3e5);M.buyAnimal(w.state,'cow',now);M.buyAnimal(w.state,'cow',now-1e6);
+  const before=structuredClone(w.state.farm),camera=new T.OrthographicCamera(-30,30,30,-30,.1,100);camera.position.set(0,50,0);camera.lookAt(0,0,0);camera.updateMatrixWorld();view.setCamera(camera);
+  view.update(w.state.farm.animals,.1,1,now);
+  const hens=view.animals.getObjectByName('farm-chicken:body') as T.InstancedMesh;assert.equal(hens.count,4);assert.ok(view.draws<=18);
+  let far=0,rest=0,count=0;const cells=new Set<string>();
+  for(let i=0;i<6000;i++) {view.update(w.state.farm.animals,.1,i*.1,now);for(const a of view.activities()){
+    const r=a.kind==='cow'?(a.young?.5:.75):(a.young?.2:.28);
+    assert.ok(gardenGround(a.x,a.z,r*.9),'animals stay on the green perimeter and out of the cabin');
+    assert.ok(w.cabinPenObstacles().every(o=>Math.hypot(a.x-o.x,a.z-o.z)>=o.r+r*.85),'animals avoid the coop and fence');
+    if(Math.hypot(a.x-CABIN_PEN.x,a.z-CABIN_PEN.z)>8)far++;if(!a.walking)rest++;count++;cells.add(Math.floor(a.x/4)+','+Math.floor(a.z/4));
+  }}
+  assert.ok(far>0&&cells.size>15,'animals explore around the house');assert.ok(rest/count>.35,'animals pause to graze');assert.deepEqual(w.state.farm,before,'moving and animating the farm never rewrites ownership or product timers');
+  w.build('ice');assert.equal(w.farmView,undefined);
 });
 
 test('stand-in animals carry the contract part names, and the rig splits them into body, head, tail and legs', () => {

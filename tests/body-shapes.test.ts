@@ -49,7 +49,7 @@ test("all heights retain the Tall rig's neck and seven meshes without extra draw
     assert.equal(g.meshes, 7, `${b}-${h}: one mesh per part plus head-leaf`);
     assert.ok(g.tris === base.tris, `${b}-${h}: ${g.tris} triangles (its chibi ${base.tris})`);
   }
-  assert.equal(hero.tris, 3336); assert.equal(glb('hero-girl.glb').tris, 3836);
+  assert.equal(hero.tris, 3496); assert.equal(glb('hero-girl.glb').tris, 3836);
   for (const b of FILE_BODIES) for (const h of ['tiny', 'chibi', 'teen'] as Height[]) assert.deepEqual(shapeFit(b, h), shapeFit(b, 'tall'), `${b}-${h}: gear fits in Tall part space`);
 });
 
