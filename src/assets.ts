@@ -18,7 +18,7 @@ const MODEL_VERSIONS: Record<string, string> = typeof __ZOO_MODEL_VERSIONS__ ===
 export const modelUrl = (file: string) => `${assetBase}assets/models/${file}${MODEL_VERSIONS[file] ? `?v=${MODEL_VERSIONS[file]}` : ''}`;
 
 export const REFINED_ASSET_FILES = {
-  cottage: modelUrl('cottage.glb'),
+  hatch: modelUrl('boat-hatch.glb'),
   market: modelUrl('market-stall.glb'),
   outfitters: modelUrl('equipment-stall.glb'),
   garden: modelUrl('garden-bed.glb'),
@@ -101,7 +101,11 @@ export class RefinedAssetLibrary {
     // An unavailable optional model must never stop the procedural game loading: the entity keeps
     // its procedural model until a later retry brings the file in (art-retry.ts).
     this.loading ??= Promise.all((Object.keys(REFINED_ASSET_FILES) as RefinedAsset[]).map(async name => {
-      const url = REFINED_ASSET_FILES[name], keep = (scene: T.Group) => { this.scenes.set(name, bakeModel(scene, { shade: perfFlags.richLook })); };
+      const url = REFINED_ASSET_FILES[name], keep = (scene: T.Group) => { this.scenes.set(name, bakeModel(scene, { shade: perfFlags.richLook, keep: mesh => {
+        // The hatch lid must retain its hinge and geometry when static colours are merged.
+        for (let node: T.Object3D | null = mesh; node; node = node.parent) if (node.name === 'door') return true;
+        return false;
+      } })); };
       const scene = await loadWithRetry(url, () => this.loadScene(url), keep, this.policy);
       if (scene) keep(scene);
     })).then(() => {});

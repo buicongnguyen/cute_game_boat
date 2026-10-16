@@ -2,7 +2,7 @@
  * The context (action) button, #context-prompt (owner request 2026-10-16). It used to show only a name ("Your cottage",
  * "Workshop") and to pop in and out mid-screen, switching between nearby things while the explorer walked.
  *
- * - promptLabel: a verb and an icon per kind of thing ("🚪 Enter cottage", "🔨 Open workshop"); unknown kinds keep their own
+ * - promptLabel: a verb and an icon per kind of thing ("🚪 Enter cabin", "🔨 Open workshop"); unknown kinds keep their own
  *   icon and name. English keys: main.ts runs them through t() (Vietnamese in locales/vi-prompt.ts).
  * - PromptFocus: what the button refers to. A new thing shows once it has been the nearest for PROMPT_SHOW_S, the button stays
  *   PROMPT_HIDE_S after its thing went out of reach (walking past never flickers), and once shown the thing is kept while it
@@ -20,7 +20,7 @@ export const PROMPT_SWITCH_M = .8;
 
 /** kind → [icon, English label]; `{name}` is the thing's own (translated) name. */
 export const PROMPT_VERBS: Readonly<Record<string, readonly [string, string]>> = {
-  home: ['🚪', 'Enter cottage'], 'house-door': ['🚪', 'Go outside'], 'house-wardrobe': ['👕', 'Open wardrobe'], 'house-mirror': ['🪞', 'Use mirror'], 'house-bench': ['🛠️', 'Use upgrade bench'],
+  home: ['🚪', 'Enter cabin'], 'house-door': ['🚪', 'Go outside'], 'house-wardrobe': ['👕', 'Open wardrobe'], 'house-mirror': ['🪞', 'Use mirror'], 'house-bench': ['🛠️', 'Use upgrade bench'],
   craft: ['🔨', 'Open workshop'], chest: ['📦', 'Open chest'], sell: ['🛒', 'Sell at market'], shop: ['🛍️', 'Open shop'], cook: ['🍳', 'Cook'],
   upgrade: ['💎', 'Use energy crystal'], well: ['🪨', 'Visit Ember Well'], travel: ['🚀', 'Board starship'], fish: ['🎣', 'Go fishing'],
   pen: ['🐔', 'Visit animal pen'], animal: ['🐔', 'Visit animal pen'], decoration: ['🪴', 'Arrange decoration'], cage: ['🗝️', 'Open cage'],

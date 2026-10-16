@@ -56,9 +56,9 @@ test('refined buildings and the explorer swap in after a late success', async ()
   const { p } = policy(), source = flaky(4 * 9, () => { const g = new T.Group(); g.add(new T.Mesh(new T.BoxGeometry(), new T.MeshStandardMaterial())); return g; });
   const assets = new RefinedAssetLibrary(source.load, p);
   await assets.loadAll();
-  assert.equal(assets.has('cottage'), false);
+  assert.equal(assets.has('hatch'), false);
   wakeArt(); await settle();
-  assert.equal(assets.has('cottage'), true); assert.ok(assets.clone('market'));
+  assert.equal(assets.has('hatch'), true); assert.ok(assets.clone('market'));
   const heroSource = flaky(4, () => kitScene('hero')), hero = new HeroLibrary('hero.glb', heroSource.load, p);
   await hero.load(); assert.equal(hero.ready, false);
   wakeArt(); await settle(); assert.equal(hero.ready, true);
@@ -73,5 +73,5 @@ test('the world swaps every kind of stand-in when late art arrives', () => {
 });
 
 test('model URLs stay plain without a build (Node, dev server)', () => {
-  assert.equal(modelUrl('cottage.glb'), '/assets/models/cottage.glb');
+  assert.equal(modelUrl('boat-hatch.glb'), '/assets/models/boat-hatch.glb');
 });

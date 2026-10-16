@@ -13,6 +13,7 @@ import { FLAGS_STORY_VI } from './vi-flags.ts';
  * Exact English keys also cover generated cooked names and catalog stat descriptions.
  */
 export const VI_CATALOG: Record<string, string> = {
+  'Cabin hatch': 'Cửa hầm tàu',
   "Removes half of the crop's original growing time. Two uses ripen a newly planted non-tree crop. Fruit trees: up to 2 hours per dose.": "Giảm thời gian chờ bằng một nửa thời gian sinh trưởng ban đầu của cây. Dùng hai lần làm cây mới trồng chín ngay, trừ cây ăn quả: mỗi lần giảm tối đa 2 giờ.",
 
   "Wild wood": "Gỗ rừng",

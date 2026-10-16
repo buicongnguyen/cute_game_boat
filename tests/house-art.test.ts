@@ -35,7 +35,7 @@ test('building models that arrive while the explorer is indoors dress the outdoo
   assert.deepEqual(w.entities.filter(e => e.mesh.userData.refinedAsset).map(e => e.kind), [], 'the interior list is untouched');
   house.leave();
   assert.equal(w.entities, outdoor);
-  assert.deepEqual(outdoor.map(e => e.mesh.userData.refinedAsset), ['cottage', 'outfitters', 'chest']);
+  assert.deepEqual(outdoor.map(e => e.mesh.userData.refinedAsset), ['hatch', 'outfitters', 'chest']);
 });
 
 test('many trips in and out keep the outdoor models', async () => {
@@ -43,6 +43,6 @@ test('many trips in and out keep the outdoor models', async () => {
   await assets.loadAll(); w.applyRefinedAssets(assets);
   const meshes = w.entities.map(e => e.mesh.children.length);
   for (let i = 0; i < 6; i++) { house.enter(w); w.applyRefinedAssets(assets); house.leave(); w.applyRefinedAssets(assets); }
-  assert.deepEqual(w.entities.map(e => e.mesh.userData.refinedAsset), ['cottage', 'outfitters', 'chest']);
+  assert.deepEqual(w.entities.map(e => e.mesh.userData.refinedAsset), ['hatch', 'outfitters', 'chest']);
   assert.deepEqual(w.entities.map(e => e.mesh.children.length), meshes);
 });

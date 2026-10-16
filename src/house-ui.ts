@@ -4,8 +4,7 @@
  * panel where you give a rescued friend things to wear (Gear tab) or change its look (Looks tab, friend-looks-ui.ts).
  * main.ts wires it with a few lines.
  */
-import * as T from 'three';
-import { dropTree } from './dispose-tree.ts';
+import type * as T from 'three';
 import { t, onLanguageChange } from './i18n.ts';
 import { ITEMS } from './content.ts';
 import type { SaveState } from './model.ts';
@@ -20,9 +19,6 @@ import { indoorsKey } from './profiles.ts';
 import { friendModel, friendSignature } from './friend-view.ts';
 import { friendLooksHtml, friendTabsHtml, initFriendLooks, type FriendTab } from './friend-looks-ui.ts';
 import { modelIcon } from './icons.ts';
-import { toonMaterial } from './toon.ts';
-import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { part } from './part-cache.ts';
 import { initHouseLife } from './house-life.ts';
 import { compileAsyncSafe } from './safe-compile.ts';
 
@@ -74,7 +70,7 @@ export function dressHtml(s: SaveState, id: FriendId, { readOnly = false, portra
 
 export function initHouse(d: HouseDeps) {
   const house = new HouseSession(), world = d.world;
-  let fade = 0, fadeTarget = 0, pending: (() => void) | null = null, friendClock = 0, dressing: FriendId | null = null, friendTab: FriendTab = 'gear', resumed = false, outdoorDoor: T.Group | null = null, doorOpen = 0, prewarmed = false, veilFade = -1;
+  let fade = 0, fadeTarget = 0, pending: (() => void) | null = null, friendClock = 0, dressing: FriendId | null = null, friendTab: FriendTab = 'gear', resumed = false, outdoorDoor: T.Object3D | null = null, doorOpen = 0, prewarmed = false, veilFade = -1;
   const veil = document.createElement('div'); veil.id = 'house-veil'; document.body.append(veil);
   const out = document.createElement('button'); out.className = 'home-button house-out'; out.dataset.houseAction = 'leave'; out.title = t('Outside');
   /** The HUD's place name says where you are: the cottage indoors, the village zone again outside. */
@@ -100,28 +96,20 @@ export function initHouse(d: HouseDeps) {
     house.view.doorTarget = 1; d.tone('pop');
     transition(() => { house.leave(); doorOpen = 1; sync(); });
   };
-  /** A swinging door in front of the cottage's painted one (the cottage model is one baked piece). */
+  /** Use the hatch's own lid, including after a late model load or world rebuild. */
   const ensureOutdoorDoor = () => {
-    if (house.inside || world.interior) return; // indoors the entity list is the interior's: keep the door we have
+    if (house.inside || world.interior) return;
     const home = world.planet === 'home' ? world.entities.find(e => e.kind === 'home') : null;
-    if (home && outdoorDoor?.parent === home.mesh) return;
-    if (outdoorDoor) { dropTree(outdoorDoor); outdoorDoor = null; } // the cottage was rebuilt or left behind: free the old door
-    if (!home) return;
-    const parts = houseKit.ready ? ['doorway', 'door'].map(n => houseKit.parts(n) ?? []) : null;
-    if (!parts) { void houseKit.load(); return; }
-    const group = new T.Group(); group.name = 'cottage-door';
-    const z = 2.585, piece = (list: typeof parts[number]) => { const g = mergeGeometries(list.map(p => { const geo = (p.geometry.index ? p.geometry.toNonIndexed() : p.geometry.clone()); for (const k of Object.keys(geo.attributes)) if (k !== 'position' && k !== 'normal') geo.deleteAttribute(k); geo.applyMatrix4(p.matrix); const c = (p.material as T.MeshToonMaterial).color, n = geo.getAttribute('position').count, a = new Float32Array(n * 3); for (let i = 0; i < n; i++) a.set([c.r, c.g, c.b], i * 3); geo.setAttribute('color', new T.BufferAttribute(a, 3)); return geo; }), false); return g ? new T.Mesh(g, toonMaterial({ color: '#ffffff', vertexColors: true })) : null; };
-    const dark = piece(parts[0]); if (dark) { dark.position.set(0, .36, z); group.add(dark); }
-    const hinge = new T.Group(); hinge.name = 'hinge'; hinge.position.set(-.53, .36, z + .075); const panel = piece(parts[1]); if (panel) { panel.castShadow = true; hinge.add(panel); } group.add(hinge);
-    home.mesh.add(group); outdoorDoor = group;
+    outdoorDoor = home?.mesh.getObjectByName('door') ?? null;
+    if (!houseKit.ready) void houseKit.load();
   };
   const stepDoors = (dt: number) => {
-    const hinge = outdoorDoor && part(outdoorDoor, 'hinge');
-    if (hinge) {
-      const near = !house.inside && Math.hypot(world.position.x - HOUSE.outdoorDoor.x, world.position.z - HOUSE.outdoorDoor.z) < 2.2;
-      const target = near || fadeTarget > 0 ? 1 : 0; doorOpen += (target - doorOpen) * (1 - Math.exp(-dt * 8));
-      hinge.rotation.y = -doorOpen * 1.75;
-    }
+    if (!outdoorDoor) return;
+    const near = !house.inside && Math.hypot(world.position.x - HOUSE.outdoorDoor.x, world.position.z - HOUSE.outdoorDoor.z) < 2.2;
+    const target = near || fadeTarget > 0 ? 1 : 0;
+    doorOpen += (target - doorOpen) * (1 - Math.exp(-dt * 8));
+    outdoorDoor.rotation.x = -doorOpen * 1.9;
+    outdoorDoor.updateMatrix();
   };
   const friendList = () => friendsOf(world.state);
   // Activities, prompts, chatter and music (house-life.ts).

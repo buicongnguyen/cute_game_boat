@@ -15,11 +15,11 @@ test('refined models load once even when requested concurrently', async () => {
   const { source } = model();
   const calls: string[] = [];
   const assets = new RefinedAssetLibrary(async url => { calls.push(url); return source; });
-  assert.equal(assets.clone('cottage'), null);
+  assert.equal(assets.clone('hatch'), null);
   await Promise.all([assets.loadAll(), assets.loadAll()]);
   await assets.loadAll();
   assert.deepEqual(calls.sort(), Object.values(REFINED_ASSET_FILES).sort());
-  assert.ok(assets.clone('cottage'));
+  assert.ok(assets.clone('hatch'));
 });
 
 test('disposing an imported world instance cannot invalidate later instances or the cache', async () => {
@@ -49,11 +49,11 @@ test('disposing an imported world instance cannot invalidate later instances or 
 test('a missing model retains its fallback without blocking the other models', async () => {
   const { source } = model();
   const assets = new RefinedAssetLibrary(async url => {
-    if (url.endsWith('cottage.glb')) throw new Error('Unavailable model');
+    if (url.endsWith('boat-hatch.glb')) throw new Error('Unavailable model');
     return source;
   });
   await assets.loadAll();
-  assert.equal(assets.clone('cottage'), null);
+  assert.equal(assets.clone('hatch'), null);
   assert.ok(assets.clone('market'));
   assert.ok(assets.clone('garden'));
 });

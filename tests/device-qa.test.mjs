@@ -49,7 +49,7 @@ test('ten trips in and out of the cottage leave the village scene and its draw c
   const probe = () => page.evaluate(() => {
     const w = window.__zoo.world; let n = 0, doors = 0;
     // Refined fish now have deeper mesh trees: prune the entire independently spawning pond population.
-    const count = o => { if (o.name === 'fishing') return; n++; if (o.name === 'cottage-door') doors++; for (const c of o.children) count(c); };
+    const count = o => { if (o.name === 'fishing') return; n++; if (o.name === 'refined-hatch') doors++; for (const c of o.children) count(c); };
     count(w.scene);
     const fish = w.scene.getObjectByName('fishing'), visible = fish?.visible;
     window.__cottageCamera ??= w.camera.clone();

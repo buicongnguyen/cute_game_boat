@@ -1,5 +1,6 @@
 /** Interface wording. Stable English source keys keep saves and game identifiers language-neutral. */
 export const VI_UI: Record<string, string> = {
+  'Enter cabin': 'Vào khoang tàu',
   'Cook all → {count} meals': 'Nấu tất cả → {count} món',
   'Cooked {count} meals. Enjoy!': 'Đã nấu {count} món. Chúc ngon miệng!',
   'Language': 'Ngôn ngữ',

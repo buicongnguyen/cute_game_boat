@@ -14,6 +14,7 @@ import { INDOOR_Y } from './house.ts';
 import {atHome,homeRecoveryBonus} from './home-care.ts';
 import { bakeCoverAtlas, coverCards, tickCoverCards, type CoverAtlas } from './cover-cards.ts';
 import { buildGround, shadeField, type GroundDetail } from './ground.ts';
+import { makeDeckHatch, HATCH_SCALE, woodenSafeDeck } from './boat-deck.ts';
 import { inSafeZone } from './safe-zone.ts';
 import { buildPond } from './pond-view.ts';
 import { circlesAt, holdsHero, ignoreRetarget, nearRay, pickCircle, pickScale, RAYCAST_ONLY, type PickCircle } from './picking.ts';
@@ -128,7 +129,7 @@ const UP = new T.Vector3(0, 1, 0);
 /** Scratch pose of a thrown body (updateEnemyVisual): one object for every creature, so a death throw allocates nothing per frame. */
 const FLING_POSE=newFlingPose();
 const matCache = new Map<string, T.MeshToonMaterial>();
-const ENTITY_ASSETS: Partial<Record<string, RefinedAsset>> = { home: 'cottage', sell: 'market', shop: 'outfitters', upgrade: 'crystal', chest: 'chest', craft: 'workshop', cook: 'kitchen' };
+const ENTITY_ASSETS: Partial<Record<string, RefinedAsset>> = { home: 'hatch', sell: 'market', shop: 'outfitters', upgrade: 'crystal', chest: 'chest', craft: 'workshop', cook: 'kitchen' };
 // A bed's entity holds only this invisible shape, the bed slab plus a column where its crop card stands, so tap raycasts
 // find the bed and its crop but pass over it to the bed behind. GardenBeds draws the beds.
 const BED_PICK=mergeGeometries([new T.BoxGeometry(1.94*M.BED_SCALE,.32,1.94*M.BED_SCALE).translate(0,.16,0),new T.BoxGeometry(.8*M.CROP_SCALE,1.05*M.CROP_SCALE,.8*M.CROP_SCALE).translate(0,.75*M.CROP_SCALE,0)]),BED_PICK_MATERIAL=new T.MeshBasicMaterial({visible:false});BED_PICK.userData.sharedKit=BED_PICK_MATERIAL.userData.sharedKit=true;
@@ -368,6 +369,7 @@ export class World {
       entity.mesh.remove(child);
       this.disposeTree(child);
     }
+    if (asset === 'hatch') { visual.scale.setScalar(HATCH_SCALE); visual.position.y = .03; }
     entity.mesh.add(visual);
     entity.mesh.userData.refinedAsset = asset;
   }
@@ -479,15 +481,7 @@ export class World {
     const g = group(box('#c99c6a', .17, 1.1, .17, -1.35, .55), box('#c99c6a', .17, 1.1, .17, 1.35, .55), box('#dfb782', 2.8, .12, .11, 0,.45),box('#dfb782',2.8,.12,.11,0,.84));
     g.position.set(x,0,z); if(rotate) g.rotation.y=Math.PI/2; this.root.add(g);
   }
-  house() {
-    const h = group(cyl('#f0dfa7', 2.6, 2.7, 3.2, 0,1.6), cyl('#b29564',2.8,2.9,.22,0,.16));
-    h.add(cyl('#e3b653',0,3.65,2.8,0,4.4,0,24),cyl('#edc869',.9,3.8,.62,0,3.2,0,24),cyl('#e9c164',0,1.1,.7,0,5.55,0,24));
-    h.add(box('#846b48',1.0,1.95,.2,0,1,2.66),ball('#e4d29c',.08,.32,1,2.83));
-    for(const x of [-1.62,1.62]) h.add(box('#f9edc2',.85,1.05,.2,x,1.6,2.11),box('#77b3b0',.64,.78,.23,x,1.6,2.24),box('#f9edc2',.08,.82,.24,x,1.6,2.27));
-    for(const x of [-2,2]) h.add(cyl('#96815a',.09,.09,2.55,x,1.28,2.55));
-    h.add(box('#dfbd78',4.6,.15,1.4,0,.12,3));
-    return h;
-  }
+  house() { return makeDeckHatch(); }
   stall(color: string, type: string) {
     const g = group(box('#b6875e',2.9,1.05,1.45,0,.53),box('#e4ba82',3.1,.16,1.6,0,1.1));
     for(const x of [-1.3,1.3]) g.add(cyl('#987958',.07,.07,2.6,x,1.3,-.55));
@@ -653,7 +647,8 @@ export class World {
     const theme=PLANETS[planet],rng=seeded(9281+Object.keys(PLANETS).indexOf(planet)*399);
     this.dressLook(planet);
     if(planet==='home'){
-      this.addEntity('home','Your cottage','🏡',this.house(),0,-8,3.2);this.obstacle(0,-8,2.7);
+      this.root.add(woodenSafeDeck());
+      this.addEntity('home','Cabin hatch','⚓',this.house(),0,-8,2.2);this.obstacle(0,-8,1.7);
       this.addEntity('sell','Harvest market','🧺',this.stall('#f291a9','sell'),9,2.5,2);this.obstacle(9,2.5,1.7);
       const shop=this.stall('#68bcc7','shop');shop.rotation.y=-2.4;this.addEntity('shop','Equipment shop','🛍️',shop,9.6,10.6,2);this.obstacle(9.6,10.6,1.7);
       const chest=group(box('#aa794d',1.25,.7,.8,0,.35),cyl('#a67c4f',.5,.5,1.2,0,.65),box('#e7bb68',.15,.8,.84,0,.4));chest.children[1].rotation.z=Math.PI/2;
@@ -673,13 +668,8 @@ export class World {
       }
       for(let i=0;i<4;i++){const a=i*Math.PI/2,g=this.kit('gate')??group(cyl('#b18c59',.14,.14,3.1,-1.7,1.55),cyl('#b18c59',.14,.14,3.1,1.7,1.55),box('#edc57a',3.75,.2,.2,0,3));g.position.set(Math.cos(a)*18,0,Math.sin(a)*18);g.rotation.y=-a-Math.PI/2;this.root.add(g);}
       this.villageTrees=[[-13,-8],[-14,7],[3,-13],[10,-11],[14,5],[-2,15]].map(([x,z])=>this.tree(x,z,.75,true,rng)); // kept: a swing shakes them (village-fun.ts)
-      // The home pond first, so the stones and fence-side bushes below keep off its water.
+      // The home pond first, so fence-side bushes keep off its water.
       this.makePond(-7.5,11.2,3.3);
-      // Stepping-stone trails lead from the cottage to the four gates.
-      if(sceneryKit.ready)for(const [axis,from,to] of [['z',-3.6,17.4],['z',-12.6,-17.4],['x',2.2,17.4],['x',-2.2,-17.4]] as const){
-        const step=from<to?1.2:-1.2;for(let t=from,i=0;step>0?t<=to:t>=to;t+=step,i++){const side=(i%2?.22:-.22),x=axis==='z'?side:t,z=axis==='z'?t:side;
-          if(this.entities.some(e=>Math.hypot(x-e.x,z-e.z)<e.radius+.35))continue;
-          const stone=this.kit('stone_step');if(stone){stone.position.set(x,0,z);stone.rotation.y=i*1.3+t;stone.scale.setScalar(.95+(i%3)*.1);this.root.add(stone);}}}
       // Walk-through dressing inside the fence. It adds no obstacles, so every player's map stays identical.
       if(sceneryKit.ready)for(let i=0;i<16;i++){const a=(i+.5)/16*Math.PI*2,x=Math.cos(a)*16.4,z=Math.sin(a)*16.4;
         if(this.entities.some(e=>Math.hypot(x-e.x,z-e.z)<e.radius+1.4)||this.obstacles.some(o=>Math.hypot(x-o.x,z-o.z)<o.r+.9))continue;
@@ -729,7 +719,7 @@ export class World {
     if(planet==='home')for(let i=0;i<FOREST_RAPTOR_COUNT;i++)placeEnemy('forest_raptor','forest');
     dressWorld(planet,this.enemies,(type,index)=>this.spawnSpecies(type,30,30,index)); // elite roles and the splitter's dormant children (elite-world.ts)
     const free=(x:number,z:number,r:number)=>!someObstacleNear(this.obstacles,x,z,x,z,r,o=>Math.hypot(x-o.x,z-o.z)<o.r+r)&&!this.entities.some(e=>Math.hypot(x-e.x,z-e.z)<e.radius+r);
-    this.decor=planDecor({planet,layout,random:rng,free,ponds,clearings:this.enemies.filter(e=>e.respawn<999999).map(e=>({x:e.homeX,z:e.homeZ,type:e.type}))});
+    this.decor=planDecor({planet,layout,random:rng,free,ponds,clearings:this.enemies.filter(e=>e.respawn<999999).map(e=>({x:e.homeX,z:e.homeZ,type:e.type}))}).filter(p=>planet!=='home'||!inSafeZone(p,'home')||!DECOR[p.type]?.cover);
     for(const piece of this.decor)if(piece.radius>0)this.obstacle(piece.x,piece.z,piece.radius);
     // The ground is coloured last, once it is known what stands on it (ground.ts: shade under trees, lush banks, glow, wear).
     this.root.add(buildGround({planet,layout,ponds:[],base:planet==='cloud'?-30:planet==='ocean'?-1.15:0,height:sunk,segments:planet==='lava'?20:12,detail:perfFlags.richLook?this.groundDetail(ponds):undefined}));

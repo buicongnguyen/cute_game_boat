@@ -8,7 +8,7 @@ import { VI_PACK } from '../src/locales/vi-pack.ts';
 const thing = (kind: string, name = 'Thing', icon = '✨') => ({ kind, name, icon });
 
 test('the button says what it does: a verb and an icon per kind, a bed by its state, an unknown kind by its own name', () => {
-  assert.deepEqual(promptLabel(thing('home', 'Your cottage')), { icon: '🚪', text: 'Enter cottage' });
+  assert.deepEqual(promptLabel(thing('home', 'Your cottage')), { icon: '🚪', text: 'Enter cabin' });
   assert.deepEqual(promptLabel(thing('craft', 'Workshop')), { icon: '🔨', text: 'Open workshop' });
   assert.deepEqual(promptLabel(thing('chest')), { icon: '📦', text: 'Open chest' });
   assert.deepEqual(promptLabel(thing('plot'), { plot: 'empty' }), { icon: '🌱', text: 'Plant a seed' });

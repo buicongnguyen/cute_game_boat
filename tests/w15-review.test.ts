@@ -334,7 +334,7 @@ test('I. friends walk round the walls through the doorways, with walking legs an
 });
 test('L. late files refresh only what they dress, once per frame', () => {
   assert.deepEqual([...lateArtParts([KIT_FILES.wear, KIT_FILES.pets])], ['avatars']);
-  assert.deepEqual([...lateArtParts([REFINED_ASSET_FILES.cottage, KIT_FILES.fruitCrops, HERO_FILE, HOUSE_FILE])].sort(), ['avatars', 'crops', 'house', 'refined']);
+  assert.deepEqual([...lateArtParts([REFINED_ASSET_FILES.hatch, KIT_FILES.fruitCrops, HERO_FILE, HOUSE_FILE])].sort(), ['avatars', 'crops', 'house', 'refined']);
   assert.deepEqual([...lateArtParts([KIT_FILES.helper, KIT_FILES.cage])], [], 'they refresh themselves');
   const q = new LateArtQueue(); q.add('a'); q.add('a'); q.add('b'); assert.deepEqual(q.take(), ['a', 'b']); assert.deepEqual(q.take(), []);
   assert.match(src('main.ts'), /onArtLoaded\(url=>lateArt\.add\(url\)\)/);
