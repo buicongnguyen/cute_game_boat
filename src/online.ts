@@ -1,3 +1,4 @@
+import { inSafeZone } from './safe-zone.ts';
 import type { GameBridge, NetworkDrop } from './game-bridge.ts';
 import { newGame, cropProgress, ITEMS, type SaveState, type PlanetId, type Difficulty } from './model.ts';
 import type { LookId } from './looks.ts';
@@ -172,7 +173,7 @@ export function initOnline(game:GameBridge) {
   function syncRoomDifficulty(){const d=host&&host!==account?.id?players.get(host)?.difficulty:null;world().roomDifficulty=d==='easy'||d==='normal'||d==='hard'?d:null;}
   function renderPlayers(){
     syncRoomDifficulty();
-    const local=game.getPresence();const space=visiting?`home:${visiting}`:local.planet==='home'&&Math.hypot(local.x,local.z)<18?`home:${account?.id}`:'wild';
+    const local=game.getPresence();const space=visiting?`home:${visiting}`:local.planet==='home'&&inSafeZone(local,'home')?`home:${account?.id}`:'wild';
     world().updateRemotePlayers([...players.values()].filter(player=>player.id!==account?.id&&player.planet===local.planet&&(player.space==='wild'||player.space===space)));
   }
   function authority(next:string|null,enemies?:EnemyState[]){

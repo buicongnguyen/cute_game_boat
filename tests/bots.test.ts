@@ -102,7 +102,7 @@ test('the message box sorts English and Vietnamese messages and always answers i
 
 test('neighbours live beyond the gates, hunt the nearest ordinary enemy there, and walk through their own gate', async () => {
   const L = await import('../src/bot-logic.ts');
-  for (const zone of L.ZONES) { assert.ok(Math.hypot(zone.gate.x, zone.gate.z) === L.SAFE_RADIUS); assert.ok(Math.hypot(zone.x, zone.z) - L.ZONE_RADIUS > L.SAFE_RADIUS, `${zone.id} hunting ground is outside the safe zone`); }
+  for (const zone of L.ZONES) { assert.ok(Math.hypot(zone.gate.x, zone.gate.z) === (zone.gate.x ? 20 : 22)); assert.ok(Math.hypot(zone.x, zone.z) - L.ZONE_RADIUS > L.SAFE_RADIUS, `${zone.id} hunting ground is outside the safe zone`); }
   assert.equal(new Set(makeCast(5).map(b => L.zoneOf(b).id)).size, 4, 'five neighbours spread over the four zones');
   const zone = L.ZONES[3], foes = [{ id: 'far', x: 38, z: 3, hp: 5 }, { id: 'near', x: 29, z: 2, hp: 5 }, { id: 'dead', x: 30, z: 0, hp: 0 }, { id: 'boss', x: 30, z: 1, hp: 9, boss: true }, { id: 'home', x: 10, z: 0, hp: 5 }];
   assert.equal(L.pickFoe(foes, { x: 31, z: 0 }, zone)?.id, 'near'); assert.equal(L.pickFoe(foes.slice(2), { x: 31, z: 0 }, zone), null, 'no bosses, no dead, nothing inside the safe zone');

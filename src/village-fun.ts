@@ -1,3 +1,4 @@
+import { homeFence } from './safe-zone.ts';
 import type * as T from 'three';
 import type { Effects } from './fx.ts';
 
@@ -40,6 +41,11 @@ export function fencePoint(x: number, z: number, fence: number, reach: number): 
   return { x: x / d * fence, z: z / d * fence };
 }
 
+export function homeFencePoint(x: number, z: number, reach: number) {
+  let nearest: {x:number;z:number}|null=null, distance=reach;
+  for(const p of homeFence()) {const dx=Math.cos(p.rot),dz=-Math.sin(p.rot),t=Math.max(-1,Math.min(1,(x-p.x)*dx+(z-p.z)*dz)),q={x:p.x+dx*t,z:p.z+dz*t},d=Math.hypot(x-q.x,z-q.z);if(d<distance){distance=d;nearest=q;}}
+  return nearest;
+}
 /** Each thing's rest between two reactions. */
 export class PokeGate {
   private last = new Map<string, number>();

@@ -13,7 +13,7 @@ import { TITANS } from './titan-content.ts';
 import { FRIENDS, FRIEND_IDS } from './friends-state.ts';
 import { spreadActivity, type Point, type RoomId } from './house.ts';
 
-export type ActivityId = 'sofa' | 'fire' | 'trophies' | 'radio' | 'stove' | 'tea' | 'workbench' | 'bench' | 'easel' | 'bed' | 'wardrobe' | 'mirror' | 'bath' | 'duck' | 'sink' | 'globe' | 'books' | 'diary';
+export type ActivityId = 'storage' | 'sofa' | 'fire' | 'trophies' | 'radio' | 'stove' | 'tea' | 'workbench' | 'bench' | 'easel' | 'bed' | 'wardrobe' | 'mirror' | 'bath' | 'duck' | 'sink' | 'globe' | 'books' | 'diary';
 /** buff: a rule in this file; open: an existing panel (main.ts routes kind 'cook'/'craft'/'travel'); fun: sound and sparkle only. */
 export type ActivityKind = 'buff' | 'open' | 'fun' | 'paint';
 export interface Activity {
@@ -46,6 +46,7 @@ const ACTIVITIES_PLAN: Activity[] = [
   // The upgrade bench (upgrade-bench.ts): levels for owned gear and fighting skills.
   { id: 'bench', room: 'craft', icon: '⚒️', verb: 'Upgrade', name: 'Upgrade bench', at: { x: 8.85, z: 2.6 }, y: .9, kind: 'open', entity: 'house-bench' },
   { id: 'easel', room: 'craft', icon: '🎨', verb: 'Paint', name: 'Easel', at: { x: 7.0, z: -.45 }, y: 1.1, kind: 'paint', entity: 'house-use', cooldownMin: 8, xpShare: .03 },
+  { id: 'storage', room: 'bedroom', icon: '📦', verb: 'Open', name: 'Storage chest', at: { x: -9.05, z: -5.75 }, y: .65, kind: 'open', entity: 'chest' },
   // Bedroom: sleep (full health and a well-rested XP buff), the wardrobe and mirror.
   { id: 'bed', room: 'bedroom', icon: '🛏️', verb: 'Sleep', name: 'Bed', at: { x: -7.0, z: -4.7 }, y: .6, kind: 'buff', entity: 'house-use', cooldownMin: 15, heal: 'full', buff: { xp: .25, time: 300 }, note: 'Well rested: +25% experience' },
   { id: 'wardrobe', room: 'bedroom', icon: '👗', verb: 'Wardrobe', name: 'Wardrobe', at: { x: -9.62, z: -3.6 }, y: 1.4, kind: 'open', entity: 'house-wardrobe' },

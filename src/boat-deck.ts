@@ -1,6 +1,6 @@
 import * as T from 'three';
 import { toonMaterial } from './toon.ts';
-import { safeRadius } from './safe-zone.ts';
+import { HOME_SAFE } from './safe-zone.ts';
 
 export const HATCH_SCALE = 1.8;
 /** Cloudback's procedural hatch remains usable if its borrowed model cannot load. */
@@ -39,7 +39,7 @@ function plankTexture() {
 /** A single deck surface inside the home fence, with a cutout around the existing fishing pond. */
 export function woodenSafeDeck() {
   const group = new T.Group(); group.name = 'wooden-safe-deck'; group.userData.environment = true;
-  const shape = new T.Shape(); shape.absarc(0, 0, safeRadius('home'), 0, Math.PI * 2, false);
+  const shape = new T.Shape(); shape.moveTo(-HOME_SAFE.x, -HOME_SAFE.z); shape.lineTo(HOME_SAFE.x, -HOME_SAFE.z); shape.lineTo(HOME_SAFE.x, HOME_SAFE.z); shape.lineTo(-HOME_SAFE.x, HOME_SAFE.z); shape.closePath();
   // Shape y becomes world -z. The bank and water keep their original geometry and fishing bounds.
   const pond = new T.Path(); pond.absarc(-7.5, -11.2, 3.85, 0, Math.PI * 2, true); shape.holes.push(pond);
   const deck = new T.Mesh(new T.ShapeGeometry(shape, 96).rotateX(-Math.PI / 2), toonMaterial({ map: plankTexture() }));

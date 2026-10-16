@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync, readdirSync } from 'node:fs';
 import { promptLabel, PromptFocus, PROMPT_VERBS, PROMPT_SHOW_S, PROMPT_HIDE_S, PROMPT_SWITCH_M } from '../src/action-prompt.ts';
 import { PROMPT_VI } from '../src/locales/vi-prompt.ts';
+import { ACTIVITIES } from '../src/house-activities.ts';
 import { VI_PACK } from '../src/locales/vi-pack.ts';
 
 const thing = (kind: string, name = 'Thing', icon = '✨') => ({ kind, name, icon });
@@ -26,6 +27,7 @@ test('every kind the world can put in reach has a verb', () => {
   // Kinds added with addEntity('kind', ...) anywhere in src, plus the environment nodes (environments.ts node('kind', ...)).
   const src = new URL('../src/', import.meta.url), kinds = new Set<string>();
   for (const f of readdirSync(src)) if (f.endsWith('.ts')) { const s = readFileSync(new URL(f, src), 'utf8'); for (const m of s.matchAll(/(?:addEntity\(|\badd\((?='house-)|\bnode\()'([a-z][a-z-]*)'/g)) kinds.add(m[1]); }
+  for (const a of ACTIVITIES) kinds.add(a.entity);
   const known = new Set(['plot', 'house-use']), missing = [...kinds].filter(k => !Object.hasOwn(PROMPT_VERBS, k) && !known.has(k));
   assert.deepEqual(missing, []);
   assert.ok(kinds.has('home') && kinds.has('craft') && kinds.has('fruit'), `the scan found the kinds (${kinds.size})`);

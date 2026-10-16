@@ -43,12 +43,18 @@ export function armSwing(drop = ARM): { swing: number; splay: number; ease: numb
   return { swing: .8 - (.8 - LONG_ARM_SWING) * k, splay: .3 - (.3 - LONG_ARM_SPLAY) * k, ease: .1 * k };
 }
 /** The arm length of a model built from the hero's parts: its hand marker under the shoulder pivot (the default without one). */
+/** Apply an animation relative to the authored limb size (short Tall rigs carry a uniform scale). */
+export function scaleLimb(node: T.Object3D | null | undefined, x = 1, y = 1, z = 1) {
+  if (!node) return;
+  const rest = node.userData.restScale ??= node.scale.toArray();
+  node.scale.set(rest[0] * x, rest[1] * y, rest[2] * z);
+}
 export function armOf(model: T.Object3D | null | undefined): number { return model ? limbsOf(model).arm ?? ARM : ARM; }
 /** The model's leg and arm pivots (the hero's named parts), found once. */
 export function limbsOf(model: T.Object3D): Limbs {
   const cached = model.userData.limbs as Limbs | undefined; if (cached) return cached;
   const limbs: Limbs = { legL: model.getObjectByName('leg-left') ?? null, legR: model.getObjectByName('leg-right') ?? null, armL: model.getObjectByName('arm-left') ?? null, armR: model.getObjectByName('arm-right') ?? null };
-  const hand = limbs.armR?.getObjectByName('hand-right') ?? limbs.armL?.getObjectByName('hand-left'); if (hand && hand.position.y < -.2) limbs.arm = -hand.position.y;
+  const hand = limbs.armR?.getObjectByName('hand-right') ?? limbs.armL?.getObjectByName('hand-left'); if (hand && hand.position.y < -.2) limbs.arm = -hand.position.y * ((limbs.armR ?? limbs.armL)?.scale.y ?? 1);
   model.userData.limbs = limbs; return limbs;
 }
 /**

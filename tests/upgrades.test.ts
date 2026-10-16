@@ -168,7 +168,7 @@ test('the bench lists owned gear weakest first, weapons with the forge rule, and
 test('the upgrade bench is a cottage spot in the craft room with its own title and purpose', () => {
   const spot = ACTIVITIES.find(a => a.id === 'bench')!; assert.equal(spot.room, 'craft'); assert.equal(spot.entity, 'house-bench');
   assert.equal(indoorStore('bench', true), INDOOR_STORES.bench); assert.equal(indoorStore('bench', false), null);
-  assert.match(INDOOR_STORES.bench.purpose, /gear you own and your fighting skills/);
+  assert.match(INDOOR_STORES.bench.purpose, /gear, weapons and fighting skills/);
 });
 
 test('bench, levels and toasts read fully in Vietnamese', () => {

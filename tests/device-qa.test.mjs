@@ -44,7 +44,12 @@ test('ten trips in and out of the cottage leave the village scene and its draw c
   // Neighbours change clothes and respawn during ordinary play; this fixture measures the cottage's lifetime only.
   await page.evaluate(async () => (await import('/src/bots.ts')).setNeighboursOn(false));
   await start(page);
-  await page.evaluate(() => { const w = window.__zoo.world; w.position.set(0, 0, -4); w.cameraTarget.copy(w.position); });
+  await page.evaluate(() => {
+    const w = window.__zoo.world; w.position.set(0, 0, -4); w.cameraTarget.copy(w.position);
+    // Creature-vs-creature fights lazily allocate pooled attack decals even without neighbours.
+    // Keep the same outdoor scene, but freeze that independent simulation for the cabin lifetime check.
+    const update=w.update.bind(w);w.update=(dt,active,draw)=>update(dt,active,draw,false);
+  });
   await page.waitForTimeout(900);
   const probe = () => page.evaluate(() => {
     const w = window.__zoo.world; let n = 0, doors = 0;

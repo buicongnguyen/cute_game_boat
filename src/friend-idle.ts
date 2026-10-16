@@ -13,7 +13,9 @@ export const lookFor = (rand: () => number) => 2 + rand() * 2;
 export const idleChoice = (rand: () => number): 'home' | 'stroll' => rand() < .15 ? 'home' : 'stroll';
 /** Up to three different things to look at, in the order that keeps the walk short (each next one is the nearest left). */
 export function strollRoute(spots: readonly Spot[], from: Spot, rand: () => number, count = 3, standOff = .9): Stop[] {
-  const pool = spots.filter(s => Number.isFinite(s.x) && Number.isFinite(s.z)), picked: Spot[] = [];
+  // Leisure walks stay near the helper's current post; work can still target every gate bed.
+  const valid = spots.filter(s => Number.isFinite(s.x) && Number.isFinite(s.z)), near = valid.filter(s => Math.hypot(s.x-from.x,s.z-from.z)<10);
+  const pool = near.length ? near : valid, picked: Spot[] = [];
   while (picked.length < count && pool.length) picked.push(pool.splice(Math.floor(rand() * pool.length), 1)[0]);
   const route: Stop[] = []; let here = from;
   while (picked.length) {

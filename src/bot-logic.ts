@@ -1,3 +1,4 @@
+import { HOME_SAFE, inSafeZone as safeZone } from './safe-zone.ts';
 /**
  * The AI neighbours for solo play (bots.ts draws and runs them): who they are, how rich they look, what they give a new
  * friend, and how friendship and gifts are remembered. Everything here is plain data and functions (no three.js, no DOM), so
@@ -196,19 +197,19 @@ export function walk(w: Walker, dt: number, ctx: WalkCtx, flying = false) {
 
 // ---- Where they live: the common area beyond the four gates ----
 /** The safe zone around the cottage ends here; the four gates stand on it (world.ts). */
-export const SAFE_RADIUS = 18;
+export const SAFE_RADIUS = HOME_SAFE.x;
 export interface Zone { id: string; x: number; z: number; /** The gate on the way in, on the safe zone's edge. */ gate: { x: number; z: number } }
 export const ZONES: readonly Zone[] = [
-  { id: 'forest', x: -30, z: 0, gate: { x: -SAFE_RADIUS, z: 0 } }, { id: 'meadow', x: 0, z: 30, gate: { x: 0, z: SAFE_RADIUS } },
-  { id: 'swamp', x: 0, z: -30, gate: { x: 0, z: -SAFE_RADIUS } }, { id: 'canyon', x: 30, z: 0, gate: { x: SAFE_RADIUS, z: 0 } },
+  { id: 'forest', x: -30, z: 0, gate: { x: -SAFE_RADIUS, z: 0 } }, { id: 'meadow', x: 0, z: 30, gate: { x: 0, z: HOME_SAFE.z } },
+  { id: 'swamp', x: 0, z: -30, gate: { x: 0, z: -HOME_SAFE.z } }, { id: 'canyon', x: 30, z: 0, gate: { x: SAFE_RADIUS, z: 0 } },
 ];
 /** How far from its zone's middle a neighbour wanders: the nearest edge is still 21 m from the cottage, outside the safe zone. */
 export const ZONE_RADIUS = 9;
 export const zoneOf = (def: Pick<BotDef, 'id'>) => ZONES[(Number(def.id.slice(BOT_ID_PREFIX.length)) || 0) % ZONES.length];
-export const inSafeZone = (x: number, z: number) => Math.hypot(x, z) < SAFE_RADIUS;
+export const inSafeZone = (x: number, z: number) => safeZone({x,z}, 'home');
 /** The way through a gate: a point just outside it and one just inside (`out` first when leaving, in first when arriving). */
 export function gateRoute(zone: Zone, inward: boolean) {
-  const k = 1 / SAFE_RADIUS, ux = zone.gate.x * k, uz = zone.gate.z * k, outside = { x: ux * (SAFE_RADIUS + 3.5), z: uz * (SAFE_RADIUS + 3.5) }, inside = { x: ux * (SAFE_RADIUS - 4), z: uz * (SAFE_RADIUS - 4) };
+  const radius = Math.hypot(zone.gate.x,zone.gate.z), k = 1 / radius, ux = zone.gate.x * k, uz = zone.gate.z * k, outside = { x: ux * (radius + 3.5), z: uz * (radius + 3.5) }, inside = { x: ux * (radius - 4), z: uz * (radius - 4) };
   return inward ? [outside, inside] : [inside, outside];
 }
 export interface Foe { id: string; x: number; z: number; hp: number; boss?: boolean }

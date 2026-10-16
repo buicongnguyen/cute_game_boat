@@ -1,3 +1,4 @@
+import { inSafeZone } from '../src/safe-zone.ts';
 import http from 'node:http';
 import { poseStep, poseFix, arrived } from './pose-budget.mjs';
 import { clientAddress } from './client-address.mjs';
@@ -156,7 +157,7 @@ export async function createGameServer(options = {}) {
   }
   function tellFriends(account) { const peer = peers.get(account.id); if (peer) send(peer.socket, { type: 'friends', ...friendList(account) }); }
   function broadcast(room, payload, except) { payload = JSON.stringify(payload); /* once for everyone in the room */ for (const id of room.members) { if (id !== except) { const peer = peers.get(id); if (peer) send(peer.socket, payload); } } }
-  function visibleDrop(peer,drop){const space=drop.space||(drop.planet==='home'&&Math.hypot(drop.x,drop.z)<18?`home:${drop.ownerId}`:'wild');return !peer.visit&&drop.room===peer.room&&drop.planet===peer.planet&&(space==='wild'||space===`home:${peer.account.id}`);}
+  function visibleDrop(peer,drop){const space=drop.space||(drop.planet==='home'&&inSafeZone(drop,'home')?`home:${drop.ownerId}`:'wild');return !peer.visit&&drop.room===peer.room&&drop.planet===peer.planet&&(space==='wild'||space===`home:${peer.account.id}`);}
   function respawn(peer){if(peer.visit)endVisit(peer);join(peer,'home',peer.party);peer.pose={...peer.pose,x:0,z:-4.8};arrived(peer);}
   const combatAuthority=createCombatAuthority({store,peers,rooms,remember,send,broadcast,onDeath:respawn});
   // The Delvers' Vault lobby, runs and in-run relay (dungeon-lobby.mjs).
@@ -186,7 +187,7 @@ export async function createGameServer(options = {}) {
     const room = rooms.get(peer.room); if (room) { peer.lastSent = null; broadcastPose(room, peer); }
   }
   function presence(peer) {
-    return { ...publicAccount(peer.account), ...peer.pose, difficulty: Game.difficultyOf(peer.account.profile), id: peer.account.id, planet: peer.planet, space: peer.visit ? `home:${peer.visit}` : peer.planet === 'home' && Math.hypot(peer.pose.x, peer.pose.z) < 18 ? `home:${peer.account.id}` : 'wild', active: peer.active };
+    return { ...publicAccount(peer.account), ...peer.pose, difficulty: Game.difficultyOf(peer.account.profile), id: peer.account.id, planet: peer.planet, space: peer.visit ? `home:${peer.visit}` : peer.planet === 'home' && inSafeZone(peer.pose, 'home') ? `home:${peer.account.id}` : 'wild', active: peer.active };
   }
   /**
    * Movement updates are sent as changes only: the first time (and every 5 s as a resync, and after any non-movement

@@ -17,6 +17,7 @@ export interface ScreenRect { left: number; top: number; right: number; bottom: 
 
 /** The furniture each activity is: [kit, x, z] of its FURNITURE placement (the diary is the desk, the books the shelf). */
 const PIECES: Record<ActivityId, Array<[string, number, number]>> = {
+  storage: [['storage_chest', -9.05, -6.35]],
   sofa: [['sofa', -1.9, -1.38]], fire: [['fireplace', -4.62, 1.7]], trophies: [['trophy_shelf', 2.25, -1.9]], radio: [['radio', 3.0, .85]],
   stove: [['stove', -9.58, 2.4]], tea: [['kettle', -9.5, .05]], workbench: [['workbench', 9.6, .3]], bench: [['upgrade_bench', 9.55, 2.6]], easel: [['easel', 7.2, -.9]],
   bed: [['bed', -7.0, -5.85]], wardrobe: [['wardrobe', -9.62, -3.6]], mirror: [['mirror', -2.35, -4.9]],

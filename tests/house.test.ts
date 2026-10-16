@@ -46,7 +46,7 @@ test('the plan: one big room and five small ones, all reachable from the front d
   assert.ok(walkable(HOUSE.spawn));
   const obstacles = furnitureObstacles(), options = { bounds: WORLD_BOUNDS, clearance: .36, gridSize: .5, walkable };
   // Points in each room clear of furniture: the explorer can walk to every one of them from the door.
-  const goals: Record<string, { x: number; z: number }> = { living: { x: 0, z: 2.5 }, kitchen: { x: -7.5, z: 1.2 }, craft: { x: 7.2, z: 1.8 }, bedroom: { x: -5.2, z: -3.4 }, bath: { x: .5, z: -3.4 }, study: { x: 6.5, z: -3.6 } };
+  const goals: Record<string, { x: number; z: number }> = { living: { x: 0, z: 2.5 }, kitchen: { x: -7.5, z: 1.2 }, craft: { x: 7.2, z: 1.8 }, bedroom: { x: -5.2, z: -4.2 }, bath: { x: .5, z: -3.4 }, study: { x: 6.5, z: -4.2 } };
   for (const [id, goal] of Object.entries(goals)) {
     assert.equal(roomAt(goal)?.id, id);
     const route = findRoute(HOUSE.spawn, goal, obstacles, options);
@@ -62,7 +62,7 @@ test('walls keep the explorer inside: walking into every wall and out of the fro
   const w = homeWorld(), house = new HouseSession();
   house.enter(w);
   const b = HOUSE.bounds;
-  for (const [dx, dz, start] of [[1, 0, { x: 3, z: 3 }], [-1, 0, { x: -7, z: 3 }], [0, 1, { x: -2, z: 3 }], [0, -1, { x: 0, z: -3 }], [0, 1, { x: 7, z: -3 }], [1, 0, { x: 8, z: -4 }]] as const) {
+  for (const [dx, dz, start] of [[1, 0, { x: 3, z: 3 }], [-1, 0, { x: -7, z: 3 }], [0, 1, { x: -2, z: 3 }], [0, -1, { x: 0, z: -4.2 }], [0, 1, { x: 7, z: -4.2 }], [1, 0, { x: 8, z: -4 }]] as const) {
     w.position.set(start.x, 0, start.z);
     for (let i = 0; i < 200; i++) w.move(dx * .1, dz * .1);
     const p = w.position;

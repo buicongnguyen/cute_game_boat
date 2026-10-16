@@ -9,7 +9,7 @@
 import * as T from 'three';
 import { groundAt } from './camera-rig.ts';
 import type { Entity, World } from './world.ts';
-import { FRIEND_SPOTS, HOUSE, furnitureObstacles, walkable } from './house.ts';
+import { FRIEND_SPOTS, HOUSE, furnitureObstacles, walkable, roomAt } from './house.ts';
 import { ACTIVITIES, type ActivityId } from './house-activities.ts';
 import { HouseView, friendName } from './house-view.ts';
 import { friendsOf, type Friend, type FriendId } from './friends.ts';
@@ -21,14 +21,20 @@ export interface FriendEntity extends Entity { friendId: FriendId }
 export interface ActivityEntity extends Entity { activity: ActivityId }
 
 /**
- * Where the camera looks indoors: at the explorer, but slid so the view never runs far past the house
- * (a dollhouse on a dark table, not a corner of floor and a lot of black). Centred when the view is wider.
+ * Where the camera looks indoors: toward the occupied room, following the explorer within its bounds.
+ * World smooths this target so entering a side room shifts the camera without a cut.
  */
 export function houseFocus(p: { x: number; z: number }, aspect: number, zoom: number, out = new T.Vector3()) {
-  const b = HOUSE.bounds, left = groundAt(aspect, zoom, -1, 0).x, right = groundAt(aspect, zoom, 1, 0).x, far = groundAt(aspect, zoom, 0, 1).z, near = groundAt(aspect, zoom, 0, -1).z;
-  // When the view is wider than the house the limits cross: then it drifts a little with the explorer around the middle.
-  const clamp = (v: number, lo: number, hi: number) => { const mid = (lo + hi) / 2, reach = lo > hi ? (lo - hi) / 4 : (hi - lo) / 2; return Math.min(mid + reach, Math.max(mid - reach, v)); };
-  return out.set(clamp(p.x, b.x0 - .6 - left, b.x1 + .6 - right), 0, clamp(p.z, b.z0 - 2.2 - far, b.z1 + .6 - near));
+  const b = HOUSE.bounds;
+  // Frame the entrance near the bottom on arrival, then follow into the deeper cabins.
+  // A ground-only whole-house fit clips tall furniture at the screen edges at the lower pitch.
+  const front = b.z1 - groundAt(aspect, zoom, 0, -.76).z;
+  const room = roomAt(p), small = room && room.id !== 'living' ? room.rect : null;
+  const aimX = small ? p.x * .6 + (small.x0 + small.x1) * .2 : p.x * (aspect > 1 ? .7 : 1);
+  const aimZ = small ? p.z * .75 + (small.z0 + small.z1) * .125 : p.z;
+  const x = Math.max(b.x0 + 2.5, Math.min(b.x1 - 2.5, aimX));
+  const z = Math.max(b.z0 + 4.5, Math.min(front, aimZ - 1.5));
+  return out.set(x, 0, z);
 }
 const innerAspect = () => typeof innerWidth === 'number' && innerHeight > 0 ? innerWidth / innerHeight : 16 / 9;
 export class HouseSession {

@@ -112,7 +112,7 @@ test('layout 3 saves move onto the 6 x 4 grid: starting beds and game-placed bed
   old.plots.push({ crop: null, plantedAt: 0, x: +(M.GARDEN_CENTRE.x - 3 * 1.64).toFixed(2), z: M.GARDEN_CENTRE.z }, { crop, plantedAt: 7, x: M.GARDEN_CENTRE.x, z: +(M.GARDEN_CENTRE.z + 2 * 1.64).toFixed(2) });
   const r = M.parseSave(JSON.stringify(old))!;
   assert.equal(r.gardenLayout, M.GARDEN_LAYOUT); assert.equal(r.plots.length, 11);
-  assert.deepEqual(r.plots.map(p => ({ x: p.x, z: p.z })), M.GARDEN_GRID.slice(0, 11));
+  assert.deepEqual(r.plots.map(p => ({ x: p.x, z: p.z })), [...Array.from({length:9},(_,i)=>M.defaultBed(i)),...M.GARDEN_GRID.slice(5,7)]);
   assert.equal(r.plots[4].crop, crop); assert.equal(r.plots[4].plantedAt, now); assert.equal(r.plots[4].level, 2); assert.equal(r.plots[10].plantedAt, 7);
 });
 

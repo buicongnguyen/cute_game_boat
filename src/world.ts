@@ -15,7 +15,7 @@ import {atHome,homeRecoveryBonus} from './home-care.ts';
 import { bakeCoverAtlas, coverCards, tickCoverCards, type CoverAtlas } from './cover-cards.ts';
 import { buildGround, shadeField, type GroundDetail } from './ground.ts';
 import { makeDeckHatch, HATCH_SCALE, woodenSafeDeck } from './boat-deck.ts';
-import { inSafeZone } from './safe-zone.ts';
+import { inSafeZone, safeClearance, homeFence, HOME_GATES } from './safe-zone.ts';
 import { buildPond } from './pond-view.ts';
 import { circlesAt, holdsHero, ignoreRetarget, nearRay, pickCircle, pickScale, RAYCAST_ONLY, type PickCircle } from './picking.ts';
 import * as T from 'three';
@@ -64,7 +64,7 @@ import {ENEMY_TYPES,HOME_SPAWNS,PLANET_SPAWNS,PLANET_BOSSES,FOREST_RAPTOR_COUNT,
 import {BOSS_DRAW,chargeTouches} from './boss-body.ts';
 import {STAGGER,adoptStaggerView,newStagger,staggerBroken,staggerDamage,staggerHit,type Stagger,type StaggerBlow,type StaggerView} from './boss-stagger.ts';
 import {BossFeel,isSolidBoss,type FeelHost} from './boss-feel.ts';
-import {applyGait,armOf,armSwing,gaitSwing,hipOf,limbsOf,newGait,stepGait,strideOf,type Gait} from './walk-cycle.ts';
+import {applyGait,scaleLimb,armOf,armSwing,gaitSwing,hipOf,limbsOf,newGait,stepGait,strideOf,type Gait} from './walk-cycle.ts';
 import {DEFAULT_PIVOTS,fitOf,lookOf,lookTrim,toLook,DEFAULT_LOOK,type Fit,type LookId} from './looks.ts';
 import {fitArmPiece} from './arm-fit.ts';
 import {part} from './part-cache.ts';
@@ -544,7 +544,7 @@ export class World {
   private syncBeds(assets: RefinedAssetLibrary = refinedAssets){
     const beds=this.gardenBeds??=new GardenBeds();if(beds.group.parent!==this.scene)this.scene.add(beds.group);
     const lifted=this.lifted?.kind==='bed'?this.lifted.index:-1,plots=this.planet==='home'?this.outdoorEntities.filter(e=>e.kind==='plot'&&e.index!==lifted):[],refined=assets.has('garden');
-    beds.sync(()=>refined?assets.clone('garden'):this.bedBoxes(),refined?'refined':'boxes',plots.map(e=>({x:e.x,z:e.z,rotation:e.mesh.rotation.y,level:M.bedLevel(this.state?.plots?.[e.index!])})),refined,M.BED_SCALE);
+    beds.sync(()=>refined?assets.clone('garden'):this.bedBoxes(),refined?'refined':'boxes',plots.map(e=>({x:e.x,z:e.z,rotation:e.mesh.rotation.y,green:e.index!>=5&&e.index!<9,level:M.bedLevel(this.state?.plots?.[e.index!])})),refined,M.BED_SCALE);
   }
   /**
    * The animal yard north of the garden (farm.ts PEN, YARD): one entity to tap (its baked back fence, coop and troughs
@@ -651,22 +651,16 @@ export class World {
       this.addEntity('home','Cabin hatch','⚓',this.house(),0,-8,2.2);this.obstacle(0,-8,1.7);
       this.addEntity('sell','Harvest market','🧺',this.stall('#f291a9','sell'),9,2.5,2);this.obstacle(9,2.5,1.7);
       const shop=this.stall('#68bcc7','shop');shop.rotation.y=-2.4;this.addEntity('shop','Equipment shop','🛍️',shop,9.6,10.6,2);this.obstacle(9.6,10.6,1.7);
-      const chest=group(box('#aa794d',1.25,.7,.8,0,.35),cyl('#a67c4f',.5,.5,1.2,0,.65),box('#e7bb68',.15,.8,.84,0,.4));chest.children[1].rotation.z=Math.PI/2;
-      this.addEntity('chest','Storage chest','📦',chest,-3.3,-4.9,1);this.obstacle(-3.3,-4.9,.6);
       this.addEntity('upgrade','Energy crystal','💎',this.crystal(),8.5,-7,1.5);this.obstacle(8.5,-7,1.4);
       this.addEntity('travel','Starship station','🚀',this.rocket(),13.5,-3,2);this.obstacle(13.5,-3,1.5);
-      const forge=group(box('#a89e8c',1.8,.8,1.2,0,.4),box('#677b7d',1.1,.25,.65,0,1),cyl('#708384',.4,.25,.5,0,.75),box('#bd9673',.2,1.1,.2,.7,.75));
-      this.addEntity('craft','Workshop','🔨',forge,5.5,6.5,1.3);this.obstacle(5.5,6.5,1.1);
-      const cook=group(cyl('#71646b',1.2,.8,1.1,0,.55),cyl('#fc9b51',.7,.7,.12,0,1.12),box('#49454e',1.8,.12,.15,0,1.3));this.addEntity('cook','Volcano kitchen','🔥',cook,1,10.5,1.4);this.obstacle(1,10.5,1);
       for(let i=0;i<this.state.plots.length;i++)this.makePlot(i);
       this.buildPen();
       const well=group(cyl('#a0a8a2',1,1,.8,0,.4,0,10),cyl('#63c5ed',.72,.72,.05,0,.83),box('#957651',.12,2.2,.12,-.85,1.5),box('#957651',.12,2.2,.12,.85,1.5),box('#cc9f78',2.4,.15,1.8,0,2.6));well.userData.prop='well';this.addEntity('well','Ember well','🪨',well,-7,-11,1.6);this.obstacle(-7,-11,1.2);
-      for(let i=0;i<54;i++){
-        const a=i/54*Math.PI*2;if(Math.abs(Math.sin(a*2))<.32)continue;
-        const g=this.kit('fence')??group(box('#b18459',.16,1,.16,-1,.5),box('#b18459',.16,1,.16,1,.5),box('#edbe77',2.1,.12,.1,0,.4),box('#edbe77',2.1,.12,.1,0,.8));g.position.set(Math.cos(a)*18,0,Math.sin(a)*18);g.rotation.y=-a-Math.PI/2;this.root.add(g);
-        for(const d of [-.6,0,.6])this.obstacle(Math.cos(a)*18-Math.sin(a)*d,Math.sin(a)*18+Math.cos(a)*d,.42);
+      for(const p of homeFence()){
+        const g=this.kit('fence')??group(box('#b18459',.16,1,.16,-1,.5),box('#b18459',.16,1,.16,1,.5),box('#edbe77',2.1,.12,.1,0,.4),box('#edbe77',2.1,.12,.1,0,.8));g.position.set(p.x,0,p.z);g.rotation.y=p.rot;this.root.add(g);
+        for(const d of [-.6,0,.6])this.obstacle(p.x+Math.cos(p.rot)*d,p.z-Math.sin(p.rot)*d,.42);
       }
-      for(let i=0;i<4;i++){const a=i*Math.PI/2,g=this.kit('gate')??group(cyl('#b18c59',.14,.14,3.1,-1.7,1.55),cyl('#b18c59',.14,.14,3.1,1.7,1.55),box('#edc57a',3.75,.2,.2,0,3));g.position.set(Math.cos(a)*18,0,Math.sin(a)*18);g.rotation.y=-a-Math.PI/2;this.root.add(g);}
+      for(const p of HOME_GATES){const g=this.kit('gate')??group(cyl('#b18c59',.14,.14,3.1,-1.7,1.55),cyl('#b18c59',.14,.14,3.1,1.7,1.55),box('#edc57a',3.75,.2,.2,0,3));g.name='village-gate';g.position.set(p.x,0,p.z);g.rotation.y=p.rot;this.root.add(g);}
       this.villageTrees=[[-13,-8],[-14,7],[3,-13],[10,-11],[14,5],[-2,15]].map(([x,z])=>this.tree(x,z,.75,true,rng)); // kept: a swing shakes them (village-fun.ts)
       // The home pond first, so fence-side bushes keep off its water.
       this.makePond(-7.5,11.2,3.3);
@@ -701,6 +695,7 @@ export class World {
       const def=ENEMY_TYPES[type];if(!def)return;const spawnIndex=enemyIndex++;
       for(let attempt=0;attempt<500;attempt++){
         let a=zone?angles[zone]+(rng()-.5)*1.3:rng()*Math.PI*2,d=boss?100+rng()*24:27+rng()*97,x=Math.cos(a)*d,z=Math.sin(a)*d;
+        if(planet==='home'&&safeClearance({x,z},planet)<2.5)continue;
         if(planet==='cloud'){const islands=this.environment.layout.islands,isl=islands[1+(enemyIndex%(islands.length-1))];a=rng()*Math.PI*2;d=rng()*(isl.r-3);x=isl.x+Math.cos(a)*d;z=isl.z+Math.sin(a)*d;}
         if(this.obstacles.some(o=>Math.hypot(x-o.x,z-o.z)<o.r+def.radius+1)||this.enemies.some(e=>Math.hypot(x-e.x,z-e.z)<(def.titan&&e.boss?25:2.4)))continue;
         if(planet==='lava'&&terrainHeight(this.environment.layout,{x,z})<-.4)continue;
@@ -813,7 +808,7 @@ export class World {
     // A body style downloads on first use; the default explorer stands in until it arrives.
     const combo=toLook(look)??DEFAULT_LOOK,styled=heroKitFor(combo);if(styled!==heroKit&&!styled.requested)void styled.load().then(()=>{if(styled.ready)this.refreshAvatars();});
     const base=styled.ready&&heroKit.ready?styled:heroKit,tint=disguise&&!kitDisguise?disguise.color:color,c=base.instance(tint)??this.chibi(tint);
-    c.userData.look=base===heroKit?DEFAULT_LOOK:combo;const fit=fitOf(combo);if(base!==heroKit&&Object.keys(fit).length)c.userData.fit=fit;
+    c.userData.look=base===heroKit?DEFAULT_LOOK:combo;const fit=fitOf(c.userData.look);if(base.ready&&Object.keys(fit).length)c.userData.fit=fit;
     // The sprout pokes through hats and most costumes; the fairy crown and hero mask leave it showing.
     // A hat kept under a costume is not drawn (below), so only the costume decides then.
     const top=id?kitDisguise&&['dz_fairy','dz_superhero'].includes(id):!gear.hat,leaf=c.getObjectByName('head-leaf');if(leaf)leaf.visible=top;tuckEars(c,!top);
@@ -1664,8 +1659,7 @@ export class World {
       // Rising lava may surround a creature: allow escape, but never walk into it from dry ground.
       if(!this.environment.lavaAt(e)&&this.environment.lavaAt(point))return false;
     }
-    const safe=(this.planet==='home'?18:11)+1.5;
-    return Math.hypot(point.x,point.z)>=Math.min(safe,Math.hypot(e.x,e.z))-.001;
+    return safeClearance(point,this.planet)>=Math.min(1.5,safeClearance(e,this.planet))-.001;
   }
   private moveCreature(e:Enemy,dx:number,dz:number,allowVoid=false){
     const obstacles=this.creatureObstacles(),options=this.navigationOptions(e.radius,true);
@@ -1715,9 +1709,9 @@ export class World {
    *  keeps the nearest as it goes instead of building and sorting a list: one small object per call, for the winner only. */
   private enemyTarget(e:Enemy):(Point&{id?:string;enemy?:Enemy;decoy?:{owner:string|null;id:number}})|undefined{
     if((e.statuses?.charm??0)>0){let best:Enemy|undefined,bestD=Infinity;for(const other of this.enemies){if(other===e||other.hp<=0)continue;const d=Math.hypot(other.x-e.x,other.z-e.z);if(d<bestD){bestD=d;best=other;}}return best?{x:best.x,z:best.z,enemy:best}:undefined;}
-    const safe=this.planet==='home'?18:11;let bx=0,bz=0,bid:string|undefined,bestD=Infinity;
-    if(!this.playerStealth&&Math.hypot(this.position.x,this.position.z)>=safe){bx=this.position.x;bz=this.position.z;bestD=Math.hypot(bx-e.x,bz-e.z);}
-    if(this.remotePlayers)for(const [id,remote] of this.remotePlayers)if(remote.mesh.visible&&!remote.pose.visual?.stealth&&(remote.pose.hp??1)>0&&Math.hypot(remote.pose.x,remote.pose.z)>=safe){const d=Math.hypot(remote.pose.x-e.x,remote.pose.z-e.z);if(d<bestD){bestD=d;bx=remote.pose.x;bz=remote.pose.z;bid=id;}}
+    let bx=0,bz=0,bid:string|undefined,bestD=Infinity;
+    if(!this.playerStealth&&!inSafeZone(this.position,this.planet)){bx=this.position.x;bz=this.position.z;bestD=Math.hypot(bx-e.x,bz-e.z);}
+    if(this.remotePlayers)for(const [id,remote] of this.remotePlayers)if(remote.mesh.visible&&!remote.pose.visual?.stealth&&(remote.pose.hp??1)>0&&!inSafeZone(remote.pose,this.planet)){const d=Math.hypot(remote.pose.x-e.x,remote.pose.z-e.z);if(d<bestD){bestD=d;bx=remote.pose.x;bz=remote.pose.z;bid=id;}}
     // Summons creatures can fight (combat.ts SUMMON_HP): a decoy within DECOY.lure m wins over every explorer, any other
     // summon is attacked when it is the nearest target. The knight's challenge (taunt) keeps a creature on the knight.
     if(this.decoyList?.length&&!((e.statuses?.taunt??0)>0)){let pick:(DecoyPose&{owner:string|null})|undefined,lured=false,pickD=Infinity;
@@ -1729,9 +1723,9 @@ export class World {
   }
   /** The hittable summons of this step: this explorer's (localDecoys) and each other explorer's from its pose, none in the safe zone. */
   private refreshDecoys(){
-    const list=this.decoyList??=[],safe=this.planet==='home'?18:11;list.length=0;
-    for(const d of this.localDecoys?.()??[])if(Math.hypot(d.x,d.z)>=safe)list.push({...d,owner:null});
-    for(const d of this.remoteDecoys())if(Math.hypot(d.x,d.z)>=safe)list.push(d);
+    const list=this.decoyList??=[];list.length=0;
+    for(const d of this.localDecoys?.()??[])if(!inSafeZone(d,this.planet))list.push({...d,owner:null});
+    for(const d of this.remoteDecoys())if(!inSafeZone(d,this.planet))list.push(d);
   }
   /** Other explorers' hittable summons from their poses (the server checked them; checked again here): for creatures to see and for drawing. */
   remoteDecoys(){const out:Array<DecoyPose&{owner:string}>=[];for(const [id,remote] of this.remotePlayers??[])if(remote.mesh.visible&&Array.isArray(remote.pose.decoys))for(const d of remote.pose.decoys.slice(0,DECOY.max))if(Number.isFinite(d?.x)&&Number.isFinite(d?.z)&&Number.isInteger(d?.id)&&d.hp>0&&Math.hypot(d.x-remote.pose.x,d.z-remote.pose.z)<30)out.push({...d,r:Math.min(1,Math.max(.2,d.r||.5)),owner:id});return out;}
@@ -1741,7 +1735,7 @@ export class World {
    * the ground it stands on, honoured for at most MAX_AIR_SECONDS in one go (updateRemotePlayer keeps the clock).
    */
   private remoteDodges(id:string,cls:AttackClass){if(cls!=='ground'||!this.jumpRules)return false;const u=this.remotePlayers?.get(id)?.mesh.userData;return !!u&&dodges(cls,u.air??0);}
-  /** Inside the safe zone (18 m at home, 11 m elsewhere) no creature can hurt the explorer, whoever it was aiming at: shots and area attacks aimed at a neighbour or a friend near the gate stop at the fence. */
+  /** Inside the safe zone (the rectangular home deck, 11 m circles elsewhere) no creature can hurt the explorer, whoever it was aiming at: shots and area attacks aimed at a neighbour or a friend near the gate stop at the fence. */
   private playerSafe(){return inSafeZone(this.position,this.planet);}
   /** A shot bounced off the knight's shield: it turns round and flies back at its shooter (DZ.block.speed m/s). */
   private reflectShot(shot:World['enemyShots'][number],owner:Enemy){
@@ -1766,9 +1760,9 @@ export class World {
   /** The laser gaze's world angle while it sweeps (main.ts from skill-fx.ts), else null. */
   gazeAngle:number|null=null;
   private titanTargets():TitanTarget[]{
-    const safe=this.planet==='home'?18:11,targets:TitanTarget[]=[];
-    if(this.state.hp>0&&Math.hypot(this.position.x,this.position.z)>=safe)targets.push({id:this.localPlayerId??'local',x:this.position.x,z:this.position.z,airborne:this.playerFlying||this.environment.airborne});
-    for(const[id,r]of this.remotePlayers??[])if(r.mesh.visible&&(r.pose.hp??1)>0&&Math.hypot(r.pose.x,r.pose.z)>=safe)targets.push({id,x:r.pose.x,z:r.pose.z,airborne:!!r.pose.visual?.flight});return targets;
+    const targets:TitanTarget[]=[];
+    if(this.state.hp>0&&!inSafeZone(this.position,this.planet))targets.push({id:this.localPlayerId??'local',x:this.position.x,z:this.position.z,airborne:this.playerFlying||this.environment.airborne});
+    for(const[id,r]of this.remotePlayers??[])if(r.mesh.visible&&(r.pose.hp??1)>0&&!inSafeZone(r.pose,this.planet))targets.push({id,x:r.pose.x,z:r.pose.z,airborne:!!r.pose.visual?.flight});return targets;
   }
   private updateTitanAttacks(e:Enemy,dt:number,authoritative=true){
     if(!e.titanAttacks?.length)return;if(e.hp<=0){e.titanAttacks=[];e.titanLift=0;return;}
@@ -2183,7 +2177,7 @@ export class World {
       this.decals?.end();}
     if(simulateWorld)for(let i=this.enemyShots.length-1;i>=0;i--){
       const shot=this.enemyShots[i],from={x:shot.mesh.position.x,z:shot.mesh.position.z};shot.mesh.position.x+=shot.vx*dt;shot.mesh.position.z+=shot.vz*dt;shot.life-=dt;
-      if(!shot.targetEnemyId&&Math.hypot(shot.mesh.position.x,shot.mesh.position.z)<(this.planet==='home'?18:11)-.3)shot.life=0; // shots aimed at players die at the safe zone's edge
+      if(!shot.targetEnemyId&&safeClearance(shot.mesh.position,this.planet)<-.3)shot.life=0; // shots aimed at players die at the safe zone's edge
       if(this.onPlayerShot&&!shot.targetEnemyId&&!shot.reflected&&!shot.guarded&&shot.life>0)this.onPlayerShot(shot);
       if(this.networkRole!=='peer'){
       if(!clearSegment(from,shot.mesh.position,this.shotObstacles(),{bounds:WORLD_BOUNDS,clearance:.1}))shot.life=0;
@@ -2415,7 +2409,7 @@ export class World {
     const kind=this.swingAs??this.weaponKind??'fist',pose=this.pose;
     let twist=0,lean=0,lift=0,step=0,sx=1,sy=1,sz=1,turn=0;
     // An arm a punch stretched is its own length again once the punch is over.
-    if(this.armsStretched&&!(this.punchT>0)){armL?.scale.set(1,1,1);armR?.scale.set(1,1,1);this.armsStretched=false;}
+    if(this.armsStretched&&!(this.punchT>0)){scaleLimb(armL);scaleLimb(armR);this.armsStretched=false;}
     // Base: walk cycle or idle breathing.
     if(this.moving){armL?.rotation.set(-c*arm.swing-arm.ease,0,-arm.splay);armR?.rotation.set(c*arm.swing-arm.ease,0,arm.splay);legL?.rotation.set(c*stride.swing,0,0);legR?.rotation.set(-c*stride.swing,0,0);lift=stride.drop?-stride.drop*(1-Math.cos(c*stride.swing))/(1-Math.cos(stride.swing))*(this.player.scale?.y||HERO_SCALE):Math.abs(Math.cos(o))*.06;lean=.1;if(head)head.rotation.set(0,0,Math.sin(o)*.05);}
     else{armL?.rotation.set(0,0,-arm.splay-Math.sin(o)*.05);armR?.rotation.set(0,0,arm.splay+Math.sin(o)*.05);legL?.rotation.set(0,0,0);legR?.rotation.set(0,0,0);sy=1+Math.sin(o*1.2)*.025;if(head)head.rotation.set(0,Math.sin(o*.4)*.15,0);}
@@ -2460,7 +2454,7 @@ export class World {
         const right=!!this.punchArm,pound=this.punchKind===2,s=punchPose(this.punchKind,t,PUNCH_POSE),wide=1+(s.fist-1)*.7,long=stretchFor(s.stretch,armOf(p));/* a long arm reaches as far as the default one, no further */
         for(const arm of [armL,armR]){
           if(!arm)continue;
-          if(pound||arm===(right?armR:armL)){arm.rotation.set(s.raise,0,pound?(arm===armR?.25:-.25):0);arm.scale.set(wide,long,wide);}else arm.scale.set(1,1,1);
+          if(pound||arm===(right?armR:armL)){arm.rotation.set(s.raise,0,pound?(arm===armR?.25:-.25):0);scaleLimb(arm,wide,long,wide);}else scaleLimb(arm);
         }
         this.armsStretched=true;twist=(right?1:-1)*s.twist;lean=Math.max(lean,s.lean);step=s.step;
       }

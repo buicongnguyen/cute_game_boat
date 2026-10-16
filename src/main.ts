@@ -96,7 +96,7 @@ import { defeatPaysPlayer } from './safe-zone.ts';
 import { PromptFocus, promptLabel } from './action-prompt.ts';
 import { interactGap } from './interact-pick.ts';
 import { attackIntent } from './attack-intent.ts';
-import { VillageFun, pokeTarget, fencePoint, type PokeThing } from './village-fun.ts';
+import { VillageFun, pokeTarget, homeFencePoint, type PokeThing } from './village-fun.ts';
 import { initHudLayout } from './hud-layout.ts';
 import { hudIcon, skillArt, publishHudIcons } from './hud-icons.ts';
 import { bagUi, bagCornerHtml, isDoubleTap, placeBagCard, type BagPrimary } from './bag-tile.ts';
@@ -1125,7 +1125,7 @@ function planets(){
     <p class="intro">${t('Pick a planet and the autopilot flies you there and lands, or take off and fly it yourself.')}</p>
     <h3 class="starmap-title">🔭 Discovery log · ${state.discovered.length} / ${all} · ${t('easiest first')}</h3><div class="planet-grid route-list">${routes.map(card).join('')}</div>`,'STAR MAP','🚀');
 }
-function map(){openDialog('map','Every path is a possibility',`<p class="intro">Choose a place and your explorer will walk there.</p><div class="map-illustration"><div class="map-path"></div><span class="map-house">🏡</span><span class="map-trees">🌳 🌲 🌳</span><span class="map-garden">🌱 🌱</span><span class="map-pond">🎣</span><span class="map-rocket">🚀</span><span class="map-stall">🧺</span><b>Clover Village</b></div><div class="map-destinations">${(state.planet==='home'?[['plot','🌱','Garden'],['sell','🧺','Market'],['shop','🛍️','Outfitters'],['fish','🎣','Pond'],['upgrade','💎','Crystal'],['craft','🔨','Workshop'],['chest','📦','Storage'],['travel','🚀','Rocket']]:[['mine','💎','Crystal vein'],['travel','🚀','Rocket']]).map(([kind,icon,name])=>`<button class="soft-button" data-action="go" data-kind="${kind}">${icon} ${name}</button>`).join('')}${(world.planet==='home'?[['forest','🍄 Mushroom Forest'],['meadow','🌊 Lake Meadow'],['swamp','🌿 Chomper Swamp'],['canyon','🏜️ Redrock Canyon']]:[['wild','Explore the wild']]).map(([kind,label])=>`<button class="soft-button" data-action="wild" data-kind="${kind}">${label}</button>`).join('')}</div><p class="fineprint">${state.discovered.length} of 9 worlds discovered · ${chooseOwnPathHint()}</p>`,'YOUR EXPLORER’S MAP');}
+function map(){openDialog('map','Every path is a possibility',`<p class="intro">Choose a place and your explorer will walk there.</p><div class="map-illustration"><div class="map-path"></div><span class="map-house">🏡</span><span class="map-trees">🌳 🌲 🌳</span><span class="map-garden">🌱 🌱</span><span class="map-pond">🎣</span><span class="map-rocket">🚀</span><span class="map-stall">🧺</span><b>Clover Village</b></div><div class="map-destinations">${(state.planet==='home'?[['plot','🌱','Garden'],['sell','🧺','Market'],['shop','🛍️','Outfitters'],['fish','🎣','Pond'],['upgrade','💎','Crystal'],['craft','🔨','Cabin workbench'],['cook','🍳','Cabin kitchen'],['chest','📦','Storage'],['travel','🚀','Rocket']]:[['mine','💎','Crystal vein'],['travel','🚀','Rocket']]).map(([kind,icon,name])=>`<button class="soft-button" data-action="go" data-kind="${kind}">${icon} ${name}</button>`).join('')}${(world.planet==='home'?[['forest','🍄 Mushroom Forest'],['meadow','🌊 Lake Meadow'],['swamp','🌿 Chomper Swamp'],['canyon','🏜️ Redrock Canyon']]:[['wild','Explore the wild']]).map(([kind,label])=>`<button class="soft-button" data-action="wild" data-kind="${kind}">${label}</button>`).join('')}</div><p class="fineprint">${state.discovered.length} of 9 worlds discovered · ${chooseOwnPathHint()}</p>`,'YOUR EXPLORER’S MAP');}
 // Tester code (tester.ts): solo only, so the online server never sees these rules.
 function testerOnline(){return !!actionHandler||!!persistence;}
 const testerTry=Tester.attemptLimiter(undefined,undefined,Tester.savedTries());let testerOpen=false;
@@ -1170,8 +1170,8 @@ function pokeScenery(reach:number){
   if(world.interior)return false;const x=world.position.x,z=world.position.z,f=world.facing;
   if(pondSplash.swing(x,z,f,reach))return true;
   const thing=pokeTarget(pokeThings(),x,z,f,reach);if(thing)return villageFun.poke(thing,x,z);
-  const fence=world.planet==='home'?fencePoint(x,z,18,reach):null; // the fence has gaps at the four gates
-  if(fence&&Math.abs(Math.sin(2*Math.atan2(fence.z,fence.x)))>=.32)return villageFun.poke({id:'fence:'+Math.round(Math.atan2(fence.x,fence.z)*8),kind:'bump',x:fence.x,z:fence.z,r:.2},x,z);
+  const fence=world.planet==='home'?homeFencePoint(x,z,reach):null; // the fence has gaps at the four gates
+  if(fence)return villageFun.poke({id:'fence:'+Math.round(Math.atan2(fence.x,fence.z)*8),kind:'bump',x:fence.x,z:fence.z,r:.2},x,z);
   return false;}
 /** A skill's area landing in the village shakes the trees it reaches. */
 function pokeEffect(e:CombatEffect){if(e.quiet||e.kind!=='ring'||!(e.radius>=1)||world.interior||!world.villageTrees?.length)return;for(const tr of world.villageTrees)if(Math.hypot(tr.position.x-e.x,tr.position.z-e.z)<=e.radius+.9)villageFun.poke({id:tr.uuid,kind:'tree',x:tr.position.x,z:tr.position.z,r:.9,obj:tr},e.x,e.z);}
@@ -2030,7 +2030,7 @@ function findChapterGoal():(GuideGoal&{radius:number})|null{
   if(step.event==='harvest'&&!fightNear(world.enemies,x,z)){const i=state.plots.findIndex(p=>p.crop&&M.cropProgress(p,now)>=1);if(i>=0){const at=M.bedPosition(state,i),far=Math.hypot(at.x-x,at.z-z);return far>4&&far<GARDEN_GUIDE.reach?{x:at.x,z:at.z,radius:1.2,label:'🧺 Ripe! Harvest here'}:null;}}
   const goal=questTarget();if(!goal||goal.place==='bag')return null;
   if(goal.place==='plot'&&state.plots[goal.target.index!]?.crop)return null; // every bed is growing: nothing to walk to yet
-  const e=goal.target;return {get x(){return e.x;},get z(){return e.z;},radius:e.radius,label:goal.place==='plot'?(isTouch()?'🌱 Tap a bed to plant':'🌱 Click a bed to plant'):GOAL_LABEL[goal.place]??'✨ Your next goal'};
+  const e=goal.target;return {get x(){return e.x;},get z(){return e.z;},radius:e.radius,label:goal.place==='plot'?(isTouch()?'🌱 Tap a bed to plant':'🌱 Click a bed to plant'):goal.target.kind==='home'?'⚓ Enter the cabin':GOAL_LABEL[goal.place]??'✨ Your next goal'};
 }
 frameListeners.add(dt=>{goalClock+=dt;if(goalClock<.2)return;goalClock=0;const was=chapterGoal;chapterGoal=findChapterGoal();if(chapterGoal||was)questWalk.point(chapterGoal);});
 /** One-time moment tips on a new save (moment-tips.ts): a small bubble beside the bed, the creature, the drop or the backpack. */
@@ -2129,13 +2129,13 @@ function questTarget(){
   // Steps with no place still point somewhere (first-run.ts): a creature for "defeat" and "use skills", the backpack for "equip".
   if(!place&&entry&&!entry.complete){if(step.event==='kill'||step.event==='skill'){const e=nearestCritter(world.enemies,world.position.x,world.position.z);return e&&Math.hypot(e.x-world.position.x,e.z-world.position.z)>4?{place:'enemy',target:e as unknown as Entity}:null;}if(step.condition==='equipped')return {place:'bag',target:null as unknown as Entity};}
   if(!place)return null;
-  const target=world.entities.find(e=>e.kind===place&&(place!=='plot'||!state.plots[e.index!]?.crop))??world.entities.find(e=>e.kind===place);
+  const target=world.entities.find(e=>e.kind===place&&(place!=='plot'||!state.plots[e.index!]?.crop))??world.entities.find(e=>e.kind===place)??((place==='cook'||place==='craft')?world.entities.find(e=>e.kind==='home'):undefined);
   return target&&Math.hypot(target.x-world.position.x,target.z-world.position.z)>7?{place,target}:null;
 }
 function walkToQuest(){setGuideOff(false);const goal=questTarget();if(!goal)return false;tone('click');if(goal.place==='bag'){bagMode='bag';inventory();}else if(goal.place==='enemy'){closeDialog();world.select(goal.target);}else{go(goal.place);if(world.selected===goal.target)questWalk.start(goal.target);}return true;}
 /** The guided quest walk (quest-walk.ts, FIX-PLAN 5.3): auto-fight holds back on the way unless attacked; a dotted trail shows the way. */
 const questWalk=new QuestWalk({get position(){return world.position;},get route(){return world.route;},get selected(){return world.selected;},get destination(){return world.destination;},get keys(){return world.keys;},get joystickInput(){return world.joystickInput;},get enemies(){return world.enemies;},select:e=>world.select(e),get scene(){return world.scene;},ground:p=>terrainHeight(world.environment.layout,p),path:to=>world.findPath(new Vector3(to.x,0,to.z))});
-function go(kind:string){closeDialog();const entities=world.entities.filter(e=>e.kind===kind);const entity=kind==='plot'?entities.find(e=>!world.state.plots[e.index!]?.crop)||entities[0]:entities[0];if(entity){world.select(entity);toast(`Off to ${kind==='plot'?'the garden':entity.name.toLowerCase()}…`,'👣');}else toast('That place is back in Clover Village.','🏡');}
+function go(kind:string){closeDialog();const indoorStation=(kind==='cook'||kind==='craft'||kind==='chest')&&world.planet==='home'&&!world.interior;const entities=world.entities.filter(e=>e.kind===(indoorStation?'home':kind));const entity=kind==='plot'?entities.find(e=>!world.state.plots[e.index!]?.crop)||entities[0]:entities[0];if(entity){world.select(entity);toast(indoorStation?'The kitchen, workbench and storage are inside the cabin.':`Off to ${kind==='plot'?'the garden':entity.name.toLowerCase()}…`,'👣');}else toast('That place is back in Clover Village.','🏡');}
 // ---- The starship: take-off, a piloted flight between planets, and landing ----
 const SCENERY_KITS={scenery:sceneryKit,wilds:wildsKit,bright:brightKit,harsh:harshKit,dressing:dressingKit};
 shipSequence=new ShipSequence(world,tone);const ship=shipSequence;

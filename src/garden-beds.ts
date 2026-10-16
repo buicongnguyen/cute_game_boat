@@ -1,4 +1,5 @@
 import * as T from 'three';
+import { toonMaterial } from './toon.ts';
 import { bakeModel } from './assets.ts';
 
 /**
@@ -20,8 +21,8 @@ export class GardenBeds {
    * Rebuild when the bed model or the bed positions change; `key` names the model. The beds own the template's
    * geometry, and its materials too when `ownsMaterials` (a refined clone); merged materials are always theirs.
    */
-  sync(make: () => T.Object3D | null, key: string, beds: readonly { x: number; z: number; rotation?: number; level?: number }[], ownsMaterials = false, scale = 1) {
-    const signature = key + '|' + scale + '|' + beds.map(b => `${b.x},${b.z},${b.rotation ?? 0},${b.level ?? 0}`).join(';');
+  sync(make: () => T.Object3D | null, key: string, beds: readonly { x: number; z: number; rotation?: number; level?: number; green?: boolean }[], ownsMaterials = false, scale = 1) {
+    const signature = key + '|' + scale + '|' + beds.map(b => `${b.x},${b.z},${b.rotation ?? 0},${b.level ?? 0},${!!b.green}`).join(';');
     if (signature === this.key) return;
     this.key = signature; this.clear();
     const template = beds.length ? make() : null;
@@ -41,6 +42,14 @@ export class GardenBeds {
       beds.forEach((b, i) => mesh.setMatrixAt(i, each.multiplyMatrices(place.makeTranslation(b.x, 0, b.z).multiply(turn.makeRotationY(b.rotation ?? 0)).multiply(size), o.matrixWorld)));
       mesh.computeBoundingSphere(); this.group.add(mesh);
     });
+    const greens = beds.filter(b => b.green);
+    if (greens.length) {
+      const material = toonMaterial({ color: '#91b86a' }); this.owned.add(material);
+      const soil = new T.InstancedMesh(new T.PlaneGeometry(1.76, 1.76).rotateX(-Math.PI / 2), material, greens.length);
+      soil.name = 'gate-bed-green-soil'; soil.receiveShadow = true;
+      greens.forEach((b,i) => soil.setMatrixAt(i, each.copy(place.makeTranslation(b.x, .37 * scale, b.z)).multiply(turn.makeRotationY(b.rotation ?? 0)).multiply(size)));
+      soil.computeBoundingSphere(); this.group.add(soil);
+    }
     // Upgraded beds show their level as gold pips: every pip of the garden is one instance of one mesh, so the
     // markers cost a single draw call in all (none until a bed is upgraded), never one per bed.
     const levels = beds.reduce((n, b) => n + (b.level ?? 0), 0);

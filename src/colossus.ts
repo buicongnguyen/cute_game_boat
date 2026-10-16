@@ -1,3 +1,4 @@
+import { inSafeZone } from './safe-zone.ts';
 import { attackClass, dodges, type AttackClass } from './jump-rules.ts';
 import * as T from 'three';
 // colossus.css is imported by main.ts (this module is a lazy chunk: its sheet must keep its place in the cascade)
@@ -234,7 +235,7 @@ export class ColossusEvent {
   private targets() {
     const w = this.h.world, list: { id: string; x: number; z: number }[] = [];
     const p = w.position, s = this.h.state();
-    if (s.hp > 0 && Math.hypot(p.x, p.z) > 18 && !this.throwing) list.push({ id: 'local', x: p.x, z: p.z });
+    if (s.hp > 0 && !inSafeZone(p, 'home') && !this.throwing) list.push({ id: 'local', x: p.x, z: p.z });
     return list;
   }
   private source(): ColossusSource { const e = this.enemy!; return { x: e.x, z: e.z, facing: this.facing }; }

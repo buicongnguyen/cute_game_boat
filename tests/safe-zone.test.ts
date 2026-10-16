@@ -2,8 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { defeatPaysPlayer, inSafeZone, safeRadius, SAFE_ZONE_REWARD_REACH } from '../src/safe-zone.ts';
 
-test('the safe zone is 18 m at home and 11 m elsewhere', () => {
-  assert.equal(safeRadius('home'), 18); assert.equal(safeRadius('lava'), 11);
+test('the safe zone has 20 m half width at home and 11 m elsewhere', () => {
+  assert.equal(safeRadius('home'), 20); assert.equal(safeRadius('lava'), 11);
   assert.ok(inSafeZone({ x: 10, z: 10 }, 'home') && !inSafeZone({ x: 20, z: 0 }, 'home') && !inSafeZone({ x: 12, z: 0 }, 'lava'));
 });
 test('in the safe zone a far fight pays nothing, a near one (a gun at the fence) still does, outside it everything does, and online is left to the server', () => {

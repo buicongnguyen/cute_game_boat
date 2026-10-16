@@ -13,17 +13,18 @@ import { PUNCH, stretchFor } from '../src/punch-wind.ts';
 import { makeCast } from '../src/bot-logic.ts';
 import { VI_PACK } from '../src/locales/vi-pack.ts';
 
-type Node = { name?: string; mesh?: number; children?: number[]; translation?: number[] };
+type Node = { name?: string; mesh?: number; children?: number[]; translation?: number[]; scale?: number[] };
 function glb(file: string) {
   const data = readFileSync(new URL(`../public/assets/models/${file}`, import.meta.url)), doc = JSON.parse(data.subarray(20, 20 + data.readUInt32LE(12)).toString('utf8'));
   const nodes: Node[] = doc.nodes, parent = new Map<number, number>(); nodes.forEach((n, i) => n.children?.forEach(c => parent.set(c, i)));
   const index = (name: string) => nodes.findIndex(n => n.name === name);
-  const at = (i: number): T.Vector3 => (parent.has(i) ? at(parent.get(i)!) : new T.Vector3()).add(new T.Vector3(...(nodes[i].translation ?? [0, 0, 0])));
-  const box = (name: string) => { const i = index(name), b = new T.Box3(), o = at(i); for (const p of doc.meshes[nodes[i].mesh!].primitives) { const a = doc.accessors[p.attributes.POSITION]; b.expandByPoint(new T.Vector3(...a.min).add(o)); b.expandByPoint(new T.Vector3(...a.max).add(o)); } return b; };
+  const scale = (i: number): T.Vector3 => (parent.has(i) ? scale(parent.get(i)!) : new T.Vector3(1, 1, 1)).multiply(new T.Vector3(...(nodes[i].scale ?? [1, 1, 1])));
+  const at = (i: number): T.Vector3 => (parent.has(i) ? at(parent.get(i)!) : new T.Vector3()).add(new T.Vector3(...(nodes[i].translation ?? [0, 0, 0])).multiply(parent.has(i) ? scale(parent.get(i)!) : new T.Vector3(1, 1, 1)));
+  const box = (name: string) => { const i = index(name), b = new T.Box3(), o = at(i); for (const p of doc.meshes[nodes[i].mesh!].primitives) { const a = doc.accessors[p.attributes.POSITION]; b.expandByPoint(new T.Vector3(...a.min).multiply(scale(i)).add(o)); b.expandByPoint(new T.Vector3(...a.max).multiply(scale(i)).add(o)); } return b; };
   const tris = doc.meshes.reduce((n: number, m: { primitives: { indices: number }[] }) => n + m.primitives.reduce((k, p) => k + doc.accessors[p.indices].count / 3, 0), 0) as number;
-  return { index, at: (name: string) => at(index(name)), local: (name: string) => new T.Vector3(...(nodes[index(name)].translation ?? [0, 0, 0])), box, tris, meshes: doc.meshes.length as number };
+  return { index, scale: (name: string) => scale(index(name)), at: (name: string) => at(index(name)), local: (name: string) => new T.Vector3(...(nodes[index(name)].translation ?? [0, 0, 0])), box, tris, meshes: doc.meshes.length as number };
 }
-const FILE_BODIES: FileBody[] = ['boy', 'girl', 'man', 'woman'], SHAPED: Height[] = ['teen', 'tall', 'grown'];
+const FILE_BODIES: FileBody[] = ['boy', 'girl', 'man', 'woman'], SHAPED: Height[] = ['tall', 'grown'];
 const act = (s: M.SaveState, type: string, payload: Record<string, unknown>) => applyGameAction(s, { type, payload }, { now: 1e9, random: () => .5 });
 
 test('Man and Woman are free bodies of the mirror: worn at once, combined with owned heights, saved and loaded; old looks still load', () => {
@@ -41,18 +42,18 @@ test('Man and Woman are free bodies of the mirror: worn at once, combined with o
   assert.equal(VI_PACK['Man'], 'Đàn ông'); assert.equal(VI_PACK['Woman'], 'Phụ nữ');
 });
 
-test('tiny and chibi boys and girls are untouched; a body costs no more draws and at most 1% more triangles (the neck)', () => {
+test("all heights retain the Tall rig's neck and seven meshes without extra draw calls", () => {
   const hero = glb('hero.glb');
   for (const b of FILE_BODIES) for (const h of ROWS.height as Height[]) {
     const g = glb(bodyFile(b, h)), base = glb(bodyFile(b === 'man' ? 'boy' : b === 'woman' ? 'girl' : b, 'chibi'));
     assert.equal(g.meshes, 7, `${b}-${h}: one mesh per part plus head-leaf`);
-    assert.ok(g.tris - base.tris === (h === 'tall' || h === 'grown' ? 32 : 0), `${b}-${h}: ${g.tris} triangles (its chibi ${base.tris})`);
+    assert.ok(g.tris === base.tris, `${b}-${h}: ${g.tris} triangles (its chibi ${base.tris})`);
   }
-  assert.equal(hero.tris, 3304); assert.equal(glb('hero-girl.glb').tris, 3804);
-  assert.deepEqual(shapeFit('boy', 'tiny'), FIT.tiny); assert.deepEqual(shapeFit('girl', 'chibi'), FIT.chibi); assert.deepEqual(fitOf('man-chibi-none-bare'), {}, 'the chibi man keeps the default pivots');
+  assert.equal(hero.tris, 3336); assert.equal(glb('hero-girl.glb').tris, 3836);
+  for (const b of FILE_BODIES) for (const h of ['tiny', 'chibi', 'teen'] as Height[]) assert.deepEqual(shapeFit(b, h), shapeFit(b, 'tall'), `${b}-${h}: gear fits in Tall part space`);
 });
 
-test('from Teen up he is broader at the shoulders than the hips and she has a waist; the difference grows with height, and Man and Woman are a step stronger', () => {
+test('Tall and Grown: he is broader at the shoulders than the hips and she has a waist; the difference grows with height, and Man and Woman are a step stronger', () => {
   // Widths across the body file: shoulders = over both arms, torso = the body mesh, legs' pivots = the hips.
   const span = (b: FileBody, h: Height) => { const g = glb(bodyFile(b, h)); return g.box('arm-right').max.x - g.box('arm-left').min.x; };
   let last = 0;
@@ -78,7 +79,7 @@ test('Tall and Grown have a neck: the chin clears the collar, the neck is one pi
     assert.ok(chin - body.max.y > least - .03, `${b}-${h}: the chin is ${(chin - body.max.y).toFixed(3)} above the top of the torso`);
     assert.ok(head.min.y < body.max.y - .04, `${b}-${h}: the neck (head part) reaches ${(body.max.y - head.min.y).toFixed(3)} into the torso, so a nod opens no crack`);
   }
-  for (const h of ['tiny', 'chibi', 'teen'] as Height[]) { const g = glb(bodyFile('boy', h)); assert.ok(g.at('head').y - .12 * (FIT[h].head?.scale[0] ?? 1) < g.box('body').max.y, `${h} stays neckless`); }
+  for (const h of ['tiny', 'chibi', 'teen'] as Height[]) { const g = glb(bodyFile('boy', h)); assert.ok(g.at('head').y - .12 * FIT.tall.head!.scale[0] * g.scale('head').y > g.box('body').max.y + .02, `${h} keeps the Tall neck`); }
   const top = (h: Height) => glb(bodyFile('boy', h)).box('head-leaf').max.y / glb('hero.glb').box('head-leaf').max.y; // to the tip of the sprout, as HEIGHT_RATIO is measured
   assert.ok(Math.abs(top('tall') - 1.152) < .004 && Math.abs(top('grown') - 1.287) < .004, `the boy stands as tall as before the neck: tall ${top('tall').toFixed(3)}, grown ${top('grown').toFixed(3)}`);
 });

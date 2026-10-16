@@ -1,3 +1,4 @@
+import { inSafeZone, HOME_SAFE } from './safe-zone.ts';
 import * as M from './model.ts';
 
 /**
@@ -12,14 +13,14 @@ import * as M from './model.ts';
  * client says whether the explorer is away; online, action-service.mjs overwrites that with the server's own pose
  * (and with "not away" when no game socket is connected, so a bare HTTP client cannot choose).
  */
-export const HOME_SAFE_R = 18;
+export const HOME_SAFE_R = HOME_SAFE.x;
 /** Work done next to the beds/pen while the explorer may be anywhere: the payload's `away` decides. */
 export const WORK_ACTIONS: ReadonlySet<string> = new Set(['helperHarvest', 'farmHelperCollect', 'friendWork']);
 /** Work done for time away (game closed, a long break): the chest when the explorer is out or the save sat idle. */
 export const CATCH_UP_ACTIONS: ReadonlySet<string> = new Set(['helperCatchUp', 'farmHelperCatchUp', 'friendsCatchUp']);
 /** A catch-up after the save sat this long without an action is work done while away (a tab switch at home is not). */
 export const CATCH_UP_IDLE_MS = 60_000;
-export const explorerAway = (planet: string, x: number, z: number) => planet !== 'home' || !(Math.hypot(x, z) < HOME_SAFE_R);
+export const explorerAway = (planet: string, x: number, z: number) => planet !== 'home' || !inSafeZone({x,z}, 'home');
 /** `idleMs`: how long the save sat without an action (now - savedAt). */
 export const deliversToChest = (type: string, payload: Record<string, unknown>, idleMs = 0) =>
   (WORK_ACTIONS.has(type) || CATCH_UP_ACTIONS.has(type)) && payload.away === true || CATCH_UP_ACTIONS.has(type) && idleMs > CATCH_UP_IDLE_MS;

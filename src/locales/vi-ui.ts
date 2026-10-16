@@ -1,5 +1,13 @@
 /** Interface wording. Stable English source keys keep saves and game identifiers language-neutral. */
 export const VI_UI: Record<string, string> = {
+  'Open': 'Mở',
+  'Cabin workbench': 'Bàn chế tạo trong khoang tàu',
+  'Cabin kitchen': 'Bếp trong khoang tàu',
+  'The kitchen, workbench and storage are inside the cabin.': 'Bếp, bàn chế tạo và rương đồ nằm trong khoang tàu.',
+  '⚓ Enter the cabin': '⚓ Vào khoang tàu',
+  'Cook your harvest and catch here in the cabin kitchen.': 'Nấu nông sản và cá tại bếp trong khoang tàu.',
+  'Craft equipment and supplies here. Use Strengthen weapons to open the forge.': 'Chế tạo trang bị và vật dụng tại đây. Chọn Cường hóa vũ khí để mở lò rèn.',
+  'Level up your gear, weapons and fighting skills here in the cabin.': 'Nâng cấp trang bị, vũ khí và kỹ năng chiến đấu tại đây trong khoang tàu.',
   'Enter cabin': 'Vào khoang tàu',
   'Cook all → {count} meals': 'Nấu tất cả → {count} món',
   'Cooked {count} meals. Enjoy!': 'Đã nấu {count} món. Chúc ngon miệng!',

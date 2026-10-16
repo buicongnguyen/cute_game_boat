@@ -18,7 +18,9 @@
  * stats, hitboxes and HERO_SCALE are the same for every combination.
  *
  * Pure state (no three.js) so model.ts parses it and the server runs the same rules (actions.ts buyLook / wearLook).
- * The art is art/blender/kit/build_hero_styles.py: one file per body x height (bodyFile) plus hero-parts.glb with the
+ * Boat edition: Tiny, Chibi and Teen reuse uniformly scaled Tall rigs, retaining their original standing heights.
+ * art/build-boat-looks.mjs rebuilds them; gear uses Tall part space and inherits the rig scale.
+ * The original art is art/blender/kit/build_hero_styles.py: one file per body x height (bodyFile) plus hero-parts.glb with the
  * ears and tails, placed with FIT and merged into the head/body meshes at load (assets.ts heroKitFor).
  * FIT is the per-part transform World.wearKit applies to a gear piece (and the parts file to ears and tails) after
  * placing it relative to the DEFAULT pivot, so every hat, outfit, boot and weapon fits every height without new art.
@@ -126,6 +128,7 @@ export const SHAPE: Record<FileBody, { sex: 'm' | 'f'; strength: Partial<Record<
 };
 /** The gear fit of a Blender body at a height: the height's FIT with that body's shaping (build_hero_styles.py fit_table). */
 export function shapeFit(body: FileBody, height: Height): Partial<Record<string, Fit>> {
+  height = height === 'tiny' || height === 'chibi' || height === 'teen' ? 'tall' : height;
   const base = FIT[height], sh = SHAPE[body], s = sh.strength[height] ?? 0, tall = sh.taller?.[height];
   if (!s && !tall) return base;
   const one: Fit = { scale: [1, 1, 1], offset: [0, 0, 0] }, out: Partial<Record<string, Fit>> = { ...base };

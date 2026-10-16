@@ -38,13 +38,15 @@ export const INDOOR_Y = 40;
  * that wall (so a fridge or a mirror still touches its wall), everything else scales about the centre.
  */
 export const SPACE = 1.15;
+/** More room from the entrance to the rear cabins, without enlarging furniture. */
+export const DEPTH = 1.6;
 const WALL_NEAR = .75, PLAN_X = [-10, -5, -2, 3, 5, 10], PLAN_Z = [-7, -2, 6.5];
-const spread = (v: number, walls: number[]) => {
+const spread = (v: number, walls: number[], scale = SPACE) => {
   let best: number | null = null;
   for (const w of walls) if (Math.abs(v - w) < WALL_NEAR && (best === null || Math.abs(v - w) < Math.abs(v - best))) best = w;
-  return best === null ? v * SPACE : best * SPACE + (v - best);
+  return best === null ? v * scale : best * scale + (v - best);
 };
-const spreadPoint = <T extends Point>(p: T): T => ({ ...p, x: spread(p.x, PLAN_X), z: spread(p.z, PLAN_Z) });
+const spreadPoint = <T extends Point>(p: T): T => ({ ...p, x: spread(p.x, PLAN_X), z: spread(p.z, PLAN_Z, DEPTH) });
 export const spreadActivity = spreadPoint;
 export const WALL = { thick: .2, full: 2.6, low: .55 } as const;
 /** Clearance the explorer keeps from walls (navigation's default clearance for the explorer). */
@@ -60,7 +62,7 @@ export const HOUSE = {
   cottage: { x: 0, z: -8 } as Point,
   outdoorDoor: { x: 0, z: -5.5 } as Point,
   outside: { x: 0, z: -4.3 } as Point,
-  bounds: { x0: -10 * SPACE, x1: 10 * SPACE, z0: -7 * SPACE, z1: 6.5 * SPACE } as Rect,
+  bounds: { x0: -10 * SPACE, x1: 10 * SPACE, z0: -7 * DEPTH, z1: 6.5 * DEPTH } as Rect,
 } as const;
 
 const ROOMS_PLAN: Room[] = [
@@ -71,7 +73,7 @@ const ROOMS_PLAN: Room[] = [
   { id: 'bath', name: 'Bathroom', rect: { x0: -2, x1: 3, z0: -7, z1: -2 }, floor: ['#e4f6ff', '#a9dcf2'], wall: '#9fe0ee', pattern: 'tiles' },
   { id: 'study', name: 'Study', rect: { x0: 3, x1: 10, z0: -7, z1: -2 }, floor: ['#b9794a', '#ad6e40'], wall: '#fff0b2', pattern: 'planks' },
 ];
-export const ROOMS: Room[] = ROOMS_PLAN.map(r => ({ ...r, rect: { x0: r.rect.x0 * SPACE, x1: r.rect.x1 * SPACE, z0: r.rect.z0 * SPACE, z1: r.rect.z1 * SPACE } }));
+export const ROOMS: Room[] = ROOMS_PLAN.map(r => ({ ...r, rect: { x0: r.rect.x0 * SPACE, x1: r.rect.x1 * SPACE, z0: r.rect.z0 * DEPTH, z1: r.rect.z1 * DEPTH } }));
 export const BIG_ROOM: RoomId = 'living';
 
 /** Doorway gaps (1.6 m) between rooms, as [wall, gap]. */
@@ -87,7 +89,7 @@ const WALLS_PLAN: Wall[] = [
   { axis: 'z', at: 3, from: -7, to: -2, height: WALL.full, gaps: [] },
 ];
 
-export const WALLS: Wall[] = WALLS_PLAN.map(w => ({ ...w, at: w.at * SPACE, from: w.from * SPACE, to: w.to * SPACE, gaps: w.at === 6.5 ? w.gaps : w.gaps.map(([a, b]) => [a * SPACE, b * SPACE] as [number, number]) })); // the front door keeps the size of its frame
+export const WALLS: Wall[] = WALLS_PLAN.map(w => ({ ...w, at: w.at * (w.axis === 'x' ? DEPTH : SPACE), from: w.from * (w.axis === 'x' ? SPACE : DEPTH), to: w.to * (w.axis === 'x' ? SPACE : DEPTH), gaps: w.axis === 'x' && w.at === 6.5 ? w.gaps : w.gaps.map(([a, b]) => [a * (w.axis === 'x' ? SPACE : DEPTH), b * (w.axis === 'x' ? SPACE : DEPTH)] as [number, number]) })); // the front door keeps the size of its frame
 
 const Q = Math.PI / 2;
 /** Furniture; rot turns the piece's front (+z) toward: 0 = camera (+z), Q = +x, -Q = -x, PI = back wall. */
@@ -137,7 +139,7 @@ const FURNITURE_PLAN: Placement[] = [
   { kit: 'window', x: -5.2, z: -6.93 },
   { kit: 'wardrobe', x: -9.62, z: -3.6, rot: Q, block: [1.2, .6], use: 'wardrobe' },
   { kit: 'mirror', x: -2.35, z: -4.9, rot: -Q, block: [.6, .4], use: 'mirror' },
-  { kit: 'plant_small', x: -9.6, z: -6.6, block: [.3, .3] },
+  { kit: 'storage_chest', x: -9.05, z: -6.35, block: [1.25, .8] },
   // Bathroom: tub with a duck, sink, towels.
   { kit: 'bathtub', x: -.75, z: -6.4, block: [1.75, .9] },
   { kit: 'duck', x: -.4, z: -6.35, y: .5 },

@@ -154,7 +154,7 @@ export function initHouse(d: HouseDeps) {
       if (d.modal() !== 'dress' && looks.clear()) friendClock = 0;
       if ((friendClock -= dt) <= 0) { friendClock = .25; house.syncFriends(looks.shown(friendList())); }
       // Walking into the front door from inside leaves.
-      if (!pending && !d.blocked() && world.moving && world.position.z > HOUSE.spawn.z + .65 && Math.abs(world.position.x) < .75 && Math.cos(world.facing) > .5) leave();
+      if (!pending && !d.blocked() && world.moving && world.position.z > HOUSE.door.z - .85 && Math.abs(world.position.x) < .75 && Math.cos(world.facing) > .5) leave();
     } else if (!pending && !d.blocked() && world.planet === 'home' && world.moving && Math.hypot(world.position.x - HOUSE.outdoorDoor.x, world.position.z - HOUSE.outdoorDoor.z) < 1.45 && Math.cos(world.facing) < -.5) enter();
   };
   const portrait = (id: FriendId) => { const f = friendList().find(x => x.id === id); return f ? modelIcon(`friend:${id}:${friendSignature(f)}:${houseKit.ready}`, () => friendModel(f)) : ''; };

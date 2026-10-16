@@ -1,3 +1,4 @@
+import { HOME_SAFE, homeFence } from './safe-zone.ts';
 import { t } from './i18n.ts';
 import { PLANETS, YARD, type PlanetId } from './model.ts';
 import { zoneAt, type EnvironmentLayout } from './environments.ts';
@@ -105,9 +106,9 @@ function drawHome(ctx: Ctx) {
     }
   }
   // The village green with its hedge line, open at the four gates (world.ts: fences where |sin 2a| >= .32).
-  ctx.fillStyle = ZONE_COLORS.home; disc(ctx, 0, 0, 18 * s);
-  ctx.strokeStyle = '#fff6e0'; ctx.lineWidth = 1.5; const gap = Math.asin(.32) / 2;
-  for (let i = 0; i < 4; i++) { ctx.beginPath(); ctx.arc(MAP_C, MAP_C, 18 * s, i * Math.PI / 2 + gap, (i + 1) * Math.PI / 2 - gap); ctx.stroke(); }
+  ctx.fillStyle = ZONE_COLORS.home; ctx.fillRect(MAP_C-HOME_SAFE.x*s, MAP_C-HOME_SAFE.z*s, HOME_SAFE.x*2*s, HOME_SAFE.z*2*s);
+  ctx.strokeStyle = '#fff6e0'; ctx.lineWidth = 1.5;
+  for(const p of homeFence()){const dx=Math.cos(p.rot),dz=-Math.sin(p.rot);ctx.beginPath();ctx.moveTo(MAP_C+(p.x-dx)*s,MAP_C+(p.z-dz)*s);ctx.lineTo(MAP_C+(p.x+dx)*s,MAP_C+(p.z+dz)*s);ctx.stroke();}
 }
 
 /** The static layer: ground, water, trails, fence. */

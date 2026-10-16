@@ -77,7 +77,7 @@ test('refining a planted garden preserves the crop group and target wrapper, and
   // The refined bed is drawn by the instanced bed meshes, not inside the entity (G2D-5).
   assert.equal(plot.mesh.getObjectByName('refined-garden'),undefined);
   const beds=w.scene.getObjectByName('garden-beds')!;assert.ok(beds.children.length>0);
-  for(const m of beds.children as T.InstancedMesh[]){assert.ok(m instanceof T.InstancedMesh);assert.equal(m.count,w.state.plots.length);assert.equal(m.castShadow,false);assert.equal(m.receiveShadow,true);}
+  for(const m of beds.children as T.InstancedMesh[]){assert.ok(m instanceof T.InstancedMesh);assert.equal(m.count,m.name==='gate-bed-green-soil'?4:w.state.plots.length);assert.equal(m.castShadow,false);assert.equal(m.receiveShadow,true);}
 });
 
 test('a tap ray through a bed still finds the plot entity through its invisible pick box',()=>{

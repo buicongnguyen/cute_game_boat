@@ -1,3 +1,4 @@
+import { inSafeZone } from '../src/safe-zone.ts';
 import {createHash,randomUUID,randomInt} from 'node:crypto';
 import * as Game from '../src/model.ts';
 import {applyGameAction,ACTION_RULES_VERSION} from '../src/actions.ts';
@@ -50,7 +51,7 @@ function validateFishingProof(proof,ticket,now){
 /** The guest diary: the newest 30 things friends did at this home (water, gift, steal, visit). */
 export function logGuest(owner,entry){owner.visitLog=[entry,...(owner.visitLog||[])].slice(0,30);}
 function saveDrop(account,item,count,peer,now,{owner=account.id,priority=0,life=30000}={}){
-  const drop={id:randomUUID(),ownerId:account.id,item,count,room:peer.room,planet:peer.planet,space:peer.planet==='home'&&Math.hypot(peer.pose.x,peer.pose.z)<18?`home:${account.id}`:'wild',x:peer.pose.x,z:peer.pose.z,owner,releaseAt:now+priority,expiresAt:now+life};
+  const drop={id:randomUUID(),ownerId:account.id,item,count,room:peer.room,planet:peer.planet,space:peer.planet==='home'&&inSafeZone(peer.pose,'home')?`home:${account.id}`:'wild',x:peer.pose.x,z:peer.pose.z,owner,releaseAt:now+priority,expiresAt:now+life};
   account.drops=(account.drops||[]).filter(value=>value.expiresAt>now);account.drops.push(drop);return drop;
 }
 
@@ -172,7 +173,7 @@ export function createActionService({store,getPeer,getWorld=()=>null,afterCommit
       }else if(data.type==='claimDrop'||data.type==='releaseDrop'){
         const owner=records.get(p.ownerId),drop=owner?.drops?.find(value=>value.id===p.id);
         if(!drop||drop.claimed||drop.expiresAt<=now||!peer||peer.visit||drop.room!==peer.room||drop.planet!==peer.planet)fail(409,'That dropped item is no longer available.');
-        const space=drop.space||(drop.planet==='home'&&Math.hypot(drop.x,drop.z)<18?`home:${drop.ownerId}`:'wild');
+        const space=drop.space||(drop.planet==='home'&&inSafeZone(drop,'home')?`home:${drop.ownerId}`:'wild');
         if(space!=='wild'&&space!==`home:${actorId}`)fail(403,'This dropped item belongs to a private garden.');
         if(data.type==='releaseDrop'){if(drop.owner!==actorId)fail(403,'Only the owner can release this item.');drop.releaseAt=now;result=drop;}
         else{if(distance(peer.pose,drop)>4.5||now<drop.releaseAt&&drop.owner!==actorId)fail(409,'Move closer or wait for the owner to release this item.');if(!Game.addItem(state,drop.item,drop.count))fail(409,Game.BAG_FULL);drop.claimed=actorId;drop.claimedAt=now;result={id:drop.id,item:drop.item,count:drop.count,ownerId:owner.id,room:drop.room,planet:drop.planet,space,x:drop.x,z:drop.z};}

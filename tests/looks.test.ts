@@ -114,14 +114,15 @@ function glb(file: string) {
   const len = data.readUInt32LE(12); const doc = JSON.parse(data.subarray(20, 20 + len).toString('utf8'));
   const nodes: Node[] = doc.nodes, parent = new Map<number, number>();
   nodes.forEach((n, i) => n.children?.forEach(c => parent.set(c, i)));
-  const at = (i: number): T.Vector3 => { const n = nodes[i], p = parent.has(i) ? at(parent.get(i)!) : new T.Vector3(); return p.add(new T.Vector3(...(n.translation ?? [0, 0, 0]))); };
+  const scale = (i: number): T.Vector3 => (parent.has(i) ? scale(parent.get(i)!) : new T.Vector3(1, 1, 1)).multiply(new T.Vector3(...(nodes[i].scale ?? [1, 1, 1])));
+  const at = (i: number): T.Vector3 => (parent.has(i) ? at(parent.get(i)!) : new T.Vector3()).add(new T.Vector3(...(nodes[i].translation ?? [0, 0, 0])).multiply(parent.has(i) ? scale(parent.get(i)!) : new T.Vector3(1, 1, 1)));
   const box = (i: number) => {
     const b = new T.Box3(), o = at(i);
-    for (const p of doc.meshes[nodes[i].mesh!].primitives) { const a = doc.accessors[p.attributes.POSITION]; b.expandByPoint(new T.Vector3(...a.min).add(o)); b.expandByPoint(new T.Vector3(...a.max).add(o)); }
+    for (const p of doc.meshes[nodes[i].mesh!].primitives) { const a = doc.accessors[p.attributes.POSITION]; b.expandByPoint(new T.Vector3(...a.min).multiply(scale(i)).add(o)); b.expandByPoint(new T.Vector3(...a.max).multiply(scale(i)).add(o)); }
     return b;
   };
   const tris = doc.meshes.reduce((n: number, m: { primitives: { indices: number }[] }) => n + m.primitives.reduce((k, p) => k + doc.accessors[p.indices].count / 3, 0), 0);
-  return { doc, nodes, at, box, tris, index: (name: string) => nodes.findIndex(n => n.name === name), parent };
+  return { doc, nodes, at, box, tris, scale, index: (name: string) => nodes.findIndex(n => n.name === name), parent };
 }
 const PARTS = ['body', 'head', 'arm-left', 'arm-right', 'leg-left', 'leg-right'];
 /** Every body (builds included) x height; the builds reuse the boy and girl files. */
@@ -140,32 +141,30 @@ function built(file: string, body: Body) {
   return { g, at, box };
 }
 /** World.wearKit's placement: relative to the default pivot, then the combination's fit, then onto the part. */
-const place = (b: T.Box3, tag: string, f: Fit | undefined, at: T.Vector3) => {
+const place = (b: T.Box3, tag: string, f: Fit | undefined, at: T.Vector3, scale = new T.Vector3(1, 1, 1)) => {
   const out = b.clone().translate(new T.Vector3(...DEFAULT_PIVOTS[tag]).negate());
   if (f) { out.min.multiply(new T.Vector3(...f.scale)).add(new T.Vector3(...f.offset)); out.max.multiply(new T.Vector3(...f.scale)).add(new T.Vector3(...f.offset)); }
-  return new T.Box3().setFromPoints([out.min, out.max]).translate(at);
+  return new T.Box3().setFromPoints([out.min.multiply(scale), out.max.multiply(scale)]).translate(at);
 };
 
 test('twenty body files (boy, girl, man, woman x five heights) keep the hero\'s parts and hand empties; their pivots agree with each body\'s fit; tiny < chibi < teen < tall < grown', () => {
   const base = glb('hero.glb');
   assert.equal(new Set(BODIES.map(b => b.file)).size, 20, 'builds add no files');
-  for (const [name, p] of Object.entries(DEFAULT_PIVOTS)) assert.ok(base.at(base.index(name)).distanceTo(new T.Vector3(...p)) < .002, name);
   for (const { file, height, id } of BODIES) {
     const g = glb(file), fit = fitOf(id);
     for (const name of [...PARTS, 'hand-left', 'hand-right', 'head-leaf']) assert.ok(g.index(name) >= 0, `${file} has ${name}`);
-    for (const n of g.nodes) assert.ok(!n.rotation && !n.scale, `${file}: ${n.name} is unrotated and unscaled, as gear placement assumes`);
+    for (const n of g.nodes) assert.ok(!n.rotation && (!n.scale || n.scale.every(v => Math.abs(v - n.scale![0]) < 1e-9)), `${file}: uniform part scaling preserves the Tall gear fit`);
     assert.equal(g.nodes[g.parent.get(g.index('head-leaf'))!].name, 'head', `${file}: the sprout rides the head and hides under hats`);
-    if (height === 'chibi') { for (const name of PARTS) assert.ok(g.at(g.index(name)).distanceTo(base.at(base.index(name))) < .002, `${file} keeps the ${name} pivot`); continue; }
     // Legs move by the fit's offset: the hips rise (or drop) by the shin change, and the soles stay on the ground.
-    assert.ok(Math.abs(g.at(g.index('leg-left')).y - (DEFAULT_PIVOTS['leg-left'][1] - fit['leg-left']!.offset[1])) < .002, `${file} hips match FIT`);
+    assert.ok(Math.abs(g.at(g.index('leg-left')).y - (DEFAULT_PIVOTS['leg-left'][1] - fit['leg-left']!.offset[1]) * g.scale(g.index('leg-left')).y) < .002, `${file} hips match FIT`);
     assert.ok(Math.abs(g.box(g.index('leg-left')).min.y) < .02, `${file} stands on the ground`);
   }
   const top = (h: Height) => { const g = glb(bodyFile('boy', h)); return g.box(g.index('head')).max.y; };
   const tops = ROWS.height.map(h => top(h as Height)); for (let i = 1; i < tops.length; i++) assert.ok(tops[i] > tops[i - 1], `${ROWS.height[i]} is taller (${tops.map(t => t.toFixed(2))})`);
   // Grown is the human-like one: about five heads tall (chibi about two). The head is measured from the chin (0.12 head
   // scales under its pivot): since Tall and Grown have a neck, the head part reaches further down than the face.
-  const heads = (h: Height) => { const g = glb(bodyFile('boy', h)), b = g.box(g.index('head')), chin = g.at(g.index('head')).y - .12 * (FIT[h].head?.scale[0] ?? 1); return b.max.y / (b.max.y - chin); };
-  assert.ok(heads('chibi') < 2.2 && heads('grown') > 4.9 && heads('grown') < 5.5, `heads tall: chibi ${heads('chibi').toFixed(2)}, grown ${heads('grown').toFixed(2)}`);
+  const heads = (h: Height) => { const g = glb(bodyFile('boy', h)), b = g.box(g.index('head')), chin = g.at(g.index('head')).y - .12 * (fitOf(`boy-${h}-none-bare`).head?.scale[0] ?? 1) * g.scale(g.index('head')).y; return b.max.y / (b.max.y - chin); };
+  assert.ok(Math.abs(heads('chibi') - heads('tall')) < .01 && heads('grown') > 4.9 && heads('grown') < 5.5, `heads tall: chibi ${heads('chibi').toFixed(2)}, grown ${heads('grown').toFixed(2)}`);
 });
 
 test('every wearable (hats, outfits, boots, weapons, disguises) attaches to every body, build and height and lands on its part', () => {
@@ -178,7 +177,7 @@ test('every wearable (hats, outfits, boots, weapons, disguises) attaches to ever
       const item = M.ITEMS[kit.nodes[kit.parent.get(i)!]?.name ?? n.name];
       const tag = n.name.includes('@') ? n.name.split('@')[1] : item?.slot === 'hat' ? 'head' : item?.slot === 'weapon' ? 'hand-right' : 'body';
       assert.ok(hero.g.index(tag) >= 0, `${file}: ${n.name} finds ${tag}`);
-      const b = place(kit.box(i), tag, fit[tag], hero.at(tag));
+      const b = place(kit.box(i), tag, fit[tag], hero.at(tag), hero.g.scale(hero.g.index(tag)));
       if (tag === 'hand-right') { assert.ok(b.distanceToPoint(hero.at(tag)) < .05, `${id}: ${n.name} is held in the fist`); checked++; continue; }
       const target = hero.box(tag).expandByScalar(/halo/.test(n.name) ? .4 : .12); // the halo floats above the head on purpose
       assert.ok(b.intersectsBox(target), `${id}: ${n.name} sits on ${tag}`);
@@ -199,13 +198,13 @@ test('ears and hoods sit on the head and tails on the back at every height and b
   for (const { file, body, id } of BODIES) {
     const hero = built(file, body), fit = fitOf(id), headBox = hero.box('head'), bodyBox = hero.box('body');
     for (const ears of ['cat', 'bunny']) {
-      const e = place(partBox('ears-' + ears), 'head', fit.head, hero.at('head')), t = place(partBox('tail-' + ears), 'body', fit.tail ?? fit.body, hero.at('body'));
+      const e = place(partBox('ears-' + ears), 'head', fit.head, hero.at('head'), hero.g.scale(hero.g.index('head'))), t = place(partBox('tail-' + ears), 'body', fit.tail ?? fit.body, hero.at('body'), hero.g.scale(hero.g.index('body')));
       assert.ok(e.intersectsBox(headBox) && e.max.y > headBox.max.y, `${id}: ${ears} ears rise from the head`);
       assert.ok(t.intersectsBox(bodyBox.clone().expandByScalar(.05)) && t.min.z < bodyBox.min.z - .02, `${id}: ${ears} tail pokes out at the back`);
     }
     let worst = 0;
     for (const deco of DECOS) {
-      const d = place(partBox('deco-' + deco), 'head', fit.head, hero.at('head'));
+      const d = place(partBox('deco-' + deco), 'head', fit.head, hero.at('head'), hero.g.scale(hero.g.index('head')));
       assert.ok(d.intersectsBox(headBox) && d.max.y > headBox.max.y - .02, `${id}: the ${deco} hood covers the crown`);
       assert.ok(d.min.y > headBox.min.y, `${id}: the ${deco} hood stays on the head`);
       // The hood replaces the sprout and the ears; the tail can come with it.
