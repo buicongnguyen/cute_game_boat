@@ -361,6 +361,11 @@ body.air-combat #app #hud .skill[hidden] { display: none; }
   #app #hud .tracker-panels, #app #hud #tracker-chip { top: calc(var(--map-top) + var(--mm) + 10px + max(40px, var(--b)) + 10px); }
   #app .colossus-banner { width: min(400px, 36vw, calc(100vw - 2 * (var(--hero-w) + var(--edge) + 14px))); }
 }
+/* Desktop notifications follow the hero plate in the left stack. Keeping them in flow also moves
+   active effects and food controls down when the Adventure and bounty cards are expanded. */
+@media (pointer: fine) and (min-width: 601px) and (min-height: 521px) {
+  #app #hud .tracker-panels, #app #hud #tracker-chip { position: static; inset: auto; }
+}
 /* With a creature selected the target frame takes the top centre; the Colossus bar steps down under it. */
 @media (min-width: 601px) { #app.target-on .colossus-banner { top: calc(78px + var(--safe-top)); } }
 /* Desktop fishing: the cast / reel button stands clear above the skill tray. */
