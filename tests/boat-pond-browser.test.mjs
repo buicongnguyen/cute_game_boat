@@ -11,13 +11,15 @@ for(const width of [360,1440])test('rectangular pond casts and caught fish rest 
   page.on('pageerror',e=>errors.push(e.message));await page.addInitScript(()=>localStorage.setItem('cute-game-boat:cute-game-language','en'));
   await page.goto(url);await page.waitForSelector('#name-input');await page.fill('#name-input','PondTest');await page.click('#title-screen button.primary');await dismissWelcome(page);
   await page.waitForFunction(()=>window.__zoo?.world.entities.some(e=>e.kind==='fish'));
-  // Moving across the harpoon range must preserve every visible fish, including decorative shadows.
+  // A harpoon is a combat weapon: calm shores select a rod without replacing the visible fish.
   await page.waitForFunction(()=>window.__zoo.fishingView.school.draws>0);
   let original;
   for(const distance of [20,15,20,15]){
-   await page.evaluate(distance=>{const g=window.__zoo;g.state.bag.harpoon=1;g.state.gear.weapon='harpoon';g.world.position.set(-7.5,0,distance);g.world.destination=null;g.world.route=[];},distance);
+   await page.evaluate(distance=>{const g=window.__zoo;g.state.bag.harpoon=1;g.state.bag.rod=1;g.state.gear.weapon='harpoon';g.world.position.set(-7.5,0,distance);g.world.destination=null;g.world.route=[];},distance);
    await page.waitForTimeout(750);
-   const roster=await page.evaluate(()=>{const g=window.__zoo;return [...g.fishingView.fish.filter(f=>f.pond.id==='home:fish:0'&&f.obj.visible).map(f=>f.species),...g.huntingView.fish.filter(f=>f.obj.visible).map(f=>f.id)].sort();});
+   assert.equal(await page.evaluate(()=>window.__zoo.state.gear.weapon),distance===15?'rod':'harpoon');
+   assert.equal(await page.locator('#reel-button.hunt:not([hidden])').count(),0);
+   const roster=await page.evaluate(()=>{const g=window.__zoo;return g.fishingView.fish.filter(f=>f.pond.id==='home:fish:0'&&f.obj.visible).map(f=>f.species).sort();});
    if(!original)original=roster;else assert.deepEqual(roster,original,'fish roster is stable near and far');
   }
   await page.evaluate(()=>{delete window.__zoo.state.bag.harpoon;delete window.__zoo.state.gear.weapon;});

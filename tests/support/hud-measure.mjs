@@ -127,7 +127,8 @@ export const STATES = {
     await page.waitForFunction(() => !!document.querySelector('#hud .skills.toes-4') || !document.body.classList.contains('air-combat'), null, { timeout: 8000 }).catch(() => {}); await page.waitForTimeout(500);
   },
   fishing: async page => {
-    await page.evaluate(() => { clearInterval(window.__probeFight); clearInterval(window.__probeChain); __zoo.fight.powerCharge.clear(); __zoo.resetCombat?.(); const w = __zoo.world, s = __zoo.state; s.bag.harpoon = 1; s.gear.weapon = 'harpoon'; delete s.gear.disguise; w.selected = null; w.position.set(-7.5, 0, 15); w.cameraTarget.copy(w.position); w.destination = null; w.route = []; });
+    await page.evaluate(() => { clearInterval(window.__probeFight); clearInterval(window.__probeChain); __zoo.fight.powerCharge.clear(); __zoo.resetCombat?.(); const w = __zoo.world, s = __zoo.state; s.bag.rod = 1; s.gear.weapon = 'rod'; delete s.gear.disguise; w.selected = null; w.position.set(-7.5, 0, 15); w.cameraTarget.copy(w.position); w.destination = null; w.route = []; });
+    await page.evaluate(()=>{const w=window.__zoo.world;w.select(w.entities.find(e=>e.kind==='fish'));});
     await page.waitForSelector('#reel-button:not([hidden])', { timeout: 8000 }).catch(() => {}); await page.waitForTimeout(500);
   },
 };

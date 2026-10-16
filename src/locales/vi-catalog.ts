@@ -867,3 +867,13 @@ Object.assign(VI_CATALOG, {
   // The four starting skills under their own names (stage 2 of docs/QUALITY-PLAN.md); the old names above stay for old text.
   'Petal Gale': 'Lốc Cánh Hoa', 'Breeze Step': 'Bước Gió', 'Root Quake': 'Địa Chấn', 'Paw Storm': 'Mưa Đấm',
 });
+
+Object.assign(VI_CATALOG, {
+  'A heavy reusable throwing weapon: +100 attack against enemies and forest birds. No ammunition needed. Use a fishing rod at ponds.':'Vũ khí phóng hạng nặng dùng nhiều lần: +100 tấn công khi đánh kẻ địch và chim rừng. Không cần đạn. Hãy dùng cần câu ở ao.',
+  'A glowing koi that guards the big meadow lake. It surfaces now and then.':'Cá koi phát sáng canh giữ hồ lớn trên đồng cỏ. Thỉnh thoảng nó nổi lên.',
+  'A glowing Lake Guardian is circling the lake.':'Cá Thần Hồ phát sáng đang bơi quanh hồ.',
+  'Harpoon ready for combat. Use a fishing rod at ponds.':'Lao đã sẵn sàng chiến đấu. Hãy dùng cần câu ở ao.',
+  'Finish fighting before fishing.':'Hãy kết thúc trận chiến trước khi câu cá.',
+  'Harpoon combat and rod fishing':'Chiến đấu bằng lao và câu cá bằng cần',
+  'Buy a Hunting harpoon at the Outfitters for 1000 energy: it is a reusable combat weapon (+100 attack). Use it against enemies and Great Forest Hawks. Keep a fishing rod in your bag: it appears near ponds when you are safe. During combat, your fighting weapon stays equipped; attackers interrupt fishing. The rod returns once the fight is over.':'Mua Lao săn ba chĩa tại cửa hàng Trang bị với 1000 năng lượng: đây là vũ khí chiến đấu dùng nhiều lần (+100 tấn công). Dùng lao để đánh kẻ địch và Diều hâu rừng lớn. Giữ cần câu trong túi: bạn sẽ tự động cầm cần khi ở gần ao và an toàn. Khi chiến đấu, bạn tiếp tục cầm vũ khí; kẻ địch tấn công sẽ ngắt việc câu cá. Cần câu sẽ trở lại sau khi trận chiến kết thúc.'
+});

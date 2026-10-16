@@ -5,11 +5,11 @@ import * as P from '../src/item-power.ts';
 import { applyGameAction } from '../src/actions.ts';
 import { CombatSimulation } from '../src/combat.ts';
 import { huntingPonds, fishHuntTarget, huntFish } from '../src/fish-hunting.ts';
-import { t, setLanguage } from '../src/i18n.ts';
+import { t, setLanguage, loadVietnamese } from '../src/i18n.ts';
 import { HELP_TOPICS } from '../src/help-topics.ts';
 
-// w25: the user's option 2 for the harpoon: ϟ1000 and +100 attack, still the fish-hunting tool and a fighting weapon.
-test('the harpoon costs 1000 energy in the shop and as a recipe, and gives +100 attack', () => {
+// The harpoon remains a reusable combat weapon at its existing price and strength.
+test('the harpoon costs 1000 energy in the shop and as a recipe, and gives +100 attack', async () => {
   const item = M.ITEMS.harpoon;
   assert.equal(item.price, 1000); assert.equal(item.attack, 100); assert.equal(item.stats?.atk, 100); assert.equal(item.sell, 400);
   assert.deepEqual(M.SHOP_CATEGORIES.find(c => c.tab === 'Weapons')!.items.find(i => i.id === 'harpoon'), { id: 'harpoon', cost: 1000 });
@@ -18,10 +18,10 @@ test('the harpoon costs 1000 energy in the shop and as a recipe, and gives +100 
   s.energy = 1000; assert.equal(M.buy(s, 'harpoon'), true); assert.equal(s.energy, 0); assert.equal(M.equip(s, 'harpoon'), true);
   const bare = M.newGame(); assert.equal(M.attack(s) - M.attack(bare), 100, 'the full +100 reaches the attack stat');
   assert.match(item.desc, /\+100 attack/); assert.ok(HELP_TOPICS.some(([, , body]) => body.includes('1000 energy') && body.includes('+100 attack')));
-  setLanguage('vi'); try { assert.match(t(item.desc), /\+100 tấn công/); assert.equal(t('Lake Guardian'), 'Cá Thần Hồ'); } finally { setLanguage('en'); }
+  await loadVietnamese(); setLanguage('vi'); try { assert.match(t(item.desc), /\+100 tấn công/); assert.equal(t('Lake Guardian'), 'Cá Thần Hồ'); } finally { setLanguage('en'); }
 });
 
-test('the harpoon keeps its fish hunting: an equipped harpoon still catches pond fish, other weapons cannot', () => {
+test('legacy fish-hunting actions remain compatible for older clients; the current game uses rods', () => {
   const pond = huntingPonds('home')[0], shore = { x: pond.x, z: pond.z + pond.rz + .6 }, now = 5_000_000, target = fishHuntTarget(pond, 0, now)!;
   const s = M.newGame(); s.bag.harpoon = 1; s.gear.weapon = 'harpoon';
   const hit = applyGameAction(s, { type: 'fishHunt', payload: { weaponId: 'harpoon', pondId: pond.id, slot: 0, aim: { x: target.x, z: target.z }, from: shore } }, { now, random: () => .5 }) as { hit: boolean; id: string };

@@ -45,7 +45,7 @@ for (const [name, view] of Object.entries(VIEWS)) {
         const boss = w.enemies.filter(e => e.boss && e.hp > 0).sort((a, b) => Math.hypot(a.x, a.z) - Math.hypot(b.x, b.z))[0];
         w.position.set(boss.x, 0, boss.z + 7); w.cameraTarget.copy(w.position); boss.hp = boss.maxHp * .8;
         const other = w.enemies.filter(e => !e.boss && e.hp > 0).sort((a, b) => Math.hypot(a.x - boss.x, a.z - boss.z) - Math.hypot(b.x - boss.x, b.z - boss.z))[0];
-        setInterval(() => { s.hp = 999; boss.hp = Math.max(boss.hp, boss.maxHp * .5); other.hp = Math.max(1, other.maxHp * .5); w.selected = other; }, 100);
+        window.__layoutFight=setInterval(() => { s.hp = 999; boss.hp = Math.max(boss.hp, boss.maxHp * .5); other.hp = Math.max(1, other.maxHp * .5); w.selected = other; }, 100);
       });
       await page.waitForTimeout(2500);
       const r = await page.evaluate(() => {
@@ -163,9 +163,10 @@ for (const [name, view] of Object.entries(VIEWS)) {
       // of tappable area over the reference's 11%; the painted HUD itself shrank (see hud-compact.css).
       if (name.startsWith('landscape')) assert.ok(r.tappable <= .23, `tappable HUD ${(r.tappable * 100).toFixed(1)}% leaves most of the world clear with the requested default joystick`);
       if (view.hasTouch) {
-        await page.evaluate(()=>{const w=window.__zoo.world,s=window.__zoo.state;s.bag.harpoon=1;s.gear.weapon='harpoon';delete s.gear.disguise;w.position.set(-7.5,0,15);w.cameraTarget.copy(w.position);w.destination=null;w.route=[];w.selected=null;document.querySelector('#hud').classList.remove('joystick-right');});
-        await page.waitForSelector('#reel-button.hunt:not([hidden])');await page.waitForTimeout(300);
-        for(const swapped of [false,true])for(const mode of ['hunt','cast','reel']){
+        await page.evaluate(()=>{clearInterval(window.__layoutFight);const w=window.__zoo.world,s=window.__zoo.state;s.bag.rod=1;s.gear.weapon='rod';delete s.gear.disguise;w.position.set(-7.5,0,15);w.cameraTarget.copy(w.position);w.destination=null;w.route=[];w.selected=null;document.querySelector('#hud').classList.remove('joystick-right');});
+        await page.waitForTimeout(3200); // The prior combat fixture must release its recent-attack hold.
+        await page.evaluate(()=>{const w=window.__zoo.world;w.select(w.entities.find(e=>e.kind==='fish'));});await page.waitForSelector('#reel-button:not([hidden])');await page.waitForTimeout(300);
+        for(const swapped of [false,true])for(const mode of ['cast','reel']){
           const h=await page.evaluate(({swapped,mode})=>{
             const hud=document.querySelector('#hud');hud.classList.toggle('joystick-right',swapped);hud.classList.toggle('fishing',mode==='reel');
             const rect=el=>{const b=el.getBoundingClientRect();return {l:b.left,r:b.right,t:b.top,b:b.bottom};};

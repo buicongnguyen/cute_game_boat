@@ -18,7 +18,7 @@ import { fightNear } from '../src/hud-combat.ts';
 // are intercepted so assertions can inspect which gear reaches each action.
 const source = await readFile(new URL('../src/main.ts', import.meta.url), 'utf8');
 const ast = ts.createSourceFile('main.ts', source, ts.ScriptTarget.Latest, true);
-const names = ['applyContextWeapon', 'prepareCombatWeapon', 'updateContextWeapon', 'fish', 'pondView', 'pondEdge', 'catchGround', 'endFishing', 'updateFishing', 'finishFishingCatch', 'basicAttack', 'skillList', 'skill', 'mysteryGotAway', 'movesOn', 'ownSkills'];
+const names = ['combatNeedsWeapon', 'applyContextWeapon', 'prepareCombatWeapon', 'updateContextWeapon', 'fish', 'pondView', 'pondEdge', 'catchGround', 'endFishing', 'updateFishing', 'finishFishingCatch', 'basicAttack', 'skillList', 'skill', 'mysteryGotAway', 'movesOn', 'ownSkills'];
 const declarations = names.map(name => {
   const node = ast.statements.find(node => ts.isFunctionDeclaration(node) && node.name?.text === name);
   assert.ok(node, `main.ts must provide the actual ${name} controller`);
@@ -95,7 +95,7 @@ test('shore hysteresis swaps only at entry/exit boundaries without repeated avat
 
 test('a selected creature or nearby aggressive creature overrides the rod while calm creatures do not', () => {
   const f = fixture('gun_pea', 'rod'); M.equip(f.state, 'gun_pea'); f.shore(2);
-  f.ctx.world.selected = { kind: 'enemy' }; f.ctx.updateContextWeapon();
+  f.ctx.world.selected = { kind: 'enemy', hp:10 }; f.ctx.updateContextWeapon();
   assert.equal(f.state.gear.weapon, 'gun_pea');
   f.ctx.world.selected = null; f.ctx.updateContextWeapon(); assert.equal(f.state.gear.weapon, 'rod');
   const enemy = { kind: 'enemy', hp: 10, phase: 'chase', x: f.ctx.world.position.x + 4, z: 0 };
@@ -288,10 +288,10 @@ for (const online of [false, true]) test(`${online ? 'online' : 'offline'} Home 
   const cancels = [];
   if (online) { f.ctx.actionHandler = () => {}; f.ctx.fishGame.ticket = 'pending-cast'; f.ctx.perform = async (type, payload) => { cancels.push({ type, payload, from: f.ctx.world.position.x }); return true; }; }
   f.ctx.world.position.set = function (x, y, z) { Object.assign(this, { x, y, z }); };
-  Object.assign(f.ctx, { huntingPending: {}, movement: { clear() { f.ctx.world.keys.clear(); } }, closeDialog() {}, updateHunting() {}, flyHome() { assert.fail('already on the home planet'); } });
+  Object.assign(f.ctx, { movement: { clear() { f.ctx.world.keys.clear(); } }, closeDialog() {}, flyHome() { assert.fail('already on the home planet'); } });
   const epoch = f.ctx.fishingEpoch; vm.runInContext(compiledHome, f.ctx); await f.ctx.returnHomeControl();
   assert.equal(f.ctx.fishGame, null); assert.equal(f.ctx.world.fishing, 'idle'); assert.equal(f.ctx.world.position.x, 0); assert.equal(f.ctx.world.position.z, 0);
-  assert.ok(f.ctx.fishingEpoch > epoch); assert.equal(f.ctx.huntingPending, null); assert.equal(f.calls.cancel, 1);
+  assert.ok(f.ctx.fishingEpoch > epoch); assert.equal(f.calls.cancel, 1);
   f.ctx.updateFishing(1); assert.equal(simulation.time, 0, 'the old cast cannot keep progressing at home');
   if (online) { assert.equal(cancels.length, 1); assert.equal(cancels[0].type, 'fishCancel'); assert.equal(cancels[0].payload.ticketId, 'pending-cast'); assert.notEqual(cancels[0].from, 0, 'the cancellation is sent before teleport'); }
 });
@@ -316,4 +316,23 @@ test('air skill classification uses the combat weapon instead of the contextual 
   f.ctx.skill(2);
   assert.equal(checked, true);
   assert.equal(f.calls.skills.length, 0);
+});
+
+
+for(const weapon of ['harpoon','sword_wood'])test(weapon+' uses a rod at a calm pond, stays armed throughout combat and resumes fishing afterward',()=>{
+ const f=fixture(weapon,'rod');M.equip(f.state,weapon);f.shore(1);
+ assert.equal(f.state.gear.weapon,'rod');
+ const enemy={kind:'enemy',hp:10,phase:'chase',x:f.ctx.world.position.x+4,z:0};f.ctx.world.enemies.push(enemy);
+ f.ctx.updateContextWeapon();assert.equal(f.state.gear.weapon,weapon);
+ f.ctx.fish(f.pond);assert.equal(f.ctx.fishGame,null,'pond interaction cannot replace the combat weapon');assert.equal(f.state.gear.weapon,weapon);
+ f.ctx.now+=10000;f.ctx.updateContextWeapon();assert.equal(f.state.gear.weapon,weapon,'ongoing aggression keeps the weapon beyond the recent-attack timer');
+ enemy.phase='idle';f.ctx.updateContextWeapon();assert.equal(f.state.gear.weapon,'rod');
+ f.ctx.fish(f.pond);assert.ok(f.ctx.fishGame,'harpoon ownership no longer routes pond interactions into hunting');assert.equal(f.calls.casts.length,1);
+ enemy.phase='attack';f.ctx.updateContextWeapon();assert.equal(f.ctx.fishGame,null,'an attacker interrupts a cast');assert.equal(f.state.gear.weapon,weapon);
+ enemy.hp=0;f.ctx.world.selected=enemy;f.ctx.updateContextWeapon();assert.equal(f.state.gear.weapon,'rod','a defeated target does not lock combat equipment forever');
+});
+
+test('a harpoon without a rod opens rod help instead of hunting fish',()=>{
+ const f=fixture('harpoon');M.equip(f.state,'harpoon');f.shore(1);f.ctx.fish(f.pond);
+ assert.equal(f.state.gear.weapon,'harpoon');assert.equal(f.ctx.fishGame,null);assert.equal(f.calls.dialogs[0][0],'fish-help');
 });

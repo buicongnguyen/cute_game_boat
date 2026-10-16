@@ -32,8 +32,7 @@ import { ENEMY_TYPES } from './enemy-types.ts';
 import { FishingView, type PondView } from './fishing-view.ts';
 import { PondSplash } from './pond-splash.ts';
 import { mountBreakables } from './breakables-game.ts';
-import { FishHuntingView } from './fish-hunting-view.ts';
-import { FISH_HUNT_COOLDOWN_MS, fishHuntTargets, huntingPondAt, type FishHuntResult } from './fish-hunting.ts';
+import { fishHuntTargets, huntingPondAt } from './fish-hunting.ts';
 import { LakeGuardianView, guardianLake } from './lake-guardian-view.ts';
 import { decorIcon } from './icons.ts';
 import { CombatHud, fightNear, lootText, zoneInfo, aggro } from './hud-combat.ts';
@@ -1173,9 +1172,7 @@ const breakables=mountBreakables({world,state:()=>state,online:()=>!!actionHandl
 function chopScenery(){if(world.interior)return false;const weapon=M.weaponStats(state);if(weapon.kind==='rod')return false;const gun=weapon.kind==='gun',piece=breakables.chopTarget(world.position,world.facing,gun?Math.min(10,(weapon.range??8)+1):Math.max(1.6,weapon.range??1)+.6);if(!piece)return false;
   world.facing=Math.atan2(piece.x-world.position.x,piece.z-world.position.z);combatTimers.attackCooldown=(weapon.cd??.4)/Math.max(.2,1+M.activeStats(state).haste);world.playerAttack(weapon.kind);tone(gun?'shoot':weapon.kind==='sword'?'swing':'punch');
   if(gun)world.fx?.spark({x:piece.x,y:1.1,z:piece.z},1,.1);breakables.strike(piece.id,gun?'shot':'melee');return true;}
-const huntingView=new FishHuntingView(world.scene,fishingView);
 const guardianView=new LakeGuardianView(world.scene,fishingView);
-let huntingPending:{owner:M.SaveState;scene:typeof world.root}|null=null;
 // The garden helper (helper.ts rules, helper-view.ts walking and poses, helper-ui.ts panels).
 const helperView=new HelperView();world.scene.add(helperView.group);
 function helperDialog(){if(visiting)return;openDialog('helper','Garden helper',helperPanel(state,{esc,mini,picture:iconUrl('helper.webp')}),'GARDEN HELPER','🤖');}
@@ -1241,10 +1238,10 @@ function catchGround(pond:{x:number;z:number;rx:number;rz:number;rectangular?:bo
 function pondEdge(e:Entity){return e.pond?waterEdge({x:e.x,z:e.z,r:e.pond.rx,rz:e.pond.rz,rectangular:e.pond.rectangular},world.position.x,world.position.z):Infinity;}
 function pondView(e:Entity):PondView{return {id:e.id,x:e.x,z:e.z,rx:e.pond!.rx,rz:e.pond!.rz,rectangular:e.pond!.rectangular,surface:e.pond!.surface,waterId:e.waterId??state.planet};}
 function stockPonds(){pondSplash.clear();villageFun.clear();fishingView.attach(world.scene);fishingView.populate(world.outdoorEntities.filter(e=>e.kind==='fish'&&e.pond).map(pondView),waterId=>(M.FISH_WEIGHTS[waterId]??M.FISH_WEIGHTS.home).flatMap(([id,weight])=>Array(Math.max(1,Math.min(6,Math.round(weight/8)))).fill(id)),waterId=>{const pool=(M.FISH_WEIGHTS[waterId]??M.FISH_WEIGHTS.home).filter(([id])=>M.FISH[id].rarity!=='junk');return pool[Math.floor(Math.random()*pool.length)]?.[0]??'fish_carp';},pondStock);}
-// Rod fish follow the harpoon slots' species so picking up hunting gear by the shore keeps the pond's look.
+// Preserve the saved pond stock while normal rod fishing owns every pond view.
 function pondStock(pond:PondView){const hunt=huntingPondAt(state.planet,pond.x,pond.z);return hunt?fishHuntTargets(hunt,0,state.hunting).map(t=>t.id):null;}
 const formatSize=(cm:number)=>cm>=100?`${(cm/100).toFixed(2).replace(/\.?0+$/,'')} m`:`${cm} cm`;
-function showReel(on:boolean,mode:'reel'|'cast'|'hunt'='reel'){const button=$('#reel-button');button.hidden=!on;button.classList.toggle('cast',mode==='cast');button.classList.toggle('hunt',mode==='hunt');button.classList.remove('bite','down');button.removeAttribute('aria-pressed');button.setAttribute('aria-label',t(mode==='hunt'?'Hunt a fish':mode==='cast'?'Cast':'Reel in the line'));$('#reel-text').textContent=t(mode==='hunt'?'Hunt':mode==='cast'?'Cast':'Reel');$('.reel-icon').textContent=mode==='hunt'?'🔱':'🎣';$('#hud').classList.toggle('fishing',on&&mode==='reel');$('#fish-hint').hidden=!(on&&mode!=='cast');}
+function showReel(on:boolean,mode:'reel'|'cast'='reel'){const button=$('#reel-button');button.hidden=!on;button.classList.toggle('cast',mode==='cast');button.classList.remove('bite','down');button.removeAttribute('aria-pressed');button.setAttribute('aria-label',t(mode==='cast'?'Cast':'Reel in the line'));$('#reel-text').textContent=t(mode==='cast'?'Cast':'Reel');$('.reel-icon').textContent='🎣';$('#hud').classList.toggle('fishing',on&&mode==='reel');$('#fish-hint').hidden=!(on&&mode!=='cast');}
 function endFishing(message?:string,icon='🎣'){fishingEpoch++;const was=!!fishGame;if(fishGame){mysteryGotAway(fishGame);fishingView.dropMystery(fishGame.pondId);}if(fishGame?.ticket&&actionHandler)void perform('fishCancel',{ticketId:fishGame.ticket});fishGame=null;fishingView.cancel();world.fishing='idle';showReel(false);if(was&&message)toast(message,icon);}
 /** Apply only actual changes: staying by the shore must not rebuild the avatar or save every frame. */
 function applyContextWeapon(id:M.ItemId|null){
@@ -1257,6 +1254,8 @@ function prepareCombatWeapon(){
   if(fishGame)endFishing('Fishing line reeled in.');
   applyContextWeapon(contextGear.forCombat(state));
 }
+/** Combat owns the weapon until the target, nearby threat and recent attack have cleared. */
+function combatNeedsWeapon(){return (world.selected?.kind==='enemy'&&(world.selected as Enemy).hp>0)||fightNear(world.enemies,world.position.x,world.position.z)||performance.now()<combatGearUntil;}
 function updateContextWeapon(){
   if(!started||visiting||uiBlocked()||document.hidden)return;
   if(gearState!==state||gearPlanet!==state.planet){gearState=state;gearPlanet=state.planet;gearWater=false;combatGearUntil=0;}
@@ -1264,63 +1263,31 @@ function updateContextWeapon(){
   for(const pond of world.entities)if(pond.kind==='fish'&&pond.pond)shore=Math.min(shore,pondEdge(pond));
   // A one-metre buffer keeps tiny movements on the boundary from swapping gear repeatedly.
   gearWater=shore<=(gearWater?4:3);
-  const fighting=!fishGame&&(world.selected?.kind==='enemy'||fightNear(world.enemies,world.position.x,world.position.z)||performance.now()<combatGearUntil);
+  const fighting=combatNeedsWeapon();
+  if(fighting&&fishGame)endFishing('Fishing line reeled in.');
   applyContextWeapon(contextGear.choose(state,{nearWater:gearWater,fighting,fishing:!!fishGame}));
 }
-function updateHunting(dt:number){
-  if(huntingPending&&(huntingPending.owner!==state||huntingPending.scene!==world.root))huntingPending=null;
-  const enabled=started&&!uiBlocked()&&!document.hidden&&!visiting&&!flight&&!fishGame&&state.hp>0&&!state.gear.disguise&&state.gear.weapon==='harpoon';
-  const entity=enabled?world.entities.filter(e=>e.kind==='fish'&&e.pond&&pondEdge(e)<=3)
-    .sort((a,b)=>Math.hypot(a.x-world.position.x,a.z-world.position.z)-a.radius-(Math.hypot(b.x-world.position.x,b.z-world.position.z)-b.radius))[0]:null;
-  const pond=entity?huntingPondAt(state.planet,entity.x,entity.z):null;
-  huntingView.update(dt,pond,state.hunting,fishKit.ready,world.root,state);
-  const button=$('#reel-button');
-  if(pond){
-    if(button.hidden||!button.classList.contains('hunt'))showReel(true,'hunt');
-    $('#fish-hint').textContent=t(huntingView.targets.length?'Tap a fish to throw your harpoon.':'Fish are returning soon.');
-    button.classList.toggle('down',!!huntingPending||huntingView.now()-(state.hunting?.lastShotAt??0)<FISH_HUNT_COOLDOWN_MS);
-  }else if(button.classList.contains('hunt'))showReel(false);
-}
+
 /**
- * The Lake Guardian (lake-guardian.ts) shows by the big meadow lake with any gear; holding the harpoon makes it a target
- * (FishHuntingView). A catch is read from the save (hunting.guardianAt), so offline and online replies celebrate alike.
+ * The Lake Guardian remains visible by the meadow lake. Existing saved catches keep their cooldown.
  */
 let guardianSeen:{owner:M.SaveState;at:number|undefined}|null=null;
 function updateGuardian(dt:number){
   guardianView.attach(world.scene);
-  const lake=started&&!visiting&&!flight&&!world.interior?guardianLake(state.planet,world.position):null,now=huntingView.now(),at=state.hunting?.guardianAt;
+  const lake=started&&!visiting&&!flight&&!world.interior?guardianLake(state.planet,world.position):null,now=Date.now(),at=state.hunting?.guardianAt;
   if(guardianSeen?.owner===state&&at!==undefined&&at!==guardianSeen.at&&Math.abs(now-at)<10_000){
     const p=guardianView.position??world.position;guardianView.caught(p,lake?.surface??.3,world.fx);toast('You caught the Lake Guardian! It will come back for you tomorrow.','🎏');tone('level');
   }
   guardianSeen={owner:state,at};
   if(guardianView.update(dt,lake,now,state.hunting,fishKit.ready,world.fx)==='surfaced'&&lake&&Math.hypot(lake.x-world.position.x,lake.z-world.position.z)<lake.rx+14)
-    toast(state.gear.weapon==='harpoon'&&!state.gear.disguise?'The Lake Guardian has surfaced! Tap it to throw your harpoon.':'A glowing Lake Guardian is circling the lake. Only a harpoon can catch it.','🎏');
+    toast('A glowing Lake Guardian is circling the lake.','🎏');
 }
-async function throwHarpoon(aim?:{x:number;z:number}){
-  if(!started||uiBlocked()||visiting||world.interior||flight||fishGame||huntingPending||state.gear.weapon!=='harpoon'||state.gear.disguise||combatTimers.attackCooldown>0)return;
-  updateHunting(0);const pond=huntingView.pond;if(!pond)return;
-  if(state.hunting&&huntingView.now()-state.hunting.lastShotAt<FISH_HUNT_COOLDOWN_MS)return;
-  const from={x:world.position.x,z:world.position.z},target=huntingView.nearest(aim??from,from,M.ITEMS.harpoon.weapon!.range);
-  if(!target){toast('No fish in reach. Move along the shore.','🐟');return;}
-  const point=aim??{x:target.x,z:target.z},owner=state,scene=world.root,scope={owner,scene};
-  huntingPending=scope;
-  world.destination=null;world.route=[];world.moving=false;world.selected=null;world.ring.visible=false;
-  world.facing=Math.atan2(point.x-from.x,point.z-from.z);
-  try{
-    const result=await perform<FishHuntResult>('fishHunt',{weaponId:'harpoon',pondId:pond.id,slot:target.slot,aim:point,from});
-    if(!result||huntingPending!==scope||state!==owner||world.root!==scene||fishGame||flight||visiting||state.hp<=0||state.gear.disguise||state.gear.weapon!=='harpoon')return;
-    huntingView.syncClock(result.serverNow);huntingView.throw(from,point);
-    world.playerAttack('gun');combatTimers.attackCooldown=FISH_HUNT_COOLDOWN_MS/1000;tone('shoot');
-    world.fx?.ring({...point,y:pond.surface+.02},{color:result.hit?'#ffe66d':'#bfe9ff',from:.15,to:.7,life:.5});
-    if(result.hit){fishingView.landHunted(result.id,{...point,surface:pond.surface},world.position,catchGround(pond));const item=M.ITEMS[result.id];floating(`${item.icon} ${t(item.name)} · ${formatSize(result.size)}`,point.x,point.z,'item');tone('success');}
-    else floating(t('Missed! Aim at a fish.'),point.x,point.z,'xp');
-  }finally{if(huntingPending===scope)huntingPending=null;}
-}
+
 function fish(pond?:Entity|null){
   pond??=world.entities.filter(e=>e.kind==='fish'&&e.pond).sort((a,b)=>Math.hypot(a.x-world.position.x,a.z-world.position.z)-a.radius-(Math.hypot(b.x-world.position.x,b.z-world.position.z)-b.radius))[0]??null;
   if(!pond?.pond||pondEdge(pond)>3){toast('Walk up to a pond to cast your line.','🎣');return;}
   if(swim.mode()!=='land'){toast('Step out onto the shore to fish.','🎣');return;}
-  if(state.gear.weapon==='harpoon'&&!state.gear.disguise){const tap=world.pondTap?.id===pond.id?world.pondTap:undefined;world.pondTap=null;void throwHarpoon(tap);return;}
+  if(combatNeedsWeapon()){applyContextWeapon(contextGear.forCombat(state));world.pondTap=null;toast('Finish fighting before fishing.','⚔️');return;}
   const rodId=contextGear.forFishing(state);
   if(!rodId){openDialog('fish-help','A quiet moment by the water',`<div class="grow-illustration">🎣</div><p class="center">Keep a fishing rod in your backpack to cast your line. Your best rod is held automatically near water, and your combat weapon returns when you leave or fight.</p><p class="center">${esc(t('A bamboo rod costs ϟ {price} in the outfitters, under Supplies › Rods & tools.',{price:M.shopPrice(state,'rod')??20}))}</p><button class="primary wide" data-action="shop-rod">${esc(t('Visit the outfitters'))}</button>`,'FISHING');return;}
   applyContextWeapon(rodId);combatGearUntil=0;
@@ -1544,7 +1511,7 @@ function autoAttack(kind:string){
 function equipFeedback(id:string){
   world.refreshPlayer();world.fx?.burst(world.position,{n:16,color:['#ffe66d','#ffffff'],glow:true,speed:3,up:6});
   floating(`${t(M.ITEMS[id].name)} ↑`,world.position.x,world.position.z,'item big');tone('level');
-  if(id==='harpoon')toast('Harpoon ready. Tap pond fish or select a forest bird.','🔱');
+  if(id==='harpoon')toast('Harpoon ready for combat. Use a fishing rod at ponds.','🔱');
 }
 /** Eating from the bag or the HUD button: one path, with "+N ❤️" over the explorer like the reference's useItem. */
 async function eatFood(id:M.ItemId){
@@ -2338,10 +2305,10 @@ app.addEventListener('click',async event=>{
     case 'go':go(button.dataset.kind!);break;
     case 'shop-rod':shopTab=rodShopTab;shopFocus='rod';if(IG.isFolded('shop','tool'))IG.toggleFold('shop','tool');go('shop');break;
     case 'wild':{closeDialog();const destinations:Record<string,[number,number]>={forest:[-30,0],meadow:[0,30],swamp:[0,-30],canyon:[30,0]};const kind=button.dataset.kind??'forest',destination=destinations[kind]??[0,-30],armed=wildArmed?.kind===kind&&Date.now()<wildArmed.until,route=wildRoute(destination,armed);world.walkTo(route.x,route.z);if(route.inside){wildArmed=null;toast('Follow the path beyond the garden gate.','🍄');}else{wildArmed={kind,until:Date.now()+45000};toast(wildDanger(state.level)?'Wild creatures ahead, and they come in packs! Get ready at the village edge, then choose this place on the map again to walk in.':'You are at the edge of the wild. Choose this place on the map again to walk in.','⚠️');}break;}
-    case 'return-home':if(state.planet!=='home')flyHome();else{endFishing();huntingPending=null;movement.clear();closeDialog();world.position.set(0,0,0);world.destination=null;world.route=[];world.selected=null;world.pondTap=null;updateHunting(0);toast('Home, sweet home.','🏡');}break;
+    case 'return-home':if(state.planet!=='home')flyHome();else{endFishing();movement.clear();closeDialog();world.position.set(0,0,0);world.destination=null;world.route=[];world.selected=null;world.pondTap=null;toast('Home, sweet home.','🏡');}break;
     case 'interact':interactPrompted();break;case 'attack':if(!airOn()||(event as MouseEvent).detail===0){if(!useInstead(true))basicAttack();}break;/* with jumping on a pointer attacked as it went down (below), so that it can be held: this is the keyboard's press of the button */case 'jump':if(airOn()&&(event as MouseEvent).detail===0){jumpInput.down();jumpInput.up();}break;/* a pointer already jumped on the way down (below): this is the keyboard's press of the button */case 'skill':skill(index);break;
     case 'fish-again':fish(fishPond);break;
-    case 'reel':if(fishGame){if(event.detail===0)fishGame.input.toggle();}else if(button.classList.contains('hunt'))void throwHarpoon();else if(button.classList.contains('cast'))fish(fishPond);break;
+    case 'reel':if(fishGame){if(event.detail===0)fishGame.input.toggle();}else if(button.classList.contains('cast'))fish(fishPond);break;
     case 'render-res':{const res=button.dataset.kind as ResolutionSetting;graphics.setResolution(res);world.applyGraphics(graphics.profile,graphics.ratio);await perform('settings',{settings:{renderRes:res}});settings();break;}
     case 'air-combat':airCombat=!airCombat;saveAirCombat((()=>{try{return localStorage;}catch{return null;}})(),airCombat);syncAirCombat();settings();updateHud();break;
     case 'space-key':spaceKey=button.dataset.kind==='attack'?'attack':'jump';airApplied=null;saveSpaceKey((()=>{try{return localStorage;}catch{return null;}})(),spaceKey);jumpInput.clear();settings();updateHud();break;
@@ -2478,10 +2445,10 @@ function frame(now:number){
   // The explorer's pose follows the weapon, skills, fishing line and hit invulnerability.
   const weaponKind=M.weaponStats(state).kind;world.weaponKind=state.gear.weapon&&M.ITEMS[state.gear.weapon]?.weapon?.kind==='rod'?'rod':weaponKind;world.pose=combat.pose;world.invulnerable=combatTimers.invulnerable>0;world.fishTension=fishGame?.simulation.tension??0;
   questWalk.update(dt);autoAttack(weaponKind);
-  updateHunting(dt);updateGuardian(dt);
+  updateGuardian(dt);
   pondSplash.update(dt);villageFun.update(dt);breakables.update(dt);fishingView.update(dt,world.time,fishGame||fishingView.active?tipPosition():rodTip,world.interior?FAR_AWAY:world.position,fishGame?.simulation??null);
   skillFx.update(dt);world.gazeAngle=skillFx.gazeAngle(world.player);
-  if(!fishGame&&!$('#reel-button').hidden&&!$('#reel-button').classList.contains('hunt')&&(performance.now()>recastUntil||world.moving))showReel(false);
+  if(!fishGame&&!$('#reel-button').hidden&&(performance.now()>recastUntil||world.moving))showReel(false);
   // Resizing the WebGL canvas clears its drawing buffer. Apply automatic quality changes
   // before drawing, so the browser never presents an empty frame during a quality transition.
   const graphicsChange=graphics.sample(realDt,started&&!document.hidden&&!uiBlocked()&&performance.now()>settledAt);if(graphicsChange)world.applyGraphics(graphics.profile,graphics.ratio);if(graphics.takeSave())saveGraphics(graphics);
@@ -2559,4 +2526,4 @@ if(import.meta.env.DEV||import.meta.env.VITE_PERF_HOOK)Object.assign(window,{__r
 }
 initPlatform(message=>toast(message));
 // Development builds expose the game to browser tests; production builds leave this out.
-if(import.meta.env.DEV||import.meta.env.VITE_PERF_HOOK)Object.assign(window,{__zoo:{inbox,controls,gainFeed,gainDemo:()=>gainFeed.demo(),surgeView,questWalk,get welcomeBack(){return welcomeBack;},pinHero:(spot:{x:number;z:number}|null)=>{world.perfPin=spot;},newsDemo:()=>{const before=state.level;state.level=Math.max(before+1,4);levelCheck(before);updateHud();},breakables,flags:perfFlags,matrixStats,updateSceneMatrices,world,get colossus(){return colossus;},get ranking(){return rankingApi;},get news(){return newsApi;},get insight(){return insight;},loadInsight,openInsight,panel:(type:string)=>{if(type==='wardrobe'){bagMode='wardrobe';inventory();}else({news:inbox.open,bag:inventory,shop,upgrade:upgrades,looks:()=>lookShop.open(),sell:market,travel:planets,map,quests,settings,help,craft:crafting,cook:cooking,chest:storage} as Record<string,()=>void>)[type]?.();},house,bench,combat,resetCombat,skill,airSwing,skillList,fight:{powerCharge,powerStrike,streak,attackHold,attackDown,get charge(){return attackCharge;},get counter(){return counterView;},get on(){return airOn();},set on(v:boolean){airCombat=v;syncAirCombat();},jumpInput,comboMeter,slideCombo,get touch(){return touchFight;},set touch(v:boolean){touchFight=v;},get pending(){return pendingPress;},tryJump,basicAttack,startDive,jumpBlock,get spaceKey(){return spaceKey;},get sure(){return sureLeft;}},challenges,keysGuide,startChallenge:(type:string)=>perform('startChallenge',{kind:type}),get cooldowns(){return cooldowns;},get airCooldowns(){return airCooldowns;},lookShop,drops,crew,fishingView,pondSplash,huntingView,guardianView,helperView,farmHelperView,get fishGame(){return fishGame;},get state(){return state;},planets,launch,flyHome,get flight(){return flight;},spaceView,toast,showZone,dialogs:{shop,market,inventory,settings,quests,help,map,upgrades,crafting,decorations,storage,cooking,forgeMenu,testerShop}}});
+if(import.meta.env.DEV||import.meta.env.VITE_PERF_HOOK)Object.assign(window,{__zoo:{inbox,controls,gainFeed,gainDemo:()=>gainFeed.demo(),surgeView,questWalk,get welcomeBack(){return welcomeBack;},pinHero:(spot:{x:number;z:number}|null)=>{world.perfPin=spot;},newsDemo:()=>{const before=state.level;state.level=Math.max(before+1,4);levelCheck(before);updateHud();},breakables,flags:perfFlags,matrixStats,updateSceneMatrices,world,get colossus(){return colossus;},get ranking(){return rankingApi;},get news(){return newsApi;},get insight(){return insight;},loadInsight,openInsight,panel:(type:string)=>{if(type==='wardrobe'){bagMode='wardrobe';inventory();}else({news:inbox.open,bag:inventory,shop,upgrade:upgrades,looks:()=>lookShop.open(),sell:market,travel:planets,map,quests,settings,help,craft:crafting,cook:cooking,chest:storage} as Record<string,()=>void>)[type]?.();},house,bench,combat,resetCombat,skill,airSwing,skillList,fight:{powerCharge,powerStrike,streak,attackHold,attackDown,get charge(){return attackCharge;},get counter(){return counterView;},get on(){return airOn();},set on(v:boolean){airCombat=v;syncAirCombat();},jumpInput,comboMeter,slideCombo,get touch(){return touchFight;},set touch(v:boolean){touchFight=v;},get pending(){return pendingPress;},tryJump,basicAttack,startDive,jumpBlock,get spaceKey(){return spaceKey;},get sure(){return sureLeft;}},challenges,keysGuide,startChallenge:(type:string)=>perform('startChallenge',{kind:type}),get cooldowns(){return cooldowns;},get airCooldowns(){return airCooldowns;},lookShop,drops,crew,fishingView,pondSplash,guardianView,helperView,farmHelperView,get fishGame(){return fishGame;},get state(){return state;},planets,launch,flyHome,get flight(){return flight;},spaceView,toast,showZone,dialogs:{shop,market,inventory,settings,quests,help,map,upgrades,crafting,decorations,storage,cooking,forgeMenu,testerShop}}});

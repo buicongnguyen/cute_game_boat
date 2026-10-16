@@ -111,10 +111,11 @@ test('malformed quantities, unknown IDs, inherited entries and nonweapon gear ca
   assert.equal(selection.choose(state, water), 'sword_wood');
 });
 
-test('an explicitly held harpoon stays ready beside a pond while ordinary fishing can still select the best rod', () => {
+test('an owned rod replaces the harpoon by calm water and combat restores the harpoon', () => {
   const selection = new ContextGearSelection(), state = stateWith('harpoon', 'rod', 'rod_gold'); hold(state, 'harpoon');
   const before = structuredClone(state);
-  assert.equal(selection.choose(state, water), 'harpoon'); assert.equal(selection.choose(state, land), 'harpoon');
+  assert.equal(selection.choose(state, water), 'rod_gold'); assert.equal(selection.choose(state, land), 'harpoon');
+  assert.equal(selection.choose(state, {...water,fighting:true}), 'harpoon');
   assert.equal(selection.forFishing(state), 'rod_gold'); assert.equal(selection.choose(state, { ...water, fishing: true }), 'rod_gold');
   assert.deepEqual(state, before);
   hold(state, 'rod_gold'); assert.equal(selection.choose(state, water), 'rod_gold', 'manually changing to the rod enables normal fishing near water');
@@ -123,14 +124,14 @@ test('an explicitly held harpoon stays ready beside a pond while ordinary fishin
 test('holding the harpoon records the manual combat choice before a later manual rod swap', () => {
   const selection = new ContextGearSelection(), state = stateWith('sword_wood', 'harpoon', 'rod');
   hold(state, 'sword_wood'); assert.equal(selection.choose(state, land), 'sword_wood');
-  hold(state, 'harpoon'); assert.equal(selection.choose(state, water), 'harpoon');
+  hold(state, 'harpoon'); assert.equal(selection.choose(state, water), 'rod');
   hold(state, 'rod'); assert.equal(selection.choose(state, water), 'rod');
   assert.equal(selection.choose(state, land), 'harpoon', 'leaving water restores the later manual weapon rather than the old sword');
 });
 
 test('a removed harpoon cannot remain selected or block rod and combat fallback', () => {
   const selection = new ContextGearSelection(), state = stateWith('harpoon', 'rod', 'sword_wood'); hold(state, 'harpoon');
-  assert.equal(selection.choose(state, water), 'harpoon'); delete state.bag.harpoon;
+  assert.equal(selection.choose(state, water), 'rod'); delete state.bag.harpoon;
   assert.equal(selection.choose(state, water), 'rod'); assert.equal(selection.forCombat(state), 'sword_wood');
   delete state.bag.rod; delete state.bag.sword_wood; assert.equal(selection.choose(state, water), null);
 });
@@ -138,6 +139,6 @@ test('a removed harpoon cannot remain selected or block rod and combat fallback'
 test('visiting another save identity holding a harpoon invalidates the previous account weapon memory', () => {
   const selection = new ContextGearSelection(), first = stateWith('gun_pea', 'sword_lava', 'rod');
   hold(first, 'gun_pea'); hold(first, selection.choose(first, water));
-  const second = stateWith('harpoon', 'rod'); hold(second, 'harpoon'); assert.equal(selection.choose(second, water), 'harpoon');
-  assert.equal(selection.choose(first, land), 'sword_lava', 'the harpoon early-return must still observe the account transition');
+  const second = stateWith('harpoon', 'rod'); hold(second, 'harpoon'); assert.equal(selection.choose(second, water), 'rod');
+  assert.equal(selection.choose(first, land), 'sword_lava', 'weapon memory still observes the account transition');
 });
