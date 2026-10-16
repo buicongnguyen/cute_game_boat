@@ -41,7 +41,7 @@ export interface PetSurgeHost {
 export const DOG_HEIGHT = .82;
 /** The big dog is drawn this much further out on its side (m), clear of the explorer. */
 const DOG_ASIDE = -1.3;
-const SIDE_BIG = 2.4, SIDE_CLEAR = 3.6, TIP_KEY = 'zoo-garden-surge-tip';
+const SIDE_BIG = 2.4, SIDE_CLEAR = 3.6, TIP_KEY = 'cute-game-boat:zoo-garden-surge-tip';
 const SOUND: Record<SignatureId, 'heavy' | 'magic' | 'zap'> = { bulwark: 'heavy', returnfire: 'zap', bloom: 'magic', taunt: 'heavy', bigbark: 'heavy', stomp: 'heavy', rebirth: 'magic', breath: 'zap', slam: 'heavy', bind: 'magic' };
 const TINT: Partial<Record<SignatureId, string>> = { bulwark: '#bfe6ff', bloom: '#ffb3d9', rebirth: '#ffb347', taunt: '#ffd166', bigbark: '#fff1d6', stomp: '#ffcf8a', bind: '#9b7bff', slam: '#7fd7ff', breath: '#ff8a3d' };
 const easeBack = (k: number) => { const c = 1.9, x = k - 1; return 1 + (c + 1) * x * x * x + c * x * x; };

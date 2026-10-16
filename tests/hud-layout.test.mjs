@@ -269,7 +269,7 @@ for (const [name, view] of Object.entries(DESKTOP)) {
       await page.evaluate(() => { window.__zoo.state.settings.keyboardLayout = 'classic'; });
       await page.waitForFunction(() => /↑←↓→/.test(document.querySelector('#keys-guide').textContent.replace(/\s/g, '')) && /SkillsQWERPower/.test(document.querySelector('#keys-guide').textContent.replace(/\s/g, '')));
       await page.click('#keys-guide .keys-toggle'); await page.waitForTimeout(300);
-      const folded = await page.evaluate(BOX => ({ box: (0, eval)(BOX)(document.querySelector('#keys-guide')), list: !!document.querySelector('#keys-guide dl'), saved: localStorage.getItem('zoo-garden-keys-guide') }), BOX);
+      const folded = await page.evaluate(BOX => ({ box: (0, eval)(BOX)(document.querySelector('#keys-guide')), list: !!document.querySelector('#keys-guide dl'), saved: localStorage.getItem('cute-game-boat:zoo-garden-keys-guide') }), BOX);
       assert.equal(folded.list, false); assert.ok(folded.box.r - folded.box.l <= 48, 'folded to a small ⌨️ chip'); assert.match(folded.saved, /"closed"/);
       // Folded trackers (as in a fight) keep the countdown in the chip.
       await page.click('.tracker-fold'); await page.waitForTimeout(300);
@@ -307,7 +307,7 @@ for (const size of Object.keys(SIZES)) for (const lang of ['en', 'vi']) {
     const browser = await (await chromium()).launch({ args: ['--use-angle=d3d11', '--enable-gpu', '--ignore-gpu-blocklist'] });
     try {
       const context = await browser.newContext({ viewport: { width, height }, deviceScaleFactor: touch ? 2 : 1, hasTouch: touch, isMobile: touch });
-      await context.addInitScript(([s, l]) => { try { localStorage.setItem('cute-game-save-v1', s); localStorage.setItem('cute-game-slot', '0'); localStorage.setItem('cute-game-language', l); localStorage.setItem('cute-game-tutorial', 'done'); } catch { /* storage blocked */ } }, [fullSave, lang]);
+      await context.addInitScript(([s, l]) => { try { localStorage.setItem('cute-game-boat:cute-game-save-v1', s); localStorage.setItem('cute-game-boat:cute-game-slot', '0'); localStorage.setItem('cute-game-boat:cute-game-language', l); localStorage.setItem('cute-game-tutorial', 'done'); } catch { /* storage blocked */ } }, [fullSave, lang]);
       const page = await context.newPage();
       await page.routeWebSocket(socketUrl => new URL(socketUrl).searchParams.has('token'), () => {});
       await page.goto(url, { waitUntil: 'load', timeout: 60000 });
@@ -403,7 +403,7 @@ for (const size of ['390x844', '320x568', '844x390']) for (const hand of ['right
     const browser = await (await chromium()).launch({ args: ['--use-angle=d3d11', '--enable-gpu', '--ignore-gpu-blocklist'] });
     try {
       const context = await browser.newContext({ viewport: { width, height }, deviceScaleFactor: 2, hasTouch: true, isMobile: true });
-      await context.addInitScript(([s]) => { try { localStorage.setItem('cute-game-save-v1', s); localStorage.setItem('cute-game-slot', '0'); localStorage.setItem('cute-game-language', 'en'); localStorage.setItem('cute-game-tutorial', 'done'); localStorage.setItem('zoo-power-hold-hint', '1'); } catch { /* storage blocked */ } }, [fullSave]);
+      await context.addInitScript(([s]) => { try { localStorage.setItem('cute-game-boat:cute-game-save-v1', s); localStorage.setItem('cute-game-boat:cute-game-slot', '0'); localStorage.setItem('cute-game-boat:cute-game-language', 'en'); localStorage.setItem('cute-game-tutorial', 'done'); localStorage.setItem('cute-game-boat:zoo-power-hold-hint', '1'); } catch { /* storage blocked */ } }, [fullSave]);
       const page = await context.newPage();
       await page.routeWebSocket(socketUrl => new URL(socketUrl).searchParams.has('token'), () => {});
       await page.goto(url, { waitUntil: 'load', timeout: 60000 });
@@ -443,7 +443,7 @@ for (const [size, lang] of [['1280x720', 'en'], ['390x844', 'vi'], ['320x568', '
     const browser = await (await chromium()).launch({ args: ['--use-angle=d3d11', '--enable-gpu', '--ignore-gpu-blocklist'] });
     try {
       const context = await browser.newContext({ viewport: { width, height }, deviceScaleFactor: touch ? 2 : 1, hasTouch: touch, isMobile: touch });
-      await context.addInitScript(([s, l]) => { try { localStorage.setItem('cute-game-save-v1', s); localStorage.setItem('cute-game-slot', '0'); localStorage.setItem('cute-game-language', l); localStorage.setItem('cute-game-tutorial', 'done'); } catch { /* storage blocked */ } }, [fullSave, lang]);
+      await context.addInitScript(([s, l]) => { try { localStorage.setItem('cute-game-boat:cute-game-save-v1', s); localStorage.setItem('cute-game-boat:cute-game-slot', '0'); localStorage.setItem('cute-game-boat:cute-game-language', l); localStorage.setItem('cute-game-tutorial', 'done'); } catch { /* storage blocked */ } }, [fullSave, lang]);
       const page = await context.newPage();
       await page.routeWebSocket(socketUrl => new URL(socketUrl).searchParams.has('token'), () => {});
       await page.goto(url, { waitUntil: 'load', timeout: 60000 });
@@ -465,7 +465,7 @@ for (const [size, lang] of [['1280x720', 'en'], ['390x844', 'vi'], ['320x568', '
           sections: [...d.querySelectorAll('.ranking-sections button')].map(tab), inner: [...panel.querySelectorAll('.panel-tabs button')].map(tab),
           ranking: shown(d.querySelector('.ranking-list')), rows: d.querySelectorAll('.ranking-row').length, boards: shown(d.querySelector('.ranking-tabs')), news: shown(panel), panel: rect(panel),
           cards: panel.querySelectorAll('.news-card').length, upcoming: panel.querySelectorAll('.news-card.upcoming').length, fresh: panel.querySelectorAll('.news-new').length, firstTitle: panel.querySelector('.news-card h3')?.textContent ?? '',
-          scrolls: panel.scrollHeight > panel.clientHeight + 1 && getComputedStyle(panel).overflowY === 'auto', read: JSON.parse(localStorage.getItem('zoo-news-read') || '[]').length, oldPanel: !document.querySelector('#dialog-layer').hidden };
+          scrolls: panel.scrollHeight > panel.clientHeight + 1 && getComputedStyle(panel).overflowY === 'auto', read: JSON.parse(localStorage.getItem('cute-game-boat:zoo-news-read') || '[]').length, oldPanel: !document.querySelector('#dialog-layer').hidden };
       });
       const words = lang === 'vi' ? { ranking: 'Xếp hạng', news: 'Tin tức', board: 'Bảng tin', leaderboard: 'Bảng xếp hạng', soon: 'Sắp ra mắt', both: 'Xếp hạng và tin tức', unread: `${total} tin chưa đọc`, tag: 'MỚI' }
         : { ranking: 'Ranking', news: 'News', board: 'News board', leaderboard: 'Leaderboard', soon: 'Coming soon', both: 'Ranking and news', unread: `${total} unread news`, tag: 'NEW' };
@@ -534,7 +534,7 @@ for (const size of ['390x844', '1600x900']) {
     const browser = await (await chromium()).launch({ args: ['--use-angle=d3d11', '--enable-gpu', '--ignore-gpu-blocklist'] });
     try {
       const context = await browser.newContext({ viewport: { width, height }, deviceScaleFactor: touch ? 2 : 1, hasTouch: touch, isMobile: touch });
-      await context.addInitScript(([s]) => { try { localStorage.setItem('cute-game-save-v1', s); localStorage.setItem('cute-game-slot', '0'); localStorage.setItem('cute-game-language', 'en'); localStorage.setItem('cute-game-tutorial', 'done'); localStorage.setItem('zoo-colossus-sleeps', 'asleep'); } catch { /* storage blocked */ } }, [fullSave]);
+      await context.addInitScript(([s]) => { try { localStorage.setItem('cute-game-boat:cute-game-save-v1', s); localStorage.setItem('cute-game-boat:cute-game-slot', '0'); localStorage.setItem('cute-game-boat:cute-game-language', 'en'); localStorage.setItem('cute-game-tutorial', 'done'); localStorage.setItem('cute-game-boat:zoo-colossus-sleeps', 'asleep'); } catch { /* storage blocked */ } }, [fullSave]);
       const page = await context.newPage();
       await page.routeWebSocket(socketUrl => new URL(socketUrl).searchParams.has('token'), () => {});
       await page.goto(url, { waitUntil: 'load', timeout: 60000 });
@@ -567,7 +567,7 @@ for (const [name, view] of Object.entries(VIEWS)) {
     const browser = await (await chromium()).launch({ args: ['--use-angle=d3d11', '--enable-gpu', '--ignore-gpu-blocklist'] });
     try {
       const context = await browser.newContext(view);
-      await context.addInitScript(() => { try { localStorage.setItem('zoo-garden-controls', JSON.stringify({ side: 'left', size: 'large', opacity: 60 })); } catch {} });
+      await context.addInitScript(() => { try { localStorage.setItem('cute-game-boat:zoo-garden-controls', JSON.stringify({ side: 'left', size: 'large', opacity: 60 })); } catch {} });
       const page = await context.newPage();
       await page.routeWebSocket(socketUrl=>new URL(socketUrl).searchParams.has('token'),()=>{});
       await page.goto(url, { waitUntil: 'load', timeout: 60000 });

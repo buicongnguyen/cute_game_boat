@@ -40,7 +40,7 @@ export interface CtfHooks {
 /** Where things stand: the gate and keeper by the south gate (village coordinates), the isle far out in the canyon corner. */
 export const GATE = { gate: { x: -12, z: 29 }, keeper: { x: -6.8, z: 24 }, isle: { x: 84, z: -104 } } as const;
 const C = GATE.isle, ME = 'me';
-const RESTORE_KEY = 'zoo-ctf-restore';
+const RESTORE_KEY = 'cute-game-boat:zoo-ctf-restore';
 const esc = (v: string) => v.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]!));
 const clock = (s: number) => `${Math.floor(Math.max(0, s) / 60)}:${String(Math.floor(Math.max(0, s) % 60)).padStart(2, '0')}`;
 const teamName = (team: TeamId) => t(team === 0 ? 'blue' : 'red');

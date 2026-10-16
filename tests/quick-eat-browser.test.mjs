@@ -50,7 +50,7 @@ for (const [name, view] of Object.entries(VIEWS)) {
       await page.click('.quick-eat-pick'); await page.click('#quick-eat-menu [data-item="auto"]');
 
       // Try on a hat in the shop.
-      const savedBefore = await page.evaluate(() => { localStorage.setItem('probe', '1'); return localStorage.getItem('cute-game-save-v1'); });
+      const savedBefore = await page.evaluate(() => { localStorage.setItem('probe', '1'); return localStorage.getItem('cute-game-boat:cute-game-save-v1'); });
       await page.evaluate(() => { const w = window.__zoo.world, shop = w.entities.find(e => e.kind === 'shop'); w.position.set(shop.x, 0, shop.z + 3.2); w.cameraTarget.copy(w.position); w.onInteract(shop); });
       await page.waitForSelector('#dialog-layer:not([hidden])');
       await page.click('[data-action="shop-tab"][data-kind="Clothing"]');
@@ -66,7 +66,7 @@ for (const [name, view] of Object.entries(VIEWS)) {
       const visible = await page.evaluate(() => { const w = window.__zoo.world, p = w.player.position.clone(); p.y += 1.2; p.project(w.camera); const x = (p.x + 1) / 2 * innerWidth, y = (1 - p.y) / 2 * innerHeight, d = document.querySelector('#dialog').getBoundingClientRect(); return { x, y, covered: x > d.left && x < d.right && y > d.top && y < d.bottom }; });
       assert.equal(visible.covered, false, `the explorer stays visible beside the panel: ${JSON.stringify(visible)}`);
       await shot(page, '4-try-on-hat');
-      assert.equal(await page.evaluate(() => localStorage.getItem('cute-game-save-v1')), savedBefore, 'try-on never saves');
+      assert.equal(await page.evaluate(() => localStorage.getItem('cute-game-boat:cute-game-save-v1')), savedBefore, 'try-on never saves');
       await page.keyboard.press('Escape'); await page.waitForTimeout(400);
       assert.equal(await page.evaluate(() => window.__zoo.world.tryOnGear ?? null), null, 'closing reverts the try-on');
       assert.equal(await meshes(), plain, 'the explorer is back in their own gear');

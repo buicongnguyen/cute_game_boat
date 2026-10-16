@@ -50,7 +50,7 @@ export interface InsightApi {
 }
 export const BOOK = { type: 'insight', title: 'The Village Almanac', kicker: 'THE BIG PICTURE', icon: '📒' } as const;
 const TABS: readonly [InsightTab, string, string][] = [['home', '📊', 'Overview'], ['map', '🗺️', 'Product map'], ['trend', '📈', 'Trend'], ['report', '🏅', 'Report card'], ['disguises', '🎭', 'Disguises']];
-const SEEN = 'zoo-almanac-seen:';
+const SEEN = 'cute-game-boat:zoo-almanac-seen:';
 const POLL_MS = 2000, INVITE_MS = 12000;
 
 export function initInsight(d: InsightDeps): InsightApi {

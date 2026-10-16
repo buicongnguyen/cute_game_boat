@@ -100,7 +100,7 @@ test('desktop keeps its compact controls (the touch hit areas are pointer:coarse
 }));
 
 for (const lang of ['en', 'vi']) test(`skill labels fit and stay apart on a 360 px phone (${lang})`, { skip, timeout: 120000 }, () => play({ viewport: { width: 360, height: 740 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true }, async page => {
-  await page.evaluate(l => localStorage.setItem('cute-game-language', l), lang); await page.reload();
+  await page.evaluate(l => localStorage.setItem('cute-game-boat:cute-game-language', l), lang); await page.reload();
   await page.waitForSelector('#title-screen button.primary', { state: 'visible', timeout: 60000 });
   await page.waitForFunction(() => !document.querySelector('#title-screen').inert, null, { timeout: 30000 });
   await start(page);

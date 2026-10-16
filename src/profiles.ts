@@ -2,7 +2,7 @@ import { SAVE_KEY } from './model.ts';
 
 /** Three offline save profiles on this device. Slot 0 keeps the original key, so an existing save is simply profile 1. */
 export const PROFILE_SLOTS = 3;
-const SLOT_KEY = 'cute-game-slot';
+const SLOT_KEY = 'cute-game-boat:cute-game-slot';
 export const slotKey = (slot: number) => slot === 0 ? SAVE_KEY : `${SAVE_KEY}-slot${slot + 1}`;
 const valid = (n: number) => Number.isInteger(n) && n >= 0 && n < PROFILE_SLOTS;
 export function activeSlot(): number {
@@ -14,6 +14,6 @@ export function setActiveSlot(slot: number): boolean {
 }
 export const activeKey = () => slotKey(activeSlot());
 /** "This profile was last saved inside the cottage" (house-ui.ts), one flag per profile; profile 1 keeps the original key. */
-export const indoorsKey = (slot = activeSlot()) => slot === 0 ? 'zoo-garden-indoors' : `zoo-garden-indoors-slot${slot + 1}`;
+export const indoorsKey = (slot = activeSlot()) => slot === 0 ? 'cute-game-boat:zoo-garden-indoors' : `cute-game-boat:zoo-garden-indoors-slot${slot + 1}`;
 /** Keep the legacy neighbour record with the original save only; never copy gifts into another profile. */
-export const neighboursKey = (slot = activeSlot()) => slot === 0 ? 'cute-game-neighbours-v1' : `cute-game-neighbours-v1-slot${slot + 1}`;
+export const neighboursKey = (slot = activeSlot()) => slot === 0 ? 'cute-game-boat:cute-game-neighbours-v1' : `cute-game-boat:cute-game-neighbours-v1-slot${slot + 1}`;

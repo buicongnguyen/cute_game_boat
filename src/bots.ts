@@ -28,7 +28,7 @@ import './bots.css';
  * The gift is promised in the same step as the friendship (bot-logic befriend) and kept in the saved store until the bag has
  * it, so closing the page, a full bag or a visit in progress can delay it but never lose it.
  */
-const ENABLED_KEY = 'cute-game-neighbours-on', COUNT = 5;
+const ENABLED_KEY = 'cute-game-boat:cute-game-neighbours-on', COUNT = 5;
 const AREA = { radius: 13, centre: { x: 0, z: 2 } }; // where a visiting friend wanders: inside the safe zone
 const FLY_HEIGHT = 3.1, GATE_EXIT = 19.5;
 type Mode = 'wander' | 'approach' | 'talk' | 'ask' | 'fly' | 'commute' | 'rest';

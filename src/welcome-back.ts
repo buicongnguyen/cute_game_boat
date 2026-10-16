@@ -15,7 +15,7 @@ import { DUNGEON_LEVEL } from './dungeon-content.ts';
 import { fullWinsLeft } from './rescue-claim.ts';
 import { COLOSSUS_LEVEL } from './colossus-sleep.ts';
 
-export const WELCOME_BACK_KEY = 'zoo-welcome-back';
+export const WELCOME_BACK_KEY = 'cute-game-boat:zoo-welcome-back';
 /** The player's local calendar day ("2026-10-15"), not UTC: the card greets a new morning where the player lives. */
 export const localDay = (now: number) => { const d = new Date(now); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
 /** Due on a new local day, unless this session began a brand-new save (the welcome gift was pending at start). */
@@ -70,7 +70,7 @@ export function initWelcomeBack(h: WelcomeHost): WelcomeBackApi {
   const key = () => `${WELCOME_BACK_KEY}:${h.saveKey()}`;
   const seen = () => { try { return localStorage.getItem(key()); } catch { return null; } };
   const mark = () => { try { localStorage.setItem(key(), localDay(Date.now())); } catch { /* optional */ } };
-  function rescueCall() { try { const v = JSON.parse(localStorage.getItem('zoo-rescue-sos') ?? 'null'); return !!v?.call && (!v.call.until || v.call.until > Date.now()); } catch { return false; } }
+  function rescueCall() { try { const v = JSON.parse(localStorage.getItem('cute-game-boat:zoo-rescue-sos') ?? 'null'); return !!v?.call && (!v.call.until || v.call.until > Date.now()); } catch { return false; } }
   function render() {
     const s = h.state(), f = welcomeFacts(s, Date.now(), { colossusAsleep: h.colossusAsleep(), rescueCall: rescueCall(), away }), c = f.checkIn, e = h.esc;
     const ready = !!c && c.complete && !c.claimed;

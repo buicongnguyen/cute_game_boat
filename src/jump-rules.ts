@@ -362,7 +362,7 @@ export class ComboMeter {
 
 /** Space jumps by default; players who liked the old way put the basic attack on Space (then Left Shift jumps). Kept per device. */
 export type SpaceKey = 'jump' | 'attack';
-export const SPACE_KEY_STORE = 'zoo-garden-space-key';
+export const SPACE_KEY_STORE = 'cute-game-boat:zoo-garden-space-key';
 export function readSpaceKey(store: Pick<Storage, 'getItem'> | null): SpaceKey { try { return store?.getItem(SPACE_KEY_STORE) === 'attack' ? 'attack' : 'jump'; } catch { return 'jump'; } }
 export function saveSpaceKey(store: Pick<Storage, 'setItem'> | null, value: SpaceKey) { try { store?.setItem(SPACE_KEY_STORE, value); } catch { /* storage blocked: it lasts for this visit */ } }
 /**
@@ -370,7 +370,7 @@ export function saveSpaceKey(store: Pick<Storage, 'setItem'> | null, value: Spac
  * before jumping existed: no jump key or button, Space is the basic attack, no combo, no dodge classes, no boss block.
  * Online it is off for everyone for now, so two explorers in one room never play by different rules (main.ts airOn).
  */
-export const AIR_COMBAT_STORE = 'zoo-air-combat';
+export const AIR_COMBAT_STORE = 'cute-game-boat:zoo-air-combat';
 export function readAirCombat(store: Pick<Storage, 'getItem'> | null): boolean { try { return store?.getItem(AIR_COMBAT_STORE) !== 'off'; } catch { return true; } }
 export function saveAirCombat(store: Pick<Storage, 'setItem'> | null, on: boolean) { try { store?.setItem(AIR_COMBAT_STORE, on ? 'on' : 'off'); } catch { /* storage blocked: it lasts for this visit */ } }
 /** What a gameplay key does under the Space setting: 'jump', 'attack' or nothing. `code` is KeyboardEvent.code. With the system `on` = false, Space attacks and nothing jumps. */

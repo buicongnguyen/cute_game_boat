@@ -192,7 +192,7 @@ export function initOnline(game:GameBridge) {
     }});
   }
 
-  function rememberActions(){if(!account)return;try{localStorage.setItem(`cute-game-actions-${account.id}`,JSON.stringify(actionQueue));}catch{/* Server receipts also make same-ID retries safe. */}}
+  function rememberActions(){if(!account)return;try{localStorage.setItem(`cute-game-boat:cute-game-actions-${account.id}`,JSON.stringify(actionQueue));}catch{/* Server receipts also make same-ID retries safe. */}}
   function rejectActions(message:string){for(const waiter of waiting.values())waiter.reject(new Error(message));waiting.clear();actionQueue=[];}
   function queueAction(intent:GameIntent):Promise<ActionReply>{
     if(!account||stopped)return Promise.reject(new Error('Reconnect before changing your online adventure.'));
@@ -301,7 +301,7 @@ export function initOnline(game:GameBridge) {
     if(account?.id!==session.account.id){rememberActions();rejectActions('Your session ended. Pending actions remain on this device.');clearChat();party=null;visiting=null;}
     const previous=socket;socket=null;previous?.close();if(reconnect)clearTimeout(reconnect);if(saveTimer)clearTimeout(saveTimer);
     if(!account)offline=structuredClone(game.getState());account=session.account;friends=session.friends||[];requests=session.requests||[];stopped=false;
-    revision=session.revision||0;try{const raw=localStorage.getItem(`cute-game-actions-${account.id}`),cached=raw?JSON.parse(raw):null;if(Array.isArray(cached))actionQueue=cached.filter(job=>job&&typeof job.requestId==='string'&&typeof job.type==='string'&&job.rulesVersion===1&&Number.isSafeInteger(job.expectedRevision)).slice(0,100);}catch{/* Keep this account's in-memory queue if storage is unavailable. */}
+    revision=session.revision||0;try{const raw=localStorage.getItem(`cute-game-boat:cute-game-actions-${account.id}`),cached=raw?JSON.parse(raw):null;if(Array.isArray(cached))actionQueue=cached.filter(job=>job&&typeof job.requestId==='string'&&typeof job.type==='string'&&job.rulesVersion===1&&Number.isSafeInteger(job.expectedRevision)).slice(0,100);}catch{/* Keep this account's in-memory queue if storage is unavailable. */}
     game.setPersistence(queueSave);game.setActionHandler(queueAction);game.applyState(session.profile);connect();render();void flushSave();announce('Welcome, {name}. Your online adventure is ready.',{name:account.name});
   }
   async function signOut(){

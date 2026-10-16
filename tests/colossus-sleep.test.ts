@@ -9,7 +9,7 @@ test('the well lid has three lids plus Automatic, remembered; an explicit choice
   assert.equal(lid.colossusChoice(), null, 'nothing stored: the player never chose');
   lid.setColossusLid('soothed');
   assert.equal(lid.colossusSoothed(1), true); assert.equal(lid.colossusSleeps(1), false, 'chosen below 20: the choice rules');
-  assert.equal(store.get('zoo-colossus-sleeps'), 'soothed');
+  assert.equal(store.get('cute-game-boat:zoo-colossus-sleeps'), 'soothed');
   lid.setColossusLid('asleep');
   assert.equal(lid.colossusSleeps(40), true); assert.equal(lid.colossusSoothed(40), false);
   lid.setColossusLid('nonsense' as never);
@@ -19,7 +19,7 @@ test('the well lid has three lids plus Automatic, remembered; an explicit choice
 });
 
 test('the first version’s saved "1" still means asleep', async () => {
-  store.set('zoo-colossus-sleeps', '1');
+  store.set('cute-game-boat:zoo-colossus-sleeps', '1');
   const lid = await import('../src/colossus-sleep.ts?again');
   assert.equal(lid.colossusLid(30), 'asleep');
 });
@@ -33,7 +33,7 @@ test('the automatic rule (never chose, or chose Automatic): asleep below level 2
   assert.equal(lid.lidFor(L - 5, 'wild'), 'wild', 'chose wild is not never chose');
   assert.equal(lid.colossusChoice(), null); assert.equal(lid.colossusSleeps(5), true); assert.equal(lid.colossusSoothed(30), true);
   lid.setColossusLid('wild'); assert.equal(lid.colossusLid(5), 'wild');
-  lid.setColossusLid('auto'); assert.equal(lid.colossusChoice(), null, 'Automatic brings the rule back'); assert.equal(store.get('zoo-colossus-sleeps'), 'auto');
+  lid.setColossusLid('auto'); assert.equal(lid.colossusChoice(), null, 'Automatic brings the rule back'); assert.equal(store.get('cute-game-boat:zoo-colossus-sleeps'), 'auto');
   assert.equal(lid.colossusLid(5), 'asleep'); assert.equal(lid.colossusLid(25), 'soothed');
 });
 

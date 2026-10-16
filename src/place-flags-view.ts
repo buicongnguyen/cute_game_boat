@@ -131,7 +131,7 @@ export interface FlagHost {
   storage?: Pick<Storage, 'getItem' | 'setItem'> | null;
 }
 
-const MIRROR_KEY = 'zoo-garden-flags-online';
+const MIRROR_KEY = 'cute-game-boat:zoo-garden-flags-online';
 export function mountPlaceFlags(host: FlagHost) {
   const { geometry, material, color } = kit();
   const plantAt = new T.InstancedBufferAttribute(new Float32Array(FLAG_CAPACITY), 1);

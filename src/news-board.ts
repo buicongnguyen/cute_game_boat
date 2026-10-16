@@ -8,7 +8,7 @@ import { t, getLanguage, onLanguageChange, type Language } from './i18n.ts';
  * device (localStorage READ_KEY). When something is unread the dialog opens by itself on News 2.5 s after load, retrying
  * every 2 s (up to 40 times) until the game has started and no other panel is open, like the reference.
  */
-export const READ_KEY = 'zoo-news-read';
+export const READ_KEY = 'cute-game-boat:zoo-news-read';
 export const AUTO_OPEN = { firstMs: 2500, retryMs: 2000, tries: 40 } as const;
 type Text = Record<Language, string>;
 type Lines = Record<Language, string[]>;

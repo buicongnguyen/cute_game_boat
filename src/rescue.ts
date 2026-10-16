@@ -51,9 +51,9 @@ export interface RescueHooks {
   /** The explorer's attack and skill timers (gameplay-controls.ts CombatTimers) and the skills' full lengths, for the Me tab's boosts. */
   combatTimers?: { attackCooldown: number; skills: number[] }; skillDurations?: number[];
 }
-const COOLDOWN_KEY = 'zoo-rescue-ready-at';
+const COOLDOWN_KEY = 'cute-game-boat:zoo-rescue-ready-at';
 const RECOVERY_MS = 3 * 60_000;
-const SOS_KEY = 'zoo-rescue-sos', CALLS_KEY = 'zoo-rescue-calls';
+const SOS_KEY = 'cute-game-boat:zoo-rescue-sos', CALLS_KEY = 'cute-game-boat:zoo-rescue-calls';
 const esc = (v: string) => v.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]!));
 const itemIcon = (id: string) => assetUrl(`icons/items/${id}.webp`);
 const planetName = (id: MissionId) => t(PLANETS[MISSIONS[id].planet].name);
@@ -245,7 +245,7 @@ export function initRescue(h: RescueHooks) {
     world.pointer = (x: number, y: number) => { const pad = padAt(x, y); if (pad >= 0 && s.m.phase !== 'over') { selectPad(pad, false); world.destination = null; world.route = []; world.marker.visible = false; return; } saved.pointer.call(world, x, y); };
     const me = runHero(m); const at = toWorld(me, o); teleport(at.x, at.z, facingToWorld(Math.PI / 2, o));
     st.hp = h.maxHp(); s.hpWritten = st.hp;
-    try { localStorage.setItem('zoo-rescue-restore', JSON.stringify({ hp: saved.hp })); } catch { /* optional */ }
+    try { localStorage.setItem('cute-game-boat:zoo-rescue-restore', JSON.stringify({ hp: saved.hp })); } catch { /* optional */ }
     document.body.classList.add('in-rescue', 'in-mode'); document.body.dataset.rescueOrient = o;
     hud.hidden = false; tags.hidden = false; panel.hidden = false; panel.classList.remove('folded'); bubble.hidden = true;
     selectPad(nearestEmptyPad(s), false);
@@ -315,13 +315,13 @@ export function initRescue(h: RescueHooks) {
     wasRecovering = true;
     try { localStorage.setItem(COOLDOWN_KEY, String(Date.now() + RECOVERY_MS)); } catch { /* storage optional */ }
     session = null; world.selected = null; world.ring.visible = false; world.movementLocked = false;
-    try { localStorage.removeItem('zoo-rescue-restore'); } catch { /* fine */ }
+    try { localStorage.removeItem('cute-game-boat:zoo-rescue-restore'); } catch { /* fine */ }
     document.body.classList.remove('in-rescue', 'in-mode'); delete document.body.dataset.rescueOrient;
     hud.hidden = panel.hidden = tags.hidden = down.hidden = true; tags.innerHTML = ''; tagEls.clear();
     decorateHome(); h.refreshPlayer(); h.updateHud(); h.toast(t('Welcome back from the rescue.'), '📯');
   }
   /** A reload in the middle of a mission: the explorer's health comes back (nothing else was ever saved). */
-  function restoreAfterReload() { try { const raw = localStorage.getItem('zoo-rescue-restore'); if (!raw) return; localStorage.setItem(COOLDOWN_KEY, String(Date.now() + RECOVERY_MS)); wasRecovering = true; localStorage.removeItem('zoo-rescue-restore'); const v = JSON.parse(raw) as { hp: number }; if (Number.isFinite(v.hp) && v.hp > 0) h.state().hp = Math.min(h.maxHp(), v.hp); } catch { /* nothing */ } }
+  function restoreAfterReload() { try { const raw = localStorage.getItem('cute-game-boat:zoo-rescue-restore'); if (!raw) return; localStorage.setItem(COOLDOWN_KEY, String(Date.now() + RECOVERY_MS)); wasRecovering = true; localStorage.removeItem('cute-game-boat:zoo-rescue-restore'); const v = JSON.parse(raw) as { hp: number }; if (Number.isFinite(v.hp) && v.hp > 0) h.state().hp = Math.min(h.maxHp(), v.hp); } catch { /* nothing */ } }
 
   // ---------------------------------------------------------------- the frame
   const camQ = new T.Quaternion(), rootQ = new T.Quaternion(), lookAt = new T.Vector3();

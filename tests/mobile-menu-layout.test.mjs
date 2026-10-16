@@ -16,7 +16,7 @@ for (const [width, height] of [[320, 568], [390, 844], [844, 390]]) {
       for (const lang of ['en', 'vi']) {
         const context = await browser.newContext({ viewport: { width, height }, isMobile: true, hasTouch: true });
         const page = await context.newPage();
-        await page.addInitScript(lang => { localStorage.setItem('cute-game-language', lang); localStorage.setItem('cute-game-neighbours-on', '0'); }, lang);
+        await page.addInitScript(lang => { localStorage.setItem('cute-game-boat:cute-game-language', lang); localStorage.setItem('cute-game-boat:cute-game-neighbours-on', '0'); }, lang);
         await page.routeWebSocket(u => new URL(u).searchParams.has('token'), () => {});
         await page.goto(url, { waitUntil: 'load', timeout: 60000 });
         await page.waitForFunction(() => !document.querySelector('#title-screen').inert);

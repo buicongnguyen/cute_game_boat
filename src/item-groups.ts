@@ -54,7 +54,7 @@ export function groupItems<T>(list: readonly T[], idOf: (entry: T) => string, or
     .map(id => ({ id, ...GROUPS[id], entries: sortByPower(buckets.get(id)!, idOf, priceOf, scoreOf) }));
 }
 
-const FOLD_KEY = 'zoo-garden-folded-groups';
+const FOLD_KEY = 'cute-game-boat:zoo-garden-folded-groups';
 let folded: Set<string> | null = null;
 function folds() {
   if (folded) return folded;

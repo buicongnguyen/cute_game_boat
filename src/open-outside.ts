@@ -24,7 +24,7 @@ export function chromeIntent(href: string) {
 export function initOpenOutside() {
   const app = inAppBrowser(), frame = !app && framed();
   if (!app && !frame) return;
-  try { if (sessionStorage.getItem('zoo-open-outside') === 'closed') return; } catch { /* storage blocked: show it */ }
+  try { if (sessionStorage.getItem('cute-game-boat:zoo-open-outside') === 'closed') return; } catch { /* storage blocked: show it */ }
   const bar = document.createElement('div'); bar.className = 'open-outside'; bar.setAttribute('role', 'status');
   const text = document.createElement('span'), go = document.createElement('button'), close = document.createElement('button');
   go.type = 'button'; close.type = 'button'; close.className = 'open-outside-close'; close.textContent = '✕';
@@ -41,6 +41,6 @@ export function initOpenOutside() {
     // iPhone in-app browsers cannot hand over to Safari from a page: copy the link and point at the app's own menu.
     void navigator.clipboard?.writeText(href).then(() => { go.textContent = t('Link copied'); }, () => {});
   });
-  close.addEventListener('click', () => { bar.remove(); try { sessionStorage.setItem('zoo-open-outside', 'closed'); } catch { /* ignore */ } });
+  close.addEventListener('click', () => { bar.remove(); try { sessionStorage.setItem('cute-game-boat:zoo-open-outside', 'closed'); } catch { /* ignore */ } });
   bar.append(text, go, close); document.body.append(bar);
 }

@@ -35,7 +35,7 @@ export const badgeText = (count: number) => count > 9 ? '9+' : count > 0 ? Strin
 const NEIGHBOURS = 5;
 const read = (key: string) => { try { return localStorage.getItem(key); } catch { return null; } };
 const write = (key: string, value: string) => { try { localStorage.setItem(key, value); } catch { /* the week starts again next visit */ } };
-const weekKeyFor = () => `cute-game-ranking-week-v1-slot${activeSlot() + 1}`;
+const weekKeyFor = () => `cute-game-boat:cute-game-ranking-week-v1-slot${activeSlot() + 1}`;
 const el = <K extends keyof HTMLElementTagNameMap>(tag: K, className = '', text = '') => { const node = document.createElement(tag); if (className) node.className = className; if (text) node.textContent = text; return node; };
 // Header of the native panels as in the bottom-sheet panels: icon tile, kicker, title. Kept local so each file loads standalone.
 const headerParts = (icon: string, kicker: string, heading: HTMLElement) => { const tile = el('span', 'social-icon', icon); tile.setAttribute('aria-hidden', 'true'); const text = el('div', 'social-title'); text.append(el('span', 'social-kicker eyebrow', t(kicker)), heading); return [tile, text]; };

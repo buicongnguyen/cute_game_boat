@@ -2,7 +2,7 @@ import { spawnSync } from 'node:child_process';
 
 const env = {
   ...process.env,
-  VITE_BASE_PATH: process.env.VITE_BASE_PATH || '/cute_game/',
+  VITE_BASE_PATH: process.env.VITE_BASE_PATH || '/cute_game_boat/',
   VITE_STATIC_HOST: 'true',
 };
 for (const args of [

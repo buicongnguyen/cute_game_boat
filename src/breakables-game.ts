@@ -43,7 +43,7 @@ export function mountBreakables(d: BreakGameDeps): BreakablesView {
     now: () => w.time, online: d.online, send: d.send,
     drop: type => { const n = grantBreakDrop(d.state(), type, Date.now(), (id, k) => d.addItem(id, k)); if (n) d.changed(); return n; },
     note: (kind, n) => {
-      if (kind === 'first-break') { let seen = false; try { seen = localStorage.getItem('zoo-garden-break-note') === '1'; localStorage.setItem('zoo-garden-break-note', '1'); } catch { /* private mode: once per visit */ } if (!seen && !firstShown) d.toast(BREAK_NOTES.first, '🪓'); firstShown = true; }
+      if (kind === 'first-break') { let seen = false; try { seen = localStorage.getItem('cute-game-boat:zoo-garden-break-note') === '1'; localStorage.setItem('cute-game-boat:zoo-garden-break-note', '1'); } catch { /* private mode: once per visit */ } if (!seen && !firstShown) d.toast(BREAK_NOTES.first, '🪓'); firstShown = true; }
       else if (kind === 'held') { if (w.time - heldAt > 20) { heldAt = w.time; d.toast(BREAK_NOTES.held, '🛡️'); } }
       else if (kind === 'wood' && n) { const key = Object.keys(d.state().worldRewards.resourceReadyAt).find(k => k.startsWith('break-wood:')), count = key ? d.state().worldRewards.resourceReadyAt[key] : n; d.toast(d.t(BREAK_NOTES.wood, { n, count, cap: BREAK.wood.daily }), '🪵'); }
     },

@@ -20,7 +20,7 @@ export const COLOSSUS_LEVEL = 20;
 export const SOOTHE_FACTOR = 50;
 /** The solo Colossus has about 1,000,000 health; soothed it has a fifth of that: about 200,000. */
 export const SOOTHE_HP_DIVISOR = 5;
-const KEY = 'zoo-colossus-sleeps';
+const KEY = 'cute-game-boat:zoo-colossus-sleeps';
 /** The player's own lid at the well, or null for the automatic rule (never chose, or chose Automatic). */
 let chosen: ColossusLid | null = null;
 // '1' is what the first version stored for "asleep"; 'auto' (or nothing) is the rule.

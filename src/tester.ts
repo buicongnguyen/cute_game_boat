@@ -38,7 +38,7 @@ export async function codeMatches(raw: string, subtle: SubtleCrypto | undefined 
 /** At most `limit` tries in any rolling minute; a sliding window kept in memory (a reload resets it, which is fine offline). */
 export interface TriesStore { get(): string | null; set(value: string): void }
 /** The tries kept in localStorage, so a reload does not reset the limit (storage is optional: blocked = in memory only). */
-export const savedTries = (key = 'zoo-garden-tester-tries'): TriesStore => ({
+export const savedTries = (key = 'cute-game-boat:zoo-garden-tester-tries'): TriesStore => ({
   get() { try { return globalThis.localStorage?.getItem(key) ?? null; } catch { return null; } },
   set(value) { try { globalThis.localStorage?.setItem(key, value); } catch { /* keep the in-memory window */ } },
 });

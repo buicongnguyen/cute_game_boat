@@ -210,7 +210,7 @@ export interface SaveState {
     placeFlags?: PlaceFlags;
 }
 export const COLORS = ['#4aa8ff', '#ff7ab0', '#6fd35a', '#ffb13d', '#a07bff', '#ff5a5a'];
-export const SAVE_KEY = 'cute-game-save-v1';
+export const SAVE_KEY = 'cute-game-boat:cute-game-save-v1';
 /** A critical hit deals this many times the normal damage (combat.ts). */
 export const CRIT_DAMAGE = 4;
 /** A critical hit landed from a jump (air swing, dive, air skills) deals this many times the damage instead. */

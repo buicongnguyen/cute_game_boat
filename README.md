@@ -1,4 +1,6 @@
-# Zoo Garden
+# Cute Game Boat
+
+Independent copy of [cute_game](https://github.com/buicongnguyen/cute_game), prepared for gradual asset replacement. The initial gameplay and in-game artwork are retained. See [the fork and asset replacement guide](docs/boat-fork.md).
 
 A browser adventure built against the gameplay of Zoo Pet, with independently authored Three.js code, original Blender assets, and local multiplayer services. The expanded build includes the reference crop, equipment, creature, progression and crafting catalogs, along with full-size worlds and their activities.
 
@@ -94,17 +96,17 @@ The dense worlds stay light: repeated scenery is drawn as instances in 64 m tile
 
 ## GitHub Pages edition
 
-Play the [solo browser edition](https://buicongnguyen.github.io/cute_game/). The full source is available in the [public GitHub repository](https://github.com/buicongnguyen/cute_game).
+Play the [solo browser edition](https://buicongnguyen.github.io/cute_game_boat/). The full source is available in the [public GitHub repository](https://github.com/buicongnguyen/cute_game_boat).
 
 ```sh
 npm run build:pages
 ```
 
-This creates only the playable static files in `dist/`, with the `/cute_game/` path prefix. It includes farming, fishing, combat, all worlds and progression, original runtime models, browser saves and offline installation. The Pages interface clearly identifies solo play. Accounts, friends, chat and shared worlds require the Node/WebSocket service and remain available with `npm run dev`, `npm start`, or the prepared [Render + Neon deployment](docs/multiplayer-deployment.md); GitHub Pages cannot run that service.
+This creates only the playable static files in `dist/`, with the `/cute_game_boat/` path prefix. It includes farming, fishing, combat, all worlds and progression, original runtime models, browser saves and offline installation. The Pages interface clearly identifies solo play. Accounts, friends, chat and shared worlds require the Node/WebSocket service and remain available with `npm run dev`, `npm start`, or the prepared [Render + Neon deployment](docs/multiplayer-deployment.md); GitHub Pages cannot run that service.
 
 The Pages workflow runs all tests before publishing `dist/` from `main`. Source files, editable Blender artwork and account data are not included in the website artifact. `VITE_BASE_PATH` can override the deployment directory; the normal build remains rooted at `/`.
 
-Browser saves are local to each website address. The published site starts a separate adventure from the localhost game.
+Browser storage is isolated with the `cute-game-boat:` key prefix. Although the original game and this site share the `buicongnguyen.github.io` origin, their saves, profiles, settings and recovery records remain separate. This fork starts a fresh adventure and does not automatically import the original game’s saves. Offline caches and service workers are separately scoped to `/cute_game_boat/`.
 ## Source guide
 
 - `src/content.ts`, `model.ts`, `progression.ts`: catalog, game rules, persistence and rewards.

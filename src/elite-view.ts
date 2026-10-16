@@ -21,7 +21,7 @@ export const eliteKit = new KitLibrary([modelUrl('elite.glb')]);
 const CAP = 16, VIEW = 40, SHARD = ['#bff4ff', '#7fe3ff', '#ffffff', '#5cc8f0'];
 type Look = { flash: number; grow: number; glass?: boolean; seen?: boolean; wasAlive?: boolean; /** The model's half width and height at scale 1 (measured once). */ foot?: number; tall?: number; /** When 'Deflected' last showed. */ said?: number };
 const box = new T.Box3();
-const SEEN_KEY = 'zoo-elite-seen';
+const SEEN_KEY = 'cute-game-boat:zoo-elite-seen';
 
 function seenRoles(): Set<string> { try { return new Set(JSON.parse(localStorage.getItem(SEEN_KEY) ?? '[]')); } catch { return new Set(); } }
 function rememberRole(id: string) { try { const s = seenRoles(); s.add(id); localStorage.setItem(SEEN_KEY, JSON.stringify([...s])); } catch { /* a private window: the toast may show again */ } }

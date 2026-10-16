@@ -121,8 +121,8 @@ import { initDeathBags } from './death-bags-view.ts';
 import { Sfx, type Sound } from './sfx.ts';
 import { audioOf, audioRowsHtml, bindAudioSliders, syncAudio } from './audio-settings.ts';
 import { CAMERA_PITCH, cameraPitch, setCameraPitch, type CameraPreset } from './camera-rig.ts';
-try{setCameraPitch(localStorage.getItem('zoo-camera-view')??CAMERA_PITCH.initial);}catch{setCameraPitch(CAMERA_PITCH.initial);}
-function saveCameraPitch(){try{localStorage.setItem('zoo-camera-view',String(cameraPitch()));}catch{/* this visit only */}}
+try{setCameraPitch(localStorage.getItem('cute-game-boat:zoo-camera-view')??CAMERA_PITCH.initial);}catch{setCameraPitch(CAMERA_PITCH.initial);}
+function saveCameraPitch(){try{localStorage.setItem('cute-game-boat:zoo-camera-view',String(cameraPitch()));}catch{/* this visit only */}}
 // The slider turns the camera while it is dragged and saves when it is let go.
 if(typeof document!=='undefined'){document.addEventListener('input',e=>{const i=e.target as HTMLInputElement|null;if(!i?.matches?.('[data-camera-pitch]'))return;setCameraPitch(Number(i.value)>=52?CAMERA_PITCH.max:Number(i.value));world.resize();const o=document.querySelector('[data-camera-pitch-out]');if(o)o.textContent=`${Math.round(cameraPitch())}°`;});document.addEventListener('change',e=>{if((e.target as Element|null)?.matches?.('[data-camera-pitch]')){saveCameraPitch();settings();}});}
 import { loadGraphics, saveGraphics, QUALITY, RESOLUTION, RESOLUTION_SETTINGS, type QualitySetting, type ResolutionSetting } from './graphics.ts';
@@ -418,7 +418,7 @@ function pairSwap(to:Hand,forced=false){const side=!!sideGun(state);if(!pair.swa
 let pairFace='',pairEl:HTMLButtonElement|null=null;function pairButton(){const b=pairEl?.isConnected?pairEl:(pairEl=document.querySelector<HTMLButtonElement>('#pair-swap'));if(!b)return;const on=started&&!!sideGun(state)&&!visiting;if(!on&&pairFace==='off')return; // the usual case (no side gun): nothing built per frame
   const face=on?`${pair.hand}|${state.gear.side}|${state.gear.weapon}|${pairMode(state)}`:'off';if(face===pairFace)return;pairFace=face;b.hidden=!on;document.body.classList.toggle('pair-on',on);if(on){b.innerHTML=`<span>${art(pair.hand==='main'?state.gear.side!:state.gear.weapon??'',swapFace(state,pair.hand))}</span>`;b.classList.toggle('manual',pairMode(state)==='manual');}}
 frameListeners.add(()=>{if(!started)return;const side=!!sideGun(state);pairButton();
-  if(!pairNoted&&sideOpen(state)){pairNoted=true;let seen=false;try{seen=localStorage.getItem('zoo-garden-pair-note')==='1';localStorage.setItem('zoo-garden-pair-note','1');}catch{/* private mode: shown once per visit */}if(!seen&&inbox.announce({kind:'unlock',icon:'🔫',title:'Side slot unlocked!',text:'Put a gun in it from the bag or the shop: far targets get the gun, close ones the blade.',open:'bag'}))toast('Side slot unlocked! Put a gun in it from the bag or the shop: far targets get the gun, close ones the blade.','🔫');}
+  if(!pairNoted&&sideOpen(state)){pairNoted=true;let seen=false;try{seen=localStorage.getItem('cute-game-boat:zoo-garden-pair-note')==='1';localStorage.setItem('cute-game-boat:zoo-garden-pair-note','1');}catch{/* private mode: shown once per visit */}if(!seen&&inbox.announce({kind:'unlock',icon:'🔫',title:'Side slot unlocked!',text:'Put a gun in it from the bag or the shop: far targets get the gun, close ones the blade.',open:'bag'}))toast('Side slot unlocked! Put a gun in it from the bag or the shop: far targets get the gun, close ones the blade.','🔫');}
   if(!side){if(pair.hand==='side'){pair.settle(false);delete state.hand;world.showHand('main');pairButton();}return;}
   if(pairMode(state)!=='auto'||visiting||fishGame||pairClock()<pairHeldUntil)return;
   const chosen=world.selected?.kind==='enemy'?world.selected as Enemy:null,edge=pairTarget(world.position,chosen,world.enemies,e=>aggro(e as Enemy));
@@ -1026,14 +1026,14 @@ function petShooter(index:0|1){
   if(cache.fighter){cache.fighter.x=at.x;cache.fighter.z=at.z;}return cache.fighter;
 }
 /**
- * The old Settings switch 'Guard dog follows me' (this device, 'zoo-dog-stays') is gone: who comes along is chosen in the
+ * The old Settings switch 'Guard dog follows me' (this device, 'cute-game-boat:zoo-dog-stays') is gone: who comes along is chosen in the
  * bag. A player who had switched it off keeps a dog that stays home: the dog pet is taken off once, then the key is removed.
  */
 async function migrateDogStays(){
-  let stays=false;try{stays=localStorage.getItem('zoo-dog-stays')==='1';if(!stays)localStorage.removeItem('zoo-dog-stays');}catch{return;}
+  let stays=false;try{stays=localStorage.getItem('cute-game-boat:zoo-dog-stays')==='1';if(!stays)localStorage.removeItem('cute-game-boat:zoo-dog-stays');}catch{return;}
   if(!stays||!M.ownsDog(state))return; // no dog in this save yet: the choice waits for the one that has it
   const slot=M.slotWearing(state.gear,M.DOG_PET);if(slot&&!await perform('unequip',{slot},{quiet:true}))return; // refused (offline hiccup): try again next time
-  try{localStorage.removeItem('zoo-dog-stays');}catch{/* asked again next time: harmless */}
+  try{localStorage.removeItem('cute-game-boat:zoo-dog-stays');}catch{/* asked again next time: harmless */}
   if(slot){world.refreshPlayer();save();}
 }
 async function buyAnimal(kind:M.AnimalKind){
@@ -1559,7 +1559,7 @@ async function eatFood(id:M.ItemId){
   if(ok){const healed=Math.round(state.hp-before);if(healed>0)floating(`+${healed} ❤️`,world.position.x,world.position.z,'item');tone('pop');}
   return !!ok;
 }
-const QUICK_EAT_KEY='zoo-garden-quick-eat';
+const QUICK_EAT_KEY='cute-game-boat:zoo-garden-quick-eat';
 let quickEatChoice:FoodChoice=(()=>{try{return (localStorage.getItem(QUICK_EAT_KEY)||'auto') as FoodChoice;}catch{return 'auto';}})(),quickEatShown='';
 /** The quick-eat button: tap eats the best fit (or the picked food); greyed out but still tappable when it cannot help. */
 async function quickEat(){
@@ -2021,8 +2021,8 @@ const gardenGuide=mountGardenGuide({world,hud:$('#hud'),state:()=>state,bedAt:i=
  * turns it back on.
  */
 let chapterGoal:(GuideGoal&{radius:number})|null=null,goalClock=0,guideOff=false,guideOffKey='';
-function guideIsOff(){const key=`zoo-guide-off:${activeKey()}`;if(key!==guideOffKey){guideOffKey=key;try{guideOff=localStorage.getItem(key)==='1';}catch{guideOff=false;}}return guideOff;}
-function setGuideOff(off:boolean){guideOff=off;guideOffKey=`zoo-guide-off:${activeKey()}`;try{if(off)localStorage.setItem(guideOffKey,'1');else localStorage.removeItem(guideOffKey);}catch{/* lasts for this visit */}}
+function guideIsOff(){const key=`cute-game-boat:zoo-guide-off:${activeKey()}`;if(key!==guideOffKey){guideOffKey=key;try{guideOff=localStorage.getItem(key)==='1';}catch{guideOff=false;}}return guideOff;}
+function setGuideOff(off:boolean){guideOff=off;guideOffKey=`cute-game-boat:zoo-guide-off:${activeKey()}`;try{if(off)localStorage.setItem(guideOffKey,'1');else localStorage.removeItem(guideOffKey);}catch{/* lasts for this visit */}}
 const GOAL_LABEL:Record<string,string>={sell:'🧺 Sell at the market',shop:'🗡️ Buy or craft here',upgrade:'💎 The wishing crystal',fish:'🎣 Fish here',cook:'🍳 Cook here',travel:'🚀 Your starship',enemy:'⚔️ Defeat creatures'};
 function findChapterGoal():(GuideGoal&{radius:number})|null{
   if(!started||!chapterOneGuide(state)||guideIsOff()||uiBlocked()||visiting||world.interior||world.planet!=='home'||world.state!==state)return null;
@@ -2479,7 +2479,7 @@ requestAnimationFrame(frame);
 
 
 function refreshDocumentLanguage(){
-  document.title=t('Zoo Garden — A little world of adventure');
+  document.title=t('Cute Game Boat — A little world of adventure');
   document.querySelector('meta[name="description"]')?.setAttribute('content',t('A cozy little 3D world. Plant a garden, catch fish, battle monsters, and explore new planets.'));
 }
 refreshDocumentLanguage();

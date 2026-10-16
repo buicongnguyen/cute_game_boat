@@ -151,7 +151,7 @@ test('runtime: an old save is backfilled silently; online the flags come back af
   r.flags.rebuild();
   assert.deepEqual(Object.keys(r.state.placeFlags!).sort(), ['candy', 'toy']); assert.deepEqual(r.toasts, [], 'no toast for the backfill');
   r.at(-30, 2); assert.deepEqual(r.toasts, ['forest']);
-  assert.ok(JSON.parse(r.store.get('zoo-garden-flags-online')!).Rig.forest, 'kept in this browser for the account');
+  assert.ok(JSON.parse(r.store.get('cute-game-boat:zoo-garden-flags-online')!).Rig.forest, 'kept in this browser for the account');
   // A server update replaces the save without flags (main.ts applyAuthoritativeState drops unknown keys).
   delete r.state.placeFlags; r.at(-31, 2);
   assert.ok(r.state.placeFlags!.forest, 'restored'); assert.deepEqual(r.toasts, ['forest'], 'and not planted again');

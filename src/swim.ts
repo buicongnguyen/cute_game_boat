@@ -28,7 +28,7 @@ export interface SwimApi {
   readonly state: SwimState;
 }
 
-const TIP_KEY = 'zoo-swim-tips';
+const TIP_KEY = 'cute-game-boat:zoo-swim-tips';
 function tipSeen(id: string) { try { return (localStorage.getItem(TIP_KEY) ?? '').split(',').includes(id); } catch { return true; } }
 function markTip(id: string) { try { const seen = (localStorage.getItem(TIP_KEY) ?? '').split(',').filter(Boolean); if (!seen.includes(id)) localStorage.setItem(TIP_KEY, [...seen, id].join(',')); } catch { /* private mode: the tip may show again */ } }
 

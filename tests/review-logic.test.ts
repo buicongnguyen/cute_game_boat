@@ -69,7 +69,7 @@ test('gear a friend got before borrowing (only copy) comes back to the bag once,
 
 test('each save profile has its own "resume indoors" flag', () => {
   const keys = Array.from({ length: PROFILE_SLOTS }, (_, i) => indoorsKey(i));
-  assert.equal(new Set(keys).size, PROFILE_SLOTS); assert.equal(keys[0], 'zoo-garden-indoors', 'profile 1 keeps the old key');
+  assert.equal(new Set(keys).size, PROFILE_SLOTS); assert.equal(keys[0], 'cute-game-boat:zoo-garden-indoors', 'profile 1 keeps the old key');
   for (let i = 0; i < PROFILE_SLOTS; i++) assert.notEqual(indoorsKey(i), slotKey(i));
   const ui = readFileSync(new URL('../src/house-ui.ts', import.meta.url), 'utf8');
   assert.doesNotMatch(ui, /INSIDE_KEY/); assert.match(ui, /localStorage\.getItem\(indoorsKey\(\)\)/);

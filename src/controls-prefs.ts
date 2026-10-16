@@ -1,5 +1,5 @@
 /**
- * The Controls preferences, per device (localStorage 'zoo-garden-controls', like the graphics setting): which side the
+ * The Controls preferences, per device (localStorage 'cute-game-boat:zoo-garden-controls', like the graphics setting): which side the
  * fight buttons stand on, their size and resting opacity, the custom layouts per screen type and the custom PC keys.
  * None of it is in the synced save: a phone and a PC want different hands, sizes and keys.
  *
@@ -9,7 +9,7 @@
  */
 import { cleanLayout, OPACITIES, SCREEN_TYPES, SIZES, type ButtonOpacity, type ButtonSize, type Layout, type ScreenType } from './controls-layout.ts';
 
-export const CONTROLS_STORE = 'zoo-garden-controls';
+export const CONTROLS_STORE = 'cute-game-boat:zoo-garden-controls';
 export interface ControlsPrefs {
   side?: 'left' | 'right'; size?: ButtonSize; opacity?: ButtonOpacity;
   layouts?: Partial<Record<ScreenType, Layout>>;

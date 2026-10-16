@@ -6,7 +6,7 @@ import { eatKey, keyboardBindings } from './gameplay-controls.ts';
 import { keyLabel, type KeyAction } from './controls-keys.ts';
 import { t } from './i18n.ts';
 
-export const KEYS_GUIDE_KEY = 'zoo-garden-keys-guide';
+export const KEYS_GUIDE_KEY = 'cute-game-boat:zoo-garden-keys-guide';
 export const KEYS_LEARNED = 120;
 export interface KeysGuideMemory { mode: 'auto' | 'open' | 'closed'; uses: number }
 export function readGuide(store: Pick<Storage, 'getItem'> | null): KeysGuideMemory {

@@ -59,7 +59,7 @@ for(const status of [410,426])test(`expired receipt (${status}) refreshes the ad
   await assert.rejects(app.bridge.perform({type:'giftFriend',payload:{ownerId:'bob',item:'carrot',count:1}}),/cannot be retried safely/);
   assert.equal(app.requests.filter(r=>r.url.endsWith('/actions')).length,1);
   assert.equal(app.bridge.getState().name,'Latest saved');
-  assert.deepEqual(JSON.parse(app.storage.get('cute-game-actions-alice')),[]);
+  assert.deepEqual(JSON.parse(app.storage.get('cute-game-boat:cute-game-actions-alice')),[]);
 });
 
 test('previously submitted legacy browser jobs retain their identity and never invent an origin revision',async()=>{
@@ -67,7 +67,7 @@ test('previously submitted legacy browser jobs retain their identity and never i
   const app=await fixture({initialActions:[job],responseFor(url){if(url.endsWith('/actions'))return{ok:false,status:426,json:async()=>({error:'Reconnect to use server-approved actions.'})};}});
   const sent=app.requests.filter(r=>r.url.endsWith('/actions')).map(r=>JSON.parse(r.options.body));
   assert.equal(sent.length,1);assert.equal(sent[0].requestId,oldId);assert.equal(sent[0].expectedRevision,514);assert.equal(sent[0].originalRevision,undefined);
-  assert.deepEqual(JSON.parse(app.storage.get('cute-game-actions-alice')),[]);
+  assert.deepEqual(JSON.parse(app.storage.get('cute-game-boat:cute-game-actions-alice')),[]);
 });
 test('Enter opens chat but composition and typing keep their normal Enter behavior',async()=>{
   const app=await fixture();app.dialog.close();const key=app.document.listeners.get('keydown');let prevented=0;
@@ -84,7 +84,7 @@ test('selecting an explorer offers a friend request addressed by immutable playe
 async function fixture({failFirstAction=false,responseFor,initialActions}={}){
   let session=sessionFor(),state=newGame('Offline'),language='en',timerId=0;
   const document=new Element(),window=new Element(),body=new Element(),slot=new Element(),timers=new Map(),sockets=[],requests=[],notices=[],visits=[],languageListeners=[],storage=new Map(),spawned=[];
-  if(initialActions)storage.set('cute-game-actions-alice',JSON.stringify(initialActions));
+  if(initialActions)storage.set('cute-game-boat:cute-game-actions-alice',JSON.stringify(initialActions));
   document.body=body;document.createElement=tag=>Object.assign(new Element(tag),{ownerDocument:document});document.createTextNode=textContent=>Object.assign(new Element('text'),{textContent});document.querySelector=selector=>selector==='#social-slot'?slot:null;
   const setTimeout=(fn,delay)=>{const id=++timerId;timers.set(id,{fn,delay});return id;},clearTimeout=id=>timers.delete(id);
   window.setTimeout=setTimeout;window.clearTimeout=clearTimeout;
@@ -202,7 +202,7 @@ test('switching accounts preserves the old pending queue without executing it as
   const original=JSON.parse(app.requests.find(r=>r.url.endsWith('/actions')).options.body);
   app.button('🏡 Account').click();app.setSession(sessionFor('bob'));await app.button('Reconnect').click();await flush();app.join();
   assert.match(await pending,/session ended/);assert.equal(app.requests.filter(r=>r.url.endsWith('/actions')).length,1);
-  assert.equal(JSON.parse(app.storage.get('cute-game-actions-alice'))[0].requestId,original.requestId);
+  assert.equal(JSON.parse(app.storage.get('cute-game-boat:cute-game-actions-alice'))[0].requestId,original.requestId);
   await app.bridge.perform({type:'settings',payload:{settings:{sound:false}}});
   const sent=app.requests.filter(r=>r.url.endsWith('/actions')).map(r=>JSON.parse(r.options.body));
   assert.deepEqual(sent.map(job=>job.type),['buy','settings']);assert.equal(app.bridge.getState().name,'bob');

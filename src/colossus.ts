@@ -93,7 +93,7 @@ export class ColossusEvent {
 
   constructor(host: ColossusHost) {
     this.h = host;
-    try { this.killedDay = Number(localStorage.getItem('zoo-colossus-killed') ?? -1); } catch { this.killedDay = -1; }
+    try { this.killedDay = Number(localStorage.getItem('cute-game-boat:zoo-colossus-killed') ?? -1); } catch { this.killedDay = -1; }
     this.banner = document.createElement('div'); this.banner.id = 'colossus-banner'; this.banner.hidden = true; this.banner.setAttribute('role', 'status');
     // A small badge on the map's edge on every screen (hud-ours.css); a tap opens the whole card under the map, another closes it.
     this.banner.addEventListener('click', () => { this.bannerOpen = !this.bannerOpen; this.banner.classList.toggle('open', this.bannerOpen); clearTimeout(this.bannerShut);
@@ -390,7 +390,7 @@ export class ColossusEvent {
   private defeated() {
     const e = this.enemy; if (!e || e.hp > 0 || this.dying > 0 || this.h.online()) return;
     const now = Date.now(), helpers = colossusContributors(this.lastHits, this.killer, now, S.contributionWindow, id => id.startsWith(BOT_PREFIX));
-    this.killedDay = this.window(now).day; try { if (this.killedDay >= 0) localStorage.setItem('zoo-colossus-killed', String(this.killedDay)); } catch { /* a private window forgets it */ }
+    this.killedDay = this.window(now).day; try { if (this.killedDay >= 0) localStorage.setItem('cute-game-boat:zoo-colossus-killed', String(this.killedDay)); } catch { /* a private window forgets it */ }
     this.crumble();
     if (helpers.includes('local')) {
       const lastHit = this.killer === 'local', roar = roarHours(now).active; let extraXp = 0;

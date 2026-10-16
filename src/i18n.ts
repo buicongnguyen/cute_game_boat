@@ -1,5 +1,5 @@
 export type Language = 'en' | 'vi';
-export const LANGUAGE_KEY = 'cute-game-language';
+export const LANGUAGE_KEY = 'cute-game-boat:cute-game-language';
 // The Vietnamese phrases (about 250 KB of source) are a separate chunk: English players never download them, Vietnamese
 // players load them before the first screen (the top-level await below) or when they switch language (switchLanguage).
 let vi: Record<string, string> = Object.create(null);

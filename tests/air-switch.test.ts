@@ -21,9 +21,9 @@ const main = read('main.ts'), css = read('hud-ours.css');
 
 test('the switch is on by default, remembered per device, and anything but "off" reads as on', () => {
   const store = new Map<string, string>(), s = { getItem: (k: string) => store.get(k) ?? null, setItem: (k: string, v: string) => { store.set(k, v); } };
-  assert.equal(J.AIR_COMBAT_STORE, 'zoo-air-combat'); assert.equal(J.readAirCombat(s), true); assert.equal(J.readAirCombat(null), true);
-  J.saveAirCombat(s, false); assert.equal(store.get('zoo-air-combat'), 'off'); assert.equal(J.readAirCombat(s), false);
-  J.saveAirCombat(s, true); assert.equal(J.readAirCombat(s), true); store.set('zoo-air-combat', 'junk'); assert.equal(J.readAirCombat(s), true);
+  assert.equal(J.AIR_COMBAT_STORE, 'cute-game-boat:zoo-air-combat'); assert.equal(J.readAirCombat(s), true); assert.equal(J.readAirCombat(null), true);
+  J.saveAirCombat(s, false); assert.equal(store.get('cute-game-boat:zoo-air-combat'), 'off'); assert.equal(J.readAirCombat(s), false);
+  J.saveAirCombat(s, true); assert.equal(J.readAirCombat(s), true); store.set('cute-game-boat:zoo-air-combat', 'junk'); assert.equal(J.readAirCombat(s), true);
   assert.equal(J.readAirCombat({ getItem() { throw new Error('blocked'); } }), true);
 });
 

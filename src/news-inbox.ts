@@ -78,7 +78,7 @@ export function agoKey(at: number, now = Date.now()): [string, number] {
 }
 
 /** "Show announcements as pop-ups" (Settings): off by default, so announcements go to News. Kept on this device. */
-export const POPUPS_KEY = 'zoo-news-popups';
+export const POPUPS_KEY = 'cute-game-boat:zoo-news-popups';
 export function popupsOn(store: Pick<Storage, 'getItem'> | null = typeof localStorage === 'undefined' ? null : localStorage): boolean {
   try { return store?.getItem(POPUPS_KEY) === '1'; } catch { return false; }
 }

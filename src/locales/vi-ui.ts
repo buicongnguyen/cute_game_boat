@@ -477,6 +477,7 @@ export const VI_UI: Record<string, string> = {
   'Start fresh': 'Bắt đầu lại',
   'A FRESH START': 'KHỞI ĐẦU MỚI',
   'Every adventure starts with a little seed.': 'Mọi cuộc phiêu lưu đều bắt đầu từ một hạt giống nhỏ.',
+  'Cute Game Boat — A little world of adventure': 'Cute Game Boat — Thế giới phiêu lưu nhỏ xinh',
   'Zoo Garden — A little world of adventure': 'Zoo Garden — Thế giới phiêu lưu nhỏ xinh',
   'A cozy little 3D world. Plant a garden, catch fish, battle monsters, and explore new planets.': 'Thế giới 3D nhỏ xinh và ấm áp. Trồng vườn, câu cá, chiến đấu với quái vật và khám phá các hành tinh mới.',
   'Store': 'Cất',

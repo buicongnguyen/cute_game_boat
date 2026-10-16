@@ -5,7 +5,7 @@ import { newGame, parseSave } from '../src/model.ts';
 import { restoreRowHtml } from '../src/save-guard-ui.ts';
 import { setLanguage, t } from '../src/i18n.ts';
 
-const KEY = 'cute-game-save-v1';
+const KEY = 'cute-game-boat:cute-game-save-v1';
 function memory(initial: Record<string, string> = {}): StorageLike & { data: Map<string, string> } {
   const data = new Map(Object.entries(initial));
   return {

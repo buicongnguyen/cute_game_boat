@@ -11,7 +11,7 @@ import { HOLD } from './five-rules.ts';
 /** What the Attack pad carries once jumping is on: the charge ring, the hold's fill and the overcharge mark. */
 export const ATTACK_CHARGE_HTML = '<i class="ap-ring" aria-hidden="true"></i><i class="ap-hold" aria-hidden="true"></i><b class="ap-x" aria-hidden="true">×2</b>';
 /** The hint shown the first time a charge is ready, once per device. */
-export const POWER_HINT_STORE = 'zoo-power-hold-hint';
+export const POWER_HINT_STORE = 'cute-game-boat:zoo-power-hold-hint';
 export function hintSeen(store: Pick<Storage, 'getItem'> | null) { try { return store?.getItem(POWER_HINT_STORE) === '1'; } catch { return true; } }
 export function markHint(store: Pick<Storage, 'setItem'> | null) { try { store?.setItem(POWER_HINT_STORE, '1'); } catch { /* storage blocked: it may show once more next visit */ } }
 /** The ring's fill in whole twentieths (one per hit at 20 hits a level): 0 to 100. */

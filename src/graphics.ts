@@ -56,7 +56,7 @@ export const RESOLUTION_SETTINGS: readonly ResolutionSetting[] = ['auto', 'sharp
 export const isResolution = (v: unknown): v is ResolutionSetting => typeof v === 'string' && (RESOLUTION_SETTINGS as readonly string[]).includes(v);
 /** The highest ratio a resolution setting allows on this device (Infinity: no cap beyond the quality level). */
 export const resolutionCap = (setting: ResolutionSetting, mobile: boolean) => setting === 'auto' ? (mobile ? PHONE_AUTO_RATIO : Infinity) : RESOLUTION[setting].ratio;
-export const QUALITY_KEY = 'zoo-garden-graphics';
+export const QUALITY_KEY = 'cute-game-boat:zoo-garden-graphics';
 /** Old mobile Auto levels were learned before the farm rendering optimizations and Sharp default. */
 export const AUTO_GRAPHICS_VERSION = 2;
 export interface StoredGraphics { setting?: QualitySetting; autoLevel?: QualityLevel | null; autoVersion?: number }

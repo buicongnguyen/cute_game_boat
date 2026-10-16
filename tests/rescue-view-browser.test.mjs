@@ -43,7 +43,7 @@ for (const [name, view] of Object.entries(VIEWS)) {
     const browser = await (await chromium()).launch({ args: ['--use-angle=d3d11', '--enable-gpu', '--ignore-gpu-blocklist'] });
     try {
       const ctx = await browser.newContext(view);
-      await ctx.addInitScript(s => { try { localStorage.setItem('cute-game-save-v1', s); localStorage.setItem('cute-game-slot', '0'); localStorage.setItem('cute-game-language', 'en'); } catch { /* fine */ } }, save);
+      await ctx.addInitScript(s => { try { localStorage.setItem('cute-game-boat:cute-game-save-v1', s); localStorage.setItem('cute-game-boat:cute-game-slot', '0'); localStorage.setItem('cute-game-boat:cute-game-language', 'en'); } catch { /* fine */ } }, save);
       const page = await ctx.newPage();
       await page.routeWebSocket(socketUrl => new URL(socketUrl).searchParams.has('token'), () => {});
       await page.goto(url, { waitUntil: 'load', timeout: 60000 });
