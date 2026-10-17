@@ -9,6 +9,7 @@ import {createAccountStore} from '../server/account-store.mjs';
 import {createCombatAuthority} from '../server/combat-authority.mjs';
 import * as Game from '../src/model.ts';
 import {enemyRoster} from '../src/enemy-roster.ts';
+import {DZ} from '../src/combat.ts';
 import {ENEMY_TYPES} from '../src/enemy-types.ts';
 import {createEnvironmentLayout,terrainHeight} from '../src/environments.ts';
 import {SURGE} from '../src/pet-surge.ts';
@@ -246,6 +247,13 @@ test('disguise freezes reach the server and the knight shield blocks only blows 
  f.account.profile.gear.disguise='dz_knight';f.account.profile.bag.dz_knight=1;f.peer.pose.facing=0;assert.equal(engine.sim.disguise('dz_knight',0),true);
  engine.healthEvents=[];engine.damageAt=0;f.authority.damage(f.peer,enemy.id);assert.equal(engine.healthEvents.length,0,'blocked from the front');
  f.peer.pose.facing=Math.PI;engine.damageAt=0;f.authority.damage(f.peer,enemy.id);assert.ok(engine.healthEvents.some(e=>e.amount<0),'hurt from behind');
+});
+test('the everyday kits run on the server too: the bandage and the lotus hold, the mic drop stuns, the splash slows',async t=>{
+ const f=await fixture(t,{profile:p=>{for(const id of ['dz_swimmer','dz_kpop','dz_yoga','dz_nurse'])p.bag[id]=1;p.gear.disguise='dz_nurse';}}),enemy=f.spawn('mushroom',-30,4);const engine=f.authority.engineFor(f.peer);f.peer.pose.facing=0;
+ const from=f.messages.length;assert.equal(engine.sim.disguise('dz_nurse',1),true);assert.equal(enemy.stun,DZ.bandage.stun);assert.ok(f.messages.slice(from).some(m=>m.type==='status'&&m.kind==='stun'&&m.id===enemy.id));
+ enemy.stun=0;assert.equal(engine.sim.disguise('dz_yoga',3),true);assert.equal(enemy.stun,DZ.lotusbloom.root);
+ enemy.stun=0;const hp=enemy.hp;assert.equal(engine.sim.disguise('dz_kpop',0),true);assert.ok(enemy.hp<hp,'the mic drop hurts');
+ assert.equal(engine.sim.disguise('dz_swimmer',0),true);assert.ok((enemy.statuses?.slow??0)>0,'the splash slows');
 });
 test('online summons: the server shares checked decoys, a reported blow hurts the clone (never the explorer) and its health goes home',async t=>{
  const f=await fixture(t,{profile:p=>{p.gear.disguise='dz_ninja';p.bag.dz_ninja=1;}}),enemy=f.spawn('mushroom',-30,4);const engine=f.authority.engineFor(f.peer);

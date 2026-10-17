@@ -3625,46 +3625,46 @@ const DISGUISE_FACTS: Record<string, any> = {
         ]
     }
 };
-// Four everyday heroes combine established effects; cooldowns keep the existing profile maxima and prices stable.
+// Four everyday heroes with kits of their own (combat.ts DISGUISE_KITS); cooldowns are tuned so the radar maxima and the prices stay as they were.
 Object.assign(DISGUISE_FACTS, {
     "dz_swimmer": {
         "name": "Sporty swimmer", "emoji": "🏊", "color": "#28b7c5",
         "weapon": { "kind": "fist", "range": 1.4, "cd": 0.4 },
         "skills": [
-            { "name": "Wave dash", "icon": "🌊", "cd": 7 },
-            { "name": "Safety shield", "icon": "🛟", "cd": 16 },
-            { "name": "Pool whistle", "icon": "📣", "cd": 12 },
-            { "name": "Guiding lighthouse", "icon": "🔦", "cd": 18 }
+            { "name": "Splash wave", "icon": "🌊", "cd": 6 },
+            { "name": "Bubble shield", "icon": "🫧", "cd": 14 },
+            { "name": "Torpedo dash", "icon": "🐬", "cd": 7 },
+            { "name": "Whirlpool", "icon": "🌀", "cd": 10 }
         ]
     },
     "dz_kpop": {
         "name": "K-pop singer", "emoji": "🎤", "color": "#b06edb",
         "weapon": { "kind": "gun", "range": 9, "cd": 0.5, "shot": "star" },
         "skills": [
-            { "name": "Petal opening", "icon": "🌸", "cd": 7 },
-            { "name": "Ribbon dance step", "icon": "🎀", "cd": 9 },
-            { "name": "Stage spotlight", "icon": "✨", "cd": 14 },
-            { "name": "Encore fireworks", "icon": "🎆", "cd": 18 }
+            { "name": "Mic drop", "icon": "🎤", "cd": 5 },
+            { "name": "Light-stick beam", "icon": "🌟", "cd": 7 },
+            { "name": "Encore", "icon": "🎶", "cd": 12 },
+            { "name": "Spotlight finale", "icon": "🎉", "cd": 18 }
         ]
     },
     "dz_yoga": {
         "name": "Yoga teacher", "emoji": "🧘", "color": "#91ba78",
         "weapon": { "kind": "fist", "range": 1.4, "cd": 0.5 },
         "skills": [
-            { "name": "Breathing breeze", "icon": "🍃", "cd": 7 },
-            { "name": "Mindful blink", "icon": "✨", "cd": 8 },
-            { "name": "Restorative flower ring", "icon": "🪷", "cd": 14 },
-            { "name": "Grounding ink circle", "icon": "⭕", "cd": 16 }
+            { "name": "Tree pose", "icon": "🌳", "cd": 15 },
+            { "name": "Sun salutation", "icon": "🌞", "cd": 14 },
+            { "name": "Calm breath", "icon": "🍃", "cd": 6 },
+            { "name": "Lotus bloom", "icon": "🪷", "cd": 12 }
         ]
     },
     "dz_nurse": {
         "name": "Kindhearted nurse", "emoji": "💗", "color": "#68c1ba",
         "weapon": { "kind": "gun", "range": 8, "cd": 0.6, "shot": "bubble" },
         "skills": [
-            { "name": "Care petals", "icon": "🌸", "cd": 7 },
-            { "name": "Heart guard", "icon": "🛡️", "cd": 12 },
-            { "name": "Recovery flower ring", "icon": "💖", "cd": 15 },
-            { "name": "Care supply drop", "icon": "🪂", "cd": 18 }
+            { "name": "First aid", "icon": "🩹", "cd": 11 },
+            { "name": "Bandage wrap", "icon": "🧻", "cd": 9 },
+            { "name": "Vitamin toss", "icon": "💊", "cd": 4 },
+            { "name": "Ambulance rush", "icon": "🚑", "cd": 10 }
         ]
     }
 });
@@ -4239,10 +4239,10 @@ const everydayDisguises = [
     { id: 'dz_nurse', cost: 390, mats: { leather: 4, bone: 4 } },
 ];
 const everydayDescriptions: Record<string, string> = {
-    dz_swimmer: 'Wave mobility and a guiding lighthouse. +6 attack · +8 defense · +40 health · +8% speed. Swimming and oxygen bonuses still come from flippers.',
-    dz_kpop: 'Petals, a ribbon step, a damage spotlight and fireworks. +10 attack · +6% critical chance · +5% speed.',
-    dz_yoga: 'A breeze, a blink, a healing flower ring and a binding ink circle. +12 defense · +60 health · +2 regeneration.',
-    dz_nurse: 'Healing petals, a shield, a recovery ring and supply crates. +8 defense · +80 health · +3 regeneration. Healing restores your health, not other explorers.',
+    dz_swimmer: 'A splash wave, a bubble shield, a torpedo dash and a whirlpool. +6 attack · +8 defense · +40 health · +8% speed. Swimming and oxygen bonuses still come from flippers.',
+    dz_kpop: 'A mic drop, a light-stick beam, an encore and the spotlight finale. +10 attack · +6% critical chance · +5% speed.',
+    dz_yoga: 'The tree pose, a sun salutation, a calm breath and a lotus bloom. +12 defense · +60 health · +2 regeneration.',
+    dz_nurse: 'First aid, a bandage wrap, a bouncing vitamin and the ambulance rush. +8 defense · +80 health · +3 regeneration. Healing restores your health, not other explorers.',
 };
 const disguiseShop = SHOP_CATEGORIES.find(category => category.tab === 'Disguises')!;
 for (const offer of everydayDisguises) {

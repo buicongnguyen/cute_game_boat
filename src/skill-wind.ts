@@ -103,6 +103,13 @@ export const SKILL_WIND: Readonly<Record<string, WindRule>> = {
   // Dawn star dancer: the ribbon is flicked out through the cone it hits; the sparkle step is the body
   lasso: { cls: 'sweep', pose: 'cut', span: 2 * LASSO * .95, turn: .3, height: 1, width: .7, keep: .45, wave: 1.6, color: '#19c9b8', hit: DZ.lasso.radius, reach: DZ.lasso.radius * .92, at: 0, arm: 'blade' }, dawnglow: buff,
   sparklestep: { cls: 'dash', time: DZ.sparklestep.time, width: .3, tail: 3, color: '#ffd84a', hit: DZ.sparklestep.speed * DZ.sparklestep.time, reach: DZ.sparklestep.speed * DZ.sparklestep.time, at: 0, arm: 'blade' }, starshower: spell,
+  // Everyday heroes: the torpedo and the ambulance are the body; the rest are spells, shouts and buffs drawn by their own looks
+  splash: spell, bubble: buff, whirlpool: spell,
+  torpedo: { cls: 'dash', time: DZ.torpedo.time, width: .34, tail: 3.2, color: '#3fe0ff', hit: DZ.torpedo.speed * DZ.torpedo.time, reach: DZ.torpedo.speed * DZ.torpedo.time, at: 0, arm: 'fists' },
+  micdrop: shout, stickbeam: shot, encore: buff, spotlight: spell,
+  treepose: buff, sunsalute: buff, breath: spell, lotusbloom: spell,
+  firstaid: buff, bandage: shot, vitamin: shot,
+  ambulance: { cls: 'dash', time: DZ.ambulance.time, width: .36, tail: 3.2, color: '#ff3b4e', hit: DZ.ambulance.speed * DZ.ambulance.time, reach: DZ.ambulance.speed * DZ.ambulance.time, at: 0, arm: 'fists' },
 };
 
 /** The class of a basic attack, by the kind of weapon that makes it: a blade cuts (the weapon trail), fists jab (the punch wind), a blaster shoots. */

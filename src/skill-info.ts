@@ -49,6 +49,7 @@ export const SPECIAL_INFO: Record<string, { damage: number; text: string; radius
  */
 const pct = (n: number) => fix(n * 100);
 const fanAngle = Math.round(2 * Math.acos(DZ.fan.cone) * 180 / Math.PI), lassoAngle = Math.round(2 * Math.acos(DZ.lasso.cone) * 180 / Math.PI);
+const coneAngle = (cone: number) => Math.round(2 * Math.acos(cone) * 180 / Math.PI);
 const snowMax = Math.min(2.6, .5 + DZ.snowball.grow * DZ.snowball.time);
 /** A summon's hit points as a share of yours (combat.ts SUMMON_HP). */
 const hp = (kind: string) => pct(SUMMON_HP[kind].hp);
@@ -125,11 +126,28 @@ export const DISGUISE_INFO: Record<string, readonly string[]> = {
     `${DZ.starshower.count} stars fall in a ring ${DZ.starshower.ring} m around you, ×${DZ.starshower.power} damage within ${DZ.starshower.radius} m each; then a great dawn star bursts: ×${DZ.starshower.finalPower} damage within ${DZ.starshower.finalRadius} m, and enemies there are stunned ${DZ.starshower.stun} s.`],
 };
 
-// Shared effects share their number-derived descriptions and translations, including their actual visual theme.
-DISGUISE_INFO.dz_swimmer = [DISGUISE_INFO.dz_navy[1], DISGUISE_INFO.dz_mecha[3], DISGUISE_INFO.dz_navy[2], DISGUISE_INFO.dz_navy[3]];
-DISGUISE_INFO.dz_kpop = [DISGUISE_INFO.dz_aodai[0], DISGUISE_INFO.dz_aodai[1], DISGUISE_INFO.dz_usa[2], DISGUISE_INFO.dz_usa[3]];
-DISGUISE_INFO.dz_yoga = [DISGUISE_INFO.dz_aodai[2], DISGUISE_INFO.dz_mage[1], DISGUISE_INFO.dz_fairy[0], DISGUISE_INFO.dz_aodai_man[2]];
-DISGUISE_INFO.dz_nurse = [DISGUISE_INFO.dz_aodai[0], DISGUISE_INFO.dz_usa[1], DISGUISE_INFO.dz_fairy[0], DISGUISE_INFO.dz_army[3]];
+// The everyday heroes (their own kits; locales/vi-everyday-disguises.ts holds the same sentences in Vietnamese).
+const W = DZ;
+DISGUISE_INFO.dz_swimmer = [
+  `Splash a wave through a ${coneAngle(W.splash.cone)}° cone ${W.splash.radius} m ahead: ×${W.splash.power} damage, enemies washed back and slowed ${W.splash.slow} s.`,
+  `Blow a bubble shield: no damage for ${W.bubble.time} s and ${pct(W.bubble.heal)}% health back.`,
+  `Dive ${fix(W.torpedo.speed * W.torpedo.time)} m forward like a torpedo, untouchable, ×${W.torpedo.power} damage to every enemy on the way.`,
+  `Open a whirlpool on the nearest enemy within ${W.whirlpool.range} m for ${W.whirlpool.time} s: enemies within ${W.whirlpool.pull} m are pulled in and slowed, and those in its ${W.whirlpool.radius} m eye take ×${W.whirlpool.power} damage every ${W.whirlpool.tick} s.`];
+DISGUISE_INFO.dz_kpop = [
+  `Drop the mic: a shockwave ${W.micdrop.radius} m around you, ×${W.micdrop.power} damage, enemies pushed back and stunned ${W.micdrop.stun} s.`,
+  `Shine the light stick in a ${W.stickbeam.length} m beam: ×${W.stickbeam.power} damage to every enemy in the line, dazzled for ${W.stickbeam.blind} s.`,
+  `Encore! ${pct(W.encore.heal)}% health back, you move ${pct(W.encore.speed)}% faster for ${W.encore.time} s, and your pets attack ${pct(DZ.dawnglow.cheer)}% faster for ${W.encore.cheerTime} s.`,
+  `Stage lights fall on the nearest enemy within ${W.spotlight.range} m: ${W.spotlight.beats} confetti beats of ×${W.spotlight.power} damage within ${W.spotlight.radius} m, then the finale: ×${W.spotlight.final} damage and a ${W.spotlight.stun} s stun.`];
+DISGUISE_INFO.dz_yoga = [
+  `Hold the tree pose for ${W.treepose.time} s: +${W.treepose.defence} defence, and ${pct(W.treepose.heal)}% health back at once.`,
+  `A sun salutation: ${pct(W.sunsalute.perTick)}% health back every ${W.sunsalute.tick} s for ${W.sunsalute.time} s (${pct(W.sunsalute.perTick * W.sunsalute.time / W.sunsalute.tick)}% in all).`,
+  `Breathe out a calm wind through a ${coneAngle(W.breath.cone)}° cone ${W.breath.radius} m ahead: ×${W.breath.power} damage, enemies blown far back and slowed ${W.breath.slow} s.`,
+  `A lotus blooms ${W.lotusbloom.radius} m around you: enemies inside are rooted ${W.lotusbloom.root} s, then for ${W.lotusbloom.time} s its petals slow them and deal ×${W.lotusbloom.power} damage every ${W.lotusbloom.tick} s.`];
+DISGUISE_INFO.dz_nurse = [
+  `First aid: ${pct(W.firstaid.heal)}% health back at once and no damage for ${W.firstaid.guard} s.`,
+  `Wrap the nearest enemy within ${W.bandage.range} m and up to ${W.bandage.count - 1} more within ${W.bandage.around} m of it in bandages: ×${W.bandage.power} damage and held for ${W.bandage.stun} s.`,
+  `Toss a vitamin at the nearest enemy within ${W.vitamin.range} m: it bounces to ${W.vitamin.bounces} enemies in all (each the nearest within ${W.vitamin.gap} m), ×${W.vitamin.power} damage each, and every hit heals you ${pct(W.vitamin.heal)}%.`,
+  `Ambulance rush: drive ${fix(W.ambulance.speed * W.ambulance.time)} m forward with the siren on, untouchable, ×${W.ambulance.power} damage to every enemy on the way, knocking them ${W.ambulance.knock} m aside; then move ${pct(W.ambulance.boost)}% faster for ${W.ambulance.boostTime} s.`];
 
 export interface SkillView { name: string; icon: string; cd: number }
 /** The Lob's splash and the Quake's ring at an upgrade level, as combat.ts casts them (the moves of moves.ts). */
@@ -177,6 +195,7 @@ export const BUFF_CHIPS: Record<string, { icon: string; name: string }> = {
   giant: { icon: '🦖', name: 'Giant' }, tank: { icon: '🤖', name: 'Tank mode' }, armor: { icon: '🪖', name: 'Armoured' },
   lifesteal: { icon: '🩸', name: 'Blood drain' }, bats: { icon: '🦇', name: 'Bat form' },
   swift: { icon: '💨', name: 'Swift' }, block: { icon: '🛡️', name: 'Blocking' }, cover: { icon: '🧱', name: 'Sandbag cover' }, rally: { icon: '🔥', name: 'Inspired' }, invuln: { icon: '✨', name: 'Untouchable' }, cheer: { icon: '🌟', name: 'Pets cheered on' },
+  pose: { icon: '🌳', name: 'Tree pose' }, sun: { icon: '🌞', name: 'Sun salutation' },
 };
 /** Enemy status marks over their HP bar, in priority order (the first two that apply are shown). */
 export const STATUS_MARKS: readonly [key: string, icon: string][] = [['stun', '💫'], ['shock', '⚡'], ['sheep', '🐑'], ['charm', '💗'], ['fear', '😱'], ['blind', '🌫️'], ['taunt', '💢'], ['slow', '🐌'], ['mark', '🎯']];

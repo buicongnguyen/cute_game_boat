@@ -627,6 +627,142 @@ const petalburst: Builder = (p, c) => {
   for (let i = 0; i < cnt(c, 18); i++) { const q = i * 2.4 + hash(i), u = c.t * (1 + hash(i + 2) * .6), d = c.r * (.15 + .7 * Math.min(1, u)), hy = Math.max(0, 2.6 * u * (1 - u / 1.5)); p.put('petal', cols[i % 4], c.x + S(q) * d, c.y + .1 + hy, c.z + C(q) * d, .24 * f, .04, .13 * f, u * 7 + i, q, u * 4); }
 };
 
+// ---- The everyday heroes (2026-10-17). Same rules as every look above: shared shapes only, nothing allocated, vivid warm
+// colours, drawn no bigger than what the cast hits. Swimmer: aqua, coral and sunny yellow; K-pop: hot pink, violet, gold
+// and cyan (a concert: notes, stage lights, confetti); yoga: lime, tangerine and magenta; nurse: white, red and candy pink.
+/** Swimmer slot 1: a curling wave crest races out through the cone, white foam on its lip and droplets thrown ahead. */
+const splash: Builder = (p, c) => {
+  const w = 1 - (1 - Math.min(1, c.t * 1.8)) ** 2, d = c.r * (.2 + .8 * w), f = fadeOut(c, 3), n = cnt(c, 22);
+  for (let i = 0; i < n; i++) {
+    const u = i / Math.max(1, n - 1) * 2 - 1, q = c.f + u * .95, dd = d * (.92 + .06 * S(i * 1.7)), x = c.x + S(q) * dd, z = c.z + C(q) * dd, h = (.55 + .35 * (1 - Math.abs(u))) * f;
+    p.put('cone', i % 3 ? '#1fd2ff' : '#00a8e0', x, c.y + h * .5, z, .32 * f, h, .32 * f, 0, q);
+    if (i % 2) p.put('petal', '#ffffff', x, c.y + h + .05, z, .3 * f, .05, .14 * f, 0, q + PI / 2);
+  }
+  for (let i = 0; i < cnt(c, 10); i++) { const q = c.f + (hash(i) * 2 - 1) * .9, k = Math.min(1, c.t * 1.3 + hash(i + 3) * .2), dd = c.r * k * .95, hy = 1.6 * k * (1 - k) * 2;
+    p.put('orb', i % 2 ? '#ffffff' : '#7ff3ff', c.x + S(q) * dd, c.y + .2 + hy, c.z + C(q) * dd, .09 * f + .02); }
+};
+/** Swimmer slot 2: a shimmering bubble round the swimmer, with little bubbles rising off it. */
+const bubble: Builder = (p, c) => {
+  const k = grow(c, 8) * fadeOut(c, 6), r = c.r * .8 * k;
+  p.put('dome', '#7ff3ff', c.x, c.y - .1, c.z, r, r * 1.08, r); p.put('gring', '#ffd21a', c.x, c.y, c.z, r, 1, r);
+  for (let i = 0; i < cnt(c, 10); i++) { const q = i * 2.4 + c.a * .8, u = (c.a * .5 + i / 10) % 1;
+    p.put('gorb', i % 3 ? '#ffffff' : '#ff6a5c', c.x + S(q) * r * .8, c.y + .3 + u * 2.2, c.z + C(q) * r * .8, (.06 + .05 * hash(i)) * k); }
+};
+/** Swimmer slot 3: a dolphin-blue streak dives down the corridor with spray kicked up on both sides. */
+const torpedo: Builder = (p, c) => {
+  const head = c.r * Math.min(1, c.t * 1.6), dx = S(c.f), dz = C(c.f), f = fadeOut(c, 3), n = cnt(c, 16);
+  p.put('orb', '#1fa8ff', c.x + dx * head, c.y + .5, c.z + dz * head, .3 * f, .3 * f, .6 * f, 0, c.f);
+  for (let i = 0; i < n; i++) { const k = head * (1 - i / n), s = (1 - i / n) * f;
+    for (const side of [-1, 1]) p.put(i % 2 ? 'mist' : 'cone', i % 2 ? '#ffffff' : '#3fe0ff', c.x + dx * k + dz * side * .45 * s, c.y + .2 + .4 * s, c.z + dz * k - dx * side * .45 * s, .16 * s + .03, .4 * s + .03, .16 * s + .03, side * .5, c.f); }
+};
+/** Swimmer slot 4: a whirlpool: rings of foam spiral in to its eye, where a deep blue funnel turns. */
+const whirlpool: Builder = (p, c) => {
+  const g = grow(c, 6), f = fadeOut(c, 5);
+  p.put('ring', '#7ff3ff', c.x, c.y + .02, c.z, c.r * g, 1, c.r * g); p.put('gring', '#00a8e0', c.x, c.y, c.z, c.r * .35 * g, 1, c.r * .35 * g);
+  const n = cnt(c, 40);
+  for (let i = 0; i < n; i++) { const u = ((i / n) + c.a * .35) % 1, rr = c.r * .95 * (1 - u) * g, q = i * 2.399 + c.a * (2.5 + 3 * u);
+    p.put('petal', i % 4 ? '#ffffff' : '#ffd21a', c.x + S(q) * rr, c.y + .05 + .1 * u, c.z + C(q) * rr, .32 * f, .04, .12 * f, 0, q + PI / 2); }
+  for (let j = 0; j < 4; j++) { const s = (.18 + j * .14) * g * f; p.put('cone', j % 2 ? '#22c8e8' : '#0078b8', c.x, c.y + .2 + j * .25, c.z, s, .25, s, 0, c.a * 6 + j); }
+};
+/** K-pop slot 1: the mic hits the stage, two shockwave rings (pink and gold) run out to the hit radius and notes fly up. */
+const micdrop: Builder = (p, c) => {
+  const f = fadeOut(c, 3);
+  if (c.t < .3) { const h = (1 - c.t / .3) * 1.4; p.put('box', '#1a1430', c.x, c.y + .3 + h, c.z, .1, .45, .1); p.put('orb', '#ffc82e', c.x, c.y + .6 + h, c.z, .16); }
+  for (let i = 0; i < 2; i++) { const k = Math.min(1, Math.max(0, c.t * 2 - i * .25)), s = (1 - (1 - k) ** 2) * c.r; if (k <= 0) continue; p.put(i ? 'ring' : 'gring', i ? '#ffc82e' : '#ff2e9a', c.x, c.y + .03 * i, c.z, s, 1, s); }
+  for (let i = 0; i < cnt(c, 12); i++) { const q = i * 2.4, k = Math.min(1, c.t * 1.4), rr = c.r * (.3 + .55 * hash(i)) * k;
+    p.put('star', ['#ff2e9a', '#2ff0ff', '#ffc82e', '#7a22ff'][i % 4], c.x + S(q) * rr, c.y + .4 + 1.8 * k * (1 - .4 * k) + .2 * hash(i + 1), c.z + C(q) * rr, .2 * f, .2 * f, .2 * f, 0, c.a * 3 + i); }
+};
+/** K-pop slot 2: a pink light beam in six segments down the line it hits, a cyan core and twinkling stars along it. */
+const stickbeam: Builder = (p, c) => {
+  const len = c.r * Math.min(1, c.t * 4), dx = S(c.f), dz = C(c.f), f = fadeOut(c, 4), seg = 6, l = len / seg;
+  for (let i = 0; i < seg; i++) { const k = (i + .5) * l; p.put('gbox', '#ff2e9a', c.x + dx * k, c.y + .9, c.z + dz * k, .5 * f, .5 * f, l * 1.02, 0, c.f); p.put('gbox', '#2ff0ff', c.x + dx * k, c.y + .9, c.z + dz * k, .18 * f, .18 * f, l * 1.02, 0, c.f); }
+  for (let i = 0; i < cnt(c, 10); i++) { const k = len * hash(i + c.a * .01 + i * .37), s = .16 * (.6 + .4 * S(c.a * 12 + i)) * f; p.put('star', i % 2 ? '#ffffff' : '#ffc82e', c.x + dx * k, c.y + .9 + .35 * S(i * 2.1), c.z + dz * k, s, s, s, 0, c.f + PI / 2); }
+};
+/** K-pop slot 3: the encore: hearts and stars swirl up round her and a gold ring pulses at her feet. */
+const encore: Builder = (p, c) => {
+  const f = fadeOut(c, 3), r = c.r * .8;
+  p.put('gring', '#ffc82e', c.x, c.y, c.z, r * (.85 + .15 * S(c.a * 8)), 1, r * (.85 + .15 * S(c.a * 8)));
+  for (let i = 0; i < cnt(c, 14); i++) { const u = (c.a * .7 + i / 14) % 1, q = i * 2.4 + c.a * 2, rr = r * (.5 + .5 * u), s = .22 * S(u * PI) * f;
+    p.put(i % 2 ? 'heart' : 'star', ['#ff2e9a', '#ffc82e', '#2ff0ff', '#7a22ff'][i % 4], c.x + S(q) * rr, c.y + .3 + u * 2.6, c.z + C(q) * rr, s, s, s, 0, q); }
+};
+/** K-pop slot 4: stage lights swing in onto the spot, a pillar of light stands in it and its outline ring beats until the finale. */
+const spotlight: Builder = (p, c) => {
+  const g = grow(c, 5), f = fadeOut(c, 6), beat = 1 + .04 * S(c.a * 20);
+  p.put('ring', '#fff3a8', c.x, c.y + .02, c.z, c.r * g * beat, 1, c.r * g * beat); p.put('gring', '#ff2e9a', c.x, c.y, c.z, c.r * .92 * g, 1, c.r * .92 * g);
+  p.put('gbox', '#fff8d0', c.x, c.y + 1.6, c.z, .55 * g * f, 3.2, .55 * g * f); p.put('gbox', '#ffffff', c.x, c.y + 1.6, c.z, .2 * g * f, 3.2, .2 * g * f);
+  for (let i = 0; i < 4; i++) { const q = i * PI / 2 + c.a * 1.2, rr = c.r * .55, x = c.x + S(q) * rr, z = c.z + C(q) * rr;
+    p.put('gbox', ['#ff2e9a', '#2ff0ff', '#ffc82e', '#7a22ff'][i], x, c.y + 1.5, z, .16 * f, 3, .16 * f, -.18 * C(q), 0, .18 * S(q)); p.put('gring', ['#ff2e9a', '#2ff0ff', '#ffc82e', '#7a22ff'][i], x, c.y + .01, z, .7 * g, 1, .7 * g); }
+  for (let i = 0; i < cnt(c, 12); i++) { const q = i * 2.4 + c.a, rr = c.r * .8 * hash(i), y = c.y + 4 - ((c.a * 1.5 + hash(i + 5) * 4) % 4); p.put('box', ['#ff2e9a', '#2ff0ff', '#ffc82e', '#ffffff'][i % 4], c.x + S(q) * rr, y, c.z + C(q) * rr, .14, .03, .09, c.a * 5 + i, q, c.a * 3); }
+};
+/** K-pop beats and finale: a ring at the hit radius and a burst of confetti thrown up inside it. */
+const confetti: Builder = (p, c) => {
+  const w = 1 - (1 - Math.min(1, c.t * 2.4)) ** 2, f = fadeOut(c, 2.5), cols = ['#ff2e9a', '#2ff0ff', '#ffc82e', '#7a22ff', '#ffffff'];
+  p.put('ring', '#ffc82e', c.x, c.y + .02, c.z, c.r * w, 1, c.r * w); p.put('gring', '#ff2e9a', c.x, c.y, c.z, c.r * w * .9, 1, c.r * w * .9);
+  for (let i = 0; i < cnt(c, 30); i++) { const q = i * 2.4 + hash(i), u = c.t * (1 + hash(i + 2) * .6), d = c.r * (.1 + .8 * Math.min(1, u) * hash(i + 7)), hy = Math.max(0, 3.2 * u * (1 - u / 1.4));
+    p.put('box', cols[i % 5], c.x + S(q) * d, c.y + .1 + hy, c.z + C(q) * d, .16 * f, .03, .1 * f, u * 9 + i, q, u * 6); }
+};
+/** Yoga slot 1: roots spread at her feet, a lime ring holds her and leaves turn slowly round her. */
+const treepose: Builder = (p, c) => {
+  const g = grow(c, 6), f = fadeOut(c, 6), r = c.r * .8;
+  p.put('gring', '#8ee01e', c.x, c.y, c.z, r * g, 1, r * g);
+  for (let i = 0; i < 6; i++) { const q = i * PI / 3 + .3; p.put('box', '#7a4a22', c.x + S(q) * r * .55 * g, c.y + .03, c.z + C(q) * r * .55 * g, .09, .06, r * .7 * g, 0, q); }
+  for (let i = 0; i < cnt(c, 10); i++) { const q = i * TAU / 10 + c.a * .9, h = .5 + (i % 3) * .55 + .1 * S(c.a * 2 + i); p.put('petal', i % 2 ? '#8ee01e' : '#3fb81e', c.x + S(q) * r, c.y + h, c.z + C(q) * r, .28 * f, .04, .14 * f, .3, q + PI / 2, .4 * S(c.a + i)); }
+};
+/** Yoga slot 2: a warm sun rises over her head, its rays turning, and a tangerine glow ring breathes at her feet. */
+const sunsalute: Builder = (p, c) => {
+  const g = grow(c, 4), f = fadeOut(c, 6), y = c.y + 2.7 + .1 * S(c.a * 2);
+  p.put('gorb', '#ffd21a', c.x, y, c.z, .32 * g * f); p.put('orb', '#ff9a1e', c.x, y, c.z, .2 * g * f);
+  for (let i = 0; i < 8; i++) { const q = i * PI / 4 + c.a * .8; p.put('gbox', '#ffb02e', c.x + S(q) * .52 * g, y, c.z + C(q) * .52 * g, .07, .07, .3 * g * f, 0, q); }
+  const r = c.r * .8 * (.9 + .1 * S(c.a * 3)); p.put('gring', '#ff7a12', c.x, c.y, c.z, r * g, 1, r * g);
+  for (let i = 0; i < cnt(c, 8); i++) { const u = (c.a * .6 + i / 8) % 1, q = i * 2.4; p.put('gorb', '#fff0a0', c.x + S(q) * r * .7, c.y + .2 + u * 2.2, c.z + C(q) * r * .7, .07 * S(u * PI) * f + .01); }
+};
+/** Yoga slot 3: a calm wind: soft mint puffs and white streaks drift out through the cone. */
+const breath: Builder = (p, c) => {
+  const f = fadeOut(c, 3), n = cnt(c, 20);
+  for (let i = 0; i < n; i++) { const u = (c.t * 1.3 + hash(i) * .5) % 1.2, k = Math.min(1, u), q = c.f + (hash(i + 4) * 2 - 1) * .75, d = c.r * k * .95;
+    if (i % 2) p.put('mist', '#c8ffe0', c.x + S(q) * d, c.y + .6 + .4 * hash(i + 1), c.z + C(q) * d, .35 * f, .2 * f, .35 * f, 0, q);
+    else p.put('gbox', '#ffffff', c.x + S(q) * d, c.y + .8 + .5 * hash(i + 2), c.z + C(q) * d, .05, .05, .8 * f, 0, q); }
+  for (let i = 0; i < cnt(c, 6); i++) { const q = c.f + (i / 5 * 2 - 1) * .7, d = c.r * Math.min(1, c.t * 1.5) * .9; p.put('petal', '#8ee01e', c.x + S(q) * d, c.y + 1 + .3 * S(c.a * 4 + i), c.z + C(q) * d, .2 * f, .04, .1 * f, .5, q, c.a * 4); }
+};
+/** Yoga slot 4: a ring of big magenta and white lotus petals opens at the edge, smaller ones inside, slowly turning. */
+const lotusbloom: Builder = (p, c) => {
+  const g = grow(c, 5), f = fadeOut(c, 6), open = Math.min(1, c.a * 2);
+  p.put('gring', '#ee1e8a', c.x, c.y, c.z, c.r * g, 1, c.r * g);
+  const n = cnt(c, 16);
+  for (let i = 0; i < n; i++) { const q = i * TAU / n + c.a * .25, x = c.x + S(q) * c.r * .9 * g, z = c.z + C(q) * c.r * .9 * g;
+    p.put('petal', i % 2 ? '#ffffff' : '#ee1e8a', x, c.y + .15, z, .5 * f, .08, .26 * f, -.9 * open, q, 0); }
+  for (let i = 0; i < cnt(c, 8); i++) { const q = i * TAU / 8 - c.a * .4, rr = c.r * .45 * g; p.put('petal', i % 2 ? '#ff7a12' : '#ff6ab4', c.x + S(q) * rr, c.y + .1, c.z + C(q) * rr, .34 * f, .06, .18 * f, -.7 * open, q); }
+  p.put('orb', '#ffd21a', c.x, c.y + .15, c.z, .22 * g * f);
+};
+/** Nurse slot 1: a big red cross rises over her head with hearts, and a white and pink ring glows at her feet. */
+const firstaid: Builder = (p, c) => {
+  const g = grow(c, 6), f = fadeOut(c, 4), y = c.y + 2.6 + c.t * .5;
+  p.put('box', '#ffffff', c.x, y, c.z, .62 * g * f, .62 * g * f, .1); p.put('box', '#e8162a', c.x, y, c.z + .01, .5 * g * f, .16 * g * f, .12); p.put('box', '#e8162a', c.x, y, c.z + .01, .16 * g * f, .5 * g * f, .12);
+  p.put('gring', '#ff4fa0', c.x, c.y, c.z, c.r * .8 * g, 1, c.r * .8 * g); p.put('ring', '#ffffff', c.x, c.y + .02, c.z, c.r * .6 * g, 1, c.r * .6 * g);
+  for (let i = 0; i < cnt(c, 10); i++) { const u = (c.a * .8 + i / 10) % 1, q = i * 2.4, s = .2 * S(u * PI) * f; p.put('heart', i % 2 ? '#ff4fa0' : '#e8162a', c.x + S(q) * .8, c.y + .4 + u * 2, c.z + C(q) * .8, s, s, s, 0, q); }
+};
+/** Nurse slot 2: white bandage bands wind round the snared creature, with a pink pin on top. */
+const bandage: Builder = (p, c) => {
+  const g = grow(c, 8), f = fadeOut(c, 8), r = Math.max(.5, c.r) * 1.05;
+  for (let i = 0; i < 4; i++) { const h = .25 + i * .3 * g; p.put('ring', '#ffffff', c.x, c.y + h, c.z, r, 1, r, .25 * S(i * 1.3 + c.a), 0, .25 * C(i * 1.3)); }
+  p.put('orb', '#ff4fa0', c.x, c.y + .3 + 1.2 * g, c.z, .1 * f + .02);
+  for (let i = 0; i < cnt(c, 4); i++) { const q = c.a * 2 + i * PI / 2; p.put('star', '#ffd21a', c.x + S(q) * r, c.y + 1.6, c.z + C(q) * r, .12, .12, .12, 0, q); }
+};
+/** Nurse slot 3: a pink-and-white capsule arcs to its target, twinkling, and pops into a small ring there. */
+const pill: Builder = (p, c) => {
+  const k = Math.min(1, c.t), dx = S(c.f), dz = C(c.f), d = Math.max(0, c.r - .2) * k, h = c.y + 1 + 1.2 * S(k * PI);
+  p.put('orb', '#ff4fa0', c.x + dx * (d - .08), h, c.z + dz * (d - .08), .14, .14, .16, 0, c.f); p.put('orb', '#ffffff', c.x + dx * (d + .08), h, c.z + dz * (d + .08), .14, .14, .16, 0, c.f);
+  for (let i = 1; i <= cnt(c, 6); i++) { const u = Math.max(0, k - i * .06), b = c.r * u; p.put('gorb', i % 2 ? '#ffd84a' : '#ffffff', c.x + dx * b, c.y + 1 + 1.2 * S(u * PI), c.z + dz * b, .07 * (1 - i / 8)); }
+  if (c.t > .85) { const s = (c.t - .85) / .15; p.put('gring', '#ff4fa0', c.x + dx * c.r, c.y, c.z + dz * c.r, .45 * s, 1, .45 * s); }
+};
+/** Nurse slot 4: the ambulance's light bar flashes red and blue over her head and speed streaks trail behind. */
+const siren: Builder = (p, c) => {
+  const on = S(c.a * 30) > 0, dx = S(c.f), dz = C(c.f), f = fadeOut(c, 4);
+  p.put('gorb', on ? '#ff1e3a' : '#2f7bff', c.x - dz * .22, c.y + 2.55, c.z + dx * .22, .2 * f); p.put('gorb', on ? '#2f7bff' : '#ff1e3a', c.x + dz * .22, c.y + 2.55, c.z - dx * .22, .2 * f);
+  p.put('box', '#ffffff', c.x, c.y + 2.45, c.z, .62, .08, .18, 0, c.f + PI / 2);
+  for (let i = 0; i < cnt(c, 10); i++) { const side = (i % 5 - 2) * .22, back = .6 + (i * .37 + c.a * 9) % 2.2; p.put('gbox', i % 2 ? '#ffffff' : '#ff4fa0', c.x - dx * back + dz * side, c.y + .4 + (i % 3) * .4, c.z - dz * back - dx * side, .05, .05, .7 * f, 0, c.f); }
+};
+
 /** Look id -> builder. Every id in DISGUISE_LOOKS (combat.ts) must be here (tests/skill-visuals.test.ts). */
 export const LOOKS: Record<string, Builder> = {
   charge, smoke, heal, icefield, blackhole, moon, holy, meteor, cannonfall, hook, drain, hearts, roots, roar, freeze, portal, bite, tail, parrot,
@@ -634,10 +770,12 @@ export const LOOKS: Record<string, Builder> = {
   tank, sandbag, flare, parachute, whistle, ribbon, fan, lantern, kite, ink, dragondance, starshield, torch, firework, bamboo, drum, bigstar,
   lob, lobmark, petalfall, petalburst,
   lasso, sparkle, starlet,
+  splash, bubble, torpedo, whirlpool, micdrop, stickbeam, encore, spotlight, confetti, treepose, sunsalute, breath, lotusbloom, firstaid, bandage, pill, siren,
 };
 /** Seconds a look lasts when its effect carries no duration. */
 export const LOOK_LIFE: Record<string, number> = { blast: .8, crater: .8, magma: .8, inferno: .7, anchor: .7, lotus: 1.4, eagle: .8, goldstar: .8, bonk: .7, whirl: .7, iceage: 2.2, bolt: .3, rainbow: .5, surf: .9, poof: .7, dust: .8, sheep: 1, taunt: 1, lift: .9, rush: .45, shield: 4, bats: 2.5,
-  tank: 6, sandbag: 6, flare: 1.4, parachute: 1.2, whistle: 1, ribbon: 1.2, fan: .7, lantern: 1.5, kite: 5, ink: 3, dragondance: 5, starshield: 3, torch: 6, firework: 1.1, bamboo: .7, drum: 1.45, bigstar: 1.2, lob: .6, lobmark: .85, petalfall: .3, petalburst: .5, lasso: .6, sparkle: 5, starlet: .5 };
+  tank: 6, sandbag: 6, flare: 1.4, parachute: 1.2, whistle: 1, ribbon: 1.2, fan: .7, lantern: 1.5, kite: 5, ink: 3, dragondance: 5, starshield: 3, torch: 6, firework: 1.1, bamboo: .7, drum: 1.45, bigstar: 1.2, lob: .6, lobmark: .85, petalfall: .3, petalburst: .5, lasso: .6, sparkle: 5, starlet: .5,
+  splash: .7, bubble: 4, torpedo: .6, whirlpool: 3, micdrop: .7, stickbeam: .45, encore: 1.4, spotlight: 1.8, confetti: .8, treepose: 6, sunsalute: 6, breath: .8, lotusbloom: 5, firstaid: 1.2, bandage: 3, pill: .18, siren: .65 };
 
 /** One soft red/gold pulse at the screen edges (roar). A single reused element; skipped for reduced motion. */
 let pulseEl: HTMLElement | null = null;

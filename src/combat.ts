@@ -19,7 +19,9 @@ export const DISGUISE_LOOKS=['charge','smoke','heal','icefield','blackhole','moo
   // The four moves (moves.ts): the Lob's arc and landing mark, the Rain's falling shots, and the petal burst where either lands.
   'lob','lobmark','petalfall','petalburst',
   // The dawn star dancer: the ribbon's loop, the sparkles a step leaves, one small star coming down.
-  'lasso','sparkle','starlet'] as const;
+  'lasso','sparkle','starlet',
+  // The everyday heroes (2026-10-17): swimmer, K-pop idol, yoga teacher and nurse, each with looks of its own.
+  'splash','bubble','torpedo','whirlpool','micdrop','stickbeam','encore','spotlight','confetti','treepose','sunsalute','breath','lotusbloom','firstaid','bandage','pill','siren'] as const;
 export type EffectLook='eyes'|'burn'|'shock'|'boulder'|typeof DISGUISE_LOOKS[number];
 export const EFFECT_LOOKS:readonly EffectLook[]=['eyes','burn','shock','boulder',...DISGUISE_LOOKS];
 /** Superhero throw: lock a landing point, then lob over intervening ground obstacles. */
@@ -45,11 +47,11 @@ export const DISGUISE_KITS:Readonly<Record<string,readonly string[]>>={
   dz_aodai_man:['dragon','kite','ink','dragondance'],dz_usa:['eagle','starshield','torch','fireworks'],dz_vietnam:['goldstar','bamboo','drum','bigstar'],
   // Our own magical-girl kit (original: no borrowed names, phrases or attacks): slot 1 control, 2 support, 3 mobility, 4 the big one.
   dz_dawnstar:['lasso','dawnglow','sparklestep','starshower'],
-  // Everyday heroes reuse the same proven effect, air-cast, wind and profile rules in new combinations.
-  dz_swimmer:['surfride','energyshield','whistle','lighthouse'],
-  dz_kpop:['lotus','ribbon','torch','fireworks'],
-  dz_yoga:['fan','teleport','heal','ink'],
-  dz_nurse:['lotus','starshield','heal','airdrop'],
+  // The everyday heroes have kits of their own (their own effects, looks and numbers), in the uniforms' shape.
+  dz_swimmer:['splash','bubble','torpedo','whirlpool'],
+  dz_kpop:['micdrop','stickbeam','encore','spotlight'],
+  dz_yoga:['treepose','sunsalute','breath','lotusbloom'],
+  dz_nurse:['firstaid','bandage','vitamin','ambulance'],
 };
 /** Disguise skill numbers: metres, seconds, damage factors (× attack). skill-info.ts builds the tooltips from this same table. */
 export const DZ={
@@ -78,6 +80,18 @@ export const DZ={
   lasso:{radius:6,cone:.5,power:1.2,pull:2.5,gap:1.4,bind:1.5},dawnglow:{time:3,heal:.15,cheer:.5,cheerTime:6},
   sparklestep:{speed:24,time:.35,trail:5,width:1.6,tick:.5,slow:1,power:.2},
   starshower:{count:8,ring:3.2,fall:.5,spacing:.12,radius:2.2,power:1.1,finale:.3,finalRadius:6,finalPower:2.4,stun:1.5},
+  // Sporty swimmer: a splash wave through a cone, a bubble that guards, a torpedo dive, a whirlpool that gathers.
+  splash:{radius:7,cone:.5,power:1.4,knock:5,slow:3},bubble:{time:4,heal:.15},torpedo:{speed:26,time:.35,power:1.6},
+  whirlpool:{range:12,fallback:6,pull:9,time:3,tick:.5,radius:3.5,power:.5},
+  // K-pop idol: a mic-drop shockwave, a light-stick beam, an encore that heals and cheers, the spotlight finale.
+  micdrop:{radius:6.5,power:2.4,knock:4,stun:1.2},stickbeam:{length:12,width:1.6,power:3.2,blind:1.5},encore:{heal:.25,speed:.6,time:6,cheerTime:6},
+  spotlight:{range:12,fallback:6,delay:.6,radius:5.5,beats:4,gap:.3,power:1.3,final:5,stun:1.8},
+  // Yoga teacher: the tree pose roots and steadies, a sun salutation heals over time, a calm breath pushes, a lotus ring slows.
+  treepose:{time:6,defence:80,heal:.08},sunsalute:{time:6,tick:.5,perTick:.03},breath:{radius:8,cone:.7,power:1,knock:6,slow:3},
+  lotusbloom:{radius:6,time:5,tick:.5,slow:1,power:.1,root:2.5},
+  // Kindhearted nurse: first aid, a bandage snare, a vitamin pill that bounces between creatures, the ambulance rush.
+  firstaid:{heal:.45,guard:1},bandage:{range:10,around:5.5,count:3,stun:3,power:1.2},vitamin:{range:11,bounces:4,gap:5,hop:.18,power:2,heal:.045},
+  ambulance:{speed:24,time:.35,power:1.6,knock:6,boost:.2,boostTime:2},
 } as const;
 /**
  * Summons creatures can fight: hit points as a fraction of the explorer's max health, body radius (m), and whether it
@@ -243,7 +257,7 @@ export class CombatSimulation {
   get defenseBonus(){
     // The wall gives cover until its time or its hit points run out (ended() clears coverAt).
     const p=this.host.position(),cover=(this.statuses.cover??0)>0&&!!this.coverAt&&Math.hypot(p.x-this.coverAt.x,p.z-this.coverAt.z)<=DZ.sandbag.radius;
-    return (this.statuses.giant>0?DZ.giant.defence:0)+((this.statuses.tank??0)>0?DZ.tank.defence:0)+(cover?DZ.sandbag.defence:0);
+    return (this.statuses.giant>0?DZ.giant.defence:0)+((this.statuses.tank??0)>0?DZ.tank.defence:0)+(cover?DZ.sandbag.defence:0)+((this.statuses.pose??0)>0?DZ.treepose.defence:0);
   }
   /** Extra move speed (fraction): flight, vanish, tank mode, bat form, the ice rink, ribbon glide, kite. */
   get speedBonus(){return (this.statuses.swift??0)>0?this.swift:0;}
@@ -696,6 +710,45 @@ export class CombatSimulation {
       case 'starshower':{const c={...p};for(let i=0;i<K.starshower.count;i++){const a=angle+i/K.starshower.count*Math.PI*2,point={x:c.x+Math.sin(a)*K.starshower.ring,z:c.z+Math.cos(a)*K.starshower.ring},at=i*K.starshower.spacing;
           this.later(at,()=>this.visual('starlet',point,K.starshower.radius,K.starshower.fall,i%2?'#ff8a7a':'#ffd84a'));this.later(at+K.starshower.fall,()=>this.area(point,K.starshower.radius,K.starshower.power,0,0,'#ffd84a',1));}
         this.later(K.starshower.fall+K.starshower.count*K.starshower.spacing+K.starshower.finale,()=>this.area(c,K.starshower.finalRadius,K.starshower.finalPower,K.starshower.stun,0,'#ffd84a',1.2,'goldstar'));break;}
+      // ---- Sporty swimmer (a splash wave, a bubble shield, a torpedo dive, a whirlpool)
+      case 'splash':this.visual('splash',p,K.splash.radius,.7,'#3fe0ff',angle);for(const t of this.within(p,K.splash.radius)){const x=t.x-p.x,z=t.z-p.z,l=Math.hypot(x,z);if(l===0||(x*d.x+z*d.z)/l>=K.splash.cone){this.damage(t,K.splash.power,0,0,K.splash.knock);this.host.status?.(t,'slow',K.splash.slow);}}break;
+      case 'bubble':this.statuses.shield=K.bubble.time;this.host.heal?.(K.bubble.heal);this.visual('bubble',p,1.5,K.bubble.time,'#7ff3ff');break;
+      case 'torpedo':this.visual('torpedo',p,K.torpedo.speed*K.torpedo.time,.6,'#3fe0ff',angle);this.dash(K.torpedo.power,K.torpedo.speed,K.torpedo.time);break;
+      case 'whirlpool':{const c=this.spot(K.whirlpool.range,K.whirlpool.fallback,d);this.visual('whirlpool',c,K.whirlpool.pull,K.whirlpool.time,'#22c8e8');
+        // Each tick draws everything within the pull a fifth of the way in and stings what is already in the eye.
+        for(let i=0;i<K.whirlpool.time/K.whirlpool.tick;i++)this.later(i*K.whirlpool.tick,()=>{for(const t of this.within(c,K.whirlpool.pull)){this.host.moveTarget?.(t,c.x+(t.x-c.x)*.8,c.z+(t.z-c.z)*.8);this.host.status?.(t,'slow',K.whirlpool.tick+.1);if(Math.hypot(t.x-c.x,t.z-c.z)<=K.whirlpool.radius+t.radius)this.damage(t,K.whirlpool.power,0,0,0);}});break;}
+      // ---- K-pop idol (a mic drop, a light-stick beam, an encore, the spotlight finale)
+      case 'micdrop':this.visual('micdrop',p,K.micdrop.radius,.7,'#ff4fb6');this.area(p,K.micdrop.radius,K.micdrop.power,K.micdrop.stun,0,'#ff4fb6',K.micdrop.knock,undefined,true);break;
+      case 'stickbeam':{this.visual('stickbeam',p,K.stickbeam.length,.45,'#ff4fb6',angle);
+        for(const t of this.host.targets()){const x=t.x-p.x,z=t.z-p.z,along=x*d.x+z*d.z,across=Math.abs(x*d.z-z*d.x);
+          if(t.hp>0&&along>0&&along<K.stickbeam.length+t.radius&&across<t.radius+K.stickbeam.width/2){this.damage(t,K.stickbeam.power,0,0,.5);this.host.status?.(t,'blind',K.stickbeam.blind);}}
+        break;}
+      case 'encore':this.host.heal?.(K.encore.heal);this.haste(K.encore.speed,K.encore.time);this.statuses.cheer=Math.max(this.statuses.cheer??0,K.encore.cheerTime);this.visual('encore',p,2.2,1.4,'#ffd84a');break;
+      case 'spotlight':{const c=this.spot(K.spotlight.range,K.spotlight.fallback,d);this.visual('spotlight',c,K.spotlight.radius,K.spotlight.delay+K.spotlight.beats*K.spotlight.gap+.5,'#fff3a8');
+        // The stage lights come on, the confetti cannons fire on the beat, and the last beat is the big finish that stuns.
+        for(let b=0;b<K.spotlight.beats;b++)this.later(K.spotlight.delay+b*K.spotlight.gap,()=>this.area(c,K.spotlight.radius,K.spotlight.power,0,0,'#ff4fb6',.6,'confetti',b>0));
+        this.later(K.spotlight.delay+K.spotlight.beats*K.spotlight.gap,()=>this.area(c,K.spotlight.radius,K.spotlight.final,K.spotlight.stun,0,'#ffd84a',1.2,'confetti'));break;}
+      // ---- Yoga teacher (the tree pose, a sun salutation, a calm breath, a lotus bloom)
+      case 'treepose':this.statuses.pose=K.treepose.time;this.host.heal?.(K.treepose.heal);this.visual('treepose',p,1.6,K.treepose.time,'#8ee01e');break;
+      case 'sunsalute':this.statuses.sun=K.sunsalute.time;this.visual('sunsalute',p,1.8,K.sunsalute.time,'#ffb02e');for(let i=1;i<=K.sunsalute.time/K.sunsalute.tick;i++)this.later(i*K.sunsalute.tick,()=>this.host.heal?.(K.sunsalute.perTick));break;
+      case 'breath':this.visual('breath',p,K.breath.radius,.8,'#c8ffe0',angle);for(const t of this.within(p,K.breath.radius)){const x=t.x-p.x,z=t.z-p.z,l=Math.hypot(x,z);if(l===0||(x*d.x+z*d.z)/l>=K.breath.cone){this.damage(t,K.breath.power,0,0,K.breath.knock);this.host.status?.(t,'slow',K.breath.slow);}}break;
+      case 'lotusbloom':{const c={...p};this.visual('lotusbloom',c,K.lotusbloom.radius,K.lotusbloom.time,'#ee1e8a');for(const t of this.within(c,K.lotusbloom.radius))this.host.status?.(t,'stun',K.lotusbloom.root);
+        for(let i=1;i<=K.lotusbloom.time/K.lotusbloom.tick;i++)this.later(i*K.lotusbloom.tick,()=>{for(const t of this.within(c,K.lotusbloom.radius)){this.damage(t,K.lotusbloom.power,0,0,0);this.host.status?.(t,'slow',K.lotusbloom.slow);}});break;}
+      // ---- Kindhearted nurse (first aid, a bandage wrap, a bouncing vitamin, the ambulance rush)
+      case 'firstaid':this.host.heal?.(K.firstaid.heal);this.statuses.invuln=Math.max(this.statuses.invuln??0,K.firstaid.guard);this.visual('firstaid',p,1.8,1.2,'#ff3b4e');break;
+      case 'bandage':{const t=this.nearest(K.bandage.range);if(!t)return false;const others=this.within(t,K.bandage.around).filter(e=>e!==t).sort((a,b)=>Math.hypot(a.x-t.x,a.z-t.z)-Math.hypot(b.x-t.x,b.z-t.z)).slice(0,K.bandage.count-1);
+        for(const e of [t,...others]){this.damage(e,K.bandage.power,0,0,0);this.host.status?.(e,'stun',K.bandage.stun);this.visual('bandage',e,Math.max(.6,e.radius),K.bandage.stun,'#ffffff');}break;}
+      case 'vitamin':{const first=this.nearest(K.vitamin.range);if(!first)return false;
+        // The pill hops to the nearest creature it has not hit within the gap, a set number of times; each hit heals you a little.
+        const hit=new Set<string>();let from:CombatPoint={...p},t:CombatTarget|undefined=first;
+        for(let i=0;i<K.vitamin.bounces&&t;i++){const target:CombatTarget=t,at={...from};hit.add(target.id);
+          this.later(i*K.vitamin.hop,()=>{this.visual('pill',at,Math.hypot(target.x-at.x,target.z-at.z),K.vitamin.hop,i%2?'#ffd84a':'#ff4fa0',Math.atan2(target.x-at.x,target.z-at.z));this.later(K.vitamin.hop*.9,()=>{if(target.hp<=0)return;this.damage(target,K.vitamin.power,0,0,.5);this.host.heal?.(K.vitamin.heal);});});
+          from={x:target.x,z:target.z};t=this.host.targets().filter(e=>e.hp>0&&!hit.has(e.id)&&Math.hypot(e.x-target.x,e.z-target.z)<=K.vitamin.gap+e.radius).sort((a,b)=>Math.hypot(a.x-target.x,a.z-target.z)-Math.hypot(b.x-target.x,b.z-target.z))[0];}
+        break;}
+      case 'ambulance':this.visual('siren',p,K.ambulance.speed*K.ambulance.time,K.ambulance.time+.3,'#ff3b4e',angle);this.dash(K.ambulance.power,K.ambulance.speed,K.ambulance.time,{then:()=>{
+        // Every creature the rush struck is shoved aside off the road (to the side it stood on), then the siren carries you on faster.
+        const at=this.host.position(),struck=this.action?.hit??new Set<string>();for(const t of this.host.targets())if(struck.has(t.id)&&t.hp>0&&!t.boss){const side=Math.sign((t.x-at.x)*d.z-(t.z-at.z)*d.x)||1;this.host.moveTarget?.(t,t.x+d.z*side*K.ambulance.knock,t.z-d.x*side*K.ambulance.knock);}
+        this.haste(K.ambulance.boost,K.ambulance.boostTime);}});break;
       default:return false;
     }
     return true;

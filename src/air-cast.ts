@@ -64,6 +64,14 @@ export const AIR_CAST: Readonly<Record<string, AirCastRule>> = {
   goldstar: body, bamboo: plunge, drum: plunge, bigstar: far,
   // Dawn star dancer: the ribbon and the glow start up there, the sparkle step holds its height, the stars fall round the spot under her
   lasso: body, dawnglow: body, sparklestep: move('glide'), starshower: ground,
+  // Sporty swimmer: the splash and the bubble start up there, the torpedo glides at its height, the whirlpool opens on the ground ahead
+  splash: body, bubble: body, torpedo: move('glide'), whirlpool: far,
+  // K-pop idol: the mic is dropped on the ground under her, the beam and the encore start up there, the spotlight falls on the enemy
+  micdrop: plunge, stickbeam: body, encore: body, spotlight: far,
+  // Yoga teacher: the tree pose is a stance on the ground; the salutation and the breath start up there; the lotus opens on the ground
+  treepose: plunge, sunsalute: body, breath: body, lotusbloom: ground,
+  // Kindhearted nurse: first aid and the pill start up there, the bandage flies to its target, the ambulance drives on the ground
+  firstaid: body, bandage: far, vitamin: body, ambulance: plunge,
 };
 export const airCastRule = (effect: string | undefined): AirCastRule | undefined => effect ? AIR_CAST[effect] : undefined;
 

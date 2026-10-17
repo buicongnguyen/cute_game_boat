@@ -195,6 +195,28 @@ export function skillFacts(effect: string): SkillFacts {
       return { damage: strikes(K.sparklestep.trail, K.sparklestep.tick) * K.sparklestep.power * CONTACT, burst: strikes(BURST_WINDOW, K.sparklestep.tick) * K.sparklestep.power * CONTACT, soft: K.sparklestep.trail * CONTACT, move: length, safe: K.sparklestep.time, area: length * 2 * K.sparklestep.width, reach: length }; }
     case 'starshower': { const near = ring(K.starshower.count).filter(a => 2 * K.starshower.ring * Math.abs(Math.sin(a / 2)) <= K.starshower.radius + REF_RADIUS).length; // a creature standing on the ring of stars
       return { damage: near * K.starshower.power + K.starshower.finalPower, hard: K.starshower.stun, area: circle(Math.max(K.starshower.finalRadius, K.starshower.ring + K.starshower.radius)), reach: Math.max(K.starshower.finalRadius, K.starshower.ring + K.starshower.radius) }; }
+    // Sporty swimmer
+    case 'splash': return { damage: K.splash.power, soft: K.splash.slow, area: Math.acos(K.splash.cone) * K.splash.radius ** 2, reach: K.splash.radius };
+    case 'bubble': return { safe: K.bubble.time, heal: K.bubble.heal };
+    case 'torpedo': { const length = K.torpedo.speed * K.torpedo.time; return { damage: K.torpedo.power, move: length, safe: K.torpedo.time, area: length * 2 * REF_RADIUS, reach: length }; }
+    case 'whirlpool': { const ticks = K.whirlpool.time / K.whirlpool.tick; // a creature pulled into the eye is stung every tick it stays (half of them, it arrives on the way)
+      return { damage: ticks * K.whirlpool.power * CONTACT, burst: strikes(BURST_WINDOW, K.whirlpool.tick) * K.whirlpool.power * CONTACT, soft: K.whirlpool.time, area: circle(K.whirlpool.pull), reach: K.whirlpool.range + K.whirlpool.pull }; }
+    // K-pop idol
+    case 'micdrop': return { damage: K.micdrop.power, hard: K.micdrop.stun, area: circle(K.micdrop.radius), reach: K.micdrop.radius };
+    case 'stickbeam': return { damage: K.stickbeam.power, soft: K.stickbeam.blind, area: K.stickbeam.length * K.stickbeam.width, reach: K.stickbeam.length };
+    case 'encore': return { heal: K.encore.heal, speed: { bonus: K.encore.speed, time: K.encore.time } }; // the pets' cheer is theirs, as with the morning glow
+    case 'spotlight': return { damage: K.spotlight.beats * K.spotlight.power + K.spotlight.final, hard: K.spotlight.stun, area: circle(K.spotlight.radius), reach: K.spotlight.range + K.spotlight.radius };
+    // Yoga teacher
+    case 'treepose': return { heal: K.treepose.heal, cover: K.treepose.time * defenceCover(K.treepose.defence) };
+    case 'sunsalute': return { heal: K.sunsalute.time / K.sunsalute.tick * K.sunsalute.perTick };
+    case 'breath': return { damage: K.breath.power, soft: K.breath.slow, area: Math.acos(K.breath.cone) * K.breath.radius ** 2, reach: K.breath.radius };
+    case 'lotusbloom': { const ticks = K.lotusbloom.time / K.lotusbloom.tick;
+      return { damage: ticks * K.lotusbloom.power * CONTACT, burst: strikes(BURST_WINDOW, K.lotusbloom.tick) * K.lotusbloom.power, hard: K.lotusbloom.root, soft: K.lotusbloom.time * CONTACT, area: circle(K.lotusbloom.radius), reach: K.lotusbloom.radius }; }
+    // Kindhearted nurse
+    case 'firstaid': return { heal: K.firstaid.heal, safe: K.firstaid.guard };
+    case 'bandage': return { damage: K.bandage.power, hard: K.bandage.stun, area: circle(K.bandage.around), reach: K.bandage.range };
+    case 'vitamin': return { damage: K.vitamin.power, heal: K.vitamin.bounces * K.vitamin.heal, area: K.vitamin.bounces * circle(REF_RADIUS), reach: K.vitamin.range + (K.vitamin.bounces - 1) * K.vitamin.gap }; // one creature takes one hop; the hops heal for each
+    case 'ambulance': { const length = K.ambulance.speed * K.ambulance.time; return { damage: K.ambulance.power, move: length, safe: K.ambulance.time, speed: { bonus: K.ambulance.boost, time: K.ambulance.boostTime }, area: length * 2 * REF_RADIUS, reach: length }; }
     default: return {};
   }
 }

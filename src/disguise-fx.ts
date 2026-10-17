@@ -4,7 +4,7 @@ import { LOOKS, LOOK_LIFE, MAX_PER_CAST, SHAPES, screenPulse, type LookContext, 
 
 interface Host { ground(x:number,z:number):number; explorerAt(x:number,z:number):T.Object3D|null; /** 0-1 particle density of the graphics setting. */ density?():number; /** True when the cast is the local player's (screen pulses). */ isLocal?(x:number,z:number):boolean }
 interface Cast { effect:CombatEffect; age:number; life:number; model:T.Object3D|null }
-const FOLLOW=new Set(['tank','charge','parrot','shield','bats','rush','whirl','ribbon','kite','dragondance','starshield','torch']);
+const FOLLOW=new Set(['tank','charge','parrot','shield','bats','rush','whirl','ribbon','kite','dragondance','starshield','torch','bubble','encore','treepose','sunsalute','firstaid','siren']);
 const BATCH=900,MAX_CASTS=48;
 /** Looks that run from the explorer to a target on the ground: cast from the air they slant down (skill-visuals.ts LookContext.lift) instead of floating level. */
 const SLANT=new Set(['hook','drain']);

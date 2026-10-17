@@ -10,6 +10,7 @@ Built with Blender 4.5 LTS by headless generators. All geometry and materials ar
 - `blender/kit/build_fish.py`: 18 fish and the old boot, pond dressing (bobber, lily pad and flower, reeds) and the fish icons.
 - `blender/kit/hero_spec.py`: the explorer's part pivots, hand grips and body envelope, shared by every gear generator so pieces fit the same body.
 - `blender/kit/build_hero.py`: the explorer (`hero.glb`) and the ten disguises.
+- `blender/kit/build_everyday_disguises.py` (boat): the swimmer, K-pop, yoga and nurse costumes (2,041–2,500 triangles) and the bear and fox ears; `--install` appends them to `disguises.glb` / `hero-parts.glb` through `art/build-boat-appearance.mjs` and writes their portraits; previews `previews/kit/everyday-disguises*.webp`.
 - `blender/kit/build_wear.py`: hats, outfits and boots.
 - `blender/kit/build_weapons.py`: swords, blasters, rods and other held weapons, plus the seven pets.
 - `blender/kit/build_items.py`: icons for materials, foods, seeds and farm supplies.
