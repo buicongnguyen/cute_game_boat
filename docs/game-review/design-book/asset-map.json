@@ -1,0 +1,530 @@
+{
+  "schema": 1,
+  "render": {
+    "method": "Pure Node CPU orthographic triangle projection using Three GLTFLoader and actual game asset/avatar construction; transparent PNG. Flat material/vertex colors with fixed Lambert lighting; excludes shader ink outlines. These are model previews, not gameplay screenshots.",
+    "width": 384,
+    "height": 384,
+    "cameraDirection": [
+      0.4551040991908594,
+      0.398216086792002,
+      0.796432173584004
+    ],
+    "padding": 1.16,
+    "lightDirection": [
+      -0.309426373877638,
+      0.7219948723811553,
+      0.618852747755276
+    ],
+    "eachModelFittedIndependently": true
+  },
+  "assets": {
+    "hero": {
+      "file": "assets/hero.png",
+      "type": "model-preview",
+      "source": [
+        "src/model.ts",
+        "src/world.ts",
+        "src/assets.ts",
+        "public/assets/models/hero-girl-tall.glb"
+      ],
+      "description": "Default explorer look and blue shirt; resting arms.",
+      "triangles": 3836,
+      "bounds": {
+        "min": [
+          -0.5461276429690385,
+          0.00003904104232788086,
+          -0.4049072265625
+        ],
+        "max": [
+          0.5461276429690385,
+          2.6879591941833496,
+          0.4049072265625
+        ]
+      }
+    },
+    "pepper": {
+      "file": "assets/pepper.png",
+      "type": "model-preview",
+      "source": [
+        "src/friend-view.ts",
+        "src/friends-state.ts",
+        "src/friends.ts",
+        "public/assets/models/hero-girl.glb",
+        "public/assets/models/gear-wear.glb"
+      ],
+      "description": "Pepper at initial growth stage with the helper look, actual white shirt, dark hair and automatic chef hat. Independently fitted thumbnail does not show relative character size.",
+      "triangles": 4308,
+      "bounds": {
+        "min": [
+          -0.21082318952051188,
+          0.000014344447338277,
+          -0.21082318952051188
+        ],
+        "max": [
+          0.21082318952051188,
+          1.0576168906498076,
+          0.21082318952051188
+        ]
+      }
+    },
+    "exchange": {
+      "file": "assets/exchange.png",
+      "type": "model-preview",
+      "source": [
+        "src/house.ts",
+        "public/assets/models/house.glb"
+      ],
+      "description": "Current cottage furniture kit node exchange_box; isolated model preview.",
+      "triangles": 300,
+      "bounds": {
+        "min": [
+          -0.679931640625,
+          0.00013671875000000056,
+          -0.43994140625
+        ],
+        "max": [
+          0.679931640625,
+          1.139765625,
+          0.53490234375
+        ]
+      }
+    },
+    "magic-mirror": {
+      "file": "assets/magic-mirror.png",
+      "type": "model-preview",
+      "source": [
+        "src/house.ts",
+        "public/assets/models/house.glb"
+      ],
+      "description": "Current cottage furniture kit node mirror; isolated model preview.",
+      "triangles": 540,
+      "bounds": {
+        "min": [
+          -0.35009765625,
+          0,
+          -0.25
+        ],
+        "max": [
+          0.35009765625,
+          1.5400390625,
+          0.14990234375
+        ]
+      }
+    },
+    "storage-chest": {
+      "file": "assets/storage-chest.png",
+      "type": "model-preview",
+      "source": [
+        "src/house.ts",
+        "public/assets/models/house.glb"
+      ],
+      "description": "Current cottage furniture kit node storage_chest; isolated model preview.",
+      "triangles": 136,
+      "bounds": {
+        "min": [
+          -0.64501953125,
+          0,
+          -0.6250000000000002
+        ],
+        "max": [
+          0.64501953125,
+          0.8999023437500001,
+          0.6250000000000001
+        ]
+      }
+    },
+    "stove": {
+      "file": "assets/stove.png",
+      "type": "model-preview",
+      "source": [
+        "src/house.ts",
+        "public/assets/models/house.glb"
+      ],
+      "description": "Current cottage furniture kit node stove; isolated model preview.",
+      "triangles": 344,
+      "bounds": {
+        "min": [
+          -0.39990234375,
+          0.009765625,
+          -0.324951171875
+        ],
+        "max": [
+          0.39990234375,
+          1.1201171875,
+          0.3798828125
+        ]
+      }
+    },
+    "workbench": {
+      "file": "assets/workbench.png",
+      "type": "model-preview",
+      "source": [
+        "src/house.ts",
+        "public/assets/models/house.glb"
+      ],
+      "description": "Current cottage furniture kit node workbench; isolated model preview.",
+      "triangles": 536,
+      "bounds": {
+        "min": [
+          -0.824951171875,
+          0,
+          -0.35498046875
+        ],
+        "max": [
+          0.824951171875,
+          1.60986328125,
+          0.35498046875
+        ]
+      }
+    },
+    "upgrade-bench": {
+      "file": "assets/upgrade-bench.png",
+      "type": "model-preview",
+      "source": [
+        "src/house.ts",
+        "public/assets/models/house.glb"
+      ],
+      "description": "Current cottage furniture kit node upgrade_bench; isolated model preview.",
+      "triangles": 340,
+      "bounds": {
+        "min": [
+          -0.60009765625,
+          0,
+          -0.330078125
+        ],
+        "max": [
+          0.60009765625,
+          1.06982421875,
+          0.330078125
+        ]
+      }
+    },
+    "wishing-cabinet": {
+      "file": "assets/wishing-cabinet.png",
+      "type": "model-preview",
+      "source": [
+        "src/house.ts",
+        "public/assets/models/house.glb"
+      ],
+      "description": "Current cottage furniture kit node wishing_cabinet; isolated model preview.",
+      "triangles": 228,
+      "bounds": {
+        "min": [
+          -0.625,
+          -0.00007812499999999833,
+          -0.3798828125
+        ],
+        "max": [
+          0.625,
+          1.79271484375,
+          0.3798828125
+        ]
+      }
+    },
+    "sleeping-bed": {
+      "file": "assets/sleeping-bed.png",
+      "type": "model-preview",
+      "source": [
+        "src/house.ts",
+        "public/assets/models/house.glb"
+      ],
+      "description": "Current cottage furniture kit node bed; isolated model preview.",
+      "triangles": 820,
+      "bounds": {
+        "min": [
+          -0.75,
+          0,
+          -1.06005859375
+        ],
+        "max": [
+          0.75,
+          1,
+          1.080078125
+        ]
+      }
+    },
+    "garden-bed": {
+      "file": "assets/garden-bed.png",
+      "type": "model-preview",
+      "source": [
+        "public/assets/models/garden-bed.glb"
+      ],
+      "description": "Existing raised garden plot model, empty.",
+      "triangles": 780,
+      "bounds": {
+        "min": [
+          -0.969970703125,
+          0,
+          -0.969970703125
+        ],
+        "max": [
+          0.969970703125,
+          0.300048828125,
+          0.969970703125
+        ]
+      }
+    },
+    "hatch": {
+      "file": "assets/hatch.png",
+      "type": "model-preview",
+      "source": [
+        "public/assets/models/boat-hatch.glb"
+      ],
+      "description": "Existing boat hatch model, isolated from the boat.",
+      "triangles": 1253,
+      "bounds": {
+        "min": [
+          -1.02001953125,
+          -0.75341796875,
+          -1.02001953125
+        ],
+        "max": [
+          1.4599609375,
+          1.24462890625,
+          1.02001953125
+        ]
+      }
+    },
+    "mushroom": {
+      "file": "assets/mushroom.png",
+      "type": "model-preview",
+      "source": [
+        "src/creature-art.ts",
+        "public/assets/models/creatures.glb"
+      ],
+      "description": "Existing mushroom enemy model in its unanimated rest pose.",
+      "triangles": 1568,
+      "bounds": {
+        "min": [
+          -0.9599170895532616,
+          0,
+          -0.9548441278351293
+        ],
+        "max": [
+          0.9599170895532616,
+          2.308761244163335,
+          0.9317339688969709
+        ]
+      }
+    },
+    "carrot": {
+      "file": "assets/carrot.webp",
+      "type": "existing-icon",
+      "source": [
+        "public/assets/icons/crops/carrot.webp"
+      ],
+      "description": "Existing game icon copied byte-for-byte."
+    },
+    "radish": {
+      "file": "assets/radish.webp",
+      "type": "existing-icon",
+      "source": [
+        "public/assets/icons/crops/radish.webp"
+      ],
+      "description": "Existing game icon copied byte-for-byte."
+    },
+    "sprout": {
+      "file": "assets/sprout.webp",
+      "type": "existing-icon",
+      "source": [
+        "public/assets/icons/crops/sprout.webp"
+      ],
+      "description": "Existing game icon copied byte-for-byte."
+    },
+    "pumpkin": {
+      "file": "assets/pumpkin.webp",
+      "type": "existing-icon",
+      "source": [
+        "public/assets/icons/crops/pumpkin.webp"
+      ],
+      "description": "Existing game icon copied byte-for-byte."
+    },
+    "mint": {
+      "file": "assets/mint.webp",
+      "type": "existing-icon",
+      "source": [
+        "public/assets/icons/crops/mint.webp"
+      ],
+      "description": "Existing game icon copied byte-for-byte."
+    },
+    "bean": {
+      "file": "assets/bean.webp",
+      "type": "existing-icon",
+      "source": [
+        "public/assets/icons/crops/bean.webp"
+      ],
+      "description": "Existing game icon copied byte-for-byte."
+    },
+    "sword_wood": {
+      "file": "assets/sword_wood.webp",
+      "type": "existing-icon",
+      "source": [
+        "public/assets/icons/items/sword_wood.webp"
+      ],
+      "description": "Existing game icon copied byte-for-byte."
+    },
+    "gun_pea": {
+      "file": "assets/gun_pea.webp",
+      "type": "existing-icon",
+      "source": [
+        "public/assets/icons/items/gun_pea.webp"
+      ],
+      "description": "Existing game icon copied byte-for-byte."
+    },
+    "hat_straw": {
+      "file": "assets/hat_straw.webp",
+      "type": "existing-icon",
+      "source": [
+        "public/assets/icons/items/hat_straw.webp"
+      ],
+      "description": "Existing game icon copied byte-for-byte."
+    },
+    "rod": {
+      "file": "assets/rod.webp",
+      "type": "existing-icon",
+      "source": [
+        "public/assets/icons/items/rod.webp"
+      ],
+      "description": "Existing game icon copied byte-for-byte."
+    },
+    "armor_leather": {
+      "file": "assets/armor_leather.webp",
+      "type": "existing-icon",
+      "source": [
+        "public/assets/icons/items/armor_leather.webp"
+      ],
+      "description": "Existing game icon copied byte-for-byte."
+    },
+    "manure": {
+      "file": "assets/manure.webp",
+      "type": "existing-icon",
+      "source": [
+        "public/assets/icons/items/manure.webp"
+      ],
+      "description": "Existing game icon copied byte-for-byte."
+    },
+    "spore": {
+      "file": "assets/spore.webp",
+      "type": "existing-icon",
+      "source": [
+        "public/assets/icons/items/spore.webp"
+      ],
+      "description": "Existing game icon copied byte-for-byte."
+    },
+    "potion": {
+      "file": "assets/potion.webp",
+      "type": "existing-icon",
+      "source": [
+        "public/assets/icons/items/potion.webp"
+      ],
+      "description": "Existing game icon copied byte-for-byte."
+    },
+    "worm": {
+      "file": "assets/worm.webp",
+      "type": "existing-icon",
+      "source": [
+        "public/assets/icons/items/worm.webp"
+      ],
+      "description": "Existing game icon copied byte-for-byte."
+    },
+    "seed_star": {
+      "file": "assets/seed_star.webp",
+      "type": "existing-icon",
+      "source": [
+        "public/assets/icons/items/seed_star.webp"
+      ],
+      "description": "Existing game icon copied byte-for-byte."
+    },
+    "plot_kit": {
+      "file": "assets/plot_kit.webp",
+      "type": "existing-icon",
+      "source": [
+        "public/assets/icons/items/plot_kit.webp"
+      ],
+      "description": "Existing game icon copied byte-for-byte."
+    },
+    "leather": {
+      "file": "assets/leather.webp",
+      "type": "existing-icon",
+      "source": [
+        "public/assets/icons/items/leather.webp"
+      ],
+      "description": "Existing game icon copied byte-for-byte."
+    },
+    "fish_perch": {
+      "file": "assets/fish_perch.webp",
+      "type": "existing-icon",
+      "source": [
+        "public/assets/icons/fish/fish_perch.webp"
+      ],
+      "description": "Existing game icon copied byte-for-byte."
+    },
+    "fish_clown": {
+      "file": "assets/fish_clown.webp",
+      "type": "existing-icon",
+      "source": [
+        "public/assets/icons/fish/fish_clown.webp"
+      ],
+      "description": "Existing game icon copied byte-for-byte."
+    },
+    "cooked-carrot": {
+      "file": "assets/cooked-carrot.webp",
+      "type": "existing-icon",
+      "source": [
+        "public/assets/icons/items/cooked_carrot.webp"
+      ],
+      "description": "Existing game icon copied byte-for-byte."
+    },
+    "cooked-radish": {
+      "file": "assets/cooked-radish.webp",
+      "type": "existing-icon",
+      "source": [
+        "public/assets/icons/items/cooked_radish.webp"
+      ],
+      "description": "Existing game icon copied byte-for-byte."
+    },
+    "keeper": {
+      "file": "assets/hero.png",
+      "type": "model-preview",
+      "source": [
+        "src/model.ts",
+        "src/world.ts",
+        "src/assets.ts",
+        "public/assets/models/hero-girl-tall.glb"
+      ],
+      "description": "Default explorer look and blue shirt; resting arms. Keeper cover image alias.",
+      "triangles": 3836,
+      "bounds": {
+        "min": [
+          -0.5461276429690385,
+          0.00003904104232788086,
+          -0.4049072265625
+        ],
+        "max": [
+          0.5461276429690385,
+          2.6879591941833496,
+          0.4049072265625
+        ]
+      }
+    }
+  },
+  "contactSheet": {
+    "file": "assets/contact-sheet.png",
+    "columns": 4,
+    "order": [
+      "hero",
+      "pepper",
+      "exchange",
+      "magic-mirror",
+      "storage-chest",
+      "stove",
+      "workbench",
+      "upgrade-bench",
+      "wishing-cabinet",
+      "sleeping-bed",
+      "garden-bed",
+      "hatch",
+      "mushroom"
+    ]
+  }
+}

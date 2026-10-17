@@ -1,8 +1,9 @@
 /**
  * Publishes how wide the dock (the menu column on the right edge) is as the CSS variable --dock-w, so the
- * map panel, the Home tab and the quest slips (hud-ours.css) sit just left of it however many columns its buttons
- * fold into on this screen. It also keeps --menu-bottom (where the dock's buttons end) for sheets that want it.
- * Measured when the dock's size changes, never per frame: DOM changes are filtered (the game rewrites unchanged
+ * map panel and Home tab (hud-ours.css) sit just left of it however many columns its buttons fold into on this screen.
+ * It also keeps --menu-bottom (where the dock's buttons end) and --hero-h (the player plate's visible height), so
+ * the compact task stack follows the plate when its layout changes.
+ * Measured when the dock or hero size changes, never per frame: DOM changes are filtered (the game rewrites unchanged
  * `hidden` flags every frame, and each rewrite still makes a mutation record) and coalesced to one measure per frame.
  */
 export function dockMetrics(dock: DOMRect, buttons: readonly DOMRect[]) {
@@ -17,17 +18,20 @@ export const realChange = (r: Pick<MutationRecord, 'type' | 'target' | 'attribut
     : r.type === 'attributes' ? (r.target as Element).getAttribute(r.attributeName ?? '') !== r.oldValue : false;
 export function initHudLayout() {
   const menu = document.querySelector<HTMLElement>('#hud .top-actions'); if (!menu) return;
-  let lastWidth = -1, lastBottom = -1;
+  const hero = document.querySelector<HTMLElement>('#hud .player-card');
+  let lastWidth = -1, lastBottom = -1, lastHeroHeight = -1;
   const measure = () => {
     const { width, bottom } = dockMetrics(menu.getBoundingClientRect(), Array.from(menu.querySelectorAll<HTMLElement>('button'), b => b.getBoundingClientRect()));
     const root = document.documentElement.style;
+    const heroHeight = hero ? Math.ceil(hero.getBoundingClientRect().height) : 0;
+    if (heroHeight > 0 && heroHeight !== lastHeroHeight) { lastHeroHeight = heroHeight; root.setProperty('--hero-h', heroHeight + 'px'); }
     if (width !== lastWidth && width > 0) { lastWidth = width; root.setProperty('--dock-w', width + 'px'); }
     if (bottom !== lastBottom && bottom > 0) { lastBottom = bottom; root.setProperty('--menu-bottom', bottom + 'px'); }
   };
   measure();
   let queued = 0;
   const later = () => { if (!queued) queued = requestAnimationFrame(() => { queued = 0; measure(); }); };
-  if (typeof ResizeObserver !== 'undefined') new ResizeObserver(measure).observe(menu); // runs after layout: no forced reflow
+  if (typeof ResizeObserver !== 'undefined') { const sizes = new ResizeObserver(measure); sizes.observe(menu); if (hero) sizes.observe(hero); } // runs after layout: no forced reflow
   // Buttons come and go (online, neighbours, install): only the dock's own child list and its two slots are watched.
   if (typeof MutationObserver !== 'undefined') {
     const watch = new MutationObserver(records => { if (records.some(realChange)) later(); }); watch.observe(menu, { childList: true });

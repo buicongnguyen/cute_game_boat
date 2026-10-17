@@ -1,0 +1,36 @@
+{
+  "kind": "Static artifact verification; no browser execution",
+  "htmlBytes": 594261,
+  "templateIds": 68,
+  "clientTargets": 46,
+  "links": 24,
+  "uniqueImageStructuresChecked": 42,
+  "imageFormats": {
+    "data:image/webp": 32,
+    "data:image/png": 10
+  },
+  "chapters": 4,
+  "chapterSteps": [
+    9,
+    6,
+    6,
+    8
+  ],
+  "assets": 38,
+  "graphs": 6,
+  "milestones": 29,
+  "proposedScenes": 29,
+  "worlds": 9,
+  "chapterReviewQuestions": [
+    4,
+    3,
+    5,
+    3
+  ],
+  "sourceMilestonesMatch": true,
+  "storyHashMatches": true,
+  "networkRuntimeDependencies": 0,
+  "browserInteraction": "Unrun: CUA browser surfaces unavailable",
+  "printLayout": "Unrun",
+  "engineeringTreeMatchesCanonical": true
+}

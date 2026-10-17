@@ -1,0 +1,8819 @@
+{
+  "commit": "6c4477fdc795995fa5d7af6a58f83845591693af",
+  "crops": {
+    "radish": {
+      "name": "Radish",
+      "icon": "🌱",
+      "duration": 150000,
+      "xp": 18,
+      "level": 1
+    },
+    "carrot": {
+      "name": "Carrot",
+      "icon": "🥕",
+      "duration": 100000,
+      "xp": 12,
+      "level": 1,
+      "buff": {
+        "speed": 0.2,
+        "time": 45
+      }
+    },
+    "pumpkin": {
+      "name": "Pumpkin",
+      "icon": "🎃",
+      "duration": 300000,
+      "xp": 42,
+      "level": 2
+    },
+    "mint": {
+      "name": "Mint",
+      "icon": "🌿",
+      "duration": 350000,
+      "xp": 42,
+      "level": 3,
+      "buff": {
+        "regen": 3,
+        "time": 60
+      }
+    },
+    "chili": {
+      "name": "Chili",
+      "icon": "🌶️",
+      "duration": 400000,
+      "xp": 54,
+      "level": 4,
+      "buff": {
+        "atk": 0.2,
+        "time": 60
+      }
+    },
+    "candy": {
+      "name": "Candy bloom",
+      "icon": "🍭",
+      "duration": 500000,
+      "xp": 78,
+      "level": 4
+    },
+    "bean": {
+      "name": "Shield bean",
+      "icon": "🫘",
+      "duration": 600000,
+      "xp": 72,
+      "level": 5,
+      "buff": {
+        "def": 15,
+        "time": 90
+      }
+    },
+    "star": {
+      "name": "Star fruit",
+      "icon": "⭐",
+      "duration": 800000,
+      "xp": 135,
+      "level": 6
+    },
+    "berry": {
+      "name": "Berry",
+      "icon": "🍓",
+      "duration": 700000,
+      "xp": 90,
+      "level": 6,
+      "buff": {
+        "xp": 0.5,
+        "time": 120
+      }
+    },
+    "coffee": {
+      "name": "Coffee bean",
+      "icon": "☕",
+      "duration": 600000,
+      "xp": 84,
+      "level": 7,
+      "buff": {
+        "haste": 0.35,
+        "time": 60
+      }
+    },
+    "moonflower": {
+      "name": "Moonflower",
+      "icon": "🌼",
+      "duration": 900000,
+      "xp": 120,
+      "level": 8,
+      "buff": {
+        "crit": 0.12,
+        "time": 90
+      }
+    },
+    "magnetmelon": {
+      "name": "Magnet melon",
+      "icon": "🧲",
+      "duration": 1000000,
+      "xp": 132,
+      "level": 9,
+      "buff": {
+        "magnet": 1,
+        "time": 120
+      }
+    },
+    "melon": {
+      "name": "Melon",
+      "icon": "🍉",
+      "duration": 1200000,
+      "xp": 240,
+      "level": 9
+    },
+    "clover": {
+      "name": "Lucky clover",
+      "icon": "🍀",
+      "duration": 1100000,
+      "xp": 150,
+      "level": 10,
+      "buff": {
+        "luck": 0.6,
+        "time": 180
+      }
+    },
+    "glowshroom": {
+      "name": "Glow mushroom",
+      "icon": "🍄",
+      "duration": 1000000,
+      "xp": 144,
+      "level": 11,
+      "buff": {
+        "light": 1,
+        "regen": 2,
+        "time": 240
+      }
+    },
+    "iceberry": {
+      "name": "Ice berry",
+      "icon": "🫐",
+      "duration": 1200000,
+      "xp": 180,
+      "level": 12,
+      "seed": "seed_ice",
+      "buff": {
+        "fireres": 0.6,
+        "time": 120
+      }
+    },
+    "goldcorn": {
+      "name": "Golden corn",
+      "icon": "🌽",
+      "duration": 1500000,
+      "xp": 210,
+      "level": 13
+    },
+    "dragonfruit": {
+      "name": "Dragon fruit",
+      "icon": "🐉",
+      "duration": 1600000,
+      "xp": 270,
+      "level": 15,
+      "seed": "seed_fire",
+      "buff": {
+        "atk": 0.3,
+        "regen": 5,
+        "time": 90
+      }
+    },
+    "rainbowrose": {
+      "name": "Rainbow rose",
+      "icon": "🌹",
+      "duration": 2000000,
+      "xp": 360,
+      "level": 18,
+      "seed": "seed_star",
+      "buff": {
+        "atk": 0.15,
+        "def": 12,
+        "haste": 0.15,
+        "regen": 3,
+        "speed": 0.1,
+        "crit": 0.05,
+        "time": 150
+      }
+    },
+    "apple": {
+      "name": "Magic Red Apple",
+      "icon": "🍎",
+      "duration": 28800000,
+      "xp": 400,
+      "level": 3
+    },
+    "grape": {
+      "name": "Juicy Purple Grapes",
+      "icon": "🍇",
+      "duration": 28800000,
+      "xp": 450,
+      "level": 5,
+      "buff": {
+        "regen": 4,
+        "time": 180
+      }
+    },
+    "mango": {
+      "name": "Golden Mango",
+      "icon": "🥭",
+      "duration": 28800000,
+      "xp": 500,
+      "level": 7,
+      "buff": {
+        "speed": 0.25,
+        "time": 180
+      }
+    },
+    "pineapple": {
+      "name": "Crown Pineapple",
+      "icon": "🍍",
+      "duration": 43200000,
+      "xp": 750,
+      "level": 9,
+      "buff": {
+        "atk": 0.25,
+        "time": 180
+      }
+    },
+    "coconut": {
+      "name": "Refreshing Coconut",
+      "icon": "🥥",
+      "duration": 43200000,
+      "xp": 800,
+      "level": 11,
+      "buff": {
+        "fireres": 0.5,
+        "time": 180
+      }
+    },
+    "durian": {
+      "name": "Spiky Durian",
+      "icon": "🌳",
+      "duration": 43200000,
+      "xp": 950,
+      "level": 14,
+      "buff": {
+        "def": 25,
+        "time": 180
+      }
+    },
+    "lychee": {
+      "name": "Ruby Lychee",
+      "icon": "🔴",
+      "duration": 50400000,
+      "xp": 1100,
+      "level": 16,
+      "buff": {
+        "crit": 0.15,
+        "haste": 0.2,
+        "time": 180
+      }
+    },
+    "peach": {
+      "name": "Immortal Peach",
+      "icon": "🍑",
+      "duration": 50400000,
+      "xp": 1400,
+      "level": 18,
+      "buff": {
+        "atk": 0.2,
+        "def": 15,
+        "regen": 5,
+        "xp": 0.5,
+        "time": 300
+      }
+    }
+  },
+  "items": {
+    "radish": {
+      "name": "Radish",
+      "icon": "🌱",
+      "type": "crop",
+      "sell": 12,
+      "heal": 12,
+      "desc": "Grows in 150s. Harvest: 18 XP. Sell: 12 energy."
+    },
+    "carrot": {
+      "name": "Carrot",
+      "icon": "🥕",
+      "type": "crop",
+      "sell": 9,
+      "heal": 11,
+      "buff": {
+        "speed": 0.2,
+        "time": 45
+      },
+      "desc": "Grows in 100s. Harvest: 12 XP. Sell: 9 energy."
+    },
+    "pumpkin": {
+      "name": "Pumpkin",
+      "icon": "🎃",
+      "type": "crop",
+      "sell": 30,
+      "heal": 18,
+      "desc": "Grows in 300s. Harvest: 42 XP. Sell: 30 energy."
+    },
+    "mint": {
+      "name": "Mint",
+      "icon": "🌿",
+      "type": "crop",
+      "sell": 27,
+      "heal": 17,
+      "buff": {
+        "regen": 3,
+        "time": 60
+      },
+      "desc": "Grows in 350s. Harvest: 42 XP. Sell: 27 energy."
+    },
+    "chili": {
+      "name": "Chili",
+      "icon": "🌶️",
+      "type": "crop",
+      "sell": 36,
+      "heal": 20,
+      "buff": {
+        "atk": 0.2,
+        "time": 60
+      },
+      "desc": "Grows in 400s. Harvest: 54 XP. Sell: 36 energy."
+    },
+    "candy": {
+      "name": "Candy bloom",
+      "icon": "🍭",
+      "type": "crop",
+      "sell": 54,
+      "heal": 26,
+      "desc": "Grows in 500s. Harvest: 78 XP. Sell: 54 energy."
+    },
+    "bean": {
+      "name": "Shield bean",
+      "icon": "🫘",
+      "type": "crop",
+      "sell": 48,
+      "heal": 24,
+      "buff": {
+        "def": 15,
+        "time": 90
+      },
+      "desc": "Grows in 600s. Harvest: 72 XP. Sell: 48 energy."
+    },
+    "star": {
+      "name": "Star fruit",
+      "icon": "⭐",
+      "type": "crop",
+      "sell": 96,
+      "heal": 40,
+      "desc": "Grows in 800s. Harvest: 135 XP. Sell: 96 energy."
+    },
+    "berry": {
+      "name": "Berry",
+      "icon": "🍓",
+      "type": "crop",
+      "sell": 60,
+      "heal": 28,
+      "buff": {
+        "xp": 0.5,
+        "time": 120
+      },
+      "desc": "Grows in 700s. Harvest: 90 XP. Sell: 60 energy."
+    },
+    "coffee": {
+      "name": "Coffee bean",
+      "icon": "☕",
+      "type": "crop",
+      "sell": 54,
+      "heal": 26,
+      "buff": {
+        "haste": 0.35,
+        "time": 60
+      },
+      "desc": "Grows in 600s. Harvest: 84 XP. Sell: 54 energy."
+    },
+    "moonflower": {
+      "name": "Moonflower",
+      "icon": "🌼",
+      "type": "crop",
+      "sell": 78,
+      "heal": 34,
+      "buff": {
+        "crit": 0.12,
+        "time": 90
+      },
+      "desc": "Grows in 900s. Harvest: 120 XP. Sell: 78 energy."
+    },
+    "magnetmelon": {
+      "name": "Magnet melon",
+      "icon": "🧲",
+      "type": "crop",
+      "sell": 90,
+      "heal": 38,
+      "buff": {
+        "magnet": 1,
+        "time": 120
+      },
+      "desc": "Grows in 1000s. Harvest: 132 XP. Sell: 90 energy."
+    },
+    "melon": {
+      "name": "Melon",
+      "icon": "🍉",
+      "type": "crop",
+      "sell": 180,
+      "heal": 68,
+      "desc": "Grows in 1200s. Harvest: 240 XP. Sell: 180 energy."
+    },
+    "clover": {
+      "name": "Lucky clover",
+      "icon": "🍀",
+      "type": "crop",
+      "sell": 102,
+      "heal": 42,
+      "buff": {
+        "luck": 0.6,
+        "time": 180
+      },
+      "desc": "Grows in 1100s. Harvest: 150 XP. Sell: 102 energy."
+    },
+    "glowshroom": {
+      "name": "Glow mushroom",
+      "icon": "🍄",
+      "type": "crop",
+      "sell": 90,
+      "heal": 38,
+      "buff": {
+        "light": 1,
+        "regen": 2,
+        "time": 240
+      },
+      "desc": "Grows in 1000s. Harvest: 144 XP. Sell: 90 energy."
+    },
+    "iceberry": {
+      "name": "Ice berry",
+      "icon": "🫐",
+      "type": "crop",
+      "sell": 120,
+      "heal": 48,
+      "buff": {
+        "fireres": 0.6,
+        "time": 120
+      },
+      "desc": "Grows in 1200s. Harvest: 180 XP. Sell: 120 energy."
+    },
+    "goldcorn": {
+      "name": "Golden corn",
+      "icon": "🌽",
+      "type": "crop",
+      "sell": 330,
+      "heal": 118,
+      "desc": "Grows in 1500s. Harvest: 210 XP. Sell: 330 energy."
+    },
+    "dragonfruit": {
+      "name": "Dragon fruit",
+      "icon": "🐉",
+      "type": "crop",
+      "sell": 210,
+      "heal": 9999,
+      "buff": {
+        "atk": 0.3,
+        "regen": 5,
+        "time": 90
+      },
+      "desc": "Grows in 1600s. Harvest: 270 XP. Sell: 210 energy."
+    },
+    "rainbowrose": {
+      "name": "Rainbow rose",
+      "icon": "🌹",
+      "type": "crop",
+      "sell": 270,
+      "heal": 98,
+      "buff": {
+        "atk": 0.15,
+        "def": 12,
+        "haste": 0.15,
+        "regen": 3,
+        "speed": 0.1,
+        "crit": 0.05,
+        "time": 150
+      },
+      "desc": "Grows in 2000s. Harvest: 360 XP. Sell: 270 energy."
+    },
+    "apple": {
+      "name": "Magic Red Apple",
+      "icon": "🍎",
+      "type": "crop",
+      "sell": 600,
+      "heal": 120,
+      "desc": "Grows in 28800s. Harvest: 400 XP. Sell: 600 energy."
+    },
+    "grape": {
+      "name": "Juicy Purple Grapes",
+      "icon": "🍇",
+      "type": "crop",
+      "sell": 700,
+      "heal": 708,
+      "buff": {
+        "regen": 4,
+        "time": 180
+      },
+      "desc": "Grows in 28800s. Harvest: 450 XP. Sell: 700 energy."
+    },
+    "mango": {
+      "name": "Golden Mango",
+      "icon": "🥭",
+      "type": "crop",
+      "sell": 800,
+      "heal": 808,
+      "buff": {
+        "speed": 0.25,
+        "time": 180
+      },
+      "desc": "Grows in 28800s. Harvest: 500 XP. Sell: 800 energy."
+    },
+    "pineapple": {
+      "name": "Crown Pineapple",
+      "icon": "🍍",
+      "type": "crop",
+      "sell": 1200,
+      "heal": 1208,
+      "buff": {
+        "atk": 0.25,
+        "time": 180
+      },
+      "desc": "Grows in 43200s. Harvest: 750 XP. Sell: 1200 energy."
+    },
+    "coconut": {
+      "name": "Refreshing Coconut",
+      "icon": "🥥",
+      "type": "crop",
+      "sell": 1300,
+      "heal": 400,
+      "buff": {
+        "fireres": 0.5,
+        "time": 180
+      },
+      "desc": "Grows in 43200s. Harvest: 800 XP. Sell: 1300 energy."
+    },
+    "durian": {
+      "name": "Spiky Durian",
+      "icon": "🌳",
+      "type": "crop",
+      "sell": 1500,
+      "heal": 1508,
+      "buff": {
+        "def": 25,
+        "time": 180
+      },
+      "desc": "Grows in 43200s. Harvest: 950 XP. Sell: 1500 energy."
+    },
+    "lychee": {
+      "name": "Ruby Lychee",
+      "icon": "🔴",
+      "type": "crop",
+      "sell": 1800,
+      "heal": 1808,
+      "buff": {
+        "crit": 0.15,
+        "haste": 0.2,
+        "time": 180
+      },
+      "desc": "Grows in 50400s. Harvest: 1100 XP. Sell: 1800 energy."
+    },
+    "peach": {
+      "name": "Immortal Peach",
+      "icon": "🍑",
+      "type": "crop",
+      "sell": 2200,
+      "heal": 9999,
+      "buff": {
+        "atk": 0.2,
+        "def": 15,
+        "regen": 5,
+        "xp": 0.5,
+        "time": 300
+      },
+      "desc": "Grows in 50400s. Harvest: 1400 XP. Sell: 2200 energy."
+    },
+    "seed_fire": {
+      "name": "Fire seed",
+      "type": "material",
+      "sell": 30,
+      "rare": true,
+      "icon": "🌰",
+      "desc": "Fire seed. Sell or use in crafting."
+    },
+    "seed_ice": {
+      "name": "Ice seed",
+      "type": "material",
+      "sell": 25,
+      "rare": true,
+      "icon": "🌰",
+      "desc": "Ice seed. Sell or use in crafting."
+    },
+    "seed_star": {
+      "name": "Star seed",
+      "type": "material",
+      "sell": 60,
+      "rare": true,
+      "icon": "🌰",
+      "desc": "Star seed. Sell or use in crafting."
+    },
+    "plot_kit": {
+      "name": "Garden bed kit",
+      "type": "placeable",
+      "sell": 20,
+      "icon": "🌱",
+      "desc": "One more garden bed for home. Place it from your backpack, or tap a garden bed and choose ➕ Expand garden.",
+      "price": 80,
+      "materials": {}
+    },
+    "meat": {
+      "name": "Meat",
+      "type": "food",
+      "sell": 3,
+      "heal": 25,
+      "icon": "🍲",
+      "desc": "Restores 25 health"
+    },
+    "leather": {
+      "name": "Leather",
+      "type": "material",
+      "sell": 4,
+      "icon": "💎",
+      "desc": "Leather. Sell or use in crafting."
+    },
+    "bone": {
+      "name": "Bone",
+      "type": "material",
+      "sell": 3,
+      "icon": "💎",
+      "desc": "Bone. Sell or use in crafting."
+    },
+    "manure": {
+      "name": "Fertilizer",
+      "type": "farm",
+      "sell": 2,
+      "grow": 0.5,
+      "icon": "🌿",
+      "desc": "Removes half of the crop's original growing time. Two uses ripen a newly planted non-tree crop. Fruit trees: up to 2 hours per dose.",
+      "price": 8,
+      "materials": {}
+    },
+    "spore": {
+      "name": "Magic spore",
+      "type": "farm",
+      "sell": 25,
+      "grow": 0.5,
+      "rare": true,
+      "icon": "🌿",
+      "desc": "Removes half of the crop's original growing time. Two uses ripen a newly planted non-tree crop. Fruit trees: up to 2 hours per dose."
+    },
+    "tusk": {
+      "name": "Tusk",
+      "type": "material",
+      "sell": 20,
+      "rare": true,
+      "icon": "💎",
+      "desc": "Tusk. Sell or use in crafting."
+    },
+    "claw": {
+      "name": "Claw",
+      "type": "food",
+      "sell": 22,
+      "buff": {
+        "haste": 0.35,
+        "time": 60
+      },
+      "rare": true,
+      "icon": "🍲",
+      "desc": "Temporary effects for 60s"
+    },
+    "sap": {
+      "name": "Sap",
+      "type": "material",
+      "sell": 5,
+      "icon": "💎",
+      "desc": "Sap. Sell or use in crafting."
+    },
+    "nectar": {
+      "name": "Nectar",
+      "type": "food",
+      "sell": 24,
+      "buff": {
+        "atk": 0.3,
+        "time": 60
+      },
+      "rare": true,
+      "icon": "🍲",
+      "desc": "Temporary effects for 60s"
+    },
+    "spine": {
+      "name": "Cactus spine",
+      "type": "material",
+      "sell": 4,
+      "icon": "💎",
+      "desc": "Cactus spine. Sell or use in crafting."
+    },
+    "cwater": {
+      "name": "Cactus water",
+      "type": "food",
+      "sell": 8,
+      "heal": 40,
+      "buff": {
+        "regen": 4,
+        "time": 30
+      },
+      "icon": "🍲",
+      "desc": "Restores 40 health · Temporary effects for 30s"
+    },
+    "bloom": {
+      "name": "Wild flower",
+      "type": "food",
+      "sell": 30,
+      "buff": {
+        "def": 20,
+        "time": 90
+      },
+      "rare": true,
+      "icon": "🍲",
+      "desc": "Temporary effects for 90s"
+    },
+    "honey": {
+      "name": "Honey",
+      "type": "food",
+      "sell": 40,
+      "heal": 9999,
+      "buff": {
+        "atk": 0.25,
+        "time": 60
+      },
+      "rare": true,
+      "icon": "🍲",
+      "desc": "Restores full health · Temporary effects for 60s"
+    },
+    "sugar": {
+      "name": "Sugar",
+      "type": "material",
+      "sell": 7,
+      "icon": "💎",
+      "desc": "Sugar. Sell or use in crafting."
+    },
+    "icecrystal": {
+      "name": "Ice crystal",
+      "type": "material",
+      "sell": 10,
+      "icon": "💎",
+      "desc": "Ice crystal. Sell or use in crafting."
+    },
+    "magma": {
+      "name": "Magma",
+      "type": "material",
+      "sell": 14,
+      "icon": "💎",
+      "desc": "Magma. Sell or use in crafting."
+    },
+    "starshard": {
+      "name": "Star shard",
+      "type": "material",
+      "sell": 60,
+      "rare": true,
+      "icon": "💎",
+      "desc": "Star shard. Sell or use in crafting."
+    },
+    "mcrystal": {
+      "name": "Magma crystal",
+      "type": "material",
+      "sell": 12,
+      "icon": "💎",
+      "desc": "Magma crystal. Sell or use in crafting."
+    },
+    "obsidian": {
+      "name": "Obsidian",
+      "type": "material",
+      "sell": 18,
+      "icon": "💎",
+      "desc": "Obsidian. Sell or use in crafting."
+    },
+    "firecore": {
+      "name": "Fire core",
+      "type": "material",
+      "sell": 45,
+      "rare": true,
+      "icon": "💎",
+      "desc": "Fire core. Sell or use in crafting."
+    },
+    "dragonscale": {
+      "name": "Dragon scale",
+      "type": "material",
+      "sell": 120,
+      "rare": true,
+      "icon": "💎",
+      "desc": "Dragon scale. Sell or use in crafting."
+    },
+    "fcrystal": {
+      "name": "Fire crystal",
+      "type": "material",
+      "sell": 15,
+      "icon": "💎",
+      "desc": "Fire crystal. Sell or use in crafting."
+    },
+    "gear": {
+      "name": "Toy gear",
+      "type": "material",
+      "sell": 10,
+      "icon": "💎",
+      "desc": "Toy gear. Sell or use in crafting."
+    },
+    "battery": {
+      "name": "Battery",
+      "type": "material",
+      "sell": 40,
+      "rare": true,
+      "icon": "💎",
+      "desc": "Battery. Sell or use in crafting."
+    },
+    "vine": {
+      "name": "Vine",
+      "type": "material",
+      "sell": 12,
+      "icon": "💎",
+      "desc": "Vine. Sell or use in crafting."
+    },
+    "amber": {
+      "name": "Amber",
+      "type": "material",
+      "sell": 55,
+      "rare": true,
+      "icon": "💎",
+      "desc": "Amber. Sell or use in crafting."
+    },
+    "pearl": {
+      "name": "Pearl",
+      "type": "material",
+      "sell": 60,
+      "rare": true,
+      "icon": "💎",
+      "desc": "Pearl. Sell or use in crafting."
+    },
+    "coral": {
+      "name": "Coral",
+      "type": "material",
+      "sell": 14,
+      "icon": "💎",
+      "desc": "Coral. Sell or use in crafting."
+    },
+    "feather": {
+      "name": "Feather",
+      "type": "material",
+      "sell": 16,
+      "icon": "💎",
+      "desc": "Feather. Sell or use in crafting."
+    },
+    "thunderstone": {
+      "name": "Thunder stone",
+      "type": "material",
+      "sell": 70,
+      "rare": true,
+      "icon": "💎",
+      "desc": "Thunder stone. Sell or use in crafting."
+    },
+    "shadow": {
+      "name": "Shadow essence",
+      "type": "material",
+      "sell": 22,
+      "icon": "💎",
+      "desc": "Shadow essence. Sell or use in crafting."
+    },
+    "moonstone": {
+      "name": "Moonstone",
+      "type": "material",
+      "sell": 90,
+      "rare": true,
+      "icon": "💎",
+      "desc": "Moonstone. Sell or use in crafting."
+    },
+    "dragonegg": {
+      "name": "Dragon egg",
+      "type": "material",
+      "sell": 200,
+      "rare": true,
+      "icon": "💎",
+      "desc": "Dragon egg. Sell or use in crafting."
+    },
+    "potion": {
+      "name": "Healing potion",
+      "type": "food",
+      "sell": 6,
+      "heal": 70,
+      "icon": "🍲",
+      "desc": "Restores 70 health",
+      "price": 15,
+      "materials": {}
+    },
+    "worm": {
+      "name": "Worm bait",
+      "type": "bait",
+      "sell": 1,
+      "icon": "🪱",
+      "desc": "Worm bait. Sell or use in crafting.",
+      "price": 6,
+      "materials": {}
+    },
+    "fish_perch": {
+      "name": "Perch",
+      "type": "fish",
+      "sell": 6,
+      "heal": 15,
+      "power": 0.2,
+      "icon": "🐟",
+      "desc": "Restores 15 health"
+    },
+    "fish_clown": {
+      "name": "Clownfish",
+      "type": "fish",
+      "sell": 10,
+      "heal": 20,
+      "power": 0.3,
+      "icon": "🐟",
+      "desc": "Restores 20 health"
+    },
+    "fish_puffer": {
+      "name": "Pufferfish",
+      "type": "fish",
+      "sell": 18,
+      "heal": 10,
+      "power": 0.45,
+      "icon": "🐟",
+      "desc": "Restores 10 health"
+    },
+    "fish_carp": {
+      "name": "Carp",
+      "type": "fish",
+      "sell": 28,
+      "heal": 35,
+      "power": 0.62,
+      "icon": "🐟",
+      "desc": "Restores 35 health"
+    },
+    "fish_shark": {
+      "name": "Shark",
+      "type": "fish",
+      "sell": 65,
+      "heal": 60,
+      "rare": true,
+      "power": 0.92,
+      "icon": "🐟",
+      "desc": "Restores 60 health"
+    },
+    "fish_rainbow": {
+      "name": "Rainbow fish",
+      "type": "fish",
+      "sell": 160,
+      "heal": 100,
+      "buff": {
+        "atk": 0.2,
+        "def": 10,
+        "time": 120
+      },
+      "rare": true,
+      "power": 0.8,
+      "icon": "🐟",
+      "desc": "Restores 100 health · Temporary effects for 120s"
+    },
+    "fish_catfish": {
+      "name": "Catfish",
+      "type": "fish",
+      "sell": 22,
+      "heal": 30,
+      "power": 0.55,
+      "size": [
+        30,
+        90
+      ],
+      "icon": "🐟",
+      "desc": "Restores 30 health"
+    },
+    "fish_koi": {
+      "name": "Koi",
+      "type": "fish",
+      "sell": 45,
+      "heal": 30,
+      "buff": {
+        "luck": 0.3,
+        "time": 120
+      },
+      "rare": true,
+      "power": 0.6,
+      "size": [
+        25,
+        70
+      ],
+      "icon": "🐟",
+      "desc": "Restores 30 health · Temporary effects for 120s"
+    },
+    "fish_eel": {
+      "name": "Eel",
+      "type": "fish",
+      "sell": 70,
+      "heal": 25,
+      "buff": {
+        "haste": 0.3,
+        "time": 60
+      },
+      "rare": true,
+      "power": 0.78,
+      "size": [
+        60,
+        180
+      ],
+      "icon": "🐟",
+      "desc": "Restores 25 health · Temporary effects for 60s"
+    },
+    "fish_swordfish": {
+      "name": "Swordfish",
+      "type": "fish",
+      "sell": 90,
+      "heal": 50,
+      "buff": {
+        "crit": 0.1,
+        "time": 90
+      },
+      "rare": true,
+      "power": 0.85,
+      "size": [
+        90,
+        300
+      ],
+      "icon": "🐟",
+      "desc": "Restores 50 health · Temporary effects for 90s"
+    },
+    "fish_jelly": {
+      "name": "Jellyfish",
+      "type": "fish",
+      "sell": 26,
+      "heal": 25,
+      "power": 0.4,
+      "size": [
+        10,
+        40
+      ],
+      "icon": "🐟",
+      "desc": "Restores 25 health"
+    },
+    "fish_icepike": {
+      "name": "Ice pike",
+      "type": "fish",
+      "sell": 48,
+      "heal": 40,
+      "buff": {
+        "fireres": 0.4,
+        "time": 90
+      },
+      "power": 0.7,
+      "size": [
+        50,
+        150
+      ],
+      "icon": "🐟",
+      "desc": "Restores 40 health · Temporary effects for 90s"
+    },
+    "fish_whale": {
+      "name": "Whale",
+      "type": "fish",
+      "sell": 420,
+      "heal": 200,
+      "buff": {
+        "def": 25,
+        "regen": 5,
+        "time": 180
+      },
+      "rare": true,
+      "legend": true,
+      "power": 0.97,
+      "size": [
+        400,
+        1200
+      ],
+      "icon": "🐟",
+      "desc": "Restores 200 health · Temporary effects for 180s"
+    },
+    "fish_kraken": {
+      "name": "Kraken",
+      "type": "fish",
+      "sell": 380,
+      "heal": 150,
+      "buff": {
+        "atk": 0.35,
+        "time": 120
+      },
+      "rare": true,
+      "legend": true,
+      "power": 0.96,
+      "size": [
+        200,
+        800
+      ],
+      "icon": "🐟",
+      "desc": "Restores 150 health · Temporary effects for 120s"
+    },
+    "fish_golden": {
+      "name": "Golden fish",
+      "type": "fish",
+      "sell": 600,
+      "heal": 9999,
+      "buff": {
+        "atk": 0.25,
+        "def": 15,
+        "crit": 0.1,
+        "luck": 0.5,
+        "time": 180
+      },
+      "rare": true,
+      "legend": true,
+      "power": 0.92,
+      "size": [
+        60,
+        160
+      ],
+      "icon": "🐟",
+      "desc": "Restores full health · Temporary effects for 180s"
+    },
+    "fish_sunfish": {
+      "name": "Sunfish",
+      "type": "fish",
+      "sell": 60,
+      "heal": 60,
+      "buff": {
+        "regen": 4,
+        "time": 90
+      },
+      "power": 0.72,
+      "size": [
+        80,
+        250
+      ],
+      "icon": "🐟",
+      "desc": "Restores 60 health · Temporary effects for 90s"
+    },
+    "fish_angler": {
+      "name": "Anglerfish",
+      "type": "fish",
+      "sell": 85,
+      "heal": 40,
+      "buff": {
+        "light": 1,
+        "time": 240
+      },
+      "rare": true,
+      "power": 0.8,
+      "size": [
+        30,
+        90
+      ],
+      "icon": "🐟",
+      "desc": "Restores 40 health · Temporary effects for 240s"
+    },
+    "fish_manta": {
+      "name": "Manta ray",
+      "type": "fish",
+      "sell": 320,
+      "heal": 150,
+      "buff": {
+        "speed": 0.3,
+        "def": 15,
+        "time": 150
+      },
+      "rare": true,
+      "legend": true,
+      "power": 0.95,
+      "size": [
+        300,
+        700
+      ],
+      "icon": "🐟",
+      "desc": "Restores 150 health · Temporary effects for 150s"
+    },
+    "boot": {
+      "name": "Old boot",
+      "type": "junk",
+      "sell": 1,
+      "power": 0.15,
+      "icon": "🥾",
+      "desc": "Old boot. Sell or use in crafting."
+    },
+    "sword_wood": {
+      "name": "Wood sword",
+      "type": "weapon",
+      "sell": 10,
+      "stats": {
+        "atk": 6
+      },
+      "weapon": {
+        "kind": "sword",
+        "range": 2.3,
+        "cd": 0.55,
+        "arc": 0.35,
+        "special": "crescent"
+      },
+      "icon": "⚔️",
+      "slot": "weapon",
+      "attack": 6,
+      "desc": "+6 attack",
+      "price": 25,
+      "materials": {}
+    },
+    "sword_tusk": {
+      "name": "Tusk sword",
+      "type": "weapon",
+      "sell": 45,
+      "stats": {
+        "atk": 14,
+        "crit": 0.05
+      },
+      "weapon": {
+        "kind": "sword",
+        "range": 2.5,
+        "cd": 0.6,
+        "arc": 0.3,
+        "special": "gore"
+      },
+      "icon": "⚔️",
+      "slot": "weapon",
+      "attack": 14,
+      "desc": "+14 attack",
+      "price": 90,
+      "materials": {
+        "tusk": 2,
+        "bone": 3
+      }
+    },
+    "sword_crystal": {
+      "name": "Crystal sword",
+      "type": "weapon",
+      "sell": 150,
+      "stats": {
+        "atk": 26,
+        "crit": 0.1
+      },
+      "weapon": {
+        "kind": "sword",
+        "range": 2.7,
+        "cd": 0.5,
+        "arc": 0.3,
+        "special": "wave"
+      },
+      "icon": "⚔️",
+      "slot": "weapon",
+      "attack": 26,
+      "desc": "+26 attack",
+      "price": 320,
+      "materials": {
+        "bloom": 2,
+        "claw": 2,
+        "bone": 5
+      }
+    },
+    "gun_pea": {
+      "name": "Pea blaster",
+      "type": "weapon",
+      "sell": 20,
+      "stats": {
+        "atk": 4
+      },
+      "weapon": {
+        "kind": "gun",
+        "range": 10,
+        "cd": 0.38,
+        "shot": "pea",
+        "special": "peastorm"
+      },
+      "icon": "🔫",
+      "slot": "weapon",
+      "attack": 4,
+      "desc": "+4 attack",
+      "price": 40,
+      "materials": {}
+    },
+    "gun_bubble": {
+      "name": "Bubble blaster",
+      "type": "weapon",
+      "sell": 70,
+      "stats": {
+        "atk": 9
+      },
+      "weapon": {
+        "kind": "gun",
+        "range": 9,
+        "cd": 0.5,
+        "shot": "bubble",
+        "special": "bigbubble"
+      },
+      "icon": "🔫",
+      "slot": "weapon",
+      "attack": 9,
+      "desc": "+9 attack",
+      "price": 140,
+      "materials": {
+        "sap": 4,
+        "nectar": 1
+      }
+    },
+    "gun_spike": {
+      "name": "Spike blaster",
+      "type": "weapon",
+      "sell": 110,
+      "stats": {
+        "atk": 15
+      },
+      "weapon": {
+        "kind": "gun",
+        "range": 7,
+        "cd": 0.75,
+        "shot": "spike",
+        "spread": 5,
+        "special": "nova"
+      },
+      "icon": "🔫",
+      "slot": "weapon",
+      "attack": 15,
+      "desc": "+15 attack",
+      "price": 220,
+      "materials": {
+        "spine": 10
+      }
+    },
+    "sword_candy": {
+      "name": "Candy sword",
+      "type": "weapon",
+      "sell": 90,
+      "stats": {
+        "atk": 22,
+        "crit": 0.08
+      },
+      "weapon": {
+        "kind": "sword",
+        "range": 2.6,
+        "cd": 0.5,
+        "arc": 0.3,
+        "special": "crescent"
+      },
+      "icon": "⚔️",
+      "slot": "weapon",
+      "attack": 22,
+      "desc": "+22 attack",
+      "price": 200,
+      "materials": {
+        "sugar": 8,
+        "bone": 2
+      }
+    },
+    "gun_ice": {
+      "name": "Ice blaster",
+      "type": "weapon",
+      "sell": 130,
+      "stats": {
+        "atk": 20
+      },
+      "weapon": {
+        "kind": "gun",
+        "range": 10,
+        "cd": 0.42,
+        "shot": "ice",
+        "special": "blizzard"
+      },
+      "icon": "🔫",
+      "slot": "weapon",
+      "attack": 20,
+      "desc": "+20 attack",
+      "price": 260,
+      "materials": {
+        "icecrystal": 8,
+        "sap": 2
+      }
+    },
+    "sword_lava": {
+      "name": "Lava sword",
+      "type": "weapon",
+      "sell": 220,
+      "stats": {
+        "atk": 38,
+        "crit": 0.12
+      },
+      "weapon": {
+        "kind": "sword",
+        "range": 2.8,
+        "cd": 0.5,
+        "arc": 0.3,
+        "special": "wave"
+      },
+      "icon": "⚔️",
+      "slot": "weapon",
+      "attack": 38,
+      "desc": "+38 attack",
+      "price": 420,
+      "materials": {
+        "magma": 8,
+        "starshard": 1
+      }
+    },
+    "sword_obsidian": {
+      "name": "Obsidian sword",
+      "type": "weapon",
+      "sell": 260,
+      "stats": {
+        "atk": 46,
+        "crit": 0.14
+      },
+      "weapon": {
+        "kind": "sword",
+        "range": 2.9,
+        "cd": 0.5,
+        "arc": 0.3,
+        "special": "magma"
+      },
+      "icon": "⚔️",
+      "slot": "weapon",
+      "attack": 46,
+      "desc": "+46 attack"
+    },
+    "hammer_thunder": {
+      "name": "Thunder hammer",
+      "type": "weapon",
+      "sell": 300,
+      "rare": true,
+      "stats": {
+        "atk": 55,
+        "crit": 0.1
+      },
+      "weapon": {
+        "kind": "sword",
+        "range": 2.6,
+        "cd": 0.85,
+        "arc": 0.1,
+        "special": "thunder",
+        "fx": "#7ff7ff"
+      },
+      "icon": "⚔️",
+      "slot": "weapon",
+      "attack": 55,
+      "desc": "+55 attack",
+      "price": 520,
+      "materials": {
+        "bone": 10,
+        "icecrystal": 6,
+        "starshard": 2
+      }
+    },
+    "scythe_moon": {
+      "name": "Moon scythe",
+      "type": "weapon",
+      "sell": 320,
+      "rare": true,
+      "stats": {
+        "atk": 48,
+        "crit": 0.18
+      },
+      "weapon": {
+        "kind": "sword",
+        "range": 3.3,
+        "cd": 0.6,
+        "arc": -0.3,
+        "special": "whirl",
+        "fx": "#c9e8ff"
+      },
+      "icon": "⚔️",
+      "slot": "weapon",
+      "attack": 48,
+      "desc": "+48 attack",
+      "price": 600,
+      "materials": {
+        "icecrystal": 8,
+        "obsidian": 4,
+        "starshard": 3
+      }
+    },
+    "bow_star": {
+      "name": "Star bow",
+      "type": "weapon",
+      "sell": 280,
+      "rare": true,
+      "stats": {
+        "atk": 34,
+        "crit": 0.12
+      },
+      "weapon": {
+        "kind": "gun",
+        "range": 13,
+        "cd": 0.55,
+        "shot": "arrow",
+        "special": "starfall"
+      },
+      "icon": "⚔️",
+      "slot": "weapon",
+      "attack": 34,
+      "desc": "+34 attack",
+      "price": 480,
+      "materials": {
+        "sugar": 10,
+        "sap": 4,
+        "starshard": 2
+      }
+    },
+    "staff_fire": {
+      "name": "Fire staff",
+      "type": "weapon",
+      "sell": 340,
+      "rare": true,
+      "stats": {
+        "atk": 40
+      },
+      "weapon": {
+        "kind": "gun",
+        "range": 10,
+        "cd": 0.7,
+        "shot": "fireball",
+        "special": "inferno"
+      },
+      "icon": "⚔️",
+      "slot": "weapon",
+      "attack": 40,
+      "desc": "+40 attack",
+      "price": 560,
+      "materials": {
+        "magma": 8,
+        "firecore": 2,
+        "obsidian": 4
+      }
+    },
+    "blaster_rainbow": {
+      "name": "Rainbow blaster",
+      "type": "weapon",
+      "sell": 380,
+      "rare": true,
+      "stats": {
+        "atk": 30,
+        "crit": 0.08
+      },
+      "weapon": {
+        "kind": "gun",
+        "range": 11,
+        "cd": 0.22,
+        "shot": "rainbow",
+        "special": "laser"
+      },
+      "icon": "⚔️",
+      "slot": "weapon",
+      "attack": 30,
+      "desc": "+30 attack",
+      "price": 700,
+      "materials": {
+        "sugar": 6,
+        "icecrystal": 6,
+        "magma": 6,
+        "starshard": 3
+      }
+    },
+    "toy_hammer": {
+      "name": "Toy hammer",
+      "type": "weapon",
+      "sell": 120,
+      "stats": {
+        "atk": 24,
+        "crit": 0.1
+      },
+      "weapon": {
+        "kind": "sword",
+        "range": 2.4,
+        "cd": 0.6,
+        "arc": 0.2,
+        "special": "bonk",
+        "fx": "#ffe14d"
+      },
+      "icon": "⚔️",
+      "slot": "weapon",
+      "attack": 24,
+      "desc": "+24 attack"
+    },
+    "trident": {
+      "name": "Ocean trident",
+      "type": "weapon",
+      "sell": 340,
+      "rare": true,
+      "stats": {
+        "atk": 50,
+        "crit": 0.12
+      },
+      "weapon": {
+        "kind": "sword",
+        "range": 3.4,
+        "cd": 0.62,
+        "arc": 0.4,
+        "special": "tsunami",
+        "fx": "#6fd3ff"
+      },
+      "icon": "⚔️",
+      "slot": "weapon",
+      "attack": 50,
+      "desc": "+50 attack"
+    },
+    "rod": {
+      "name": "Fishing rod",
+      "type": "weapon",
+      "sell": 10,
+      "weapon": {
+        "kind": "rod",
+        "quality": 0.3
+      },
+      "icon": "🎣",
+      "slot": "weapon",
+      "desc": "Keep this rod in your backpack. It is held automatically near a pond; your combat weapon returns away from water. Hook at the bite, then balance reeling with line tension. Its bamboo line snaps 60% of the time when it strains (the tension bar fills).",
+      "price": 20,
+      "materials": {}
+    },
+    "rod_gold": {
+      "name": "Golden fishing rod",
+      "type": "weapon",
+      "sell": 75,
+      "weapon": {
+        "kind": "rod",
+        "quality": 0.7
+      },
+      "icon": "🎣",
+      "slot": "weapon",
+      "desc": "A stronger rod that makes difficult fish easier to land and improves rare catches. A strained line snaps only 30% of the time.",
+      "price": 150,
+      "materials": {
+        "bone": 3,
+        "sap": 2
+      }
+    },
+    "rod_steady": {
+      "name": "Steady fishing rod",
+      "type": "weapon",
+      "sell": 300,
+      "weapon": {
+        "kind": "rod",
+        "quality": 0.9,
+        "steady": true
+      },
+      "icon": "🎣",
+      "slot": "weapon",
+      "desc": "A sturdy rod with a forgiving line: tension builds slowly and heavy fish feel lighter. A strained line snaps only 10% of the time, so let go of Reel when the fish surges.",
+      "price": 900,
+      "materials": {
+        "coral": 4,
+        "pearl": 2
+      }
+    },
+    "hat_straw": {
+      "name": "Straw hat",
+      "type": "hat",
+      "sell": 10,
+      "stats": {
+        "def": 3,
+        "hp": 10
+      },
+      "icon": "🎩",
+      "slot": "hat",
+      "defense": 3,
+      "desc": "+3 defense · +10 health",
+      "price": 20,
+      "materials": {}
+    },
+    "hat_leather": {
+      "name": "Leather hat",
+      "type": "hat",
+      "sell": 25,
+      "stats": {
+        "def": 7,
+        "hp": 20
+      },
+      "icon": "🎩",
+      "slot": "hat",
+      "defense": 7,
+      "desc": "+7 defense · +20 health",
+      "price": 45,
+      "materials": {
+        "leather": 3
+      }
+    },
+    "hat_bear": {
+      "name": "Bear hat",
+      "type": "hat",
+      "sell": 90,
+      "rare": true,
+      "stats": {
+        "def": 12,
+        "atk": 5,
+        "hp": 40
+      },
+      "icon": "🎩",
+      "slot": "hat",
+      "attack": 5,
+      "defense": 12,
+      "desc": "+5 attack · +12 defense · +40 health"
+    },
+    "crown": {
+      "name": "Royal crown",
+      "type": "hat",
+      "sell": 200,
+      "rare": true,
+      "stats": {
+        "atk": 10,
+        "crit": 0.15
+      },
+      "icon": "🎩",
+      "slot": "hat",
+      "attack": 10,
+      "desc": "+10 attack"
+    },
+    "hat_space": {
+      "name": "Space hat",
+      "type": "hat",
+      "sell": 120,
+      "stats": {
+        "def": 14,
+        "hp": 45,
+        "atk": 4
+      },
+      "icon": "🎩",
+      "slot": "hat",
+      "attack": 4,
+      "defense": 14,
+      "desc": "+4 attack · +14 defense · +45 health",
+      "price": 240,
+      "materials": {
+        "starshard": 2,
+        "icecrystal": 3
+      }
+    },
+    "armor_leather": {
+      "name": "Leather outfit",
+      "type": "armor",
+      "sell": 30,
+      "stats": {
+        "def": 8,
+        "hp": 25
+      },
+      "icon": "🧥",
+      "slot": "outfit",
+      "defense": 8,
+      "desc": "+8 defense · +25 health",
+      "price": 60,
+      "materials": {
+        "leather": 5
+      }
+    },
+    "armor_wolf": {
+      "name": "Wolf outfit",
+      "type": "armor",
+      "sell": 65,
+      "stats": {
+        "def": 12,
+        "hp": 30,
+        "speed": 0.12
+      },
+      "icon": "🧥",
+      "slot": "outfit",
+      "defense": 12,
+      "desc": "+12 defense · +30 health · +12% speed",
+      "price": 130,
+      "materials": {
+        "leather": 6,
+        "claw": 2
+      }
+    },
+    "armor_space": {
+      "name": "Space outfit",
+      "type": "armor",
+      "sell": 180,
+      "stats": {
+        "def": 26,
+        "hp": 80,
+        "speed": 0.08
+      },
+      "icon": "🧥",
+      "slot": "outfit",
+      "defense": 26,
+      "desc": "+26 defense · +80 health · +8% speed",
+      "price": 360,
+      "materials": {
+        "starshard": 3,
+        "sugar": 5,
+        "magma": 3
+      }
+    },
+    "armor_bone": {
+      "name": "Bone outfit",
+      "type": "armor",
+      "sell": 100,
+      "stats": {
+        "def": 20,
+        "hp": 60
+      },
+      "icon": "🧥",
+      "slot": "outfit",
+      "defense": 20,
+      "desc": "+20 defense · +60 health",
+      "price": 200,
+      "materials": {
+        "bone": 8,
+        "leather": 4
+      }
+    },
+    "armor_leaf": {
+      "name": "Leaf outfit",
+      "type": "armor",
+      "sell": 140,
+      "stats": {
+        "def": 18,
+        "hp": 50,
+        "regen": 2
+      },
+      "antidote": true,
+      "icon": "🧥",
+      "slot": "outfit",
+      "defense": 18,
+      "desc": "+18 defense · +50 health"
+    },
+    "armor_cloud": {
+      "name": "Cloud outfit",
+      "type": "armor",
+      "sell": 260,
+      "stats": {
+        "def": 26,
+        "hp": 80,
+        "speed": 0.15
+      },
+      "featherfall": true,
+      "icon": "🧥",
+      "slot": "outfit",
+      "defense": 26,
+      "desc": "+26 defense · +80 health · +15% speed"
+    },
+    "hat_lantern": {
+      "name": "Lantern hat",
+      "type": "hat",
+      "sell": 200,
+      "stats": {
+        "def": 16,
+        "hp": 50
+      },
+      "light": true,
+      "icon": "🎩",
+      "slot": "hat",
+      "defense": 16,
+      "desc": "+16 defense · +50 health"
+    },
+    "armor_wings": {
+      "name": "Dragon wings",
+      "type": "armor",
+      "sell": 240,
+      "stats": {
+        "def": 24,
+        "hp": 70,
+        "speed": 0.18
+      },
+      "icon": "🧥",
+      "slot": "outfit",
+      "defense": 24,
+      "desc": "+24 defense · +70 health · +18% speed"
+    },
+    "dz_ninja": {
+      "name": "Shadow ninja",
+      "type": "disguise",
+      "sell": 300,
+      "rare": true,
+      "stats": {
+        "atk": 8,
+        "crit": 0.15,
+        "speed": 0.2
+      },
+      "icon": "🎭",
+      "slot": "disguise",
+      "attack": 8,
+      "desc": "+8 attack · +20% speed",
+      "price": 550,
+      "materials": {
+        "leather": 8,
+        "shadow": 4,
+        "claw": 2
+      }
+    },
+    "dz_mage": {
+      "name": "Archmage",
+      "type": "disguise",
+      "sell": 230,
+      "rare": true,
+      "stats": {
+        "atk": 12,
+        "hp": 20
+      },
+      "icon": "🎭",
+      "slot": "disguise",
+      "attack": 12,
+      "desc": "+12 attack · +20 health",
+      "price": 410,
+      "materials": {
+        "starshard": 2,
+        "sap": 6,
+        "fcrystal": 2
+      }
+    },
+    "dz_knight": {
+      "name": "Sun knight",
+      "type": "disguise",
+      "sell": 260,
+      "rare": true,
+      "stats": {
+        "def": 25,
+        "hp": 120,
+        "atk": 6
+      },
+      "icon": "🎭",
+      "slot": "disguise",
+      "attack": 6,
+      "defense": 25,
+      "desc": "+6 attack · +25 defense · +120 health",
+      "price": 480,
+      "materials": {
+        "bone": 12,
+        "obsidian": 6
+      }
+    },
+    "dz_mecha": {
+      "name": "Battle robot",
+      "type": "disguise",
+      "sell": 290,
+      "rare": true,
+      "stats": {
+        "atk": 6,
+        "def": 12,
+        "hp": 60
+      },
+      "icon": "🎭",
+      "slot": "disguise",
+      "attack": 6,
+      "defense": 12,
+      "desc": "+6 attack · +12 defense · +60 health",
+      "price": 530,
+      "materials": {
+        "gear": 14,
+        "battery": 3
+      }
+    },
+    "dz_dino": {
+      "name": "Tyrannosaur",
+      "type": "disguise",
+      "sell": 170,
+      "rare": true,
+      "stats": {
+        "atk": 14,
+        "hp": 90
+      },
+      "icon": "🎭",
+      "slot": "disguise",
+      "attack": 14,
+      "desc": "+14 attack · +90 health",
+      "price": 300,
+      "materials": {
+        "amber": 3,
+        "vine": 10,
+        "bone": 6
+      }
+    },
+    "dz_fairy": {
+      "name": "Flower fairy",
+      "type": "disguise",
+      "sell": 260,
+      "rare": true,
+      "stats": {
+        "hp": 40,
+        "regen": 4,
+        "speed": 0.15
+      },
+      "icon": "🎭",
+      "slot": "disguise",
+      "desc": "+40 health · +15% speed",
+      "price": 480,
+      "materials": {
+        "nectar": 3,
+        "sugar": 8,
+        "feather": 4
+      }
+    },
+    "dz_pirate": {
+      "name": "Pirate captain",
+      "type": "disguise",
+      "sell": 170,
+      "rare": true,
+      "stats": {
+        "atk": 10,
+        "crit": 0.08
+      },
+      "luck": 0.25,
+      "icon": "🎭",
+      "slot": "disguise",
+      "attack": 10,
+      "desc": "+10 attack",
+      "price": 300,
+      "materials": {
+        "pearl": 2,
+        "coral": 8,
+        "leather": 6
+      }
+    },
+    "dz_army": {
+      "name": "Army soldier",
+      "type": "disguise",
+      "sell": 210,
+      "rare": true,
+      "stats": {
+        "atk": 10,
+        "crit": 0.08
+      },
+      "icon": "🎭",
+      "slot": "disguise",
+      "attack": 10,
+      "desc": "+10 attack",
+      "price": 380,
+      "materials": {
+        "pearl": 2,
+        "coral": 8,
+        "leather": 6
+      }
+    },
+    "dz_navy": {
+      "name": "Navy sailor",
+      "type": "disguise",
+      "sell": 220,
+      "rare": true,
+      "stats": {
+        "atk": 10,
+        "crit": 0.08
+      },
+      "icon": "🎭",
+      "slot": "disguise",
+      "attack": 10,
+      "desc": "+10 attack",
+      "price": 400,
+      "materials": {
+        "pearl": 2,
+        "coral": 8,
+        "leather": 6
+      }
+    },
+    "dz_aodai": {
+      "name": "Ao dai lady",
+      "type": "disguise",
+      "sell": 230,
+      "rare": true,
+      "stats": {
+        "atk": 10,
+        "crit": 0.08
+      },
+      "icon": "🎭",
+      "slot": "disguise",
+      "attack": 10,
+      "desc": "+10 attack",
+      "price": 420,
+      "materials": {
+        "pearl": 2,
+        "coral": 8,
+        "leather": 6
+      }
+    },
+    "dz_aodai_man": {
+      "name": "Ao dai gentleman",
+      "type": "disguise",
+      "sell": 170,
+      "rare": true,
+      "stats": {
+        "atk": 10,
+        "crit": 0.08
+      },
+      "icon": "🎭",
+      "slot": "disguise",
+      "attack": 10,
+      "desc": "+10 attack",
+      "price": 310,
+      "materials": {
+        "pearl": 2,
+        "coral": 8,
+        "leather": 6
+      }
+    },
+    "dz_usa": {
+      "name": "Stars and stripes",
+      "type": "disguise",
+      "sell": 280,
+      "rare": true,
+      "stats": {
+        "atk": 10,
+        "crit": 0.08
+      },
+      "icon": "🎭",
+      "slot": "disguise",
+      "attack": 10,
+      "desc": "+10 attack",
+      "price": 510,
+      "materials": {
+        "pearl": 2,
+        "coral": 8,
+        "leather": 6
+      }
+    },
+    "dz_vietnam": {
+      "name": "Vietnam flag",
+      "type": "disguise",
+      "sell": 180,
+      "rare": true,
+      "stats": {
+        "atk": 10,
+        "crit": 0.08
+      },
+      "icon": "🎭",
+      "slot": "disguise",
+      "attack": 10,
+      "desc": "+10 attack",
+      "price": 320,
+      "materials": {
+        "pearl": 2,
+        "coral": 8,
+        "leather": 6
+      }
+    },
+    "dz_superhero": {
+      "name": "Superhero",
+      "type": "disguise",
+      "sell": 330,
+      "rare": true,
+      "stats": {
+        "atk": 16,
+        "def": 12,
+        "speed": 0.25
+      },
+      "icon": "🎭",
+      "slot": "disguise",
+      "attack": 16,
+      "defense": 12,
+      "desc": "+16 attack · +12 defense · +25% speed",
+      "price": 600,
+      "materials": {
+        "starshard": 3,
+        "thunderstone": 2,
+        "battery": 2
+      }
+    },
+    "dz_vampire": {
+      "name": "Vampire count",
+      "type": "disguise",
+      "sell": 240,
+      "rare": true,
+      "stats": {
+        "atk": 12,
+        "crit": 0.1
+      },
+      "icon": "🎭",
+      "slot": "disguise",
+      "attack": 12,
+      "desc": "+12 attack",
+      "price": 440,
+      "materials": {
+        "shadow": 10,
+        "moonstone": 1,
+        "leather": 6
+      }
+    },
+    "dz_snowman": {
+      "name": "Snowman",
+      "type": "disguise",
+      "sell": 290,
+      "rare": true,
+      "stats": {
+        "def": 10,
+        "hp": 60
+      },
+      "icon": "🎭",
+      "slot": "disguise",
+      "defense": 10,
+      "desc": "+10 defense · +60 health",
+      "price": 530,
+      "materials": {
+        "icecrystal": 10,
+        "leather": 4
+      }
+    },
+    "dz_dawnstar": {
+      "name": "Dawn star dancer",
+      "type": "disguise",
+      "sell": 230,
+      "rare": true,
+      "stats": {
+        "hp": 40,
+        "regen": 3,
+        "speed": 0.1
+      },
+      "icon": "🎭",
+      "slot": "disguise",
+      "desc": "+40 health · +10% speed",
+      "price": 410,
+      "materials": {
+        "starshard": 2,
+        "feather": 6,
+        "sugar": 6
+      }
+    },
+    "hat_cowboy": {
+      "name": "Cowboy hat",
+      "type": "hat",
+      "sell": 30,
+      "stats": {
+        "def": 6,
+        "hp": 20,
+        "crit": 0.03
+      },
+      "icon": "🎩",
+      "slot": "hat",
+      "defense": 6,
+      "desc": "+6 defense · +20 health",
+      "price": 60,
+      "materials": {
+        "leather": 4
+      }
+    },
+    "hat_wizard": {
+      "name": "Wizard hat",
+      "type": "hat",
+      "sell": 60,
+      "stats": {
+        "def": 5,
+        "hp": 15,
+        "atk": 6
+      },
+      "icon": "🎩",
+      "slot": "hat",
+      "attack": 6,
+      "defense": 5,
+      "desc": "+6 attack · +5 defense · +15 health",
+      "price": 120,
+      "materials": {
+        "sap": 3,
+        "starshard": 1
+      }
+    },
+    "hat_pirate": {
+      "name": "Pirate hat",
+      "type": "hat",
+      "sell": 50,
+      "stats": {
+        "def": 8,
+        "hp": 25
+      },
+      "luck": 0.1,
+      "icon": "🎩",
+      "slot": "hat",
+      "defense": 8,
+      "desc": "+8 defense · +25 health",
+      "price": 90,
+      "materials": {
+        "leather": 4,
+        "coral": 2
+      }
+    },
+    "hat_chef": {
+      "name": "Chef hat",
+      "type": "hat",
+      "sell": 35,
+      "stats": {
+        "def": 4,
+        "hp": 30
+      },
+      "icon": "🎩",
+      "slot": "hat",
+      "defense": 4,
+      "desc": "+4 defense · +30 health",
+      "price": 50,
+      "materials": {
+        "sugar": 3
+      }
+    },
+    "hat_bunny": {
+      "name": "Bunny hat",
+      "type": "hat",
+      "sell": 30,
+      "stats": {
+        "def": 3,
+        "hp": 15,
+        "speed": 0.06
+      },
+      "icon": "🎩",
+      "slot": "hat",
+      "defense": 3,
+      "desc": "+3 defense · +15 health · +6% speed",
+      "price": 40,
+      "materials": {
+        "leather": 2
+      }
+    },
+    "hat_cat": {
+      "name": "Cat hat",
+      "type": "hat",
+      "sell": 40,
+      "stats": {
+        "def": 7,
+        "hp": 25
+      },
+      "icon": "🎩",
+      "slot": "hat",
+      "defense": 7,
+      "desc": "+7 defense · +25 health",
+      "price": 55,
+      "materials": {
+        "leather": 3
+      }
+    },
+    "hat_viking": {
+      "name": "Viking hat",
+      "type": "hat",
+      "sell": 80,
+      "stats": {
+        "def": 14,
+        "hp": 40,
+        "atk": 4
+      },
+      "icon": "🎩",
+      "slot": "hat",
+      "attack": 4,
+      "defense": 14,
+      "desc": "+4 attack · +14 defense · +40 health",
+      "price": 150,
+      "materials": {
+        "bone": 6,
+        "tusk": 2
+      }
+    },
+    "hat_santa": {
+      "name": "Santa hat",
+      "type": "hat",
+      "sell": 45,
+      "stats": {
+        "def": 6,
+        "hp": 30,
+        "regen": 1
+      },
+      "icon": "🎩",
+      "slot": "hat",
+      "defense": 6,
+      "desc": "+6 defense · +30 health",
+      "price": 80,
+      "materials": {
+        "leather": 3,
+        "icecrystal": 2
+      }
+    },
+    "hat_graduate": {
+      "name": "Graduation cap",
+      "type": "hat",
+      "sell": 70,
+      "stats": {
+        "def": 5,
+        "hp": 20
+      },
+      "xp": 0.1,
+      "icon": "🎩",
+      "slot": "hat",
+      "defense": 5,
+      "desc": "+5 defense · +20 health",
+      "price": 130,
+      "materials": {
+        "leather": 4,
+        "gear": 3
+      }
+    },
+    "hat_samurai": {
+      "name": "Samurai hat",
+      "type": "hat",
+      "sell": 110,
+      "stats": {
+        "def": 16,
+        "hp": 45,
+        "crit": 0.05
+      },
+      "icon": "🎩",
+      "slot": "hat",
+      "defense": 16,
+      "desc": "+16 defense · +45 health",
+      "price": 220,
+      "materials": {
+        "bone": 6,
+        "obsidian": 3
+      }
+    },
+    "hat_party": {
+      "name": "Party hat",
+      "type": "hat",
+      "sell": 7,
+      "stats": {
+        "hp": 10
+      },
+      "icon": "🎩",
+      "slot": "hat",
+      "desc": "+10 health",
+      "price": 15,
+      "materials": {}
+    },
+    "hat_halo": {
+      "name": "Halo",
+      "type": "hat",
+      "sell": 150,
+      "rare": true,
+      "stats": {
+        "def": 10,
+        "hp": 60,
+        "regen": 2
+      },
+      "light": true,
+      "icon": "🎩",
+      "slot": "hat",
+      "defense": 10,
+      "desc": "+10 defense · +60 health",
+      "price": 380,
+      "materials": {
+        "feather": 8,
+        "moonstone": 1,
+        "starshard": 1
+      }
+    },
+    "hat_frog": {
+      "name": "Frog hat",
+      "type": "hat",
+      "sell": 35,
+      "stats": {
+        "def": 5,
+        "hp": 20,
+        "speed": 0.05
+      },
+      "icon": "🎩",
+      "slot": "hat",
+      "defense": 5,
+      "desc": "+5 defense · +20 health · +5% speed",
+      "price": 45,
+      "materials": {
+        "leather": 2
+      }
+    },
+    "armor_knight": {
+      "name": "Knight outfit",
+      "type": "armor",
+      "sell": 160,
+      "stats": {
+        "def": 28,
+        "hp": 90,
+        "speed": -0.05
+      },
+      "icon": "🧥",
+      "slot": "outfit",
+      "defense": 28,
+      "desc": "+28 defense · +90 health · +-5% speed",
+      "price": 280,
+      "materials": {
+        "bone": 10,
+        "obsidian": 4
+      }
+    },
+    "armor_pirate": {
+      "name": "Pirate outfit",
+      "type": "armor",
+      "sell": 90,
+      "stats": {
+        "def": 14,
+        "hp": 40,
+        "crit": 0.05
+      },
+      "luck": 0.1,
+      "icon": "🧥",
+      "slot": "outfit",
+      "defense": 14,
+      "desc": "+14 defense · +40 health",
+      "price": 170,
+      "materials": {
+        "leather": 6,
+        "pearl": 1
+      }
+    },
+    "armor_chef": {
+      "name": "Chef outfit",
+      "type": "armor",
+      "sell": 40,
+      "stats": {
+        "def": 8,
+        "hp": 40,
+        "regen": 1
+      },
+      "icon": "🧥",
+      "slot": "outfit",
+      "defense": 8,
+      "desc": "+8 defense · +40 health",
+      "price": 60,
+      "materials": {
+        "leather": 3
+      }
+    },
+    "armor_tux": {
+      "name": "Tuxedo",
+      "type": "armor",
+      "sell": 120,
+      "stats": {
+        "def": 12,
+        "hp": 35,
+        "crit": 0.08
+      },
+      "icon": "🧥",
+      "slot": "outfit",
+      "defense": 12,
+      "desc": "+12 defense · +35 health",
+      "price": 200,
+      "materials": {
+        "leather": 6,
+        "gear": 4
+      }
+    },
+    "armor_kimono": {
+      "name": "Kimono",
+      "type": "armor",
+      "sell": 100,
+      "stats": {
+        "def": 12,
+        "hp": 40,
+        "speed": 0.1
+      },
+      "icon": "🧥",
+      "slot": "outfit",
+      "defense": 12,
+      "desc": "+12 defense · +40 health · +10% speed",
+      "price": 160,
+      "materials": {
+        "leather": 5,
+        "nectar": 1
+      }
+    },
+    "armor_hawaii": {
+      "name": "Island shirt",
+      "type": "armor",
+      "sell": 45,
+      "stats": {
+        "def": 8,
+        "hp": 30,
+        "speed": 0.08
+      },
+      "icon": "🧥",
+      "slot": "outfit",
+      "defense": 8,
+      "desc": "+8 defense · +30 health · +8% speed",
+      "price": 70,
+      "materials": {
+        "leather": 3,
+        "coral": 2
+      }
+    },
+    "armor_superhero": {
+      "name": "Superhero outfit",
+      "type": "armor",
+      "sell": 220,
+      "rare": true,
+      "stats": {
+        "def": 20,
+        "hp": 70,
+        "atk": 8,
+        "speed": 0.1
+      },
+      "icon": "🧥",
+      "slot": "outfit",
+      "attack": 8,
+      "defense": 20,
+      "desc": "+8 attack · +20 defense · +70 health · +10% speed",
+      "price": 420,
+      "materials": {
+        "starshard": 2,
+        "battery": 2,
+        "leather": 6
+      }
+    },
+    "armor_angel": {
+      "name": "Angel outfit",
+      "type": "armor",
+      "sell": 260,
+      "rare": true,
+      "stats": {
+        "def": 22,
+        "hp": 90,
+        "regen": 3
+      },
+      "featherfall": true,
+      "icon": "🧥",
+      "slot": "outfit",
+      "defense": 22,
+      "desc": "+22 defense · +90 health",
+      "price": 500,
+      "materials": {
+        "feather": 14,
+        "moonstone": 1,
+        "starshard": 2
+      }
+    },
+    "armor_santa": {
+      "name": "Santa outfit",
+      "type": "armor",
+      "sell": 70,
+      "stats": {
+        "def": 12,
+        "hp": 50
+      },
+      "icon": "🧥",
+      "slot": "outfit",
+      "defense": 12,
+      "desc": "+12 defense · +50 health",
+      "price": 110,
+      "materials": {
+        "leather": 5,
+        "icecrystal": 3
+      }
+    },
+    "armor_hoodie": {
+      "name": "Hoodie",
+      "type": "armor",
+      "sell": 35,
+      "stats": {
+        "def": 6,
+        "hp": 30,
+        "speed": 0.05
+      },
+      "icon": "🧥",
+      "slot": "outfit",
+      "defense": 6,
+      "desc": "+6 defense · +30 health · +5% speed",
+      "price": 50,
+      "materials": {
+        "leather": 3
+      }
+    },
+    "armor_army": {
+      "name": "Army uniform",
+      "type": "armor",
+      "sell": 90,
+      "stats": {
+        "def": 14,
+        "hp": 45,
+        "crit": 0.05
+      },
+      "icon": "🧥",
+      "slot": "outfit",
+      "defense": 14,
+      "desc": "+14 defense · +45 health",
+      "price": 220,
+      "materials": {
+        "leather": 4,
+        "bone": 2
+      }
+    },
+    "armor_navy": {
+      "name": "Navy uniform",
+      "type": "armor",
+      "sell": 90,
+      "stats": {
+        "def": 12,
+        "hp": 40,
+        "speed": 0.04
+      },
+      "icon": "🧥",
+      "slot": "outfit",
+      "defense": 12,
+      "desc": "+12 defense · +40 health · +4% speed",
+      "price": 200,
+      "materials": {
+        "leather": 3,
+        "coral": 3
+      }
+    },
+    "armor_aodai": {
+      "name": "Vietnamese long dress",
+      "type": "armor",
+      "sell": 95,
+      "stats": {
+        "def": 10,
+        "hp": 50,
+        "regen": 1
+      },
+      "icon": "🧥",
+      "slot": "outfit",
+      "defense": 10,
+      "desc": "+10 defense · +50 health",
+      "price": 210,
+      "materials": {
+        "leather": 3,
+        "feather": 4
+      }
+    },
+    "armor_aodai_man": {
+      "name": "Vietnamese long gown",
+      "type": "armor",
+      "sell": 95,
+      "stats": {
+        "def": 13,
+        "hp": 40,
+        "crit": 0.06
+      },
+      "icon": "🧥",
+      "slot": "outfit",
+      "defense": 13,
+      "desc": "+13 defense · +40 health",
+      "price": 210,
+      "materials": {
+        "leather": 3,
+        "feather": 3,
+        "moonstone": 1
+      }
+    },
+    "armor_usa": {
+      "name": "Stars and stripes outfit",
+      "type": "armor",
+      "sell": 85,
+      "stats": {
+        "def": 11,
+        "hp": 35,
+        "speed": 0.05
+      },
+      "icon": "🧥",
+      "slot": "outfit",
+      "defense": 11,
+      "desc": "+11 defense · +35 health · +5% speed",
+      "price": 190,
+      "materials": {
+        "leather": 4,
+        "starshard": 1,
+        "coral": 2
+      }
+    },
+    "armor_vietnam": {
+      "name": "Vietnam flag outfit",
+      "type": "armor",
+      "sell": 85,
+      "stats": {
+        "def": 11,
+        "hp": 45,
+        "crit": 0.05
+      },
+      "icon": "🧥",
+      "slot": "outfit",
+      "defense": 11,
+      "desc": "+11 defense · +45 health",
+      "price": 190,
+      "materials": {
+        "leather": 4,
+        "starshard": 1,
+        "bone": 2
+      }
+    },
+    "boots_rocket": {
+      "name": "Rocket boots",
+      "type": "feet",
+      "sell": 200,
+      "rare": true,
+      "stats": {
+        "def": 4,
+        "speed": 0.25
+      },
+      "icon": "👟",
+      "slot": "boots",
+      "defense": 4,
+      "desc": "+4 defense · +25% speed",
+      "price": 320,
+      "materials": {
+        "battery": 2,
+        "gear": 6,
+        "magma": 2
+      }
+    },
+    "boots_cowboy": {
+      "name": "Cowboy boots",
+      "type": "feet",
+      "sell": 50,
+      "stats": {
+        "def": 8,
+        "hp": 20
+      },
+      "icon": "👟",
+      "slot": "boots",
+      "defense": 8,
+      "desc": "+8 defense · +20 health",
+      "price": 70,
+      "materials": {
+        "leather": 4
+      }
+    },
+    "boots_flipper": {
+      "name": "Swim flippers",
+      "type": "feet",
+      "sell": 90,
+      "stats": {
+        "def": 3
+      },
+      "icon": "👟",
+      "slot": "boots",
+      "defense": 3,
+      "desc": "+3 defense",
+      "price": 130,
+      "materials": {
+        "coral": 5,
+        "leather": 2
+      }
+    },
+    "boots_cloud": {
+      "name": "Cloud boots",
+      "type": "feet",
+      "sell": 160,
+      "stats": {
+        "def": 5,
+        "speed": 0.12
+      },
+      "featherfall": true,
+      "icon": "👟",
+      "slot": "boots",
+      "defense": 5,
+      "desc": "+5 defense · +12% speed",
+      "price": 240,
+      "materials": {
+        "feather": 10
+      }
+    },
+    "boots_lava": {
+      "name": "Lava boots",
+      "type": "feet",
+      "sell": 90,
+      "stats": {
+        "def": 6
+      },
+      "lavaproof": true,
+      "icon": "👟",
+      "slot": "boots",
+      "defense": 6,
+      "desc": "+6 defense"
+    },
+    "pet_robot": {
+      "name": "Robot companion",
+      "type": "pet",
+      "sell": 150,
+      "stats": {
+        "atk": 3
+      },
+      "pet": {
+        "scale": 0.2,
+        "dmg": 0.3,
+        "cd": 1.2,
+        "shot": "volt"
+      },
+      "icon": "🐾",
+      "slot": "pet",
+      "attack": 3,
+      "desc": "+3 attack"
+    },
+    "pet_parrot": {
+      "name": "Parrot companion",
+      "type": "pet",
+      "sell": 160,
+      "stats": {
+        "atk": 3
+      },
+      "pet": {
+        "scale": 0.55,
+        "dmg": 0.3,
+        "cd": 1.3,
+        "shot": "arrow"
+      },
+      "luck": 0.15,
+      "icon": "🐾",
+      "slot": "pet",
+      "attack": 3,
+      "desc": "+3 attack"
+    },
+    "pet_turtle": {
+      "name": "Turtle companion",
+      "type": "pet",
+      "sell": 180,
+      "stats": {
+        "def": 8
+      },
+      "pet": {
+        "scale": 0.38,
+        "dmg": 0.25,
+        "cd": 1.8,
+        "shot": "bubble"
+      },
+      "icon": "🐾",
+      "slot": "pet",
+      "defense": 8,
+      "desc": "+8 defense"
+    },
+    "pet_sheep": {
+      "name": "Sheep companion",
+      "type": "pet",
+      "sell": 220,
+      "stats": {
+        "hp": 40
+      },
+      "pet": {
+        "scale": 0.5,
+        "dmg": 0.3,
+        "cd": 1.5,
+        "shot": "ice"
+      },
+      "icon": "🐾",
+      "slot": "pet",
+      "desc": "+40 health"
+    },
+    "pet_firefly": {
+      "name": "Firefly companion",
+      "type": "pet",
+      "sell": 260,
+      "stats": {
+        "atk": 4
+      },
+      "pet": {
+        "scale": 0.5,
+        "dmg": 0.35,
+        "cd": 1.3,
+        "shot": "fire"
+      },
+      "light": true,
+      "icon": "🐾",
+      "slot": "pet",
+      "attack": 4,
+      "desc": "+4 attack"
+    },
+    "pet_dragon": {
+      "name": "Dragon companion",
+      "type": "pet",
+      "sell": 300,
+      "rare": true,
+      "stats": {
+        "atk": 4
+      },
+      "pet": {
+        "scale": 0.26,
+        "dmg": 0.35,
+        "cd": 1.6
+      },
+      "icon": "🐾",
+      "slot": "pet",
+      "attack": 4,
+      "desc": "+4 attack"
+    },
+    "deco_volcano": {
+      "name": "Little volcano",
+      "type": "decor",
+      "sell": 20,
+      "collider": 0.8,
+      "set": "lava",
+      "icon": "🏡",
+      "desc": "Little volcano. Place in your home garden."
+    },
+    "deco_lamp": {
+      "name": "Lava lamp",
+      "type": "decor",
+      "sell": 30,
+      "light": "#ff8a3d",
+      "collider": 0.3,
+      "set": "lava",
+      "icon": "🏡",
+      "desc": "Lava lamp. Place in your home garden."
+    },
+    "deco_table": {
+      "name": "Obsidian table",
+      "type": "decor",
+      "sell": 45,
+      "collider": 1.1,
+      "set": "lava",
+      "icon": "🏡",
+      "desc": "Obsidian table. Place in your home garden."
+    },
+    "deco_statue": {
+      "name": "Golem statue",
+      "type": "decor",
+      "sell": 80,
+      "rare": true,
+      "collider": 0.7,
+      "set": "lava",
+      "icon": "🏡",
+      "desc": "Golem statue. Place in your home garden."
+    },
+    "deco_nest": {
+      "name": "Dragon nest",
+      "type": "decor",
+      "sell": 90,
+      "rare": true,
+      "collider": 0.6,
+      "set": "lava",
+      "icon": "🏡",
+      "desc": "Dragon nest. Place in your home garden."
+    },
+    "deco_trophy": {
+      "name": "Dragon trophy",
+      "type": "decor",
+      "sell": 150,
+      "rare": true,
+      "collider": 0.6,
+      "set": "lava",
+      "icon": "🏡",
+      "desc": "Dragon trophy. Place in your home garden."
+    },
+    "deco_teddy": {
+      "name": "Giant teddy",
+      "type": "decor",
+      "sell": 40,
+      "collider": 0.6,
+      "set": "toy",
+      "icon": "🏡",
+      "desc": "Giant teddy. Place in your home garden."
+    },
+    "deco_musicbox": {
+      "name": "Music box",
+      "type": "decor",
+      "sell": 55,
+      "collider": 0.5,
+      "set": "toy",
+      "icon": "🏡",
+      "desc": "Music box. Place in your home garden."
+    },
+    "deco_traincar": {
+      "name": "Toy train",
+      "type": "decor",
+      "sell": 80,
+      "rare": true,
+      "collider": 0.8,
+      "set": "toy",
+      "icon": "🏡",
+      "desc": "Toy train. Place in your home garden."
+    },
+    "deco_totem": {
+      "name": "Forest totem",
+      "type": "decor",
+      "sell": 60,
+      "collider": 0.4,
+      "set": "jungle",
+      "icon": "🏡",
+      "desc": "Forest totem. Place in your home garden."
+    },
+    "deco_rafflesia": {
+      "name": "Giant forest flower",
+      "type": "decor",
+      "sell": 45,
+      "collider": 0.8,
+      "set": "jungle",
+      "icon": "🏡",
+      "desc": "Giant forest flower. Place in your home garden."
+    },
+    "deco_fruittree": {
+      "name": "Fruit tree",
+      "type": "decor",
+      "sell": 90,
+      "rare": true,
+      "collider": 0.5,
+      "set": "jungle",
+      "icon": "🏡",
+      "desc": "Fruit tree. Place in your home garden."
+    },
+    "deco_aquarium": {
+      "name": "Coral aquarium",
+      "type": "decor",
+      "sell": 90,
+      "collider": 0.8,
+      "set": "ocean",
+      "icon": "🏡",
+      "desc": "Coral aquarium. Place in your home garden."
+    },
+    "deco_shell": {
+      "name": "Giant seashell",
+      "type": "decor",
+      "sell": 50,
+      "collider": 0.6,
+      "set": "ocean",
+      "icon": "🏡",
+      "desc": "Giant seashell. Place in your home garden."
+    },
+    "deco_piratechest": {
+      "name": "Pirate treasure",
+      "type": "decor",
+      "sell": 150,
+      "rare": true,
+      "collider": 0.6,
+      "set": "ocean",
+      "icon": "🏡",
+      "desc": "Pirate treasure. Place in your home garden."
+    },
+    "deco_cloudsofa": {
+      "name": "Cloud sofa",
+      "type": "decor",
+      "sell": 70,
+      "collider": 0.8,
+      "set": "sky",
+      "icon": "🏡",
+      "desc": "Cloud sofa. Place in your home garden."
+    },
+    "deco_windchime": {
+      "name": "Crystal wind chime",
+      "type": "decor",
+      "sell": 60,
+      "collider": 0.3,
+      "set": "sky",
+      "icon": "🏡",
+      "desc": "Crystal wind chime. Place in your home garden."
+    },
+    "deco_rainbow": {
+      "name": "Rainbow arch",
+      "type": "decor",
+      "sell": 160,
+      "rare": true,
+      "collider": 0.5,
+      "set": "sky",
+      "icon": "🏡",
+      "desc": "Rainbow arch. Place in your home garden."
+    },
+    "deco_ghostlantern": {
+      "name": "Ghost lantern",
+      "type": "decor",
+      "sell": 60,
+      "collider": 0.3,
+      "set": "dark",
+      "icon": "🏡",
+      "desc": "Ghost lantern. Place in your home garden."
+    },
+    "deco_nightcrystal": {
+      "name": "Night crystal",
+      "type": "decor",
+      "sell": 90,
+      "collider": 0.6,
+      "set": "dark",
+      "icon": "🏡",
+      "desc": "Night crystal. Place in your home garden."
+    },
+    "deco_owlstatue": {
+      "name": "Owl statue",
+      "type": "decor",
+      "sell": 180,
+      "rare": true,
+      "collider": 0.5,
+      "set": "dark",
+      "icon": "🏡",
+      "desc": "Owl statue. Place in your home garden."
+    },
+    "wood": {
+      "name": "Wild wood",
+      "icon": "🪵",
+      "type": "material",
+      "sell": 5,
+      "keepsake": true,
+      "desc": "A keepsake material from the first garden. Can still be sold."
+    },
+    "bunny": {
+      "name": "Mochi bunny",
+      "icon": "🐰",
+      "type": "pet",
+      "slot": "pet",
+      "sell": 0,
+      "keepsake": true,
+      "stats": {
+        "atk": 3
+      },
+      "attack": 3,
+      "pet": {
+        "scale": 0.5,
+        "dmg": 0.25,
+        "cd": 1.5
+      },
+      "desc": "Your original companion stays with you."
+    },
+    "pet_dog": {
+      "name": "Garden guard dog",
+      "icon": "🐕",
+      "type": "pet",
+      "slot": "pet",
+      "sell": 0,
+      "keepsake": true,
+      "penned": true,
+      "desc": "Your guard dog. Bring it along and it tosses bones at creatures; left at home it rests by its pen. It guards your garden either way."
+    },
+    "cooked_radish": {
+      "name": "Roasted radish",
+      "icon": "🔥",
+      "type": "food",
+      "sell": 28,
+      "heal": 24,
+      "desc": "Cooked at home. Stronger healing and longer effects.",
+      "base": "radish",
+      "cooked": true
+    },
+    "cooked_carrot": {
+      "name": "Roasted carrot",
+      "icon": "🔥",
+      "type": "food",
+      "sell": 22,
+      "heal": 22,
+      "buff": {
+        "speed": 0.27,
+        "time": 90
+      },
+      "desc": "Cooked at home. Stronger healing and longer effects.",
+      "base": "carrot",
+      "cooked": true
+    },
+    "cooked_pumpkin": {
+      "name": "Roasted pumpkin",
+      "icon": "🔥",
+      "type": "food",
+      "sell": 68,
+      "heal": 36,
+      "desc": "Cooked at home. Stronger healing and longer effects.",
+      "base": "pumpkin",
+      "cooked": true
+    },
+    "cooked_mint": {
+      "name": "Roasted mint",
+      "icon": "🔥",
+      "type": "food",
+      "sell": 61,
+      "heal": 34,
+      "buff": {
+        "regen": 4.050000000000001,
+        "time": 120
+      },
+      "desc": "Cooked at home. Stronger healing and longer effects.",
+      "base": "mint",
+      "cooked": true
+    },
+    "cooked_chili": {
+      "name": "Roasted chili",
+      "icon": "🔥",
+      "type": "food",
+      "sell": 81,
+      "heal": 40,
+      "buff": {
+        "atk": 0.27,
+        "time": 120
+      },
+      "desc": "Cooked at home. Stronger healing and longer effects.",
+      "base": "chili",
+      "cooked": true
+    },
+    "cooked_candy": {
+      "name": "Roasted candy bloom",
+      "icon": "🔥",
+      "type": "food",
+      "sell": 121,
+      "heal": 52,
+      "desc": "Cooked at home. Stronger healing and longer effects.",
+      "base": "candy",
+      "cooked": true
+    },
+    "cooked_bean": {
+      "name": "Roasted shield bean",
+      "icon": "🔥",
+      "type": "food",
+      "sell": 108,
+      "heal": 48,
+      "buff": {
+        "def": 20.25,
+        "time": 180
+      },
+      "desc": "Cooked at home. Stronger healing and longer effects.",
+      "base": "bean",
+      "cooked": true
+    },
+    "cooked_star": {
+      "name": "Roasted star fruit",
+      "icon": "🔥",
+      "type": "food",
+      "sell": 213,
+      "heal": 80,
+      "desc": "Cooked at home. Stronger healing and longer effects.",
+      "base": "star",
+      "cooked": true
+    },
+    "cooked_berry": {
+      "name": "Roasted berry",
+      "icon": "🔥",
+      "type": "food",
+      "sell": 134,
+      "heal": 56,
+      "buff": {
+        "xp": 0.675,
+        "time": 240
+      },
+      "desc": "Cooked at home. Stronger healing and longer effects.",
+      "base": "berry",
+      "cooked": true
+    },
+    "cooked_coffee": {
+      "name": "Roasted coffee bean",
+      "icon": "🔥",
+      "type": "food",
+      "sell": 121,
+      "heal": 52,
+      "buff": {
+        "haste": 0.4725,
+        "time": 120
+      },
+      "desc": "Cooked at home. Stronger healing and longer effects.",
+      "base": "coffee",
+      "cooked": true
+    },
+    "cooked_moonflower": {
+      "name": "Roasted moonflower",
+      "icon": "🔥",
+      "type": "food",
+      "sell": 174,
+      "heal": 68,
+      "buff": {
+        "crit": 0.162,
+        "time": 180
+      },
+      "desc": "Cooked at home. Stronger healing and longer effects.",
+      "base": "moonflower",
+      "cooked": true
+    },
+    "cooked_magnetmelon": {
+      "name": "Roasted magnet melon",
+      "icon": "🔥",
+      "type": "food",
+      "sell": 200,
+      "heal": 76,
+      "buff": {
+        "magnet": 1,
+        "time": 240
+      },
+      "desc": "Cooked at home. Stronger healing and longer effects.",
+      "base": "magnetmelon",
+      "cooked": true
+    },
+    "cooked_melon": {
+      "name": "Roasted melon",
+      "icon": "🔥",
+      "type": "food",
+      "sell": 398,
+      "heal": 136,
+      "desc": "Cooked at home. Stronger healing and longer effects.",
+      "base": "melon",
+      "cooked": true
+    },
+    "cooked_clover": {
+      "name": "Roasted lucky clover",
+      "icon": "🔥",
+      "type": "food",
+      "sell": 226,
+      "heal": 84,
+      "buff": {
+        "luck": 0.81,
+        "time": 360
+      },
+      "desc": "Cooked at home. Stronger healing and longer effects.",
+      "base": "clover",
+      "cooked": true
+    },
+    "cooked_glowshroom": {
+      "name": "Roasted glow mushroom",
+      "icon": "🔥",
+      "type": "food",
+      "sell": 200,
+      "heal": 76,
+      "buff": {
+        "light": 1,
+        "regen": 2.7,
+        "time": 480
+      },
+      "desc": "Cooked at home. Stronger healing and longer effects.",
+      "base": "glowshroom",
+      "cooked": true
+    },
+    "cooked_iceberry": {
+      "name": "Roasted ice berry",
+      "icon": "🔥",
+      "type": "food",
+      "sell": 266,
+      "heal": 96,
+      "buff": {
+        "fireres": 0.81,
+        "time": 240
+      },
+      "desc": "Cooked at home. Stronger healing and longer effects.",
+      "base": "iceberry",
+      "cooked": true
+    },
+    "cooked_goldcorn": {
+      "name": "Roasted golden corn",
+      "icon": "🔥",
+      "type": "food",
+      "sell": 728,
+      "heal": 236,
+      "desc": "Cooked at home. Stronger healing and longer effects.",
+      "base": "goldcorn",
+      "cooked": true
+    },
+    "cooked_dragonfruit": {
+      "name": "Roasted dragon fruit",
+      "icon": "🔥",
+      "type": "food",
+      "sell": 464,
+      "heal": 9999,
+      "buff": {
+        "atk": 0.405,
+        "regen": 6.75,
+        "time": 180
+      },
+      "desc": "Cooked at home. Stronger healing and longer effects.",
+      "base": "dragonfruit",
+      "cooked": true
+    },
+    "cooked_rainbowrose": {
+      "name": "Roasted rainbow rose",
+      "icon": "🔥",
+      "type": "food",
+      "sell": 596,
+      "heal": 196,
+      "buff": {
+        "atk": 0.2025,
+        "def": 16.200000000000003,
+        "haste": 0.2025,
+        "regen": 4.050000000000001,
+        "speed": 0.135,
+        "crit": 0.0675,
+        "time": 300
+      },
+      "desc": "Cooked at home. Stronger healing and longer effects.",
+      "base": "rainbowrose",
+      "cooked": true
+    },
+    "cooked_apple": {
+      "name": "Roasted magic red apple",
+      "icon": "🔥",
+      "type": "food",
+      "sell": 1322,
+      "heal": 240,
+      "desc": "Cooked at home. Stronger healing and longer effects.",
+      "base": "apple",
+      "cooked": true
+    },
+    "cooked_grape": {
+      "name": "Roasted juicy purple grapes",
+      "icon": "🔥",
+      "type": "food",
+      "sell": 1542,
+      "heal": 1416,
+      "buff": {
+        "regen": 5.4,
+        "time": 360
+      },
+      "desc": "Cooked at home. Stronger healing and longer effects.",
+      "base": "grape",
+      "cooked": true
+    },
+    "cooked_mango": {
+      "name": "Roasted golden mango",
+      "icon": "🔥",
+      "type": "food",
+      "sell": 1762,
+      "heal": 1616,
+      "buff": {
+        "speed": 0.3375,
+        "time": 360
+      },
+      "desc": "Cooked at home. Stronger healing and longer effects.",
+      "base": "mango",
+      "cooked": true
+    },
+    "cooked_pineapple": {
+      "name": "Roasted crown pineapple",
+      "icon": "🔥",
+      "type": "food",
+      "sell": 2642,
+      "heal": 2416,
+      "buff": {
+        "atk": 0.3375,
+        "time": 360
+      },
+      "desc": "Cooked at home. Stronger healing and longer effects.",
+      "base": "pineapple",
+      "cooked": true
+    },
+    "cooked_coconut": {
+      "name": "Roasted refreshing coconut",
+      "icon": "🔥",
+      "type": "food",
+      "sell": 2862,
+      "heal": 800,
+      "buff": {
+        "fireres": 0.675,
+        "time": 360
+      },
+      "desc": "Cooked at home. Stronger healing and longer effects.",
+      "base": "coconut",
+      "cooked": true
+    },
+    "cooked_durian": {
+      "name": "Roasted spiky durian",
+      "icon": "🔥",
+      "type": "food",
+      "sell": 3302,
+      "heal": 3016,
+      "buff": {
+        "def": 33.75,
+        "time": 360
+      },
+      "desc": "Cooked at home. Stronger healing and longer effects.",
+      "base": "durian",
+      "cooked": true
+    },
+    "cooked_lychee": {
+      "name": "Roasted ruby lychee",
+      "icon": "🔥",
+      "type": "food",
+      "sell": 3962,
+      "heal": 3616,
+      "buff": {
+        "crit": 0.2025,
+        "haste": 0.27,
+        "time": 360
+      },
+      "desc": "Cooked at home. Stronger healing and longer effects.",
+      "base": "lychee",
+      "cooked": true
+    },
+    "cooked_peach": {
+      "name": "Roasted immortal peach",
+      "icon": "🔥",
+      "type": "food",
+      "sell": 4842,
+      "heal": 9999,
+      "buff": {
+        "atk": 0.27,
+        "def": 20.25,
+        "regen": 6.75,
+        "xp": 0.675,
+        "time": 600
+      },
+      "desc": "Cooked at home. Stronger healing and longer effects.",
+      "base": "peach",
+      "cooked": true
+    },
+    "cooked_meat": {
+      "name": "Roasted meat",
+      "type": "food",
+      "sell": 9,
+      "heal": 50,
+      "icon": "🔥",
+      "desc": "Cooked at home. Stronger healing and longer effects.",
+      "base": "meat",
+      "cooked": true
+    },
+    "cooked_fish_perch": {
+      "name": "Roasted perch",
+      "type": "food",
+      "sell": 15,
+      "heal": 30,
+      "power": 0.2,
+      "icon": "🔥",
+      "desc": "Cooked at home. Stronger healing and longer effects.",
+      "base": "fish_perch",
+      "cooked": true
+    },
+    "cooked_fish_clown": {
+      "name": "Roasted clownfish",
+      "type": "food",
+      "sell": 24,
+      "heal": 40,
+      "power": 0.3,
+      "icon": "🔥",
+      "desc": "Cooked at home. Stronger healing and longer effects.",
+      "base": "fish_clown",
+      "cooked": true
+    },
+    "cooked_fish_puffer": {
+      "name": "Roasted pufferfish",
+      "type": "food",
+      "sell": 42,
+      "heal": 20,
+      "power": 0.45,
+      "icon": "🔥",
+      "desc": "Cooked at home. Stronger healing and longer effects.",
+      "base": "fish_puffer",
+      "cooked": true
+    },
+    "cooked_fish_carp": {
+      "name": "Roasted carp",
+      "type": "food",
+      "sell": 64,
+      "heal": 70,
+      "power": 0.62,
+      "icon": "🔥",
+      "desc": "Cooked at home. Stronger healing and longer effects.",
+      "base": "fish_carp",
+      "cooked": true
+    },
+    "cooked_fish_shark": {
+      "name": "Roasted shark",
+      "type": "food",
+      "sell": 145,
+      "heal": 120,
+      "rare": true,
+      "power": 0.92,
+      "icon": "🔥",
+      "desc": "Cooked at home. Stronger healing and longer effects.",
+      "base": "fish_shark",
+      "cooked": true
+    },
+    "cooked_fish_rainbow": {
+      "name": "Roasted rainbow fish",
+      "type": "food",
+      "sell": 354,
+      "heal": 200,
+      "buff": {
+        "atk": 0.27,
+        "def": 13.5,
+        "time": 240
+      },
+      "rare": true,
+      "power": 0.8,
+      "icon": "🔥",
+      "desc": "Cooked at home. Stronger healing and longer effects.",
+      "base": "fish_rainbow",
+      "cooked": true
+    },
+    "cooked_fish_catfish": {
+      "name": "Roasted catfish",
+      "type": "food",
+      "sell": 50,
+      "heal": 60,
+      "power": 0.55,
+      "size": [
+        30,
+        90
+      ],
+      "icon": "🔥",
+      "desc": "Cooked at home. Stronger healing and longer effects.",
+      "base": "fish_catfish",
+      "cooked": true
+    },
+    "cooked_fish_koi": {
+      "name": "Roasted koi",
+      "type": "food",
+      "sell": 101,
+      "heal": 60,
+      "buff": {
+        "luck": 0.405,
+        "time": 240
+      },
+      "rare": true,
+      "power": 0.6,
+      "size": [
+        25,
+        70
+      ],
+      "icon": "🔥",
+      "desc": "Cooked at home. Stronger healing and longer effects.",
+      "base": "fish_koi",
+      "cooked": true
+    },
+    "cooked_fish_eel": {
+      "name": "Roasted eel",
+      "type": "food",
+      "sell": 156,
+      "heal": 50,
+      "buff": {
+        "haste": 0.405,
+        "time": 120
+      },
+      "rare": true,
+      "power": 0.78,
+      "size": [
+        60,
+        180
+      ],
+      "icon": "🔥",
+      "desc": "Cooked at home. Stronger healing and longer effects.",
+      "base": "fish_eel",
+      "cooked": true
+    },
+    "cooked_fish_swordfish": {
+      "name": "Roasted swordfish",
+      "type": "food",
+      "sell": 200,
+      "heal": 100,
+      "buff": {
+        "crit": 0.135,
+        "time": 180
+      },
+      "rare": true,
+      "power": 0.85,
+      "size": [
+        90,
+        300
+      ],
+      "icon": "🔥",
+      "desc": "Cooked at home. Stronger healing and longer effects.",
+      "base": "fish_swordfish",
+      "cooked": true
+    },
+    "cooked_fish_jelly": {
+      "name": "Roasted jellyfish",
+      "type": "food",
+      "sell": 59,
+      "heal": 50,
+      "power": 0.4,
+      "size": [
+        10,
+        40
+      ],
+      "icon": "🔥",
+      "desc": "Cooked at home. Stronger healing and longer effects.",
+      "base": "fish_jelly",
+      "cooked": true
+    },
+    "cooked_fish_icepike": {
+      "name": "Roasted ice pike",
+      "type": "food",
+      "sell": 108,
+      "heal": 80,
+      "buff": {
+        "fireres": 0.54,
+        "time": 180
+      },
+      "power": 0.7,
+      "size": [
+        50,
+        150
+      ],
+      "icon": "🔥",
+      "desc": "Cooked at home. Stronger healing and longer effects.",
+      "base": "fish_icepike",
+      "cooked": true
+    },
+    "cooked_fish_whale": {
+      "name": "Roasted whale",
+      "type": "food",
+      "sell": 926,
+      "heal": 400,
+      "buff": {
+        "def": 33.75,
+        "regen": 6.75,
+        "time": 360
+      },
+      "rare": true,
+      "legend": true,
+      "power": 0.97,
+      "size": [
+        400,
+        1200
+      ],
+      "icon": "🔥",
+      "desc": "Cooked at home. Stronger healing and longer effects.",
+      "base": "fish_whale",
+      "cooked": true
+    },
+    "cooked_fish_kraken": {
+      "name": "Roasted kraken",
+      "type": "food",
+      "sell": 838,
+      "heal": 300,
+      "buff": {
+        "atk": 0.4725,
+        "time": 240
+      },
+      "rare": true,
+      "legend": true,
+      "power": 0.96,
+      "size": [
+        200,
+        800
+      ],
+      "icon": "🔥",
+      "desc": "Cooked at home. Stronger healing and longer effects.",
+      "base": "fish_kraken",
+      "cooked": true
+    },
+    "cooked_fish_golden": {
+      "name": "Roasted golden fish",
+      "type": "food",
+      "sell": 1322,
+      "heal": 9999,
+      "buff": {
+        "atk": 0.3375,
+        "def": 20.25,
+        "crit": 0.135,
+        "luck": 0.675,
+        "time": 360
+      },
+      "rare": true,
+      "legend": true,
+      "power": 0.92,
+      "size": [
+        60,
+        160
+      ],
+      "icon": "🔥",
+      "desc": "Cooked at home. Stronger healing and longer effects.",
+      "base": "fish_golden",
+      "cooked": true
+    },
+    "cooked_fish_sunfish": {
+      "name": "Roasted sunfish",
+      "type": "food",
+      "sell": 134,
+      "heal": 120,
+      "buff": {
+        "regen": 5.4,
+        "time": 180
+      },
+      "power": 0.72,
+      "size": [
+        80,
+        250
+      ],
+      "icon": "🔥",
+      "desc": "Cooked at home. Stronger healing and longer effects.",
+      "base": "fish_sunfish",
+      "cooked": true
+    },
+    "cooked_fish_angler": {
+      "name": "Roasted anglerfish",
+      "type": "food",
+      "sell": 189,
+      "heal": 80,
+      "buff": {
+        "light": 1,
+        "time": 480
+      },
+      "rare": true,
+      "power": 0.8,
+      "size": [
+        30,
+        90
+      ],
+      "icon": "🔥",
+      "desc": "Cooked at home. Stronger healing and longer effects.",
+      "base": "fish_angler",
+      "cooked": true
+    },
+    "cooked_fish_manta": {
+      "name": "Roasted manta ray",
+      "type": "food",
+      "sell": 706,
+      "heal": 300,
+      "buff": {
+        "speed": 0.405,
+        "def": 20.25,
+        "time": 300
+      },
+      "rare": true,
+      "legend": true,
+      "power": 0.95,
+      "size": [
+        300,
+        700
+      ],
+      "icon": "🔥",
+      "desc": "Cooked at home. Stronger healing and longer effects.",
+      "base": "fish_manta",
+      "cooked": true
+    },
+    "hat_t_turtle": {
+      "type": "hat",
+      "sell": 900,
+      "rare": true,
+      "legend": true,
+      "stats": {
+        "def": 30,
+        "hp": 150,
+        "regen": 3
+      },
+      "name": "Ancient Mountain Helm",
+      "icon": "👑",
+      "desc": "A legendary trophy from Ancient Mountain Turtle.",
+      "slot": "hat"
+    },
+    "hat_t_hydra": {
+      "type": "hat",
+      "sell": 900,
+      "rare": true,
+      "legend": true,
+      "stats": {
+        "atk": 16,
+        "crit": 0.08,
+        "hp": 60
+      },
+      "name": "Candy Hydra Crown",
+      "icon": "👑",
+      "desc": "A legendary trophy from Three-Headed Candy Hydra.",
+      "slot": "hat"
+    },
+    "hat_t_crystal": {
+      "type": "hat",
+      "sell": 950,
+      "rare": true,
+      "legend": true,
+      "stats": {
+        "crit": 0.12,
+        "def": 18,
+        "hp": 80
+      },
+      "light": true,
+      "name": "Ice Crystal Crown",
+      "icon": "👑",
+      "desc": "A legendary trophy from Ice Crystal Queen.",
+      "slot": "hat"
+    },
+    "hat_t_scorpion": {
+      "type": "hat",
+      "sell": 1000,
+      "rare": true,
+      "legend": true,
+      "stats": {
+        "atk": 20,
+        "def": 12
+      },
+      "lavaproof": true,
+      "name": "Inferno Scorpion Helm",
+      "icon": "👑",
+      "desc": "A legendary trophy from Inferno Scorpion.",
+      "slot": "hat"
+    },
+    "hat_t_clock": {
+      "type": "hat",
+      "sell": 900,
+      "rare": true,
+      "legend": true,
+      "stats": {
+        "speed": 0.18,
+        "atk": 10
+      },
+      "xp": 0.3,
+      "name": "Clockwork Crown",
+      "icon": "👑",
+      "desc": "A legendary trophy from Clockwork Spider.",
+      "slot": "hat"
+    },
+    "hat_t_flower": {
+      "type": "hat",
+      "sell": 950,
+      "rare": true,
+      "legend": true,
+      "stats": {
+        "hp": 120,
+        "regen": 5
+      },
+      "antidote": true,
+      "name": "Rafflesia Crown",
+      "icon": "👑",
+      "desc": "A legendary trophy from Death Flower Rafflesia.",
+      "slot": "hat"
+    },
+    "hat_t_kraken": {
+      "type": "hat",
+      "sell": 950,
+      "rare": true,
+      "legend": true,
+      "stats": {
+        "def": 16,
+        "atk": 12
+      },
+      "luck": 0.4,
+      "name": "Kraken Tentacle Hat",
+      "icon": "👑",
+      "desc": "A legendary trophy from Abyssal Kraken.",
+      "slot": "hat"
+    },
+    "hat_t_whale": {
+      "type": "hat",
+      "sell": 1000,
+      "rare": true,
+      "legend": true,
+      "stats": {
+        "speed": 0.22,
+        "hp": 140
+      },
+      "xp": 0.2,
+      "name": "Cloud Whale Hat",
+      "icon": "👑",
+      "desc": "A legendary trophy from Celestial Cloud Whale.",
+      "slot": "hat"
+    },
+    "hat_t_eye": {
+      "type": "hat",
+      "sell": 1100,
+      "rare": true,
+      "legend": true,
+      "stats": {
+        "atk": 22,
+        "crit": 0.1
+      },
+      "light": true,
+      "luck": 0.25,
+      "name": "Void Eye Crown",
+      "icon": "👑",
+      "desc": "A legendary trophy from Void Eye.",
+      "slot": "hat"
+    },
+    "pet_t_turtle": {
+      "type": "pet",
+      "sell": 1400,
+      "rare": true,
+      "legend": true,
+      "stats": {
+        "def": 25,
+        "hp": 120,
+        "regen": 3
+      },
+      "pet": {
+        "scale": 0.09,
+        "dmg": 0.44,
+        "cd": 1.6,
+        "shot": "bubble"
+      },
+      "name": "Little Mountain Turtle",
+      "icon": "🐢",
+      "desc": "A legendary companion that follows you and attacks nearby enemies.",
+      "slot": "pet"
+    },
+    "pet_t_hydra": {
+      "type": "pet",
+      "sell": 1400,
+      "rare": true,
+      "legend": true,
+      "stats": {
+        "atk": 12
+      },
+      "pet": {
+        "scale": 0.09,
+        "dmg": 0.26,
+        "cd": 0.9,
+        "shot": "rainbow"
+      },
+      "name": "Little Candy Hydra",
+      "icon": "🐉",
+      "desc": "A legendary companion that follows you and attacks nearby enemies.",
+      "slot": "pet"
+    },
+    "pet_t_crystal": {
+      "type": "pet",
+      "sell": 1450,
+      "rare": true,
+      "legend": true,
+      "stats": {
+        "crit": 0.1
+      },
+      "light": true,
+      "pet": {
+        "scale": 0.1,
+        "dmg": 0.33,
+        "cd": 1.1,
+        "shot": "ice"
+      },
+      "name": "Little Crystal Queen",
+      "icon": "❄️",
+      "desc": "A legendary companion that follows you and attacks nearby enemies.",
+      "slot": "pet"
+    },
+    "pet_t_scorpion": {
+      "type": "pet",
+      "sell": 1500,
+      "rare": true,
+      "legend": true,
+      "stats": {
+        "atk": 14
+      },
+      "lavaproof": true,
+      "pet": {
+        "scale": 0.09,
+        "dmg": 0.31,
+        "cd": 1,
+        "shot": "fire"
+      },
+      "name": "Little Inferno Scorpion",
+      "icon": "🦂",
+      "desc": "A legendary companion that follows you and attacks nearby enemies.",
+      "slot": "pet"
+    },
+    "pet_t_clock": {
+      "type": "pet",
+      "sell": 1400,
+      "rare": true,
+      "legend": true,
+      "stats": {
+        "speed": 0.15
+      },
+      "xp": 0.25,
+      "pet": {
+        "scale": 0.09,
+        "dmg": 0.22,
+        "cd": 0.8,
+        "shot": "spike"
+      },
+      "name": "Little Clockwork Spider",
+      "icon": "⚙️",
+      "desc": "A legendary companion that follows you and attacks nearby enemies.",
+      "slot": "pet"
+    },
+    "pet_t_flower": {
+      "type": "pet",
+      "sell": 1450,
+      "rare": true,
+      "legend": true,
+      "stats": {
+        "hp": 100,
+        "regen": 6
+      },
+      "antidote": true,
+      "pet": {
+        "scale": 0.09,
+        "dmg": 0.35,
+        "cd": 1.2,
+        "shot": "bubble"
+      },
+      "name": "Little Rafflesia",
+      "icon": "🌺",
+      "desc": "A legendary companion that follows you and attacks nearby enemies.",
+      "slot": "pet"
+    },
+    "pet_t_kraken": {
+      "type": "pet",
+      "sell": 1450,
+      "rare": true,
+      "legend": true,
+      "stats": {
+        "def": 12
+      },
+      "luck": 0.35,
+      "pet": {
+        "scale": 0.09,
+        "dmg": 0.33,
+        "cd": 1.1,
+        "shot": "bubble"
+      },
+      "name": "Little Abyssal Kraken",
+      "icon": "🐙",
+      "desc": "A legendary companion that follows you and attacks nearby enemies.",
+      "slot": "pet"
+    },
+    "pet_t_whale": {
+      "type": "pet",
+      "sell": 1500,
+      "rare": true,
+      "legend": true,
+      "stats": {
+        "hp": 150,
+        "speed": 0.2
+      },
+      "xp": 0.2,
+      "pet": {
+        "scale": 0.09,
+        "dmg": 0.38,
+        "cd": 1.2,
+        "shot": "ice"
+      },
+      "name": "Little Cloud Whale",
+      "icon": "🐳",
+      "desc": "A legendary companion that follows you and attacks nearby enemies.",
+      "slot": "pet"
+    },
+    "pet_t_eye": {
+      "type": "pet",
+      "sell": 1600,
+      "rare": true,
+      "legend": true,
+      "stats": {
+        "atk": 16,
+        "crit": 0.08
+      },
+      "light": true,
+      "luck": 0.2,
+      "pet": {
+        "scale": 0.1,
+        "dmg": 0.325,
+        "cd": 1,
+        "shot": "rainbow"
+      },
+      "name": "Little Void Eye",
+      "icon": "👁️",
+      "desc": "A legendary companion that follows you and attacks nearby enemies.",
+      "slot": "pet"
+    },
+    "pet_b_bear": {
+      "type": "pet",
+      "slot": "pet",
+      "sell": 600,
+      "rare": true,
+      "stats": {
+        "hp": 40,
+        "def": 6
+      },
+      "pet": {
+        "scale": 0.09,
+        "dmg": 0.4,
+        "cd": 1.5
+      },
+      "name": "Little King Bear",
+      "icon": "🐻",
+      "desc": "A little companion won from King Bear. It follows you and attacks nearby enemies."
+    },
+    "pet_b_treant": {
+      "type": "pet",
+      "slot": "pet",
+      "sell": 620,
+      "rare": true,
+      "stats": {
+        "hp": 45,
+        "regen": 1
+      },
+      "pet": {
+        "scale": 0.09,
+        "dmg": 0.4,
+        "cd": 1.5
+      },
+      "name": "Little Ancient Treant",
+      "icon": "🌳",
+      "desc": "A little companion won from Ancient Treant. It follows you and attacks nearby enemies."
+    },
+    "pet_b_croc": {
+      "type": "pet",
+      "slot": "pet",
+      "sell": 640,
+      "rare": true,
+      "stats": {
+        "atk": 8,
+        "def": 4
+      },
+      "pet": {
+        "scale": 0.09,
+        "dmg": 0.4,
+        "cd": 1.5
+      },
+      "name": "Little Crocodile King",
+      "icon": "🐊",
+      "desc": "A little companion won from Crocodile King. It follows you and attacks nearby enemies."
+    },
+    "pet_b_mushking": {
+      "type": "pet",
+      "slot": "pet",
+      "sell": 620,
+      "rare": true,
+      "stats": {
+        "hp": 40,
+        "regen": 1
+      },
+      "pet": {
+        "scale": 0.09,
+        "dmg": 0.4,
+        "cd": 1.5
+      },
+      "name": "Little Mushroom King",
+      "icon": "🍄",
+      "desc": "A little companion won from Mushroom King. It follows you and attacks nearby enemies."
+    },
+    "pet_b_cake": {
+      "type": "pet",
+      "slot": "pet",
+      "sell": 660,
+      "rare": true,
+      "stats": {
+        "hp": 45,
+        "speed": 0.05
+      },
+      "pet": {
+        "scale": 0.09,
+        "dmg": 0.4,
+        "cd": 1.5
+      },
+      "name": "Little Cake King",
+      "icon": "🍰",
+      "desc": "A little companion won from Cake King. It follows you and attacks nearby enemies."
+    },
+    "pet_b_gingerbread": {
+      "type": "pet",
+      "slot": "pet",
+      "sell": 660,
+      "rare": true,
+      "stats": {
+        "def": 8,
+        "hp": 30
+      },
+      "pet": {
+        "scale": 0.09,
+        "dmg": 0.4,
+        "cd": 1.5
+      },
+      "name": "Little Gingerbread Giant",
+      "icon": "🍪",
+      "desc": "A little companion won from Gingerbread Giant. It follows you and attacks nearby enemies."
+    },
+    "pet_b_jellyqueen": {
+      "type": "pet",
+      "slot": "pet",
+      "sell": 680,
+      "rare": true,
+      "stats": {
+        "hp": 50,
+        "regen": 1
+      },
+      "pet": {
+        "scale": 0.09,
+        "dmg": 0.4,
+        "cd": 1.5,
+        "shot": "bubble"
+      },
+      "name": "Little Jelly Queen",
+      "icon": "🍮",
+      "desc": "A little companion won from Jelly Queen. It follows you and attacks nearby enemies."
+    },
+    "pet_b_yeti": {
+      "type": "pet",
+      "slot": "pet",
+      "sell": 700,
+      "rare": true,
+      "stats": {
+        "def": 9,
+        "hp": 40
+      },
+      "pet": {
+        "scale": 0.09,
+        "dmg": 0.4,
+        "cd": 1.5,
+        "shot": "ice"
+      },
+      "name": "Little Snow Yeti",
+      "icon": "☃️",
+      "desc": "A little companion won from Snow Yeti. It follows you and attacks nearby enemies."
+    },
+    "pet_b_mammoth": {
+      "type": "pet",
+      "slot": "pet",
+      "sell": 720,
+      "rare": true,
+      "stats": {
+        "hp": 60,
+        "def": 6
+      },
+      "pet": {
+        "scale": 0.09,
+        "dmg": 0.4,
+        "cd": 1.5,
+        "shot": "ice"
+      },
+      "name": "Little Ice Mammoth",
+      "icon": "🦣",
+      "desc": "A little companion won from Ice Mammoth. It follows you and attacks nearby enemies."
+    },
+    "pet_b_frostowl": {
+      "type": "pet",
+      "slot": "pet",
+      "sell": 740,
+      "rare": true,
+      "stats": {
+        "atk": 8,
+        "crit": 0.03
+      },
+      "pet": {
+        "scale": 0.09,
+        "dmg": 0.4,
+        "cd": 1.5,
+        "shot": "ice"
+      },
+      "name": "Little Frost Owl",
+      "icon": "🦉",
+      "desc": "A little companion won from Frost Owl. It follows you and attacks nearby enemies."
+    },
+    "pet_b_golem": {
+      "type": "pet",
+      "slot": "pet",
+      "sell": 760,
+      "rare": true,
+      "stats": {
+        "def": 10,
+        "hp": 50
+      },
+      "pet": {
+        "scale": 0.09,
+        "dmg": 0.4,
+        "cd": 1.5
+      },
+      "name": "Little Magma Golem",
+      "icon": "🪨",
+      "desc": "A little companion won from Magma Golem. It follows you and attacks nearby enemies."
+    },
+    "pet_b_dragon": {
+      "type": "pet",
+      "slot": "pet",
+      "sell": 880,
+      "rare": true,
+      "stats": {
+        "atk": 12,
+        "crit": 0.04
+      },
+      "pet": {
+        "scale": 0.09,
+        "dmg": 0.4,
+        "cd": 1.5
+      },
+      "name": "Little Volcano Dragon",
+      "icon": "🐉",
+      "desc": "A little companion won from Volcano Dragon. It follows you and attacks nearby enemies."
+    },
+    "pet_b_robot": {
+      "type": "pet",
+      "slot": "pet",
+      "sell": 700,
+      "rare": true,
+      "stats": {
+        "atk": 9,
+        "def": 5
+      },
+      "pet": {
+        "scale": 0.09,
+        "dmg": 0.4,
+        "cd": 1.5
+      },
+      "name": "Little Giant Toy Robot",
+      "icon": "🤖",
+      "desc": "A little companion won from Giant Toy Robot. It follows you and attacks nearby enemies."
+    },
+    "pet_b_gorilla": {
+      "type": "pet",
+      "slot": "pet",
+      "sell": 780,
+      "rare": true,
+      "stats": {
+        "atk": 11,
+        "hp": 40
+      },
+      "pet": {
+        "scale": 0.09,
+        "dmg": 0.4,
+        "cd": 1.5
+      },
+      "name": "Little Jungle Gorilla",
+      "icon": "🦍",
+      "desc": "A little companion won from Jungle Gorilla. It follows you and attacks nearby enemies."
+    },
+    "pet_b_leviathan": {
+      "type": "pet",
+      "slot": "pet",
+      "sell": 840,
+      "rare": true,
+      "stats": {
+        "hp": 70,
+        "speed": 0.08
+      },
+      "pet": {
+        "scale": 0.09,
+        "dmg": 0.4,
+        "cd": 1.5,
+        "shot": "bubble"
+      },
+      "name": "Little Ocean Leviathan",
+      "icon": "🐋",
+      "desc": "A little companion won from Ocean Leviathan. It follows you and attacks nearby enemies."
+    },
+    "pet_b_phoenix": {
+      "type": "pet",
+      "slot": "pet",
+      "sell": 860,
+      "rare": true,
+      "stats": {
+        "atk": 12,
+        "speed": 0.08
+      },
+      "pet": {
+        "scale": 0.09,
+        "dmg": 0.4,
+        "cd": 1.5,
+        "shot": "rainbow"
+      },
+      "name": "Little Thunder Phoenix",
+      "icon": "🦅",
+      "desc": "A little companion won from Thunder Phoenix. It follows you and attacks nearby enemies."
+    },
+    "pet_b_shadowlord": {
+      "type": "pet",
+      "slot": "pet",
+      "sell": 900,
+      "rare": true,
+      "stats": {
+        "atk": 13,
+        "crit": 0.05
+      },
+      "pet": {
+        "scale": 0.09,
+        "dmg": 0.4,
+        "cd": 1.5
+      },
+      "name": "Little Shadow Lord",
+      "icon": "🦇",
+      "desc": "A little companion won from Shadow Lord. It follows you and attacks nearby enemies."
+    },
+    "dg_seal": {
+      "name": "Rune Seal",
+      "icon": "🔱",
+      "type": "material",
+      "sell": 60,
+      "rare": true,
+      "desc": "A warm little seal stamped with the vault keeper's rune. Delvers trade them like coins."
+    },
+    "deco_dgchest": {
+      "name": "Delver's Chest",
+      "icon": "🧰",
+      "type": "decor",
+      "sell": 260,
+      "collider": 0.7,
+      "desc": "A treasure chest carried up from the deepest vault. It still hums with starlight."
+    },
+    "pet_dg_morel": {
+      "name": "Little Morel",
+      "icon": "🍄",
+      "type": "pet",
+      "slot": "pet",
+      "sell": 1500,
+      "rare": true,
+      "legend": true,
+      "stats": {
+        "def": 20,
+        "hp": 120
+      },
+      "pet": {
+        "scale": 0.16,
+        "dmg": 0.41,
+        "cd": 1.3,
+        "shot": "ice"
+      },
+      "desc": "A sleepy mushroom from the Glowcap Grotto. Now and then it bursts spores or shines a glow beam."
+    },
+    "pet_dg_owl": {
+      "name": "Little Bellwarden",
+      "icon": "🦉",
+      "type": "pet",
+      "slot": "pet",
+      "sell": 1550,
+      "rare": true,
+      "legend": true,
+      "stats": {
+        "speed": 0.15
+      },
+      "xp": 0.25,
+      "pet": {
+        "scale": 0.14,
+        "dmg": 0.355,
+        "cd": 1.1,
+        "shot": "spike"
+      },
+      "desc": "A tiny owl with a tiny bell. It rings little chimes and drops feathers on your foes."
+    },
+    "pet_dg_anemone": {
+      "name": "Little Anemone",
+      "icon": "🪸",
+      "type": "pet",
+      "slot": "pet",
+      "sell": 1650,
+      "rare": true,
+      "legend": true,
+      "stats": {
+        "atk": 16,
+        "crit": 0.08
+      },
+      "light": true,
+      "pet": {
+        "scale": 0.13,
+        "dmg": 0.295,
+        "cd": 0.9,
+        "shot": "bubble"
+      },
+      "desc": "A wiggly sea anemone from the Coral Throne. It pops bubbles and flicks tiny tentacles."
+    },
+    "pet_dg_bellows": {
+      "name": "Little Bellows",
+      "icon": "🔨",
+      "type": "pet",
+      "slot": "pet",
+      "sell": 1650,
+      "rare": true,
+      "legend": true,
+      "stats": {
+        "atk": 16,
+        "hp": 40
+      },
+      "pet": {
+        "scale": 0.14,
+        "dmg": 0.265,
+        "cd": 0.8,
+        "shot": "fire"
+      },
+      "desc": "A pocket forge golem. It drops a mini anvil and showers sparks when you fight."
+    },
+    "pet_dg_empress": {
+      "name": "Little Moon Moth",
+      "icon": "🦋",
+      "type": "pet",
+      "slot": "pet",
+      "sell": 1800,
+      "rare": true,
+      "legend": true,
+      "stats": {
+        "atk": 15,
+        "crit": 0.1
+      },
+      "luck": 0.3,
+      "pet": {
+        "scale": 0.12,
+        "dmg": 0.305,
+        "cd": 0.9,
+        "shot": "rainbow"
+      },
+      "desc": "A moth with moonlight on its wings. It sends moonbeams and sprinkles stardust."
+    },
+    "hat_colossus": {
+      "name": "Cinderhorn Crown",
+      "icon": "🌋",
+      "type": "hat",
+      "slot": "hat",
+      "sell": 2000,
+      "rare": true,
+      "legend": true,
+      "lavaproof": true,
+      "stats": {
+        "atk": 22,
+        "def": 26,
+        "hp": 150,
+        "crit": 0.08
+      },
+      "desc": "Two glowing horns from the Cinderpeak Colossus. Lava cannot hurt the one who wears them."
+    },
+    "pet_colossus": {
+      "name": "Little Cinderpeak",
+      "icon": "🪨",
+      "type": "pet",
+      "slot": "pet",
+      "sell": 6000,
+      "rare": true,
+      "legend": true,
+      "lavaproof": true,
+      "stats": {
+        "atk": 16,
+        "def": 25,
+        "hp": 150
+      },
+      "pet": {
+        "scale": 0.09,
+        "dmg": 0.44,
+        "cd": 1.2,
+        "shot": "fire"
+      },
+      "desc": "A pebble-sized colossus that follows the explorer who landed the final blow, spitting embers at enemies."
+    },
+    "colossus_shard": {
+      "name": "Cinder Heartstone",
+      "icon": "🔥",
+      "type": "material",
+      "sell": 220,
+      "rare": true,
+      "desc": "A warm stone that fell from the Cinderpeak Colossus. It never quite cools down."
+    },
+    "harpoon": {
+      "name": "Hunting harpoon",
+      "icon": "🔱",
+      "desc": "A heavy reusable throwing weapon: +100 attack against enemies and forest birds. No ammunition needed. Use a fishing rod at ponds.",
+      "type": "weapon",
+      "slot": "weapon",
+      "sell": 400,
+      "price": 1000,
+      "materials": {},
+      "attack": 100,
+      "stats": {
+        "atk": 100
+      },
+      "weapon": {
+        "kind": "gun",
+        "range": 11,
+        "cd": 1.3,
+        "shot": "harpoon",
+        "special": "wave",
+        "fx": "#c9f0ec"
+      }
+    },
+    "fish_guardian": {
+      "name": "Lake Guardian",
+      "icon": "🎏",
+      "desc": "A glowing koi that guards the big meadow lake. It surfaces now and then.",
+      "type": "fish",
+      "sell": 450,
+      "heal": 250,
+      "buff": {
+        "luck": 0.4,
+        "regen": 6,
+        "time": 240
+      },
+      "rare": true,
+      "legend": true,
+      "power": 0.98,
+      "size": [
+        180,
+        260
+      ]
+    },
+    "dye_gilded_hat_samurai": {
+      "name": "Gilded Samurai hat",
+      "type": "hat",
+      "sell": 0,
+      "stats": {
+        "def": 16,
+        "hp": 45,
+        "crit": 0.05
+      },
+      "icon": "🎩",
+      "slot": "hat",
+      "defense": 16,
+      "desc": "+16 defense · +45 health",
+      "noTrade": true,
+      "dye": {
+        "style": "gilded",
+        "base": "hat_samurai",
+        "price": 7650
+      }
+    },
+    "dye_gilded_armor_knight": {
+      "name": "Gilded Knight outfit",
+      "type": "armor",
+      "sell": 0,
+      "stats": {
+        "def": 28,
+        "hp": 90,
+        "speed": -0.05
+      },
+      "icon": "🧥",
+      "slot": "outfit",
+      "defense": 28,
+      "desc": "+28 defense · +90 health · +-5% speed",
+      "noTrade": true,
+      "dye": {
+        "style": "gilded",
+        "base": "armor_knight",
+        "price": 8400
+      }
+    },
+    "dye_gilded_sword_crystal": {
+      "name": "Gilded Crystal sword",
+      "type": "weapon",
+      "sell": 0,
+      "stats": {
+        "atk": 26,
+        "crit": 0.1
+      },
+      "weapon": {
+        "kind": "sword",
+        "range": 2.7,
+        "cd": 0.5,
+        "arc": 0.3,
+        "special": "wave"
+      },
+      "icon": "⚔️",
+      "slot": "weapon",
+      "attack": 26,
+      "desc": "+26 attack",
+      "noTrade": true,
+      "dye": {
+        "style": "gilded",
+        "base": "sword_crystal",
+        "price": 8250
+      }
+    },
+    "dye_gilded_boots_rocket": {
+      "name": "Gilded Rocket boots",
+      "type": "feet",
+      "sell": 0,
+      "rare": true,
+      "stats": {
+        "def": 4,
+        "speed": 0.25
+      },
+      "icon": "👟",
+      "slot": "boots",
+      "defense": 4,
+      "desc": "+4 defense · +25% speed",
+      "noTrade": true,
+      "dye": {
+        "style": "gilded",
+        "base": "boots_rocket",
+        "price": 9000
+      }
+    },
+    "dye_gilded_pet_robot": {
+      "name": "Gilded Robot companion",
+      "type": "pet",
+      "sell": 0,
+      "stats": {
+        "atk": 3
+      },
+      "pet": {
+        "scale": 0.2,
+        "dmg": 0.3,
+        "cd": 1.2,
+        "shot": "volt"
+      },
+      "icon": "🐾",
+      "slot": "pet",
+      "attack": 3,
+      "desc": "+3 attack",
+      "noTrade": true,
+      "dye": {
+        "style": "gilded",
+        "base": "pet_robot",
+        "price": 8250
+      }
+    },
+    "dye_prism_hat_halo": {
+      "name": "Prism Halo",
+      "type": "hat",
+      "sell": 0,
+      "rare": true,
+      "stats": {
+        "def": 10,
+        "hp": 60,
+        "regen": 2
+      },
+      "light": true,
+      "icon": "🎩",
+      "slot": "hat",
+      "defense": 10,
+      "desc": "+10 defense · +60 health",
+      "noTrade": true,
+      "dye": {
+        "style": "prism",
+        "base": "hat_halo",
+        "price": 8250
+      }
+    },
+    "dye_prism_armor_angel": {
+      "name": "Prism Angel outfit",
+      "type": "armor",
+      "sell": 0,
+      "rare": true,
+      "stats": {
+        "def": 22,
+        "hp": 90,
+        "regen": 3
+      },
+      "featherfall": true,
+      "icon": "🧥",
+      "slot": "outfit",
+      "defense": 22,
+      "desc": "+22 defense · +90 health",
+      "noTrade": true,
+      "dye": {
+        "style": "prism",
+        "base": "armor_angel",
+        "price": 9900
+      }
+    },
+    "dye_prism_blaster_rainbow": {
+      "name": "Prism Rainbow blaster",
+      "type": "weapon",
+      "sell": 0,
+      "rare": true,
+      "stats": {
+        "atk": 30,
+        "crit": 0.08
+      },
+      "weapon": {
+        "kind": "gun",
+        "range": 11,
+        "cd": 0.22,
+        "shot": "rainbow",
+        "special": "laser"
+      },
+      "icon": "⚔️",
+      "slot": "weapon",
+      "attack": 30,
+      "desc": "+30 attack",
+      "noTrade": true,
+      "dye": {
+        "style": "prism",
+        "base": "blaster_rainbow",
+        "price": 11700
+      }
+    },
+    "dye_prism_pet_sheep": {
+      "name": "Prism Sheep companion",
+      "type": "pet",
+      "sell": 0,
+      "stats": {
+        "hp": 40
+      },
+      "pet": {
+        "scale": 0.5,
+        "dmg": 0.3,
+        "cd": 1.5,
+        "shot": "ice"
+      },
+      "icon": "🐾",
+      "slot": "pet",
+      "desc": "+40 health",
+      "noTrade": true,
+      "dye": {
+        "style": "prism",
+        "base": "pet_sheep",
+        "price": 9300
+      }
+    },
+    "dye_frost_hat_viking": {
+      "name": "Frost Viking hat",
+      "type": "hat",
+      "sell": 0,
+      "stats": {
+        "def": 14,
+        "hp": 40,
+        "atk": 4
+      },
+      "icon": "🎩",
+      "slot": "hat",
+      "attack": 4,
+      "defense": 14,
+      "desc": "+4 attack · +14 defense · +40 health",
+      "noTrade": true,
+      "dye": {
+        "style": "frost",
+        "base": "hat_viking",
+        "price": 7200
+      }
+    },
+    "dye_frost_armor_space": {
+      "name": "Frost Space outfit",
+      "type": "armor",
+      "sell": 0,
+      "stats": {
+        "def": 26,
+        "hp": 80,
+        "speed": 0.08
+      },
+      "icon": "🧥",
+      "slot": "outfit",
+      "defense": 26,
+      "desc": "+26 defense · +80 health · +8% speed",
+      "noTrade": true,
+      "dye": {
+        "style": "frost",
+        "base": "armor_space",
+        "price": 8700
+      }
+    },
+    "dye_frost_gun_ice": {
+      "name": "Frost Ice blaster",
+      "type": "weapon",
+      "sell": 0,
+      "stats": {
+        "atk": 20
+      },
+      "weapon": {
+        "kind": "gun",
+        "range": 10,
+        "cd": 0.42,
+        "shot": "ice",
+        "special": "blizzard"
+      },
+      "icon": "🔫",
+      "slot": "weapon",
+      "attack": 20,
+      "desc": "+20 attack",
+      "noTrade": true,
+      "dye": {
+        "style": "frost",
+        "base": "gun_ice",
+        "price": 7950
+      }
+    },
+    "dye_frost_boots_cloud": {
+      "name": "Frost Cloud boots",
+      "type": "feet",
+      "sell": 0,
+      "stats": {
+        "def": 5,
+        "speed": 0.12
+      },
+      "featherfall": true,
+      "icon": "👟",
+      "slot": "boots",
+      "defense": 5,
+      "desc": "+5 defense · +12% speed",
+      "noTrade": true,
+      "dye": {
+        "style": "frost",
+        "base": "boots_cloud",
+        "price": 8400
+      }
+    },
+    "dye_frost_pet_turtle": {
+      "name": "Frost Turtle companion",
+      "type": "pet",
+      "sell": 0,
+      "stats": {
+        "def": 8
+      },
+      "pet": {
+        "scale": 0.38,
+        "dmg": 0.25,
+        "cd": 1.8,
+        "shot": "bubble"
+      },
+      "icon": "🐾",
+      "slot": "pet",
+      "defense": 8,
+      "desc": "+8 defense",
+      "noTrade": true,
+      "dye": {
+        "style": "frost",
+        "base": "pet_turtle",
+        "price": 8700
+      }
+    },
+    "dye_shade_hat_pirate": {
+      "name": "Shade Pirate hat",
+      "type": "hat",
+      "sell": 0,
+      "stats": {
+        "def": 8,
+        "hp": 25
+      },
+      "luck": 0.1,
+      "icon": "🎩",
+      "slot": "hat",
+      "defense": 8,
+      "desc": "+8 defense · +25 health",
+      "noTrade": true,
+      "dye": {
+        "style": "shade",
+        "base": "hat_pirate",
+        "price": 6750
+      }
+    },
+    "dye_shade_armor_tux": {
+      "name": "Shade Tuxedo",
+      "type": "armor",
+      "sell": 0,
+      "stats": {
+        "def": 12,
+        "hp": 35,
+        "crit": 0.08
+      },
+      "icon": "🧥",
+      "slot": "outfit",
+      "defense": 12,
+      "desc": "+12 defense · +35 health",
+      "noTrade": true,
+      "dye": {
+        "style": "shade",
+        "base": "armor_tux",
+        "price": 7800
+      }
+    },
+    "dye_shade_scythe_moon": {
+      "name": "Shade Moon scythe",
+      "type": "weapon",
+      "sell": 0,
+      "rare": true,
+      "stats": {
+        "atk": 48,
+        "crit": 0.18
+      },
+      "weapon": {
+        "kind": "sword",
+        "range": 3.3,
+        "cd": 0.6,
+        "arc": -0.3,
+        "special": "whirl",
+        "fx": "#c9e8ff"
+      },
+      "icon": "⚔️",
+      "slot": "weapon",
+      "attack": 48,
+      "desc": "+48 attack",
+      "noTrade": true,
+      "dye": {
+        "style": "shade",
+        "base": "scythe_moon",
+        "price": 10800
+      }
+    },
+    "dye_shade_boots_cowboy": {
+      "name": "Shade Cowboy boots",
+      "type": "feet",
+      "sell": 0,
+      "stats": {
+        "def": 8,
+        "hp": 20
+      },
+      "icon": "👟",
+      "slot": "boots",
+      "defense": 8,
+      "desc": "+8 defense · +20 health",
+      "noTrade": true,
+      "dye": {
+        "style": "shade",
+        "base": "boots_cowboy",
+        "price": 6750
+      }
+    },
+    "dye_ruby_hat_wizard": {
+      "name": "Ruby Wizard hat",
+      "type": "hat",
+      "sell": 0,
+      "stats": {
+        "def": 5,
+        "hp": 15,
+        "atk": 6
+      },
+      "icon": "🎩",
+      "slot": "hat",
+      "attack": 6,
+      "defense": 5,
+      "desc": "+6 attack · +5 defense · +15 health",
+      "noTrade": true,
+      "dye": {
+        "style": "ruby",
+        "base": "hat_wizard",
+        "price": 6900
+      }
+    },
+    "dye_ruby_armor_kimono": {
+      "name": "Ruby Kimono",
+      "type": "armor",
+      "sell": 0,
+      "stats": {
+        "def": 12,
+        "hp": 40,
+        "speed": 0.1
+      },
+      "icon": "🧥",
+      "slot": "outfit",
+      "defense": 12,
+      "desc": "+12 defense · +40 health · +10% speed",
+      "noTrade": true,
+      "dye": {
+        "style": "ruby",
+        "base": "armor_kimono",
+        "price": 7500
+      }
+    },
+    "dye_ruby_staff_fire": {
+      "name": "Ruby Fire staff",
+      "type": "weapon",
+      "sell": 0,
+      "rare": true,
+      "stats": {
+        "atk": 40
+      },
+      "weapon": {
+        "kind": "gun",
+        "range": 10,
+        "cd": 0.7,
+        "shot": "fireball",
+        "special": "inferno"
+      },
+      "icon": "⚔️",
+      "slot": "weapon",
+      "attack": 40,
+      "desc": "+40 attack",
+      "noTrade": true,
+      "dye": {
+        "style": "ruby",
+        "base": "staff_fire",
+        "price": 11100
+      }
+    },
+    "dye_ruby_bow_star": {
+      "name": "Ruby Star bow",
+      "type": "weapon",
+      "sell": 0,
+      "rare": true,
+      "stats": {
+        "atk": 34,
+        "crit": 0.12
+      },
+      "weapon": {
+        "kind": "gun",
+        "range": 13,
+        "cd": 0.55,
+        "shot": "arrow",
+        "special": "starfall"
+      },
+      "icon": "⚔️",
+      "slot": "weapon",
+      "attack": 34,
+      "desc": "+34 attack",
+      "noTrade": true,
+      "dye": {
+        "style": "ruby",
+        "base": "bow_star",
+        "price": 10200
+      }
+    },
+    "egg": {
+      "name": "Egg",
+      "icon": "🥚",
+      "type": "food",
+      "sell": 6,
+      "heal": 12,
+      "desc": "Laid by your chickens. Sell it, or cook an omelette or pancakes at the kitchen."
+    },
+    "milk": {
+      "name": "Milk",
+      "icon": "🥛",
+      "type": "food",
+      "sell": 14,
+      "heal": 20,
+      "desc": "From your cows. Sell it, or make a milkshake, cheese or pancakes at the kitchen."
+    },
+    "goat_milk": {
+      "name": "Goat milk",
+      "icon": "🥛",
+      "type": "food",
+      "sell": 22,
+      "heal": 30,
+      "desc": "Creamy milk from your goats. Sell it or use it at the kitchen."
+    },
+    "goose_egg": {
+      "name": "Goose egg",
+      "icon": "🥚",
+      "type": "food",
+      "sell": 32,
+      "heal": 42,
+      "desc": "A big goose egg. Collect from geese or sell at the market."
+    },
+    "duck_egg": {
+      "name": "Duck egg",
+      "icon": "🥚",
+      "type": "food",
+      "sell": 25,
+      "heal": 35,
+      "desc": "A rich duck egg. Collect from ducks or sell at the market."
+    },
+    "truffle": {
+      "name": "Garden truffle",
+      "icon": "🍄",
+      "type": "food",
+      "sell": 80,
+      "heal": 90,
+      "buff": {
+        "luck": 0.2,
+        "time": 120
+      },
+      "desc": "A rare treat unearthed by pigs. Heals 90 and +20% luck for 120s."
+    },
+    "guard": {
+      "name": "Garden protection",
+      "icon": "🛡️",
+      "type": "effect",
+      "sell": 0,
+      "desc": "A guard dog protects ripe crops from visitors. It never becomes meat."
+    },
+    "omelette": {
+      "name": "Omelette",
+      "icon": "🍳",
+      "type": "food",
+      "sell": 18,
+      "heal": 40,
+      "buff": {
+        "def": 10,
+        "time": 90
+      },
+      "desc": "Two eggs, folded warm. Heals 40 and +10 defense for 90s."
+    },
+    "milkshake": {
+      "name": "Milkshake",
+      "icon": "🥤",
+      "type": "food",
+      "sell": 34,
+      "heal": 45,
+      "buff": {
+        "speed": 0.25,
+        "time": 90
+      },
+      "desc": "Cold and frothy. Heals 45 and +25% speed for 90s."
+    },
+    "cheese": {
+      "name": "Cheese wheel",
+      "icon": "🧀",
+      "type": "food",
+      "sell": 50,
+      "heal": 70,
+      "buff": {
+        "regen": 3,
+        "time": 120
+      },
+      "desc": "Three jugs of milk, aged a little. Heals 70 and +3 HP/s for 120s."
+    },
+    "pancake": {
+      "name": "Pancakes",
+      "icon": "🥞",
+      "type": "food",
+      "sell": 26,
+      "heal": 55,
+      "buff": {
+        "xp": 0.3,
+        "time": 120
+      },
+      "desc": "An egg and a jug of milk. Heals 55 and +30% XP for 120s."
+    }
+  },
+  "recipes": [
+    {
+      "result": "sword_wood",
+      "energy": 25,
+      "materials": {},
+      "category": "Weapons",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "gun_pea",
+      "energy": 40,
+      "materials": {},
+      "category": "Weapons",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "sword_tusk",
+      "energy": 90,
+      "materials": {
+        "tusk": 2,
+        "bone": 3
+      },
+      "category": "Weapons",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "gun_bubble",
+      "energy": 140,
+      "materials": {
+        "sap": 4,
+        "nectar": 1
+      },
+      "category": "Weapons",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "gun_spike",
+      "energy": 220,
+      "materials": {
+        "spine": 10
+      },
+      "category": "Weapons",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "sword_crystal",
+      "energy": 320,
+      "materials": {
+        "bloom": 2,
+        "claw": 2,
+        "bone": 5
+      },
+      "category": "Weapons",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "hat_straw",
+      "energy": 20,
+      "materials": {},
+      "category": "Equipment",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "hat_leather",
+      "energy": 45,
+      "materials": {
+        "leather": 3
+      },
+      "category": "Equipment",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "armor_leather",
+      "energy": 60,
+      "materials": {
+        "leather": 5
+      },
+      "category": "Equipment",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "armor_wolf",
+      "energy": 130,
+      "materials": {
+        "leather": 6,
+        "claw": 2
+      },
+      "category": "Equipment",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "armor_bone",
+      "energy": 200,
+      "materials": {
+        "bone": 8,
+        "leather": 4
+      },
+      "category": "Equipment",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "hat_party",
+      "energy": 15,
+      "materials": {},
+      "category": "Fashion",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "hat_bunny",
+      "energy": 40,
+      "materials": {
+        "leather": 2
+      },
+      "category": "Fashion",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "hat_frog",
+      "energy": 45,
+      "materials": {
+        "leather": 2
+      },
+      "category": "Fashion",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "hat_cat",
+      "energy": 55,
+      "materials": {
+        "leather": 3
+      },
+      "category": "Fashion",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "hat_cowboy",
+      "energy": 60,
+      "materials": {
+        "leather": 4
+      },
+      "category": "Fashion",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "hat_chef",
+      "energy": 50,
+      "materials": {
+        "sugar": 3
+      },
+      "category": "Fashion",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "hat_santa",
+      "energy": 80,
+      "materials": {
+        "leather": 3,
+        "icecrystal": 2
+      },
+      "category": "Fashion",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "hat_pirate",
+      "energy": 90,
+      "materials": {
+        "leather": 4,
+        "coral": 2
+      },
+      "category": "Fashion",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "hat_wizard",
+      "energy": 120,
+      "materials": {
+        "sap": 3,
+        "starshard": 1
+      },
+      "category": "Fashion",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "hat_graduate",
+      "energy": 130,
+      "materials": {
+        "leather": 4,
+        "gear": 3
+      },
+      "category": "Fashion",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "hat_viking",
+      "energy": 150,
+      "materials": {
+        "bone": 6,
+        "tusk": 2
+      },
+      "category": "Fashion",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "hat_samurai",
+      "energy": 220,
+      "materials": {
+        "bone": 6,
+        "obsidian": 3
+      },
+      "category": "Fashion",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "hat_halo",
+      "energy": 380,
+      "materials": {
+        "feather": 8,
+        "moonstone": 1,
+        "starshard": 1
+      },
+      "category": "Fashion",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "armor_hoodie",
+      "energy": 50,
+      "materials": {
+        "leather": 3
+      },
+      "category": "Fashion",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "armor_hawaii",
+      "energy": 70,
+      "materials": {
+        "leather": 3,
+        "coral": 2
+      },
+      "category": "Fashion",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "armor_chef",
+      "energy": 60,
+      "materials": {
+        "leather": 3
+      },
+      "category": "Fashion",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "armor_santa",
+      "energy": 110,
+      "materials": {
+        "leather": 5,
+        "icecrystal": 3
+      },
+      "category": "Fashion",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "armor_army",
+      "energy": 220,
+      "materials": {
+        "leather": 4,
+        "bone": 2
+      },
+      "category": "Fashion",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "armor_navy",
+      "energy": 200,
+      "materials": {
+        "leather": 3,
+        "coral": 3
+      },
+      "category": "Fashion",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "armor_aodai",
+      "energy": 210,
+      "materials": {
+        "leather": 3,
+        "feather": 4
+      },
+      "category": "Fashion",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "armor_aodai_man",
+      "energy": 210,
+      "materials": {
+        "leather": 3,
+        "feather": 3,
+        "moonstone": 1
+      },
+      "category": "Fashion",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "armor_usa",
+      "energy": 190,
+      "materials": {
+        "leather": 4,
+        "starshard": 1,
+        "coral": 2
+      },
+      "category": "Fashion",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "armor_vietnam",
+      "energy": 190,
+      "materials": {
+        "leather": 4,
+        "starshard": 1,
+        "bone": 2
+      },
+      "category": "Fashion",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "armor_kimono",
+      "energy": 160,
+      "materials": {
+        "leather": 5,
+        "nectar": 1
+      },
+      "category": "Fashion",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "armor_pirate",
+      "energy": 170,
+      "materials": {
+        "leather": 6,
+        "pearl": 1
+      },
+      "category": "Fashion",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "armor_tux",
+      "energy": 200,
+      "materials": {
+        "leather": 6,
+        "gear": 4
+      },
+      "category": "Fashion",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "armor_knight",
+      "energy": 280,
+      "materials": {
+        "bone": 10,
+        "obsidian": 4
+      },
+      "category": "Fashion",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "armor_superhero",
+      "energy": 420,
+      "materials": {
+        "starshard": 2,
+        "battery": 2,
+        "leather": 6
+      },
+      "category": "Fashion",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "armor_angel",
+      "energy": 500,
+      "materials": {
+        "feather": 14,
+        "moonstone": 1,
+        "starshard": 2
+      },
+      "category": "Fashion",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "boots_cowboy",
+      "energy": 70,
+      "materials": {
+        "leather": 4
+      },
+      "category": "Fashion",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "boots_flipper",
+      "energy": 130,
+      "materials": {
+        "coral": 5,
+        "leather": 2
+      },
+      "category": "Fashion",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "boots_cloud",
+      "energy": 240,
+      "materials": {
+        "feather": 10
+      },
+      "category": "Fashion",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "boots_rocket",
+      "energy": 320,
+      "materials": {
+        "battery": 2,
+        "gear": 6,
+        "magma": 2
+      },
+      "category": "Fashion",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "dz_snowman",
+      "energy": 530,
+      "materials": {
+        "icecrystal": 10,
+        "leather": 4
+      },
+      "category": "Disguises",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "dz_dawnstar",
+      "energy": 410,
+      "materials": {
+        "starshard": 2,
+        "feather": 6,
+        "sugar": 6
+      },
+      "category": "Disguises",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "dz_fairy",
+      "energy": 480,
+      "materials": {
+        "nectar": 3,
+        "sugar": 8,
+        "feather": 4
+      },
+      "category": "Disguises",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "dz_ninja",
+      "energy": 550,
+      "materials": {
+        "leather": 8,
+        "shadow": 4,
+        "claw": 2
+      },
+      "category": "Disguises",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "dz_army",
+      "energy": 380,
+      "materials": {
+        "pearl": 2,
+        "coral": 8,
+        "leather": 6
+      },
+      "category": "Disguises",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "dz_navy",
+      "energy": 400,
+      "materials": {
+        "pearl": 2,
+        "coral": 8,
+        "leather": 6
+      },
+      "category": "Disguises",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "dz_aodai",
+      "energy": 420,
+      "materials": {
+        "pearl": 2,
+        "coral": 8,
+        "leather": 6
+      },
+      "category": "Disguises",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "dz_aodai_man",
+      "energy": 310,
+      "materials": {
+        "pearl": 2,
+        "coral": 8,
+        "leather": 6
+      },
+      "category": "Disguises",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "dz_usa",
+      "energy": 510,
+      "materials": {
+        "pearl": 2,
+        "coral": 8,
+        "leather": 6
+      },
+      "category": "Disguises",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "dz_vietnam",
+      "energy": 320,
+      "materials": {
+        "pearl": 2,
+        "coral": 8,
+        "leather": 6
+      },
+      "category": "Disguises",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "dz_pirate",
+      "energy": 300,
+      "materials": {
+        "pearl": 2,
+        "coral": 8,
+        "leather": 6
+      },
+      "category": "Disguises",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "dz_mage",
+      "energy": 410,
+      "materials": {
+        "starshard": 2,
+        "sap": 6,
+        "fcrystal": 2
+      },
+      "category": "Disguises",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "dz_knight",
+      "energy": 480,
+      "materials": {
+        "bone": 12,
+        "obsidian": 6
+      },
+      "category": "Disguises",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "dz_dino",
+      "energy": 300,
+      "materials": {
+        "amber": 3,
+        "vine": 10,
+        "bone": 6
+      },
+      "category": "Disguises",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "dz_mecha",
+      "energy": 530,
+      "materials": {
+        "gear": 14,
+        "battery": 3
+      },
+      "category": "Disguises",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "dz_vampire",
+      "energy": 440,
+      "materials": {
+        "shadow": 10,
+        "moonstone": 1,
+        "leather": 6
+      },
+      "category": "Disguises",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "dz_superhero",
+      "energy": 600,
+      "materials": {
+        "starshard": 3,
+        "thunderstone": 2,
+        "battery": 2
+      },
+      "category": "Disguises",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "potion",
+      "energy": 15,
+      "materials": {},
+      "category": "Supplies",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "worm",
+      "energy": 6,
+      "materials": {},
+      "category": "Supplies",
+      "station": "shop",
+      "count": 5
+    },
+    {
+      "result": "manure",
+      "energy": 8,
+      "materials": {},
+      "category": "Supplies",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "rod",
+      "energy": 20,
+      "materials": {},
+      "category": "Supplies",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "rod_gold",
+      "energy": 150,
+      "materials": {
+        "bone": 3,
+        "sap": 2
+      },
+      "category": "Supplies",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "rod_steady",
+      "energy": 900,
+      "materials": {
+        "coral": 4,
+        "pearl": 2
+      },
+      "category": "Supplies",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "plot_kit",
+      "energy": 80,
+      "materials": {},
+      "category": "Supplies",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "sword_candy",
+      "energy": 200,
+      "materials": {
+        "sugar": 8,
+        "bone": 2
+      },
+      "category": "Space gear",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "gun_ice",
+      "energy": 260,
+      "materials": {
+        "icecrystal": 8,
+        "sap": 2
+      },
+      "category": "Space gear",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "sword_lava",
+      "energy": 420,
+      "materials": {
+        "magma": 8,
+        "starshard": 1
+      },
+      "category": "Space gear",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "hat_space",
+      "energy": 240,
+      "materials": {
+        "starshard": 2,
+        "icecrystal": 3
+      },
+      "category": "Space gear",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "armor_space",
+      "energy": 360,
+      "materials": {
+        "starshard": 3,
+        "sugar": 5,
+        "magma": 3
+      },
+      "category": "Space gear",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "bow_star",
+      "energy": 480,
+      "materials": {
+        "sugar": 10,
+        "sap": 4,
+        "starshard": 2
+      },
+      "category": "Legendary",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "hammer_thunder",
+      "energy": 520,
+      "materials": {
+        "bone": 10,
+        "icecrystal": 6,
+        "starshard": 2
+      },
+      "category": "Legendary",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "staff_fire",
+      "energy": 560,
+      "materials": {
+        "magma": 8,
+        "firecore": 2,
+        "obsidian": 4
+      },
+      "category": "Legendary",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "scythe_moon",
+      "energy": 600,
+      "materials": {
+        "icecrystal": 8,
+        "obsidian": 4,
+        "starshard": 3
+      },
+      "category": "Legendary",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "blaster_rainbow",
+      "energy": 700,
+      "materials": {
+        "sugar": 6,
+        "icecrystal": 6,
+        "magma": 6,
+        "starshard": 3
+      },
+      "category": "Legendary",
+      "station": "shop",
+      "count": 1
+    },
+    {
+      "result": "boots_lava",
+      "energy": 180,
+      "materials": {
+        "obsidian": 4,
+        "mcrystal": 6
+      },
+      "category": "Volcano equipment",
+      "station": "craft",
+      "count": 1
+    },
+    {
+      "result": "sword_obsidian",
+      "energy": 450,
+      "materials": {
+        "obsidian": 10,
+        "firecore": 2,
+        "mcrystal": 6
+      },
+      "category": "Volcano equipment",
+      "station": "craft",
+      "count": 1
+    },
+    {
+      "result": "armor_wings",
+      "energy": 420,
+      "materials": {
+        "firecore": 3,
+        "dragonscale": 2,
+        "obsidian": 6
+      },
+      "category": "Volcano equipment",
+      "station": "craft",
+      "count": 1
+    },
+    {
+      "result": "pet_dragon",
+      "energy": 300,
+      "materials": {
+        "dragonegg": 1,
+        "firecore": 3
+      },
+      "category": "Companions",
+      "station": "craft",
+      "count": 1
+    },
+    {
+      "result": "toy_hammer",
+      "energy": 150,
+      "materials": {
+        "gear": 8,
+        "battery": 1
+      },
+      "category": "Toybox and jungle",
+      "station": "craft",
+      "count": 1
+    },
+    {
+      "result": "deco_teddy",
+      "energy": 60,
+      "materials": {
+        "gear": 4,
+        "leather": 3
+      },
+      "category": "Toybox and jungle",
+      "station": "craft",
+      "count": 1
+    },
+    {
+      "result": "deco_musicbox",
+      "energy": 90,
+      "materials": {
+        "gear": 6,
+        "battery": 1
+      },
+      "category": "Toybox and jungle",
+      "station": "craft",
+      "count": 1
+    },
+    {
+      "result": "pet_robot",
+      "energy": 260,
+      "materials": {
+        "battery": 3,
+        "gear": 10
+      },
+      "category": "Toybox and jungle",
+      "station": "craft",
+      "count": 1
+    },
+    {
+      "result": "armor_leaf",
+      "energy": 220,
+      "materials": {
+        "vine": 10,
+        "amber": 1
+      },
+      "category": "Toybox and jungle",
+      "station": "craft",
+      "count": 1
+    },
+    {
+      "result": "deco_totem",
+      "energy": 90,
+      "materials": {
+        "vine": 6,
+        "amber": 1
+      },
+      "category": "Toybox and jungle",
+      "station": "craft",
+      "count": 1
+    },
+    {
+      "result": "deco_rafflesia",
+      "energy": 70,
+      "materials": {
+        "vine": 4,
+        "nectar": 1
+      },
+      "category": "Toybox and jungle",
+      "station": "craft",
+      "count": 1
+    },
+    {
+      "result": "pet_parrot",
+      "energy": 280,
+      "materials": {
+        "amber": 3,
+        "vine": 8,
+        "feather": 2
+      },
+      "category": "Toybox and jungle",
+      "station": "craft",
+      "count": 1
+    },
+    {
+      "result": "trident",
+      "energy": 520,
+      "materials": {
+        "pearl": 4,
+        "coral": 10,
+        "starshard": 2
+      },
+      "category": "Ocean, cloud and night",
+      "station": "craft",
+      "count": 1
+    },
+    {
+      "result": "deco_aquarium",
+      "energy": 120,
+      "materials": {
+        "coral": 8,
+        "pearl": 1
+      },
+      "category": "Ocean, cloud and night",
+      "station": "craft",
+      "count": 1
+    },
+    {
+      "result": "deco_shell",
+      "energy": 70,
+      "materials": {
+        "coral": 5
+      },
+      "category": "Ocean, cloud and night",
+      "station": "craft",
+      "count": 1
+    },
+    {
+      "result": "pet_turtle",
+      "energy": 300,
+      "materials": {
+        "pearl": 3,
+        "coral": 8
+      },
+      "category": "Ocean, cloud and night",
+      "station": "craft",
+      "count": 1
+    },
+    {
+      "result": "armor_cloud",
+      "energy": 450,
+      "materials": {
+        "feather": 14,
+        "thunderstone": 2
+      },
+      "category": "Ocean, cloud and night",
+      "station": "craft",
+      "count": 1
+    },
+    {
+      "result": "deco_cloudsofa",
+      "energy": 100,
+      "materials": {
+        "feather": 8
+      },
+      "category": "Ocean, cloud and night",
+      "station": "craft",
+      "count": 1
+    },
+    {
+      "result": "deco_windchime",
+      "energy": 90,
+      "materials": {
+        "feather": 4,
+        "icecrystal": 3
+      },
+      "category": "Ocean, cloud and night",
+      "station": "craft",
+      "count": 1
+    },
+    {
+      "result": "pet_sheep",
+      "energy": 340,
+      "materials": {
+        "feather": 12,
+        "thunderstone": 1
+      },
+      "category": "Ocean, cloud and night",
+      "station": "craft",
+      "count": 1
+    },
+    {
+      "result": "hat_lantern",
+      "energy": 480,
+      "materials": {
+        "shadow": 12,
+        "moonstone": 2,
+        "fcrystal": 2
+      },
+      "category": "Ocean, cloud and night",
+      "station": "craft",
+      "count": 1
+    },
+    {
+      "result": "deco_ghostlantern",
+      "energy": 90,
+      "materials": {
+        "shadow": 5,
+        "fcrystal": 1
+      },
+      "category": "Ocean, cloud and night",
+      "station": "craft",
+      "count": 1
+    },
+    {
+      "result": "deco_nightcrystal",
+      "energy": 140,
+      "materials": {
+        "shadow": 8,
+        "moonstone": 1
+      },
+      "category": "Ocean, cloud and night",
+      "station": "craft",
+      "count": 1
+    },
+    {
+      "result": "pet_firefly",
+      "energy": 380,
+      "materials": {
+        "shadow": 10,
+        "moonstone": 2,
+        "fcrystal": 3
+      },
+      "category": "Ocean, cloud and night",
+      "station": "craft",
+      "count": 1
+    },
+    {
+      "result": "deco_volcano",
+      "energy": 40,
+      "materials": {
+        "mcrystal": 4
+      },
+      "category": "Decorations",
+      "station": "craft",
+      "count": 1
+    },
+    {
+      "result": "deco_lamp",
+      "energy": 60,
+      "materials": {
+        "mcrystal": 3,
+        "fcrystal": 1
+      },
+      "category": "Decorations",
+      "station": "craft",
+      "count": 1
+    },
+    {
+      "result": "deco_table",
+      "energy": 90,
+      "materials": {
+        "obsidian": 5
+      },
+      "category": "Decorations",
+      "station": "craft",
+      "count": 1
+    },
+    {
+      "result": "deco_statue",
+      "energy": 160,
+      "materials": {
+        "obsidian": 8,
+        "firecore": 1
+      },
+      "category": "Decorations",
+      "station": "craft",
+      "count": 1
+    },
+    {
+      "result": "deco_nest",
+      "energy": 120,
+      "materials": {
+        "obsidian": 3,
+        "dragonscale": 1
+      },
+      "category": "Decorations",
+      "station": "craft",
+      "count": 1
+    },
+    {
+      "result": "deco_trophy",
+      "energy": 250,
+      "materials": {
+        "dragonscale": 3,
+        "firecore": 2
+      },
+      "category": "Decorations",
+      "station": "craft",
+      "count": 1
+    },
+    {
+      "result": "obsidian",
+      "energy": 0,
+      "materials": {
+        "mcrystal": 3
+      },
+      "category": "Ancient furnace",
+      "station": "forge"
+    },
+    {
+      "result": "firecore",
+      "energy": 0,
+      "materials": {
+        "obsidian": 3,
+        "mcrystal": 2
+      },
+      "category": "Ancient furnace",
+      "station": "forge"
+    },
+    {
+      "result": "harpoon",
+      "energy": 1000,
+      "materials": {},
+      "category": "Weapons",
+      "station": "shop"
+    }
+  ],
+  "planets": {
+    "home": {
+      "name": "Clover Village",
+      "icon": "🌱",
+      "level": 1,
+      "color": "#9be36f",
+      "sky": "#aee4ff",
+      "grad": [
+        "#9be36f",
+        "#3fae52",
+        "#5ec8ff"
+      ],
+      "ground": [
+        "#86d25a",
+        "#9be36f",
+        "#e8cf92"
+      ],
+      "description": "Your garden and four trails: forest, meadow, swamp and canyon.",
+      "enemy": "mushroom",
+      "health": 45,
+      "attack": 6,
+      "xp": 8,
+      "bosses": [
+        "bear",
+        "treant",
+        "croc",
+        "mushking"
+      ],
+      "spawns": [
+        [
+          "mushroom",
+          20
+        ],
+        [
+          "boar",
+          12
+        ],
+        [
+          "bee",
+          6
+        ],
+        [
+          "wolf",
+          10
+        ],
+        [
+          "chomper",
+          14
+        ],
+        [
+          "cactus",
+          14
+        ]
+      ]
+    },
+    "candy": {
+      "name": "Candy Planet",
+      "icon": "🍭",
+      "level": 6,
+      "color": "#ff9fd0",
+      "sky": "#ffc9ea",
+      "grad": [
+        "#ffc2e0",
+        "#ff7ab0",
+        "#fff08a"
+      ],
+      "ground": [
+        "#ff9fd0",
+        "#ffc4e4",
+        "#ffe98a"
+      ],
+      "description": "Sweet forests, springy surprises and powerful candy creatures.",
+      "enemy": "jelly",
+      "health": 60,
+      "attack": 8,
+      "xp": 12,
+      "bosses": [
+        "cake",
+        "gingerbread",
+        "jellyqueen"
+      ],
+      "spawns": [
+        [
+          "jelly",
+          26
+        ],
+        [
+          "gummy",
+          16
+        ],
+        [
+          "lollipop",
+          16
+        ],
+        [
+          "bunny",
+          18
+        ],
+        [
+          "chocobeetle",
+          12
+        ]
+      ]
+    },
+    "ice": {
+      "name": "Frost Planet",
+      "icon": "❄️",
+      "level": 10,
+      "color": "#cfe6fb",
+      "sky": "#d8f0ff",
+      "grad": [
+        "#e8f7ff",
+        "#8fd3ff",
+        "#ffffff"
+      ],
+      "ground": [
+        "#cfe6fb",
+        "#f4faff",
+        "#b9d6f2"
+      ],
+      "description": "Slippery ice, frozen ponds and snowbound bosses. Plan your stopping distance.",
+      "enemy": "snowball",
+      "health": 70,
+      "attack": 9,
+      "xp": 16,
+      "bosses": [
+        "yeti",
+        "mammoth",
+        "frostowl"
+      ],
+      "spawns": [
+        [
+          "snowball",
+          24
+        ],
+        [
+          "penguin",
+          18
+        ],
+        [
+          "icebloom",
+          14
+        ],
+        [
+          "seal",
+          14
+        ],
+        [
+          "owl",
+          16
+        ]
+      ]
+    },
+    "lava": {
+      "name": "Volcano Planet",
+      "icon": "🌋",
+      "level": 14,
+      "color": "#6e5a60",
+      "sky": "#ffb08a",
+      "grad": [
+        "#ff9a5a",
+        "#c94a2a",
+        "#4a3f4f"
+      ],
+      "ground": [
+        "#6e5a60",
+        "#8a6f6a",
+        "#4f4450"
+      ],
+      "description": "Eruptions, rising lava, meteors and a hidden cave furnace. Watch the warning circles.",
+      "enemy": "magmaslime",
+      "health": 80,
+      "attack": 11,
+      "xp": 20,
+      "bosses": [
+        "golem",
+        "dragon"
+      ],
+      "spawns": [
+        [
+          "magmaslime",
+          22
+        ],
+        [
+          "firelizard",
+          12
+        ],
+        [
+          "volcano",
+          12
+        ],
+        [
+          "firebat",
+          20
+        ],
+        [
+          "magmacrab",
+          10
+        ],
+        [
+          "magmaturtle",
+          10
+        ],
+        [
+          "lavaworm",
+          8
+        ]
+      ]
+    },
+    "toy": {
+      "name": "Toybox Planet",
+      "icon": "🧸",
+      "level": 4,
+      "color": "#ffe4ef",
+      "sky": "#ffe9f6",
+      "grad": [
+        "#ffe14d",
+        "#ff7ab0",
+        "#4dc3ff"
+      ],
+      "ground": [
+        "#ffe4ef",
+        "#e2f0ff",
+        "#fff4c8"
+      ],
+      "description": "Ride the moving trains and open surprise gifts among giant toys.",
+      "enemy": "toysoldier",
+      "health": 70,
+      "attack": 9,
+      "xp": 16,
+      "bosses": [
+        "robot"
+      ],
+      "spawns": [
+        [
+          "toysoldier",
+          20
+        ],
+        [
+          "windmouse",
+          18
+        ],
+        [
+          "jackbox",
+          16
+        ]
+      ]
+    },
+    "jungle": {
+      "name": "Wild Jungle",
+      "icon": "🌿",
+      "level": 8,
+      "color": "#3f8a3a",
+      "sky": "#bfe8b0",
+      "grad": [
+        "#7fd35a",
+        "#1f6e35",
+        "#ffb13d"
+      ],
+      "ground": [
+        "#3f8a3a",
+        "#5aa84a",
+        "#8a6a3a"
+      ],
+      "description": "Changing thorn walls, poisonous plants and restorative fruit.",
+      "enemy": "monkey",
+      "health": 110,
+      "attack": 13,
+      "xp": 24,
+      "bosses": [
+        "gorilla"
+      ],
+      "spawns": [
+        [
+          "monkey",
+          18
+        ],
+        [
+          "snake",
+          16
+        ],
+        [
+          "chameleon",
+          16
+        ],
+        [
+          "flytrap",
+          12
+        ]
+      ]
+    },
+    "ocean": {
+      "name": "Ocean Planet",
+      "icon": "🌊",
+      "level": 12,
+      "color": "#f2dca0",
+      "sky": "#aee8ff",
+      "grad": [
+        "#6fd3ff",
+        "#2f7fd6",
+        "#f2dca0"
+      ],
+      "ground": [
+        "#f2dca0",
+        "#e8cf8a",
+        "#f8e8b8"
+      ],
+      "description": "Swim between islands. Refill your air at bubbles or ride a sea turtle.",
+      "enemy": "jellyzap",
+      "health": 110,
+      "attack": 14,
+      "xp": 28,
+      "bosses": [
+        "leviathan"
+      ],
+      "spawns": [
+        [
+          "jellyzap",
+          18
+        ],
+        [
+          "hammershark",
+          14
+        ],
+        [
+          "urchin",
+          14
+        ],
+        [
+          "crab",
+          12
+        ]
+      ]
+    },
+    "cloud": {
+      "name": "Cloud Islands",
+      "icon": "☁️",
+      "level": 16,
+      "color": "#bfe8a0",
+      "sky": "#9fd8ff",
+      "grad": [
+        "#ffffff",
+        "#8fd8ff",
+        "#ffe14d"
+      ],
+      "ground": [
+        "#bfe8a0",
+        "#d8f5c0",
+        "#e8f0ff"
+      ],
+      "description": "Bounce between floating islands and watch the wind near their edges.",
+      "enemy": "cloudsheep",
+      "health": 140,
+      "attack": 16,
+      "xp": 34,
+      "bosses": [
+        "phoenix"
+      ],
+      "spawns": [
+        [
+          "cloudsheep",
+          22
+        ],
+        [
+          "thunderbird",
+          18
+        ],
+        [
+          "windspirit",
+          14
+        ]
+      ]
+    },
+    "shadow": {
+      "name": "Night Planet",
+      "icon": "🌑",
+      "level": 20,
+      "color": "#2a2440",
+      "sky": "#0d0b1a",
+      "grad": [
+        "#8a5aff",
+        "#2a2440",
+        "#9ff7ff"
+      ],
+      "ground": [
+        "#2a2440",
+        "#3a3258",
+        "#1e1a30"
+      ],
+      "description": "Explore the darkness, light ancient pillars and face the Night Lord.",
+      "enemy": "wisp",
+      "health": 130,
+      "attack": 18,
+      "xp": 40,
+      "bosses": [
+        "shadowlord"
+      ],
+      "spawns": [
+        [
+          "wisp",
+          22
+        ],
+        [
+          "spider",
+          18
+        ],
+        [
+          "demoneye",
+          14
+        ]
+      ]
+    }
+  },
+  "fish": {
+    "fish_perch": {
+      "id": "fish_perch",
+      "name": "Perch",
+      "icon": "🐟",
+      "rarity": "common",
+      "speed": 0.2,
+      "power": 0.2,
+      "stamina": 0.2,
+      "sell": 6,
+      "xp": 9,
+      "size": [
+        10,
+        60
+      ],
+      "planet": [
+        "home",
+        "lake",
+        "swamp",
+        "ice"
+      ]
+    },
+    "fish_clown": {
+      "id": "fish_clown",
+      "name": "Clownfish",
+      "icon": "🐟",
+      "rarity": "common",
+      "speed": 0.3,
+      "power": 0.3,
+      "stamina": 0.3,
+      "sell": 10,
+      "xp": 12,
+      "size": [
+        10,
+        60
+      ],
+      "planet": [
+        "home",
+        "lake",
+        "candy",
+        "toy",
+        "ocean"
+      ]
+    },
+    "fish_puffer": {
+      "id": "fish_puffer",
+      "name": "Pufferfish",
+      "icon": "🐟",
+      "rarity": "common",
+      "speed": 0.45,
+      "power": 0.45,
+      "stamina": 0.45,
+      "sell": 18,
+      "xp": 15,
+      "size": [
+        10,
+        60
+      ],
+      "planet": [
+        "home",
+        "lake",
+        "swamp",
+        "candy",
+        "toy",
+        "jungle"
+      ]
+    },
+    "fish_carp": {
+      "id": "fish_carp",
+      "name": "Carp",
+      "icon": "🐟",
+      "rarity": "common",
+      "speed": 0.62,
+      "power": 0.62,
+      "stamina": 0.62,
+      "sell": 28,
+      "xp": 20,
+      "size": [
+        10,
+        60
+      ],
+      "planet": [
+        "lake",
+        "swamp",
+        "candy",
+        "jungle",
+        "ice"
+      ]
+    },
+    "fish_shark": {
+      "id": "fish_shark",
+      "name": "Shark",
+      "icon": "🐟",
+      "rarity": "rare",
+      "speed": 0.92,
+      "power": 0.92,
+      "stamina": 0.92,
+      "sell": 65,
+      "xp": 27,
+      "size": [
+        10,
+        60
+      ],
+      "planet": [
+        "swamp",
+        "ocean",
+        "ice"
+      ]
+    },
+    "fish_rainbow": {
+      "id": "fish_rainbow",
+      "name": "Rainbow fish",
+      "icon": "🐟",
+      "rarity": "rare",
+      "speed": 0.8,
+      "power": 0.8,
+      "stamina": 0.8,
+      "sell": 160,
+      "xp": 24,
+      "size": [
+        10,
+        60
+      ],
+      "planet": [
+        "lake",
+        "swamp",
+        "candy",
+        "ice"
+      ]
+    },
+    "fish_catfish": {
+      "id": "fish_catfish",
+      "name": "Catfish",
+      "icon": "🐟",
+      "rarity": "common",
+      "speed": 0.55,
+      "power": 0.55,
+      "stamina": 0.55,
+      "sell": 22,
+      "xp": 18,
+      "size": [
+        30,
+        90
+      ],
+      "planet": [
+        "lake",
+        "swamp",
+        "jungle"
+      ]
+    },
+    "fish_koi": {
+      "id": "fish_koi",
+      "name": "Koi",
+      "icon": "🐟",
+      "rarity": "rare",
+      "speed": 0.6,
+      "power": 0.6,
+      "stamina": 0.6,
+      "sell": 45,
+      "xp": 19,
+      "size": [
+        25,
+        70
+      ],
+      "planet": [
+        "home",
+        "toy"
+      ]
+    },
+    "fish_eel": {
+      "id": "fish_eel",
+      "name": "Eel",
+      "icon": "🐟",
+      "rarity": "rare",
+      "speed": 0.78,
+      "power": 0.78,
+      "stamina": 0.78,
+      "sell": 70,
+      "xp": 24,
+      "size": [
+        60,
+        180
+      ],
+      "planet": [
+        "swamp",
+        "jungle",
+        "dark",
+        "shadow"
+      ]
+    },
+    "fish_swordfish": {
+      "id": "fish_swordfish",
+      "name": "Swordfish",
+      "icon": "🐟",
+      "rarity": "rare",
+      "speed": 0.85,
+      "power": 0.85,
+      "stamina": 0.85,
+      "sell": 90,
+      "xp": 25,
+      "size": [
+        90,
+        300
+      ],
+      "planet": [
+        "lake",
+        "ocean"
+      ]
+    },
+    "fish_jelly": {
+      "id": "fish_jelly",
+      "name": "Jellyfish",
+      "icon": "🐟",
+      "rarity": "common",
+      "speed": 0.4,
+      "power": 0.4,
+      "stamina": 0.4,
+      "sell": 26,
+      "xp": 14,
+      "size": [
+        10,
+        40
+      ],
+      "planet": [
+        "candy",
+        "toy",
+        "dark",
+        "shadow"
+      ]
+    },
+    "fish_icepike": {
+      "id": "fish_icepike",
+      "name": "Ice pike",
+      "icon": "🐟",
+      "rarity": "common",
+      "speed": 0.7,
+      "power": 0.7,
+      "stamina": 0.7,
+      "sell": 48,
+      "xp": 22,
+      "size": [
+        50,
+        150
+      ],
+      "planet": [
+        "ice"
+      ]
+    },
+    "fish_whale": {
+      "id": "fish_whale",
+      "name": "Whale",
+      "icon": "🐟",
+      "rarity": "legendary",
+      "speed": 0.97,
+      "power": 0.97,
+      "stamina": 0.97,
+      "sell": 420,
+      "xp": 113,
+      "size": [
+        400,
+        1200
+      ],
+      "planet": [
+        "lake",
+        "ocean",
+        "ice"
+      ]
+    },
+    "fish_kraken": {
+      "id": "fish_kraken",
+      "name": "Kraken",
+      "icon": "🐟",
+      "rarity": "legendary",
+      "speed": 0.96,
+      "power": 0.96,
+      "stamina": 0.96,
+      "sell": 380,
+      "xp": 112,
+      "size": [
+        200,
+        800
+      ],
+      "planet": [
+        "swamp",
+        "jungle",
+        "dark",
+        "shadow"
+      ]
+    },
+    "fish_golden": {
+      "id": "fish_golden",
+      "name": "Golden fish",
+      "icon": "🐟",
+      "rarity": "legendary",
+      "speed": 0.92,
+      "power": 0.92,
+      "stamina": 0.92,
+      "sell": 600,
+      "xp": 108,
+      "size": [
+        60,
+        160
+      ],
+      "planet": [
+        "home",
+        "lake",
+        "swamp",
+        "candy",
+        "toy",
+        "jungle",
+        "ocean",
+        "dark",
+        "ice",
+        "shadow"
+      ]
+    },
+    "fish_sunfish": {
+      "id": "fish_sunfish",
+      "name": "Sunfish",
+      "icon": "🐟",
+      "rarity": "common",
+      "speed": 0.72,
+      "power": 0.72,
+      "stamina": 0.72,
+      "sell": 60,
+      "xp": 22,
+      "size": [
+        80,
+        250
+      ],
+      "planet": [
+        "ocean"
+      ]
+    },
+    "fish_angler": {
+      "id": "fish_angler",
+      "name": "Anglerfish",
+      "icon": "🐟",
+      "rarity": "rare",
+      "speed": 0.8,
+      "power": 0.8,
+      "stamina": 0.8,
+      "sell": 85,
+      "xp": 24,
+      "size": [
+        30,
+        90
+      ],
+      "planet": [
+        "ocean",
+        "dark",
+        "shadow"
+      ]
+    },
+    "fish_manta": {
+      "id": "fish_manta",
+      "name": "Manta ray",
+      "icon": "🐟",
+      "rarity": "legendary",
+      "speed": 0.95,
+      "power": 0.95,
+      "stamina": 0.95,
+      "sell": 320,
+      "xp": 111,
+      "size": [
+        300,
+        700
+      ],
+      "planet": [
+        "ocean"
+      ]
+    },
+    "boot": {
+      "id": "boot",
+      "name": "Old boot",
+      "icon": "🥾",
+      "rarity": "junk",
+      "speed": 0.15,
+      "power": 0.15,
+      "stamina": 0.15,
+      "sell": 1,
+      "xp": 8,
+      "size": [
+        10,
+        60
+      ],
+      "planet": [
+        "home",
+        "lake",
+        "swamp",
+        "candy",
+        "toy",
+        "jungle",
+        "ocean",
+        "dark",
+        "ice",
+        "shadow"
+      ]
+    },
+    "fish_guardian": {
+      "id": "fish_guardian",
+      "name": "Lake Guardian",
+      "icon": "🎏",
+      "rarity": "legendary",
+      "speed": 0.98,
+      "power": 0.98,
+      "stamina": 0.98,
+      "sell": 450,
+      "xp": 114,
+      "size": [
+        180,
+        260
+      ],
+      "planet": [
+        "home"
+      ]
+    }
+  },
+  "fishWeights": {
+    "home": [
+      [
+        "fish_perch",
+        50
+      ],
+      [
+        "fish_clown",
+        28
+      ],
+      [
+        "fish_puffer",
+        8
+      ],
+      [
+        "fish_koi",
+        6
+      ],
+      [
+        "fish_golden",
+        0.3
+      ],
+      [
+        "boot",
+        7
+      ]
+    ],
+    "lake": [
+      [
+        "fish_perch",
+        26
+      ],
+      [
+        "fish_clown",
+        24
+      ],
+      [
+        "fish_puffer",
+        16
+      ],
+      [
+        "fish_carp",
+        14
+      ],
+      [
+        "fish_catfish",
+        14
+      ],
+      [
+        "fish_swordfish",
+        4
+      ],
+      [
+        "fish_rainbow",
+        3
+      ],
+      [
+        "fish_whale",
+        0.8
+      ],
+      [
+        "fish_golden",
+        0.4
+      ],
+      [
+        "boot",
+        6
+      ]
+    ],
+    "swamp": [
+      [
+        "fish_perch",
+        14
+      ],
+      [
+        "fish_puffer",
+        20
+      ],
+      [
+        "fish_carp",
+        24
+      ],
+      [
+        "fish_catfish",
+        16
+      ],
+      [
+        "fish_shark",
+        14
+      ],
+      [
+        "fish_eel",
+        6
+      ],
+      [
+        "fish_rainbow",
+        5
+      ],
+      [
+        "fish_kraken",
+        0.8
+      ],
+      [
+        "fish_golden",
+        0.4
+      ],
+      [
+        "boot",
+        6
+      ]
+    ],
+    "candy": [
+      [
+        "fish_clown",
+        26
+      ],
+      [
+        "fish_puffer",
+        20
+      ],
+      [
+        "fish_jelly",
+        22
+      ],
+      [
+        "fish_carp",
+        16
+      ],
+      [
+        "fish_rainbow",
+        12
+      ],
+      [
+        "fish_golden",
+        0.8
+      ],
+      [
+        "boot",
+        5
+      ]
+    ],
+    "toy": [
+      [
+        "fish_clown",
+        30
+      ],
+      [
+        "fish_puffer",
+        22
+      ],
+      [
+        "fish_jelly",
+        16
+      ],
+      [
+        "fish_koi",
+        6
+      ],
+      [
+        "fish_golden",
+        0.5
+      ],
+      [
+        "boot",
+        14
+      ]
+    ],
+    "jungle": [
+      [
+        "fish_catfish",
+        26
+      ],
+      [
+        "fish_carp",
+        20
+      ],
+      [
+        "fish_eel",
+        12
+      ],
+      [
+        "fish_puffer",
+        14
+      ],
+      [
+        "fish_kraken",
+        0.8
+      ],
+      [
+        "fish_golden",
+        0.5
+      ],
+      [
+        "boot",
+        6
+      ]
+    ],
+    "ocean": [
+      [
+        "fish_clown",
+        16
+      ],
+      [
+        "fish_sunfish",
+        18
+      ],
+      [
+        "fish_swordfish",
+        12
+      ],
+      [
+        "fish_shark",
+        16
+      ],
+      [
+        "fish_angler",
+        8
+      ],
+      [
+        "fish_manta",
+        1.2
+      ],
+      [
+        "fish_whale",
+        1.2
+      ],
+      [
+        "fish_golden",
+        0.6
+      ],
+      [
+        "boot",
+        4
+      ]
+    ],
+    "dark": [
+      [
+        "fish_angler",
+        26
+      ],
+      [
+        "fish_eel",
+        20
+      ],
+      [
+        "fish_jelly",
+        16
+      ],
+      [
+        "fish_kraken",
+        1.2
+      ],
+      [
+        "fish_golden",
+        0.6
+      ],
+      [
+        "boot",
+        6
+      ]
+    ],
+    "ice": [
+      [
+        "fish_perch",
+        14
+      ],
+      [
+        "fish_carp",
+        24
+      ],
+      [
+        "fish_icepike",
+        20
+      ],
+      [
+        "fish_shark",
+        26
+      ],
+      [
+        "fish_rainbow",
+        8
+      ],
+      [
+        "fish_whale",
+        1.2
+      ],
+      [
+        "fish_golden",
+        0.5
+      ],
+      [
+        "boot",
+        5
+      ]
+    ],
+    "shadow": [
+      [
+        "fish_angler",
+        26
+      ],
+      [
+        "fish_eel",
+        20
+      ],
+      [
+        "fish_jelly",
+        16
+      ],
+      [
+        "fish_kraken",
+        1.2
+      ],
+      [
+        "fish_golden",
+        0.6
+      ],
+      [
+        "boot",
+        6
+      ]
+    ]
+  },
+  "story": [
+    {
+      "title": "Harvest three crops",
+      "event": "harvest",
+      "target": 3,
+      "chapter": 0,
+      "icon": "🌾"
+    },
+    {
+      "title": "Earn 20 energy at the market",
+      "event": "sell",
+      "target": 20,
+      "chapter": 0,
+      "icon": "🧺"
+    },
+    {
+      "title": "Buy or craft one item",
+      "event": "craft",
+      "target": 1,
+      "chapter": 0,
+      "icon": "🗡️"
+    },
+    {
+      "title": "Equip a weapon",
+      "condition": "equipped",
+      "target": 1,
+      "chapter": 0,
+      "icon": "✋"
+    },
+    {
+      "title": "Defeat five creatures",
+      "event": "kill",
+      "target": 5,
+      "chapter": 0,
+      "icon": "⚔️"
+    },
+    {
+      "title": "Buy a crystal upgrade",
+      "event": "upgrade",
+      "target": 1,
+      "chapter": 0,
+      "icon": "💎"
+    },
+    {
+      "title": "Catch two fish",
+      "event": "fish",
+      "target": 2,
+      "chapter": 0,
+      "icon": "🎣"
+    },
+    {
+      "title": "Use ten skills",
+      "event": "skill",
+      "target": 10,
+      "chapter": 0,
+      "icon": "🌀"
+    },
+    {
+      "title": "Reach level 5",
+      "condition": "level",
+      "target": 5,
+      "chapter": 0,
+      "icon": "⭐",
+      "end": {
+        "seed_star": 1,
+        "spore": 2,
+        "plot_kit": 1
+      }
+    },
+    {
+      "title": "Defeat 25 creatures",
+      "event": "kill",
+      "target": 25,
+      "chapter": 1,
+      "icon": "⚔️"
+    },
+    {
+      "title": "Place another garden bed",
+      "condition": "plots",
+      "target": 1,
+      "chapter": 1,
+      "icon": "🌱"
+    },
+    {
+      "title": "Cook three meals",
+      "event": "cook",
+      "target": 3,
+      "chapter": 1,
+      "icon": "🔥"
+    },
+    {
+      "title": "Defeat a boss",
+      "event": "boss",
+      "target": 1,
+      "chapter": 1,
+      "icon": "👑"
+    },
+    {
+      "title": "Catch five fish",
+      "event": "fish",
+      "target": 5,
+      "chapter": 1,
+      "icon": "🐠"
+    },
+    {
+      "title": "Reach level 8",
+      "condition": "level",
+      "target": 8,
+      "chapter": 1,
+      "icon": "⭐",
+      "end": {
+        "seed_fire": 2,
+        "seed_ice": 2,
+        "claw": 2
+      }
+    },
+    {
+      "title": "Visit another planet",
+      "event": "planet",
+      "target": 1,
+      "chapter": 2,
+      "icon": "🚀"
+    },
+    {
+      "title": "Mine five deposits",
+      "event": "mine",
+      "target": 5,
+      "chapter": 2,
+      "icon": "⛏️"
+    },
+    {
+      "title": "Discover three planets",
+      "condition": "visited",
+      "target": 3,
+      "chapter": 2,
+      "icon": "🔭"
+    },
+    {
+      "title": "Craft or buy three items",
+      "event": "craft",
+      "target": 3,
+      "chapter": 2,
+      "icon": "🔨"
+    },
+    {
+      "title": "Place two decorations",
+      "condition": "decor",
+      "target": 2,
+      "chapter": 2,
+      "icon": "🏡"
+    },
+    {
+      "title": "Reach level 12",
+      "condition": "level",
+      "target": 12,
+      "chapter": 2,
+      "icon": "⭐",
+      "end": {
+        "starshard": 2,
+        "seed_star": 2,
+        "spore": 3
+      }
+    },
+    {
+      "title": "Defeat three bosses",
+      "event": "boss",
+      "target": 3,
+      "chapter": 3,
+      "icon": "👑"
+    },
+    {
+      "title": "Discover five planets",
+      "condition": "visited",
+      "target": 5,
+      "chapter": 3,
+      "icon": "🔭"
+    },
+    {
+      "title": "Equip a disguise",
+      "condition": "disguise",
+      "target": 1,
+      "chapter": 3,
+      "icon": "🎭"
+    },
+    {
+      "title": "Defeat 150 creatures",
+      "event": "kill",
+      "target": 150,
+      "chapter": 3,
+      "icon": "⚔️"
+    },
+    {
+      "title": "Reach level 18",
+      "condition": "level",
+      "target": 18,
+      "chapter": 3,
+      "icon": "⭐"
+    },
+    {
+      "title": "Discover every planet",
+      "condition": "visited",
+      "target": 9,
+      "chapter": 3,
+      "icon": "🔭"
+    },
+    {
+      "title": "Defeat ten bosses",
+      "event": "boss",
+      "target": 10,
+      "chapter": 3,
+      "icon": "👑"
+    },
+    {
+      "title": "Reach level 25",
+      "condition": "level",
+      "target": 25,
+      "chapter": 3,
+      "icon": "⭐",
+      "end": {
+        "starshard": 3,
+        "moonstone": 1,
+        "thunderstone": 2,
+        "seed_star": 3
+      }
+    }
+  ],
+  "disguises": {
+    "dz_superhero": {
+      "name": "Superhero",
+      "emoji": "🦸",
+      "color": "#3f6fff",
+      "weapon": {
+        "kind": "fist",
+        "range": 1.3,
+        "cd": 0.28
+      },
+      "skills": [
+        {
+          "name": "Take flight",
+          "icon": "🦸",
+          "cd": 3
+        },
+        {
+          "name": "Meteor dive",
+          "icon": "☄️",
+          "cd": 6
+        },
+        {
+          "name": "Laser gaze",
+          "icon": "👀",
+          "cd": 7
+        },
+        {
+          "name": "Boulder throw",
+          "icon": "🪨",
+          "cd": 10
+        }
+      ]
+    },
+    "dz_ninja": {
+      "name": "Shadow ninja",
+      "emoji": "🥷",
+      "color": "#c9c9ff",
+      "weapon": {
+        "kind": "sword",
+        "range": 2.3,
+        "cd": 0.3,
+        "arc": 0.3,
+        "fx": "#c9c9ff"
+      },
+      "skills": [
+        {
+          "name": "Shadow clones",
+          "icon": "👥",
+          "cd": 14
+        },
+        {
+          "name": "Vanish",
+          "icon": "👤",
+          "cd": 12
+        },
+        {
+          "name": "Shadow strike",
+          "icon": "⚡",
+          "cd": 6
+        },
+        {
+          "name": "Smoke bomb",
+          "icon": "💨",
+          "cd": 12
+        }
+      ]
+    },
+    "dz_mage": {
+      "name": "Archmage",
+      "emoji": "🧙",
+      "color": "#7f6fff",
+      "weapon": {
+        "kind": "gun",
+        "range": 10,
+        "cd": 0.7,
+        "shot": "fireball"
+      },
+      "skills": [
+        {
+          "name": "Great fireball",
+          "icon": "🔥",
+          "cd": 5
+        },
+        {
+          "name": "Blink",
+          "icon": "✨",
+          "cd": 5
+        },
+        {
+          "name": "Sheep spell",
+          "icon": "🐑",
+          "cd": 12
+        },
+        {
+          "name": "Black hole",
+          "icon": "🌀",
+          "cd": 13
+        }
+      ]
+    },
+    "dz_knight": {
+      "name": "Sun knight",
+      "emoji": "🛡️",
+      "color": "#fff3c4",
+      "weapon": {
+        "kind": "sword",
+        "range": 2.8,
+        "cd": 0.6,
+        "arc": 0.2,
+        "fx": "#fff3c4"
+      },
+      "skills": [
+        {
+          "name": "Shield block",
+          "icon": "🛡️",
+          "cd": 8
+        },
+        {
+          "name": "Knight's charge",
+          "icon": "🐎",
+          "cd": 7
+        },
+        {
+          "name": "Challenge",
+          "icon": "📯",
+          "cd": 12
+        },
+        {
+          "name": "Sky sword",
+          "icon": "🗡️",
+          "cd": 12
+        }
+      ]
+    },
+    "dz_mecha": {
+      "name": "Battle robot",
+      "emoji": "🤖",
+      "color": "#6ff2ff",
+      "weapon": {
+        "kind": "gun",
+        "range": 11,
+        "cd": 0.22,
+        "shot": "volt"
+      },
+      "skills": [
+        {
+          "name": "Tank mode",
+          "icon": "🚜",
+          "cd": 12
+        },
+        {
+          "name": "Tesla turret",
+          "icon": "🗼",
+          "cd": 14
+        },
+        {
+          "name": "Homing missiles",
+          "icon": "🚀",
+          "cd": 7
+        },
+        {
+          "name": "Energy shield",
+          "icon": "🔰",
+          "cd": 16
+        }
+      ]
+    },
+    "dz_dino": {
+      "name": "Tyrannosaur",
+      "emoji": "🦖",
+      "color": "#5fbf5a",
+      "weapon": {
+        "kind": "sword",
+        "range": 2.4,
+        "cd": 0.55,
+        "arc": 0.4,
+        "fx": "#ffffff"
+      },
+      "skills": [
+        {
+          "name": "Devour",
+          "icon": "😋",
+          "cd": 9
+        },
+        {
+          "name": "Tail sweep",
+          "icon": "🌪️",
+          "cd": 5
+        },
+        {
+          "name": "Terrifying roar",
+          "icon": "📢",
+          "cd": 12
+        },
+        {
+          "name": "Giant form",
+          "icon": "🦕",
+          "cd": 18
+        }
+      ]
+    },
+    "dz_fairy": {
+      "name": "Flower fairy",
+      "emoji": "🧚",
+      "color": "#ff9ec8",
+      "weapon": {
+        "kind": "gun",
+        "range": 10,
+        "cd": 0.42,
+        "shot": "bubble"
+      },
+      "skills": [
+        {
+          "name": "Healing flower ring",
+          "icon": "💖",
+          "cd": 12
+        },
+        {
+          "name": "Butterfly float",
+          "icon": "🦋",
+          "cd": 10
+        },
+        {
+          "name": "Fairy charm",
+          "icon": "💘",
+          "cd": 14
+        },
+        {
+          "name": "Binding tree",
+          "icon": "🌳",
+          "cd": 14
+        }
+      ]
+    },
+    "dz_army": {
+      "name": "Army soldier",
+      "emoji": "🎖️",
+      "color": "#6b7a3a",
+      "weapon": {
+        "kind": "gun",
+        "range": 12,
+        "cd": 0.35,
+        "shot": "cork",
+        "spread": 2
+      },
+      "skills": [
+        {
+          "name": "Cork popgun",
+          "icon": "🍾",
+          "cd": 6
+        },
+        {
+          "name": "Sandbag wall",
+          "icon": "🧱",
+          "cd": 10
+        },
+        {
+          "name": "Signal flare",
+          "icon": "🎇",
+          "cd": 12
+        },
+        {
+          "name": "Supply drop",
+          "icon": "🪂",
+          "cd": 16
+        }
+      ]
+    },
+    "dz_navy": {
+      "name": "Navy sailor",
+      "emoji": "⚓",
+      "color": "#1e3a8a",
+      "weapon": {
+        "kind": "sword",
+        "range": 2.4,
+        "cd": 0.55,
+        "arc": 0.4,
+        "fx": "#9fd6ff"
+      },
+      "skills": [
+        {
+          "name": "Anchor swing",
+          "icon": "⚓",
+          "cd": 7
+        },
+        {
+          "name": "Wave ride",
+          "icon": "🌊",
+          "cd": 7
+        },
+        {
+          "name": "Bosun's whistle",
+          "icon": "🎶",
+          "cd": 12
+        },
+        {
+          "name": "Lighthouse beam",
+          "icon": "🔦",
+          "cd": 15
+        }
+      ]
+    },
+    "dz_aodai": {
+      "name": "Ao dai lady",
+      "emoji": "🪷",
+      "color": "#ff8fb1",
+      "weapon": {
+        "kind": "gun",
+        "range": 10,
+        "cd": 0.42,
+        "shot": "bubble"
+      },
+      "skills": [
+        {
+          "name": "Lotus petals",
+          "icon": "🪷",
+          "cd": 6
+        },
+        {
+          "name": "Silk ribbon glide",
+          "icon": "🎀",
+          "cd": 8
+        },
+        {
+          "name": "Paper fan breeze",
+          "icon": "🪭",
+          "cd": 12
+        },
+        {
+          "name": "Lantern festival",
+          "icon": "🏮",
+          "cd": 15
+        }
+      ]
+    },
+    "dz_aodai_man": {
+      "name": "Ao dai gentleman",
+      "emoji": "🐉",
+      "color": "#23408f",
+      "weapon": {
+        "kind": "sword",
+        "range": 2.4,
+        "cd": 0.55,
+        "arc": 0.4,
+        "fx": "#ffd84a"
+      },
+      "skills": [
+        {
+          "name": "Dragon fan",
+          "icon": "🐉",
+          "cd": 7
+        },
+        {
+          "name": "Kite glide",
+          "icon": "🪁",
+          "cd": 10
+        },
+        {
+          "name": "Ink circle",
+          "icon": "🖌️",
+          "cd": 12
+        },
+        {
+          "name": "Dragon dance",
+          "icon": "🐲",
+          "cd": 15
+        }
+      ]
+    },
+    "dz_usa": {
+      "name": "Stars and stripes",
+      "emoji": "🦅",
+      "color": "#d6283a",
+      "weapon": {
+        "kind": "gun",
+        "range": 11,
+        "cd": 0.4,
+        "shot": "star"
+      },
+      "skills": [
+        {
+          "name": "Eagle strike",
+          "icon": "🦅",
+          "cd": 7
+        },
+        {
+          "name": "Star shield",
+          "icon": "🛡️",
+          "cd": 9
+        },
+        {
+          "name": "Liberty torch",
+          "icon": "🔥",
+          "cd": 12
+        },
+        {
+          "name": "Fireworks finale",
+          "icon": "🎆",
+          "cd": 15
+        }
+      ]
+    },
+    "dz_vietnam": {
+      "name": "Vietnam flag",
+      "emoji": "⭐",
+      "color": "#da251d",
+      "weapon": {
+        "kind": "gun",
+        "range": 10,
+        "cd": 0.42,
+        "shot": "fire"
+      },
+      "skills": [
+        {
+          "name": "Golden star burst",
+          "icon": "⭐",
+          "cd": 7
+        },
+        {
+          "name": "Bamboo vault",
+          "icon": "🎋",
+          "cd": 7
+        },
+        {
+          "name": "Bronze drum",
+          "icon": "🥁",
+          "cd": 12
+        },
+        {
+          "name": "Great golden star",
+          "icon": "🌟",
+          "cd": 15
+        }
+      ]
+    },
+    "dz_pirate": {
+      "name": "Pirate captain",
+      "emoji": "🏴‍☠️",
+      "color": "#ffc93c",
+      "weapon": {
+        "kind": "gun",
+        "range": 8,
+        "cd": 0.6,
+        "shot": "spike",
+        "spread": 3
+      },
+      "skills": [
+        {
+          "name": "Deck cannon",
+          "icon": "💣",
+          "cd": 12
+        },
+        {
+          "name": "Grappling hook",
+          "icon": "🪝",
+          "cd": 6
+        },
+        {
+          "name": "Scout parrot",
+          "icon": "🦜",
+          "cd": 10
+        },
+        {
+          "name": "Ship broadside",
+          "icon": "🏴‍☠️",
+          "cd": 14
+        }
+      ]
+    },
+    "dz_vampire": {
+      "name": "Vampire count",
+      "emoji": "🧛",
+      "color": "#b0203a",
+      "weapon": {
+        "kind": "sword",
+        "range": 2.3,
+        "cd": 0.45,
+        "arc": 0.3,
+        "fx": "#b0203a"
+      },
+      "lifesteal": 0.04,
+      "skills": [
+        {
+          "name": "Life drain",
+          "icon": "🩸",
+          "cd": 7
+        },
+        {
+          "name": "Bat form",
+          "icon": "🦇",
+          "cd": 9
+        },
+        {
+          "name": "Bat swarm",
+          "icon": "🌑",
+          "cd": 12
+        },
+        {
+          "name": "Blood moon",
+          "icon": "🌕",
+          "cd": 15
+        }
+      ]
+    },
+    "dz_snowman": {
+      "name": "Snowman",
+      "emoji": "⛄",
+      "color": "#9fe8ff",
+      "weapon": {
+        "kind": "gun",
+        "range": 10,
+        "cd": 0.4,
+        "shot": "ice"
+      },
+      "skills": [
+        {
+          "name": "Rolling snowball",
+          "icon": "⚪",
+          "cd": 7
+        },
+        {
+          "name": "Snow decoy",
+          "icon": "⛄",
+          "cd": 12
+        },
+        {
+          "name": "Ice rink",
+          "icon": "🧊",
+          "cd": 12
+        },
+        {
+          "name": "Ice age",
+          "icon": "❄️",
+          "cd": 16
+        }
+      ]
+    },
+    "dz_dawnstar": {
+      "name": "Dawn star dancer",
+      "emoji": "🌟",
+      "color": "#ff6a5c",
+      "weapon": {
+        "kind": "gun",
+        "range": 9,
+        "cd": 0.45,
+        "shot": "star"
+      },
+      "skills": [
+        {
+          "name": "Ribbon lasso",
+          "icon": "🎀",
+          "cd": 6
+        },
+        {
+          "name": "Morning glow",
+          "icon": "🌅",
+          "cd": 12
+        },
+        {
+          "name": "Sparkle step",
+          "icon": "✨",
+          "cd": 7
+        },
+        {
+          "name": "Star shower",
+          "icon": "🌠",
+          "cd": 15
+        }
+      ]
+    }
+  },
+  "animals": {
+    "chicken": {
+      "name": "Chicken",
+      "baby": "Chick",
+      "icon": "🐔",
+      "babyIcon": "🐤",
+      "level": 2,
+      "price": 25,
+      "growMs": 60000,
+      "productMs": 120000,
+      "product": "egg",
+      "xp": 5,
+      "cap": 4,
+      "capStep": 3
+    },
+    "cow": {
+      "name": "Cow",
+      "baby": "Calf",
+      "icon": "🐄",
+      "babyIcon": "🐮",
+      "level": 5,
+      "price": 70,
+      "growMs": 120000,
+      "productMs": 240000,
+      "product": "milk",
+      "xp": 10,
+      "cap": 2,
+      "capStep": 4
+    },
+    "duck": {
+      "name": "Duck",
+      "baby": "Duckling",
+      "icon": "🦆",
+      "babyIcon": "🐥",
+      "level": 3,
+      "price": 220,
+      "growMs": 90000,
+      "productMs": 180000,
+      "product": "duck_egg",
+      "xp": 8,
+      "cap": 4,
+      "capStep": 3
+    },
+    "pig": {
+      "name": "Pink pig",
+      "baby": "Piglet",
+      "icon": "🐖",
+      "babyIcon": "🐷",
+      "level": 6,
+      "price": 380,
+      "growMs": 120000,
+      "productMs": 360000,
+      "product": "truffle",
+      "xp": 18,
+      "cap": 4,
+      "capStep": 3
+    },
+    "goat": {
+      "name": "Goat",
+      "baby": "Kid",
+      "icon": "🐐",
+      "babyIcon": "🐐",
+      "level": 4,
+      "price": 300,
+      "growMs": 100000,
+      "productMs": 300000,
+      "product": "goat_milk",
+      "xp": 12,
+      "cap": 3,
+      "capStep": 3
+    },
+    "goose": {
+      "name": "Goose",
+      "baby": "Gosling",
+      "icon": "🪿",
+      "babyIcon": "🐥",
+      "level": 4,
+      "price": 260,
+      "growMs": 100000,
+      "productMs": 240000,
+      "product": "goose_egg",
+      "xp": 10,
+      "cap": 3,
+      "capStep": 3
+    },
+    "dog": {
+      "name": "Garden guard dog",
+      "baby": "Garden guard dog",
+      "icon": "🐕",
+      "babyIcon": "🐕",
+      "level": 3,
+      "price": 450,
+      "growMs": 0,
+      "productMs": 0,
+      "product": "guard",
+      "xp": 0,
+      "cap": 1,
+      "capStep": 0
+    }
+  },
+  "dishes": [
+    {
+      "id": "omelette",
+      "materials": {
+        "egg": 2
+      }
+    },
+    {
+      "id": "pancake",
+      "materials": {
+        "egg": 1,
+        "milk": 1
+      }
+    },
+    {
+      "id": "milkshake",
+      "materials": {
+        "milk": 2
+      }
+    },
+    {
+      "id": "cheese",
+      "materials": {
+        "milk": 3
+      }
+    }
+  ],
+  "defaults": {
+    "version": 1,
+    "contentVersion": 3,
+    "forge": {},
+    "nextPlantId": 0,
+    "name": "Clover",
+    "color": "#4aa8ff",
+    "level": 1,
+    "xp": 0,
+    "hp": 100,
+    "energy": 0,
+    "bag": {},
+    "chest": {},
+    "gear": {},
+    "plots": [
+      {
+        "crop": null,
+        "plantedAt": 0,
+        "x": -12.23,
+        "z": 1.16
+      },
+      {
+        "crop": null,
+        "plantedAt": 0,
+        "x": -11,
+        "z": 1.16
+      },
+      {
+        "crop": null,
+        "plantedAt": 0,
+        "x": -9.77,
+        "z": 1.16
+      },
+      {
+        "crop": null,
+        "plantedAt": 0,
+        "x": -12.23,
+        "z": 2.39
+      },
+      {
+        "crop": null,
+        "plantedAt": 0,
+        "x": -11,
+        "z": 2.39
+      },
+      {
+        "crop": null,
+        "plantedAt": 0,
+        "x": 18,
+        "z": 3
+      },
+      {
+        "crop": null,
+        "plantedAt": 0,
+        "x": -18,
+        "z": -3
+      },
+      {
+        "crop": null,
+        "plantedAt": 0,
+        "x": 3,
+        "z": -20
+      },
+      {
+        "crop": null,
+        "plantedAt": 0,
+        "x": -3,
+        "z": 20
+      }
+    ],
+    "gardenLayout": 4,
+    "boatGateBeds": true,
+    "farm": {
+      "animals": [],
+      "nextId": 1,
+      "penLevel": 0,
+      "built": false,
+      "speciesPens": {},
+      "helper": {
+        "owned": false,
+        "paused": false,
+        "autoFeed": false
+      }
+    },
+    "counters": {
+      "harvests": 0,
+      "sold": 0,
+      "bought": 0,
+      "equipped": 0,
+      "kills": 0,
+      "upgrades": 0,
+      "fish": 0,
+      "skills": 0
+    },
+    "quest": 0,
+    "healthUp": 0,
+    "attackUp": 0,
+    "defenseUp": 0,
+    "critUp": 0,
+    "planet": "home",
+    "visited": [
+      "home"
+    ],
+    "discovered": [
+      "home"
+    ],
+    "settings": {
+      "sound": true,
+      "musicVolume": 0.45,
+      "sfxVolume": 0.8,
+      "vibrate": true,
+      "lowGraphics": false,
+      "difficulty": "easy"
+    },
+    "worldRewards": {
+      "mineReadyAt": {},
+      "collectedGifts": {},
+      "giftReadyAt": {},
+      "resourceReadyAt": {},
+      "lava": {
+        "gateOpen": false,
+        "braziers": []
+      }
+    },
+    "buffs": {},
+    "sizeEffect": null,
+    "decorations": [],
+    "nextDecorationId": 1,
+    "collection": {},
+    "fishRecords": {},
+    "progression": {
+      "story": {
+        "index": 0,
+        "progress": 0
+      },
+      "totals": {},
+      "daily": {
+        "key": "",
+        "tasks": [],
+        "chest": false,
+        "rerolled": false
+      },
+      "weekly": {
+        "key": "",
+        "tasks": [],
+        "chest": false
+      },
+      "pass": {
+        "season": "",
+        "stars": 0,
+        "claimed": []
+      },
+      "achievements": {},
+      "login": {
+        "day": "",
+        "streak": 0
+      },
+      "bounty": null,
+      "challenge": null,
+      "streak": 0,
+      "bestStreak": 0
+    },
+    "savedAt": 1792205264285,
+    "welcome": "pending",
+    "looks": {
+      "owned": [
+        "tall"
+      ],
+      "style": "girl-tall-none-bare"
+    }
+  },
+  "xp": [
+    {
+      "level": 1,
+      "needed": 25
+    },
+    {
+      "level": 3,
+      "needed": 137
+    },
+    {
+      "level": 5,
+      "needed": 303
+    },
+    {
+      "level": 8,
+      "needed": 628
+    },
+    {
+      "level": 12,
+      "needed": 1177
+    },
+    {
+      "level": 20,
+      "needed": 2597
+    },
+    {
+      "level": 25,
+      "needed": 3671
+    },
+    {
+      "level": 40,
+      "needed": 7606
+    }
+  ]
+}

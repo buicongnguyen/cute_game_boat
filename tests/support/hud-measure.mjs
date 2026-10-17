@@ -23,8 +23,8 @@ export function measureHud() {
     const run = (dx, dy) => { let n = 1; for (const s of [1, -1]) for (let i = 1; i < 40; i++) { if (!mine(document.elementFromPoint(cx + dx * i * s, cy + dy * i * s))) break; n++; } return n; };
     const w = run(1, 0), h = run(0, 1); if (w < 44 || h < 44) small.push({ el: el.id || el.className || el.dataset.action, w, h });
   }
-  // The hero plate's own pieces (they sit inside it, so they are not a group of their own): the name, the level badge on the
-  // portrait tile, the energy count over the health bar. `cut` = the text is wider than its box; `tall` = the height of its glyphs.
+  // The hero plate's own pieces: name and energy on one row, with the level badge on the portrait tile.
+  // `cut` = the text is wider than its box; `tall` = the height of its glyphs.
   const piece = sel => { const el = document.querySelector(sel); if (!seen(el)) return null; const cs = getComputedStyle(el); return { ...box(el), text: el.textContent.trim(), cut: el.scrollWidth > el.clientWidth + 1, font: parseFloat(cs.fontSize), ellipsis: cs.textOverflow === 'ellipsis' }; };
   const plate = { name: piece('#hud #player-name'), level: piece('#hud .level-badge'), energy: piece('#hud .hero-energy'), energyText: piece('#hud #energy'), avatar: piece('#hud .avatar'), health: piece('#hud .meter.health'), oldTag: document.querySelectorAll('#hud .top-actions .energy, #hud .level-chip').length };
   return { W: innerWidth, H: innerHeight, coarse, air: document.body.classList.contains('air-combat'), leftHanded: !!document.querySelector('#hud.joystick-right'), groups, plate, small, dockW: getComputedStyle(document.documentElement).getPropertyValue('--dock-w') };
@@ -78,7 +78,7 @@ export function findings(m) {
   out.push(...plateFindings(m), ...pawFindings(m));
   return out;
 }
-/** The hero plate: the name over the tile, the level as a number on a badge, the energy count over the health bar, all inside the
+/** The hero plate: name and energy share a row, the level is a number on a badge, all inside the
     plate and none of them cut (a long name may end in an ellipsis: that is `name.cut` with `name.ellipsis`, and is not a finding). */
 export function plateFindings(m) {
   const out = [], p = m.plate, hero = m.groups.hero[0]; if (!p || !hero) return ['the hero plate is missing'];
@@ -94,12 +94,13 @@ export function plateFindings(m) {
   if (p.energyText.cut || p.energy.cut || p.energyText.r > p.energy.r + .5) out.push(`the energy count is cut ${JSON.stringify(p.energyText)}`);
   if (p.energyText.font < 12) out.push(`the energy count is ${p.energyText.font}px, too small to read`);
   if (p.energy.b > p.health.t + .5) out.push('the energy count is not above the health bar');
+  if (p.name.r > p.energy.l + .5 || p.name.b <= p.energy.t || p.name.t >= p.energy.b) out.push('the name and energy do not share a row without overlapping');
   if (p.name.cut && !p.name.ellipsis) out.push('a long name is clipped without an ellipsis');
   if (p.avatar) {
-    if (p.name.b > p.avatar.t + .5) out.push('the name is not above the portrait tile');
+    if (p.name.l < p.avatar.r - .5) out.push('the name is not beside the portrait tile');
     const cx = (p.level.l + p.level.r) / 2, cy = (p.level.t + p.level.b) / 2;
     if (cx < p.avatar.l || cx > p.avatar.r + 2 || cy < p.avatar.t || cy > p.avatar.b + 2 || p.level.r < p.avatar.r - 2 || p.level.b < p.avatar.b - 2) out.push(`the level badge is not on the tile's corner ${JSON.stringify([p.avatar, p.level].map(b => [b.l, b.t, b.r, b.b].map(Math.round)))}`);
-  } else if (p.level.r > p.name.l + .5 || p.level.b <= p.name.t || p.level.t >= p.name.b || p.name.b > p.energy.t + .5) out.push('without the tile the level badge should stand before the name, over the energy count');
+  } else if (p.level.r > p.name.l + .5 || p.level.b <= p.name.t || p.level.t >= p.name.b) out.push('without the tile the level badge should stand before the name and energy row');
   return out;
 }
 /** The three states the probe measures; each returns when the HUD has settled. */

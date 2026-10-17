@@ -1,0 +1,2831 @@
+{
+  "schemaVersion": 1,
+  "title": "First chapter graph facts and book acceptance",
+  "baselineCommit": "6c4477fdc795995fa5d7af6a58f83845591693af",
+  "reviewDate": "2026-10-17",
+  "evidenceNote": "Source inspected plus read-only importing pure rule/catalog modules to derive exact numeric data. Game test files inspected, not executed. Browser binaries inspected, not launched in this task.",
+  "edgeLegend": [
+    {
+      "kind": "purchase with materials",
+      "meaning": "Acquire a separate item for currency/resources; does not consume a previous tier unless explicitly stated."
+    },
+    {
+      "kind": "story reward",
+      "meaning": "Collect a completed active story milestone; ownership changes but no item recipe is implied."
+    },
+    {
+      "kind": "deterministic upgrade",
+      "meaning": "Spend the next-level cost to improve the same owned entity with guaranteed success."
+    },
+    {
+      "kind": "probabilistic upgrade",
+      "meaning": "Spend an attempt cost; success probability and failure loss must be visible."
+    },
+    {
+      "kind": "unlock",
+      "meaning": "A prerequisite opens availability; it does not grant, buy or improve an item."
+    }
+  ],
+  "globalCaveats": [
+    "Use numeric rank and item identity as distinct labels.",
+    "A line between catalog pictures is not automatically a recipe or evolution.",
+    "Do not mark all advanced enhancements as chapter-one objectives.",
+    "No new features are proposed by these rule diagrams."
+  ],
+  "diagrams": [
+    {
+      "id": "bed-growth",
+      "title": "Improve one crop bed",
+      "question": "Does this upgrade make every crop faster or unlock a new crop",
+      "summary": "The same bed gains speed. Crop species and crop-level requirements stay separate.",
+      "layout": "horizontal-ladder",
+      "nodes": [
+        {
+          "id": "bed-0",
+          "label": "Bed level 0",
+          "assetKey": "plot_kit",
+          "state": {
+            "level": 0,
+            "growthSpeedMultiplier": 1,
+            "ordinaryDurationShare": 1
+          },
+          "caption": "1x growth speed",
+          "subtitle": "1x growth speed",
+          "assetId": "plot_kit",
+          "details": "{\"level\":0,\"growthSpeedMultiplier\":1,\"ordinaryDurationShare\":1}",
+          "sourcePaths": [
+            "src/model.ts",
+            "src/difficulty.ts",
+            "tests/bed-upgrade.test.ts"
+          ],
+          "column": 0,
+          "row": 0
+        },
+        {
+          "id": "bed-1",
+          "label": "Bed level 1",
+          "assetKey": "plot_kit",
+          "state": {
+            "level": 1,
+            "growthSpeedMultiplier": 2,
+            "ordinaryDurationShare": 0.5
+          },
+          "caption": "2x growth speed",
+          "subtitle": "2x growth speed",
+          "assetId": "plot_kit",
+          "details": "{\"level\":1,\"growthSpeedMultiplier\":2,\"ordinaryDurationShare\":0.5}",
+          "sourcePaths": [
+            "src/model.ts",
+            "src/difficulty.ts",
+            "tests/bed-upgrade.test.ts"
+          ],
+          "column": 1,
+          "row": 0
+        },
+        {
+          "id": "bed-2",
+          "label": "Bed level 2",
+          "assetKey": "plot_kit",
+          "state": {
+            "level": 2,
+            "growthSpeedMultiplier": 4,
+            "ordinaryDurationShare": 0.25
+          },
+          "caption": "4x growth speed",
+          "subtitle": "4x growth speed",
+          "assetId": "plot_kit",
+          "details": "{\"level\":2,\"growthSpeedMultiplier\":4,\"ordinaryDurationShare\":0.25}",
+          "sourcePaths": [
+            "src/model.ts",
+            "src/difficulty.ts",
+            "tests/bed-upgrade.test.ts"
+          ],
+          "column": 2,
+          "row": 0
+        },
+        {
+          "id": "bed-3",
+          "label": "Bed level 3",
+          "assetKey": "plot_kit",
+          "state": {
+            "level": 3,
+            "growthSpeedMultiplier": 8,
+            "ordinaryDurationShare": 0.125
+          },
+          "caption": "8x growth speed",
+          "subtitle": "8x growth speed",
+          "assetId": "plot_kit",
+          "details": "{\"level\":3,\"growthSpeedMultiplier\":8,\"ordinaryDurationShare\":0.125}",
+          "sourcePaths": [
+            "src/model.ts",
+            "src/difficulty.ts",
+            "tests/bed-upgrade.test.ts"
+          ],
+          "column": 3,
+          "row": 0
+        },
+        {
+          "id": "bed-4",
+          "label": "Bed level 4",
+          "assetKey": "plot_kit",
+          "state": {
+            "level": 4,
+            "growthSpeedMultiplier": 16,
+            "ordinaryDurationShare": 0.0625
+          },
+          "caption": "16x growth speed",
+          "subtitle": "16x growth speed",
+          "assetId": "plot_kit",
+          "details": "{\"level\":4,\"growthSpeedMultiplier\":16,\"ordinaryDurationShare\":0.0625}",
+          "sourcePaths": [
+            "src/model.ts",
+            "src/difficulty.ts",
+            "tests/bed-upgrade.test.ts"
+          ],
+          "column": 4,
+          "row": 0
+        },
+        {
+          "id": "bed-5",
+          "label": "Bed level 5",
+          "assetKey": "plot_kit",
+          "state": {
+            "level": 5,
+            "growthSpeedMultiplier": 32,
+            "ordinaryDurationShare": 0.03125
+          },
+          "caption": "32x growth speed",
+          "subtitle": "32x growth speed",
+          "assetId": "plot_kit",
+          "details": "{\"level\":5,\"growthSpeedMultiplier\":32,\"ordinaryDurationShare\":0.03125}",
+          "sourcePaths": [
+            "src/model.ts",
+            "src/difficulty.ts",
+            "tests/bed-upgrade.test.ts"
+          ],
+          "column": 5,
+          "row": 0
+        }
+      ],
+      "edges": [
+        {
+          "from": "bed-0",
+          "to": "bed-1",
+          "label": "120 energy Easy",
+          "kind": "upgrade",
+          "conditions": [
+            "Own the bed",
+            "Be on the home planet",
+            "Have the listed energy"
+          ],
+          "cost": {
+            "energy": 120,
+            "materials": {}
+          },
+          "normalHardEnergy": 180,
+          "semanticKind": "deterministic upgrade"
+        },
+        {
+          "from": "bed-1",
+          "to": "bed-2",
+          "label": "240 energy Easy",
+          "kind": "upgrade",
+          "conditions": [
+            "Own the bed",
+            "Be on the home planet",
+            "Have the listed energy"
+          ],
+          "cost": {
+            "energy": 240,
+            "materials": {}
+          },
+          "normalHardEnergy": 360,
+          "semanticKind": "deterministic upgrade"
+        },
+        {
+          "from": "bed-2",
+          "to": "bed-3",
+          "label": "480 energy Easy",
+          "kind": "upgrade",
+          "conditions": [
+            "Own the bed",
+            "Be on the home planet",
+            "Have the listed energy"
+          ],
+          "cost": {
+            "energy": 480,
+            "materials": {}
+          },
+          "normalHardEnergy": 720,
+          "semanticKind": "deterministic upgrade"
+        },
+        {
+          "from": "bed-3",
+          "to": "bed-4",
+          "label": "960 energy Easy",
+          "kind": "upgrade",
+          "conditions": [
+            "Own the bed",
+            "Be on the home planet",
+            "Have the listed energy"
+          ],
+          "cost": {
+            "energy": 960,
+            "materials": {}
+          },
+          "normalHardEnergy": 1440,
+          "semanticKind": "deterministic upgrade"
+        },
+        {
+          "from": "bed-4",
+          "to": "bed-5",
+          "label": "1920 energy Easy",
+          "kind": "upgrade",
+          "conditions": [
+            "Own the bed",
+            "Be on the home planet",
+            "Have the listed energy"
+          ],
+          "cost": {
+            "energy": 1920,
+            "materials": {}
+          },
+          "normalHardEnergy": 2880,
+          "semanticKind": "deterministic upgrade"
+        }
+      ],
+      "stepTable": [
+        {
+          "fromLevel": 0,
+          "toLevel": 1,
+          "easyEnergy": 120,
+          "normalHardEnergy": 180,
+          "materials": {},
+          "successProbability": 1
+        },
+        {
+          "fromLevel": 1,
+          "toLevel": 2,
+          "easyEnergy": 240,
+          "normalHardEnergy": 360,
+          "materials": {},
+          "successProbability": 1
+        },
+        {
+          "fromLevel": 2,
+          "toLevel": 3,
+          "easyEnergy": 480,
+          "normalHardEnergy": 720,
+          "materials": {},
+          "successProbability": 1
+        },
+        {
+          "fromLevel": 3,
+          "toLevel": 4,
+          "easyEnergy": 960,
+          "normalHardEnergy": 1440,
+          "materials": {},
+          "successProbability": 1
+        },
+        {
+          "fromLevel": 4,
+          "toLevel": 5,
+          "easyEnergy": 1920,
+          "normalHardEnergy": 2880,
+          "materials": {},
+          "successProbability": 1
+        }
+      ],
+      "totals": {
+        "easyEnergy": 3720,
+        "normalHardEnergy": 5580
+      },
+      "caveats": [
+        "No minimum explorer level is checked by upgradeBed.",
+        "Prices are per bed and per next level, not a fee for all nine beds.",
+        "Normal and Hard multiply bed-upgrade prices by 1.5.",
+        "Existing growing crops retain their completion fraction while their duration is halved; an upgrade does not remove growth already earned.",
+        "Ordinary duration calculations round to milliseconds and have a one-millisecond minimum. First-run tutorial timing is a separate modifier.",
+        "This is not a path from carrot to radish or a crop unlock tree."
+      ],
+      "sources": [
+        {
+          "path": "src/model.ts",
+          "symbol": "BED_MAX_LEVEL bedSpeedUp bedGrowTime bedUpgradeCost upgradeBed",
+          "evidence": "Code",
+          "executed": false
+        },
+        {
+          "path": "src/difficulty.ts",
+          "symbol": "bedUpgradeScale",
+          "evidence": "Code",
+          "executed": false
+        },
+        {
+          "path": "tests/bed-upgrade.test.ts",
+          "symbol": "bed speed cost and preservation assertions",
+          "evidence": "Code",
+          "executed": false
+        }
+      ],
+      "subtitle": "Does this upgrade make every crop faster or unlock a new crop",
+      "description": "The same bed gains speed. Crop species and crop-level requirements stay separate.",
+      "notes": [
+        "No minimum explorer level is checked by upgradeBed.",
+        "Prices are per bed and per next level, not a fee for all nine beds.",
+        "Normal and Hard multiply bed-upgrade prices by 1.5.",
+        "Existing growing crops retain their completion fraction while their duration is halved; an upgrade does not remove growth already earned.",
+        "Ordinary duration calculations round to milliseconds and have a one-millisecond minimum. First-run tutorial timing is a separate modifier.",
+        "This is not a path from carrot to radish or a crop unlock tree."
+      ],
+      "sourcePaths": [
+        "src/model.ts",
+        "src/difficulty.ts",
+        "tests/bed-upgrade.test.ts"
+      ],
+      "steps": [
+        {
+          "fromLevel": 0,
+          "toLevel": 1,
+          "easyEnergy": 120,
+          "normalHardEnergy": 180,
+          "materials": {},
+          "successProbability": 1
+        },
+        {
+          "fromLevel": 1,
+          "toLevel": 2,
+          "easyEnergy": 240,
+          "normalHardEnergy": 360,
+          "materials": {},
+          "successProbability": 1
+        },
+        {
+          "fromLevel": 2,
+          "toLevel": 3,
+          "easyEnergy": 480,
+          "normalHardEnergy": 720,
+          "materials": {},
+          "successProbability": 1
+        },
+        {
+          "fromLevel": 3,
+          "toLevel": 4,
+          "easyEnergy": 960,
+          "normalHardEnergy": 1440,
+          "materials": {},
+          "successProbability": 1
+        },
+        {
+          "fromLevel": 4,
+          "toLevel": 5,
+          "easyEnergy": 1920,
+          "normalHardEnergy": 2880,
+          "materials": {},
+          "successProbability": 1
+        }
+      ]
+    },
+    {
+      "id": "permanent-wishes",
+      "title": "Choose a permanent stat wish",
+      "question": "Which improvement changes the explorer rather than one owned item",
+      "summary": "Four independent energy-only counters. Each repeats its own next-rank price curve.",
+      "layout": "four-branches",
+      "nodes": [
+        {
+          "id": "wishing-cabinet",
+          "label": "Wishing cabinet",
+          "caption": "Permanent stat wishes",
+          "subtitle": "Permanent stat wishes",
+          "details": "Permanent stat wishes",
+          "sourcePaths": [
+            "src/content.ts",
+            "src/model.ts",
+            "src/item-views.ts",
+            "src/house-activities.ts"
+          ],
+          "column": 0,
+          "row": 1.5
+        },
+        {
+          "id": "wish-health",
+          "label": "Health",
+          "assetKey": "potion",
+          "caption": "+25 maximum HP per rank",
+          "state": {
+            "id": "health",
+            "label": "Health",
+            "assetKey": "potion",
+            "effectPerRank": 25,
+            "unit": "maximum HP",
+            "basePrice": 12,
+            "priceFormula": "ceil(12 * 1.38^currentRank)",
+            "firstFourEnergyCosts": [
+              12,
+              17,
+              23,
+              32
+            ],
+            "maximumRank": null
+          },
+          "subtitle": "+25 maximum HP per rank",
+          "assetId": "potion",
+          "details": "{\"id\":\"health\",\"label\":\"Health\",\"assetKey\":\"potion\",\"effectPerRank\":25,\"unit\":\"maximum HP\",\"basePrice\":12,\"priceFormula\":\"ceil(12 * 1.38^currentRank)\",\"firstFourEnergyCosts\":[12,17,23,32],\"maximumRank\":null}",
+          "sourcePaths": [
+            "src/content.ts",
+            "src/model.ts",
+            "src/item-views.ts",
+            "src/house-activities.ts"
+          ],
+          "column": 1,
+          "row": 0
+        },
+        {
+          "id": "wish-attack",
+          "label": "Attack",
+          "assetKey": "sword_wood",
+          "caption": "+3 base attack per rank",
+          "state": {
+            "id": "attack",
+            "label": "Attack",
+            "assetKey": "sword_wood",
+            "effectPerRank": 3,
+            "unit": "base attack",
+            "basePrice": 15,
+            "priceFormula": "ceil(15 * 1.38^currentRank)",
+            "firstFourEnergyCosts": [
+              15,
+              21,
+              29,
+              40
+            ],
+            "maximumRank": null
+          },
+          "subtitle": "+3 base attack per rank",
+          "assetId": "sword_wood",
+          "details": "{\"id\":\"attack\",\"label\":\"Attack\",\"assetKey\":\"sword_wood\",\"effectPerRank\":3,\"unit\":\"base attack\",\"basePrice\":15,\"priceFormula\":\"ceil(15 * 1.38^currentRank)\",\"firstFourEnergyCosts\":[15,21,29,40],\"maximumRank\":null}",
+          "sourcePaths": [
+            "src/content.ts",
+            "src/model.ts",
+            "src/item-views.ts",
+            "src/house-activities.ts"
+          ],
+          "column": 1,
+          "row": 1
+        },
+        {
+          "id": "wish-defense",
+          "label": "Defense",
+          "assetKey": "hat_straw",
+          "caption": "+4 defence points per rank",
+          "state": {
+            "id": "defense",
+            "label": "Defense",
+            "assetKey": "hat_straw",
+            "effectPerRank": 4,
+            "unit": "defence points",
+            "basePrice": 14,
+            "priceFormula": "ceil(14 * 1.38^currentRank)",
+            "firstFourEnergyCosts": [
+              14,
+              20,
+              27,
+              37
+            ],
+            "maximumRank": null
+          },
+          "subtitle": "+4 defence points per rank",
+          "assetId": "hat_straw",
+          "details": "{\"id\":\"defense\",\"label\":\"Defense\",\"assetKey\":\"hat_straw\",\"effectPerRank\":4,\"unit\":\"defence points\",\"basePrice\":14,\"priceFormula\":\"ceil(14 * 1.38^currentRank)\",\"firstFourEnergyCosts\":[14,20,27,37],\"maximumRank\":null}",
+          "sourcePaths": [
+            "src/content.ts",
+            "src/model.ts",
+            "src/item-views.ts",
+            "src/house-activities.ts"
+          ],
+          "column": 1,
+          "row": 2
+        },
+        {
+          "id": "wish-crit",
+          "label": "Critical chance",
+          "assetKey": "clover",
+          "caption": "+2.5 percentage points per rank",
+          "state": {
+            "id": "crit",
+            "label": "Critical chance",
+            "assetKey": "clover",
+            "effectPerRank": 0.025,
+            "unit": "chance fraction; 0.025 is +2.5 percentage points",
+            "basePrice": 18,
+            "priceFormula": "ceil(18 * 1.38^currentRank)",
+            "firstFourEnergyCosts": [
+              18,
+              25,
+              35,
+              48
+            ],
+            "maximumRank": 28
+          },
+          "subtitle": "+2.5 percentage points per rank",
+          "assetId": "clover",
+          "details": "{\"id\":\"crit\",\"label\":\"Critical chance\",\"assetKey\":\"clover\",\"effectPerRank\":0.025,\"unit\":\"chance fraction; 0.025 is +2.5 percentage points\",\"basePrice\":18,\"priceFormula\":\"ceil(18 * 1.38^currentRank)\",\"firstFourEnergyCosts\":[18,25,35,48],\"maximumRank\":28}",
+          "sourcePaths": [
+            "src/content.ts",
+            "src/model.ts",
+            "src/item-views.ts",
+            "src/house-activities.ts"
+          ],
+          "column": 1,
+          "row": 3
+        }
+      ],
+      "edges": [
+        {
+          "from": "wishing-cabinet",
+          "to": "wish-health",
+          "label": "First purchase 12 energy",
+          "kind": "upgrade",
+          "cost": {
+            "energy": 12,
+            "materials": {}
+          },
+          "repeatPriceFormula": "ceil(12 * 1.38^currentRank)",
+          "conditions": [
+            "Have the next-rank energy price"
+          ],
+          "semanticKind": "permanent stat upgrade"
+        },
+        {
+          "from": "wishing-cabinet",
+          "to": "wish-attack",
+          "label": "First purchase 15 energy",
+          "kind": "upgrade",
+          "cost": {
+            "energy": 15,
+            "materials": {}
+          },
+          "repeatPriceFormula": "ceil(15 * 1.38^currentRank)",
+          "conditions": [
+            "Have the next-rank energy price"
+          ],
+          "semanticKind": "permanent stat upgrade"
+        },
+        {
+          "from": "wishing-cabinet",
+          "to": "wish-defense",
+          "label": "First purchase 14 energy",
+          "kind": "upgrade",
+          "cost": {
+            "energy": 14,
+            "materials": {}
+          },
+          "repeatPriceFormula": "ceil(14 * 1.38^currentRank)",
+          "conditions": [
+            "Have the next-rank energy price"
+          ],
+          "semanticKind": "permanent stat upgrade"
+        },
+        {
+          "from": "wishing-cabinet",
+          "to": "wish-crit",
+          "label": "First purchase 18 energy",
+          "kind": "upgrade",
+          "cost": {
+            "energy": 18,
+            "materials": {}
+          },
+          "repeatPriceFormula": "ceil(18 * 1.38^currentRank)",
+          "conditions": [
+            "Have the next-rank energy price",
+            "Current crit rank below 28"
+          ],
+          "semanticKind": "permanent stat upgrade"
+        }
+      ],
+      "stepTable": [
+        {
+          "id": "health",
+          "label": "Health",
+          "assetKey": "potion",
+          "effectPerRank": 25,
+          "unit": "maximum HP",
+          "basePrice": 12,
+          "priceFormula": "ceil(12 * 1.38^currentRank)",
+          "firstFourEnergyCosts": [
+            12,
+            17,
+            23,
+            32
+          ],
+          "maximumRank": null
+        },
+        {
+          "id": "attack",
+          "label": "Attack",
+          "assetKey": "sword_wood",
+          "effectPerRank": 3,
+          "unit": "base attack",
+          "basePrice": 15,
+          "priceFormula": "ceil(15 * 1.38^currentRank)",
+          "firstFourEnergyCosts": [
+            15,
+            21,
+            29,
+            40
+          ],
+          "maximumRank": null
+        },
+        {
+          "id": "defense",
+          "label": "Defense",
+          "assetKey": "hat_straw",
+          "effectPerRank": 4,
+          "unit": "defence points",
+          "basePrice": 14,
+          "priceFormula": "ceil(14 * 1.38^currentRank)",
+          "firstFourEnergyCosts": [
+            14,
+            20,
+            27,
+            37
+          ],
+          "maximumRank": null
+        },
+        {
+          "id": "crit",
+          "label": "Critical chance",
+          "assetKey": "clover",
+          "effectPerRank": 0.025,
+          "unit": "chance fraction; 0.025 is +2.5 percentage points",
+          "basePrice": 18,
+          "priceFormula": "ceil(18 * 1.38^currentRank)",
+          "firstFourEnergyCosts": [
+            18,
+            25,
+            35,
+            48
+          ],
+          "maximumRank": 28
+        }
+      ],
+      "caveats": [
+        "Each stat uses its own current rank; buying Health does not raise the Attack price.",
+        "Health also heals 25 current HP, capped by the new maximum; it is not a full heal.",
+        "Critical wishes stop at rank28. Other wish counters have no explicit finite rank cap in upgrade().",
+        "A +3 Attack wish changes base attack; final attack also depends on level, equipped items, forging and buffs.",
+        "These wishes do not replace the deterministic gear bench or weapon forge.",
+        "No player-level gate or material cost is checked in the shared upgrade rule."
+      ],
+      "sources": [
+        {
+          "path": "src/content.ts",
+          "symbol": "UPGRADES",
+          "evidence": "Code",
+          "executed": false
+        },
+        {
+          "path": "src/model.ts",
+          "symbol": "upgradeCost upgrade maxHp attack defense activeStats",
+          "evidence": "Code",
+          "executed": false
+        },
+        {
+          "path": "src/item-views.ts",
+          "symbol": "upgradeCards",
+          "evidence": "Code",
+          "executed": false
+        },
+        {
+          "path": "src/house-activities.ts",
+          "symbol": "wishing",
+          "evidence": "Code",
+          "executed": false
+        }
+      ],
+      "subtitle": "Which improvement changes the explorer rather than one owned item",
+      "description": "Four independent energy-only counters. Each repeats its own next-rank price curve.",
+      "notes": [
+        "Each stat uses its own current rank; buying Health does not raise the Attack price.",
+        "Health also heals 25 current HP, capped by the new maximum; it is not a full heal.",
+        "Critical wishes stop at rank28. Other wish counters have no explicit finite rank cap in upgrade().",
+        "A +3 Attack wish changes base attack; final attack also depends on level, equipped items, forging and buffs.",
+        "These wishes do not replace the deterministic gear bench or weapon forge.",
+        "No player-level gate or material cost is checked in the shared upgrade rule."
+      ],
+      "sourcePaths": [
+        "src/content.ts",
+        "src/model.ts",
+        "src/item-views.ts",
+        "src/house-activities.ts"
+      ],
+      "steps": [
+        {
+          "id": "health",
+          "label": "Health",
+          "assetKey": "potion",
+          "effectPerRank": 25,
+          "unit": "maximum HP",
+          "basePrice": 12,
+          "priceFormula": "ceil(12 * 1.38^currentRank)",
+          "firstFourEnergyCosts": [
+            12,
+            17,
+            23,
+            32
+          ],
+          "maximumRank": null
+        },
+        {
+          "id": "attack",
+          "label": "Attack",
+          "assetKey": "sword_wood",
+          "effectPerRank": 3,
+          "unit": "base attack",
+          "basePrice": 15,
+          "priceFormula": "ceil(15 * 1.38^currentRank)",
+          "firstFourEnergyCosts": [
+            15,
+            21,
+            29,
+            40
+          ],
+          "maximumRank": null
+        },
+        {
+          "id": "defense",
+          "label": "Defense",
+          "assetKey": "hat_straw",
+          "effectPerRank": 4,
+          "unit": "defence points",
+          "basePrice": 14,
+          "priceFormula": "ceil(14 * 1.38^currentRank)",
+          "firstFourEnergyCosts": [
+            14,
+            20,
+            27,
+            37
+          ],
+          "maximumRank": null
+        },
+        {
+          "id": "crit",
+          "label": "Critical chance",
+          "assetKey": "clover",
+          "effectPerRank": 0.025,
+          "unit": "chance fraction; 0.025 is +2.5 percentage points",
+          "basePrice": 18,
+          "priceFormula": "ceil(18 * 1.38^currentRank)",
+          "firstFourEnergyCosts": [
+            18,
+            25,
+            35,
+            48
+          ],
+          "maximumRank": 28
+        }
+      ]
+    },
+    {
+      "id": "fishing-tools",
+      "title": "Acquire a fishing tool",
+      "question": "Are stronger rods upgrades of the first rod or separate acquisitions",
+      "summary": "Three separate shop recipes. A more forgiving rod is acquired directly; an older rod is not an ingredient.",
+      "layout": "parallel-acquisitions",
+      "nodes": [
+        {
+          "id": "mirror-supplies",
+          "label": "Magic Mirror supplies",
+          "caption": "Choose a rod recipe",
+          "subtitle": "Choose a rod recipe",
+          "details": "Choose a rod recipe",
+          "sourcePaths": [
+            "src/content.ts",
+            "src/model.ts",
+            "src/level-gates.ts",
+            "src/story-gifts.ts",
+            "src/context-gear.ts",
+            "src/fishing.ts",
+            "src/weapon-forge.ts",
+            "src/upgrades.ts"
+          ],
+          "column": 0,
+          "row": 0
+        },
+        {
+          "id": "story-five-kills",
+          "label": "Collect story step 5",
+          "caption": "Defeat five creatures while that milestone is active",
+          "subtitle": "Defeat five creatures while that milestone is active",
+          "details": "Defeat five creatures while that milestone is active",
+          "sourcePaths": [
+            "src/content.ts",
+            "src/model.ts",
+            "src/level-gates.ts",
+            "src/story-gifts.ts",
+            "src/context-gear.ts",
+            "src/fishing.ts",
+            "src/weapon-forge.ts",
+            "src/upgrades.ts"
+          ],
+          "column": 0,
+          "row": 2
+        },
+        {
+          "id": "rod",
+          "label": "Fishing rod",
+          "assetKey": "rod",
+          "caption": "Quality 0.3; strain snap 60%",
+          "state": {
+            "quality": 0.3,
+            "steady": false,
+            "breakChancePerStrain": 0.6,
+            "playerLevelGate": 0
+          },
+          "subtitle": "Quality 0.3; strain snap 60%",
+          "assetId": "rod",
+          "details": "{\"quality\":0.3,\"steady\":false,\"breakChancePerStrain\":0.6,\"playerLevelGate\":0}",
+          "sourcePaths": [
+            "src/content.ts",
+            "src/model.ts",
+            "src/level-gates.ts",
+            "src/story-gifts.ts",
+            "src/context-gear.ts",
+            "src/fishing.ts",
+            "src/weapon-forge.ts",
+            "src/upgrades.ts"
+          ],
+          "column": 1,
+          "row": 0
+        },
+        {
+          "id": "rod_gold",
+          "label": "Golden fishing rod",
+          "assetKey": "rod_gold",
+          "caption": "Quality 0.7; strain snap 30%",
+          "state": {
+            "quality": 0.7,
+            "steady": false,
+            "breakChancePerStrain": 0.3,
+            "playerLevelGate": 0
+          },
+          "subtitle": "Quality 0.7; strain snap 30%",
+          "assetId": "rod_gold",
+          "details": "{\"quality\":0.7,\"steady\":false,\"breakChancePerStrain\":0.3,\"playerLevelGate\":0}",
+          "sourcePaths": [
+            "src/content.ts",
+            "src/model.ts",
+            "src/level-gates.ts",
+            "src/story-gifts.ts",
+            "src/context-gear.ts",
+            "src/fishing.ts",
+            "src/weapon-forge.ts",
+            "src/upgrades.ts"
+          ],
+          "column": 1,
+          "row": 1
+        },
+        {
+          "id": "rod_steady",
+          "label": "Steady fishing rod",
+          "assetKey": "rod_steady",
+          "caption": "Quality 0.9; strain snap 10%",
+          "state": {
+            "quality": 0.9,
+            "steady": true,
+            "breakChancePerStrain": 0.1,
+            "playerLevelGate": 0
+          },
+          "subtitle": "Quality 0.9; strain snap 10%",
+          "assetId": "rod_steady",
+          "details": "{\"quality\":0.9,\"steady\":true,\"breakChancePerStrain\":0.1,\"playerLevelGate\":0}",
+          "sourcePaths": [
+            "src/content.ts",
+            "src/model.ts",
+            "src/level-gates.ts",
+            "src/story-gifts.ts",
+            "src/context-gear.ts",
+            "src/fishing.ts",
+            "src/weapon-forge.ts",
+            "src/upgrades.ts"
+          ],
+          "column": 1,
+          "row": 2
+        }
+      ],
+      "edges": [
+        {
+          "from": "mirror-supplies",
+          "to": "rod",
+          "label": "20 energy",
+          "kind": "acquire",
+          "cost": {
+            "energy": 20,
+            "materials": {}
+          },
+          "conditions": [
+            "Have sufficient output bag room",
+            "Have the recipe energy and materials"
+          ],
+          "playerLevelGate": 0,
+          "consumes": [],
+          "consumesPreviousItem": false,
+          "semanticKind": "purchase with materials"
+        },
+        {
+          "from": "mirror-supplies",
+          "to": "rod_gold",
+          "label": "150 energy plus materials",
+          "kind": "acquire",
+          "cost": {
+            "energy": 150,
+            "materials": {
+              "bone": 3,
+              "sap": 2
+            }
+          },
+          "conditions": [
+            "Have sufficient output bag room",
+            "Have the recipe energy and materials"
+          ],
+          "playerLevelGate": 0,
+          "consumes": [],
+          "consumesPreviousItem": false,
+          "semanticKind": "purchase with materials"
+        },
+        {
+          "from": "mirror-supplies",
+          "to": "rod_steady",
+          "label": "900 energy plus materials",
+          "kind": "acquire",
+          "cost": {
+            "energy": 900,
+            "materials": {
+              "coral": 4,
+              "pearl": 2
+            }
+          },
+          "conditions": [
+            "Have sufficient output bag room",
+            "Have the recipe energy and materials"
+          ],
+          "playerLevelGate": 0,
+          "consumes": [],
+          "consumesPreviousItem": false,
+          "semanticKind": "purchase with materials"
+        },
+        {
+          "from": "story-five-kills",
+          "to": "rod",
+          "label": "1 rod and 5 worm bait",
+          "kind": "acquire",
+          "conditions": [
+            "Complete active Defeat five creatures milestone",
+            "Use Collect"
+          ],
+          "cost": {
+            "energy": 0,
+            "materials": {}
+          },
+          "reward": {
+            "rod": 1,
+            "worm": 5
+          },
+          "semanticKind": "story reward"
+        }
+      ],
+      "stepTable": [
+        {
+          "id": "rod",
+          "label": "Fishing rod",
+          "assetKey": "rod",
+          "state": {
+            "quality": 0.3,
+            "steady": false,
+            "breakChancePerStrain": 0.6,
+            "playerLevelGate": 0
+          },
+          "acquisition": {
+            "kind": "purchase",
+            "station": "Magic Mirror Equipment and supplies",
+            "energy": 20,
+            "materials": {},
+            "consumesPreviousRod": false
+          }
+        },
+        {
+          "id": "rod_gold",
+          "label": "Golden fishing rod",
+          "assetKey": "rod_gold",
+          "state": {
+            "quality": 0.7,
+            "steady": false,
+            "breakChancePerStrain": 0.3,
+            "playerLevelGate": 0
+          },
+          "acquisition": {
+            "kind": "purchase",
+            "station": "Magic Mirror Equipment and supplies",
+            "energy": 150,
+            "materials": {
+              "bone": 3,
+              "sap": 2
+            },
+            "consumesPreviousRod": false
+          }
+        },
+        {
+          "id": "rod_steady",
+          "label": "Steady fishing rod",
+          "assetKey": "rod_steady",
+          "state": {
+            "quality": 0.9,
+            "steady": true,
+            "breakChancePerStrain": 0.1,
+            "playerLevelGate": 0
+          },
+          "acquisition": {
+            "kind": "purchase",
+            "station": "Magic Mirror Equipment and supplies",
+            "energy": 900,
+            "materials": {
+              "coral": 4,
+              "pearl": 2
+            },
+            "consumesPreviousRod": false
+          }
+        }
+      ],
+      "caveats": [
+        "All three rods currently have gearLevel gate0. This is a rule fact, not a promise that advanced materials are available in the opening.",
+        "Golden needs bone3 and sap2; Steady needs coral4 and pearl2. Material acquisition and player knowledge can delay them.",
+        "There are no rod-to-rod upgrade edges, no mandatory prior rod, and no wooden-rod ingredient.",
+        "Rods cannot be forged and do not receive +10 gear-bench levels.",
+        "A rod is automatically held near suitable water when calm; quality influences catch handling, not combat attack.",
+        "Strain snap chance is per tension strain, not the overall chance of losing a cast. Steady adds a 0.4s bite window and reduces tension/heaviness.",
+        "Shop recipes are purchases with resource costs, not a required workbench or Ancient furnace crafting route."
+      ],
+      "sources": [
+        {
+          "path": "src/content.ts",
+          "symbol": "ITEMS RECIPES rod rod_gold rod_steady",
+          "evidence": "Code",
+          "executed": false
+        },
+        {
+          "path": "src/model.ts",
+          "symbol": "buy craft canCraft",
+          "evidence": "Code",
+          "executed": false
+        },
+        {
+          "path": "src/level-gates.ts",
+          "symbol": "gearLevel",
+          "evidence": "Code",
+          "executed": false
+        },
+        {
+          "path": "src/story-gifts.ts",
+          "symbol": "STORY_GIFTS[4]",
+          "evidence": "Code",
+          "executed": false
+        },
+        {
+          "path": "src/context-gear.ts",
+          "symbol": "ContextGearSelection",
+          "evidence": "Code",
+          "executed": false
+        },
+        {
+          "path": "src/fishing.ts",
+          "symbol": "lineBreakChance STEADY",
+          "evidence": "Code",
+          "executed": false
+        },
+        {
+          "path": "src/weapon-forge.ts",
+          "symbol": "canForge",
+          "evidence": "Code",
+          "executed": false
+        },
+        {
+          "path": "src/upgrades.ts",
+          "symbol": "upgradableGear",
+          "evidence": "Code",
+          "executed": false
+        }
+      ],
+      "subtitle": "Are stronger rods upgrades of the first rod or separate acquisitions",
+      "description": "Three separate shop recipes. A more forgiving rod is acquired directly; an older rod is not an ingredient.",
+      "notes": [
+        "All three rods currently have gearLevel gate0. This is a rule fact, not a promise that advanced materials are available in the opening.",
+        "Golden needs bone3 and sap2; Steady needs coral4 and pearl2. Material acquisition and player knowledge can delay them.",
+        "There are no rod-to-rod upgrade edges, no mandatory prior rod, and no wooden-rod ingredient.",
+        "Rods cannot be forged and do not receive +10 gear-bench levels.",
+        "A rod is automatically held near suitable water when calm; quality influences catch handling, not combat attack.",
+        "Strain snap chance is per tension strain, not the overall chance of losing a cast. Steady adds a 0.4s bite window and reduces tension/heaviness.",
+        "Shop recipes are purchases with resource costs, not a required workbench or Ancient furnace crafting route."
+      ],
+      "sourcePaths": [
+        "src/content.ts",
+        "src/model.ts",
+        "src/level-gates.ts",
+        "src/story-gifts.ts",
+        "src/context-gear.ts",
+        "src/fishing.ts",
+        "src/weapon-forge.ts",
+        "src/upgrades.ts"
+      ],
+      "steps": [
+        {
+          "id": "rod",
+          "label": "Fishing rod",
+          "assetKey": "rod",
+          "state": {
+            "quality": 0.3,
+            "steady": false,
+            "breakChancePerStrain": 0.6,
+            "playerLevelGate": 0
+          },
+          "acquisition": {
+            "kind": "purchase",
+            "station": "Magic Mirror Equipment and supplies",
+            "energy": 20,
+            "materials": {},
+            "consumesPreviousRod": false
+          }
+        },
+        {
+          "id": "rod_gold",
+          "label": "Golden fishing rod",
+          "assetKey": "rod_gold",
+          "state": {
+            "quality": 0.7,
+            "steady": false,
+            "breakChancePerStrain": 0.3,
+            "playerLevelGate": 0
+          },
+          "acquisition": {
+            "kind": "purchase",
+            "station": "Magic Mirror Equipment and supplies",
+            "energy": 150,
+            "materials": {
+              "bone": 3,
+              "sap": 2
+            },
+            "consumesPreviousRod": false
+          }
+        },
+        {
+          "id": "rod_steady",
+          "label": "Steady fishing rod",
+          "assetKey": "rod_steady",
+          "state": {
+            "quality": 0.9,
+            "steady": true,
+            "breakChancePerStrain": 0.1,
+            "playerLevelGate": 0
+          },
+          "acquisition": {
+            "kind": "purchase",
+            "station": "Magic Mirror Equipment and supplies",
+            "energy": 900,
+            "materials": {
+              "coral": 4,
+              "pearl": 2
+            },
+            "consumesPreviousRod": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "owned-gear-strengthening",
+      "title": "Strengthen the item already owned",
+      "question": "How does forging a sword differ from levelling a hat",
+      "summary": "The sword remains a Wood sword. Its random forge level is separate from a hat’s deterministic bench level.",
+      "layout": "two-independent-lanes",
+      "lanes": [
+        {
+          "id": "weapon-forge",
+          "label": "Wood sword forge",
+          "nodeIds": [
+            "wood-acquire",
+            "wood-0",
+            "wood-5",
+            "wood-15"
+          ]
+        },
+        {
+          "id": "gear-bench",
+          "label": "Straw hat bench",
+          "nodeIds": [
+            "hat-acquire",
+            "hat-0",
+            "hat-5",
+            "hat-10"
+          ]
+        }
+      ],
+      "nodes": [
+        {
+          "id": "wood-acquire",
+          "label": "Acquire Wood sword",
+          "assetKey": "sword_wood",
+          "caption": "25 energy at Magic Mirror; +6 item attack",
+          "subtitle": "25 energy at Magic Mirror; +6 item attack",
+          "assetId": "sword_wood",
+          "details": "25 energy at Magic Mirror; +6 item attack",
+          "sourcePaths": [
+            "src/content.ts",
+            "src/weapon-forge.ts",
+            "src/model.ts",
+            "src/weapon-growth.ts",
+            "src/upgrades.ts",
+            "src/gear-ceiling.ts",
+            "src/upgrade-bench.ts",
+            "src/story-gifts.ts",
+            "server/action-service.mjs"
+          ],
+          "column": 0,
+          "row": 0,
+          "lane": "weapon-forge"
+        },
+        {
+          "id": "wood-0",
+          "label": "Wood sword +0",
+          "assetKey": "sword_wood",
+          "caption": "Base sword reach 2.3m",
+          "subtitle": "Base sword reach 2.3m",
+          "assetId": "sword_wood",
+          "details": "Base sword reach 2.3m",
+          "sourcePaths": [
+            "src/content.ts",
+            "src/weapon-forge.ts",
+            "src/model.ts",
+            "src/weapon-growth.ts",
+            "src/upgrades.ts",
+            "src/gear-ceiling.ts",
+            "src/upgrade-bench.ts",
+            "src/story-gifts.ts",
+            "server/action-service.mjs"
+          ],
+          "column": 1,
+          "row": 0,
+          "lane": "weapon-forge"
+        },
+        {
+          "id": "wood-5",
+          "label": "Wood sword +5",
+          "assetKey": "sword_wood",
+          "caption": "Same item; forge multiplier 1.05",
+          "subtitle": "Same item; forge multiplier 1.05",
+          "assetId": "sword_wood",
+          "details": "Same item; forge multiplier 1.05",
+          "sourcePaths": [
+            "src/content.ts",
+            "src/weapon-forge.ts",
+            "src/model.ts",
+            "src/weapon-growth.ts",
+            "src/upgrades.ts",
+            "src/gear-ceiling.ts",
+            "src/upgrade-bench.ts",
+            "src/story-gifts.ts",
+            "server/action-service.mjs"
+          ],
+          "column": 2,
+          "row": 0,
+          "lane": "weapon-forge"
+        },
+        {
+          "id": "wood-15",
+          "label": "Wood sword +15",
+          "assetKey": "sword_wood",
+          "caption": "Same item; multiplier 1.15; cap",
+          "subtitle": "Same item; multiplier 1.15; cap",
+          "assetId": "sword_wood",
+          "details": "Same item; multiplier 1.15; cap",
+          "sourcePaths": [
+            "src/content.ts",
+            "src/weapon-forge.ts",
+            "src/model.ts",
+            "src/weapon-growth.ts",
+            "src/upgrades.ts",
+            "src/gear-ceiling.ts",
+            "src/upgrade-bench.ts",
+            "src/story-gifts.ts",
+            "server/action-service.mjs"
+          ],
+          "column": 3,
+          "row": 0,
+          "lane": "weapon-forge"
+        },
+        {
+          "id": "hat-acquire",
+          "label": "Acquire Straw hat",
+          "assetKey": "hat_straw",
+          "caption": "20 energy or story-step-3 gift",
+          "subtitle": "20 energy or story-step-3 gift",
+          "assetId": "hat_straw",
+          "details": "20 energy or story-step-3 gift",
+          "sourcePaths": [
+            "src/content.ts",
+            "src/weapon-forge.ts",
+            "src/model.ts",
+            "src/weapon-growth.ts",
+            "src/upgrades.ts",
+            "src/gear-ceiling.ts",
+            "src/upgrade-bench.ts",
+            "src/story-gifts.ts",
+            "server/action-service.mjs"
+          ],
+          "column": 0,
+          "row": 1,
+          "lane": "gear-bench"
+        },
+        {
+          "id": "hat-0",
+          "label": "Straw hat +0",
+          "assetKey": "hat_straw",
+          "caption": "10 HP and 3 defence",
+          "subtitle": "10 HP and 3 defence",
+          "assetId": "hat_straw",
+          "details": "10 HP and 3 defence",
+          "sourcePaths": [
+            "src/content.ts",
+            "src/weapon-forge.ts",
+            "src/model.ts",
+            "src/weapon-growth.ts",
+            "src/upgrades.ts",
+            "src/gear-ceiling.ts",
+            "src/upgrade-bench.ts",
+            "src/story-gifts.ts",
+            "server/action-service.mjs"
+          ],
+          "column": 1,
+          "row": 1,
+          "lane": "gear-bench"
+        },
+        {
+          "id": "hat-5",
+          "label": "Straw hat +5",
+          "assetKey": "hat_straw",
+          "caption": "Halfway to the shared hat stat ceiling",
+          "subtitle": "Halfway to the shared hat stat ceiling",
+          "assetId": "hat_straw",
+          "details": "Halfway to the shared hat stat ceiling",
+          "sourcePaths": [
+            "src/content.ts",
+            "src/weapon-forge.ts",
+            "src/model.ts",
+            "src/weapon-growth.ts",
+            "src/upgrades.ts",
+            "src/gear-ceiling.ts",
+            "src/upgrade-bench.ts",
+            "src/story-gifts.ts",
+            "server/action-service.mjs"
+          ],
+          "column": 2,
+          "row": 1,
+          "lane": "gear-bench"
+        },
+        {
+          "id": "hat-10",
+          "label": "Straw hat +10",
+          "assetKey": "hat_straw",
+          "caption": "Shared hat ceiling; cap",
+          "state": {
+            "hp": 210,
+            "def": 42,
+            "atk": 31,
+            "regen": 7,
+            "crit": 0.15,
+            "speed": 0.22
+          },
+          "subtitle": "Shared hat ceiling; cap",
+          "assetId": "hat_straw",
+          "details": "{\"hp\":210,\"def\":42,\"atk\":31,\"regen\":7,\"crit\":0.15,\"speed\":0.22}",
+          "sourcePaths": [
+            "src/content.ts",
+            "src/weapon-forge.ts",
+            "src/model.ts",
+            "src/weapon-growth.ts",
+            "src/upgrades.ts",
+            "src/gear-ceiling.ts",
+            "src/upgrade-bench.ts",
+            "src/story-gifts.ts",
+            "server/action-service.mjs"
+          ],
+          "column": 3,
+          "row": 1,
+          "lane": "gear-bench"
+        }
+      ],
+      "edges": [
+        {
+          "from": "wood-acquire",
+          "to": "wood-0",
+          "label": "Buy and retain the same item",
+          "kind": "acquire",
+          "cost": {
+            "energy": 25,
+            "materials": {}
+          },
+          "playerLevelGate": 0,
+          "semanticKind": "purchase"
+        },
+        {
+          "from": "wood-0",
+          "to": "wood-5",
+          "label": "5 successful levels; 50% per attempt",
+          "kind": "upgrade",
+          "range": [
+            0,
+            5
+          ],
+          "successProbability": 0.5,
+          "firstAttempt": {
+            "fromLevel": 0,
+            "toLevel": 1,
+            "energy": 80,
+            "materials": {
+              "bone": 4,
+              "leather": 4,
+              "starshard": 1
+            },
+            "successProbability": 0.5,
+            "expectedAttemptsForThisLevel": 2,
+            "failure": {
+              "materialsConsumed": true,
+              "energyConsumed": true,
+              "levelUnchanged": true,
+              "itemConsumed": false,
+              "downgrade": false
+            }
+          },
+          "semanticKind": "probabilistic upgrade"
+        },
+        {
+          "from": "wood-5",
+          "to": "wood-15",
+          "label": "10 successful levels; 30% per attempt",
+          "kind": "upgrade",
+          "range": [
+            5,
+            15
+          ],
+          "successProbability": 0.3,
+          "firstAttempt": {
+            "fromLevel": 5,
+            "toLevel": 6,
+            "energy": 380,
+            "materials": {
+              "bone": 14,
+              "leather": 14,
+              "starshard": 2,
+              "moonstone": 1
+            },
+            "successProbability": 0.3,
+            "expectedAttemptsForThisLevel": 3.3333333333333335,
+            "failure": {
+              "materialsConsumed": true,
+              "energyConsumed": true,
+              "levelUnchanged": true,
+              "itemConsumed": false,
+              "downgrade": false
+            }
+          },
+          "semanticKind": "probabilistic upgrade"
+        },
+        {
+          "from": "hat-acquire",
+          "to": "hat-0",
+          "label": "Purchase or collect story gift",
+          "kind": "acquire",
+          "purchase": {
+            "energy": 20,
+            "materials": {}
+          },
+          "storyGift": {
+            "step": 3,
+            "item": "hat_straw",
+            "count": 1
+          },
+          "semanticKind": "acquisition"
+        },
+        {
+          "from": "hat-0",
+          "to": "hat-5",
+          "label": "5 paid levels; guaranteed",
+          "kind": "upgrade",
+          "range": [
+            0,
+            5
+          ],
+          "successProbability": 1,
+          "firstLevel": {
+            "fromLevel": 0,
+            "toLevel": 1,
+            "energy": 85,
+            "materials": {
+              "leather": 2,
+              "bone": 1
+            },
+            "successProbability": 1,
+            "resultStats": {
+              "hp": 30,
+              "def": 6.9,
+              "atk": 3.1,
+              "regen": 0.7,
+              "crit": 0.015,
+              "speed": 0.022
+            }
+          },
+          "semanticKind": "deterministic upgrade"
+        },
+        {
+          "from": "hat-5",
+          "to": "hat-10",
+          "label": "5 more paid levels; guaranteed",
+          "kind": "upgrade",
+          "range": [
+            5,
+            10
+          ],
+          "successProbability": 1,
+          "firstLevel": {
+            "fromLevel": 5,
+            "toLevel": 6,
+            "energy": 740,
+            "materials": {
+              "leather": 7,
+              "bone": 3,
+              "starshard": 1
+            },
+            "successProbability": 1,
+            "resultStats": {
+              "hp": 130,
+              "def": 26.4,
+              "atk": 18.6,
+              "regen": 4.2,
+              "crit": 0.09,
+              "speed": 0.132
+            }
+          },
+          "semanticKind": "deterministic upgrade"
+        }
+      ],
+      "stepTables": {
+        "woodSwordForge": [
+          {
+            "fromLevel": 0,
+            "toLevel": 1,
+            "energy": 80,
+            "materials": {
+              "bone": 4,
+              "leather": 4,
+              "starshard": 1
+            },
+            "successProbability": 0.5,
+            "expectedAttemptsForThisLevel": 2,
+            "failure": {
+              "materialsConsumed": true,
+              "energyConsumed": true,
+              "levelUnchanged": true,
+              "itemConsumed": false,
+              "downgrade": false
+            }
+          },
+          {
+            "fromLevel": 1,
+            "toLevel": 2,
+            "energy": 140,
+            "materials": {
+              "bone": 6,
+              "leather": 6,
+              "starshard": 1
+            },
+            "successProbability": 0.5,
+            "expectedAttemptsForThisLevel": 2,
+            "failure": {
+              "materialsConsumed": true,
+              "energyConsumed": true,
+              "levelUnchanged": true,
+              "itemConsumed": false,
+              "downgrade": false
+            }
+          },
+          {
+            "fromLevel": 2,
+            "toLevel": 3,
+            "energy": 200,
+            "materials": {
+              "bone": 8,
+              "leather": 8,
+              "starshard": 1
+            },
+            "successProbability": 0.5,
+            "expectedAttemptsForThisLevel": 2,
+            "failure": {
+              "materialsConsumed": true,
+              "energyConsumed": true,
+              "levelUnchanged": true,
+              "itemConsumed": false,
+              "downgrade": false
+            }
+          },
+          {
+            "fromLevel": 3,
+            "toLevel": 4,
+            "energy": 260,
+            "materials": {
+              "bone": 10,
+              "leather": 10,
+              "starshard": 2
+            },
+            "successProbability": 0.5,
+            "expectedAttemptsForThisLevel": 2,
+            "failure": {
+              "materialsConsumed": true,
+              "energyConsumed": true,
+              "levelUnchanged": true,
+              "itemConsumed": false,
+              "downgrade": false
+            }
+          },
+          {
+            "fromLevel": 4,
+            "toLevel": 5,
+            "energy": 320,
+            "materials": {
+              "bone": 12,
+              "leather": 12,
+              "starshard": 2
+            },
+            "successProbability": 0.5,
+            "expectedAttemptsForThisLevel": 2,
+            "failure": {
+              "materialsConsumed": true,
+              "energyConsumed": true,
+              "levelUnchanged": true,
+              "itemConsumed": false,
+              "downgrade": false
+            }
+          },
+          {
+            "fromLevel": 5,
+            "toLevel": 6,
+            "energy": 380,
+            "materials": {
+              "bone": 14,
+              "leather": 14,
+              "starshard": 2,
+              "moonstone": 1
+            },
+            "successProbability": 0.3,
+            "expectedAttemptsForThisLevel": 3.3333333333333335,
+            "failure": {
+              "materialsConsumed": true,
+              "energyConsumed": true,
+              "levelUnchanged": true,
+              "itemConsumed": false,
+              "downgrade": false
+            }
+          },
+          {
+            "fromLevel": 6,
+            "toLevel": 7,
+            "energy": 440,
+            "materials": {
+              "bone": 16,
+              "leather": 16,
+              "starshard": 3,
+              "moonstone": 1
+            },
+            "successProbability": 0.3,
+            "expectedAttemptsForThisLevel": 3.3333333333333335,
+            "failure": {
+              "materialsConsumed": true,
+              "energyConsumed": true,
+              "levelUnchanged": true,
+              "itemConsumed": false,
+              "downgrade": false
+            }
+          },
+          {
+            "fromLevel": 7,
+            "toLevel": 8,
+            "energy": 500,
+            "materials": {
+              "bone": 18,
+              "leather": 18,
+              "starshard": 3,
+              "moonstone": 1
+            },
+            "successProbability": 0.3,
+            "expectedAttemptsForThisLevel": 3.3333333333333335,
+            "failure": {
+              "materialsConsumed": true,
+              "energyConsumed": true,
+              "levelUnchanged": true,
+              "itemConsumed": false,
+              "downgrade": false
+            }
+          },
+          {
+            "fromLevel": 8,
+            "toLevel": 9,
+            "energy": 560,
+            "materials": {
+              "bone": 20,
+              "leather": 20,
+              "starshard": 3,
+              "moonstone": 1
+            },
+            "successProbability": 0.3,
+            "expectedAttemptsForThisLevel": 3.3333333333333335,
+            "failure": {
+              "materialsConsumed": true,
+              "energyConsumed": true,
+              "levelUnchanged": true,
+              "itemConsumed": false,
+              "downgrade": false
+            }
+          },
+          {
+            "fromLevel": 9,
+            "toLevel": 10,
+            "energy": 620,
+            "materials": {
+              "bone": 22,
+              "leather": 22,
+              "starshard": 4,
+              "moonstone": 2
+            },
+            "successProbability": 0.3,
+            "expectedAttemptsForThisLevel": 3.3333333333333335,
+            "failure": {
+              "materialsConsumed": true,
+              "energyConsumed": true,
+              "levelUnchanged": true,
+              "itemConsumed": false,
+              "downgrade": false
+            }
+          },
+          {
+            "fromLevel": 10,
+            "toLevel": 11,
+            "energy": 680,
+            "materials": {
+              "bone": 24,
+              "leather": 24,
+              "starshard": 4,
+              "moonstone": 2,
+              "firecore": 2
+            },
+            "successProbability": 0.3,
+            "expectedAttemptsForThisLevel": 3.3333333333333335,
+            "failure": {
+              "materialsConsumed": true,
+              "energyConsumed": true,
+              "levelUnchanged": true,
+              "itemConsumed": false,
+              "downgrade": false
+            }
+          },
+          {
+            "fromLevel": 11,
+            "toLevel": 12,
+            "energy": 740,
+            "materials": {
+              "bone": 26,
+              "leather": 26,
+              "starshard": 4,
+              "moonstone": 2,
+              "firecore": 3
+            },
+            "successProbability": 0.3,
+            "expectedAttemptsForThisLevel": 3.3333333333333335,
+            "failure": {
+              "materialsConsumed": true,
+              "energyConsumed": true,
+              "levelUnchanged": true,
+              "itemConsumed": false,
+              "downgrade": false
+            }
+          },
+          {
+            "fromLevel": 12,
+            "toLevel": 13,
+            "energy": 800,
+            "materials": {
+              "bone": 28,
+              "leather": 28,
+              "starshard": 5,
+              "moonstone": 2,
+              "firecore": 4
+            },
+            "successProbability": 0.3,
+            "expectedAttemptsForThisLevel": 3.3333333333333335,
+            "failure": {
+              "materialsConsumed": true,
+              "energyConsumed": true,
+              "levelUnchanged": true,
+              "itemConsumed": false,
+              "downgrade": false
+            }
+          },
+          {
+            "fromLevel": 13,
+            "toLevel": 14,
+            "energy": 860,
+            "materials": {
+              "bone": 30,
+              "leather": 30,
+              "starshard": 5,
+              "moonstone": 3,
+              "firecore": 5
+            },
+            "successProbability": 0.3,
+            "expectedAttemptsForThisLevel": 3.3333333333333335,
+            "failure": {
+              "materialsConsumed": true,
+              "energyConsumed": true,
+              "levelUnchanged": true,
+              "itemConsumed": false,
+              "downgrade": false
+            }
+          },
+          {
+            "fromLevel": 14,
+            "toLevel": 15,
+            "energy": 920,
+            "materials": {
+              "bone": 32,
+              "leather": 32,
+              "starshard": 5,
+              "moonstone": 3,
+              "firecore": 6
+            },
+            "successProbability": 0.3,
+            "expectedAttemptsForThisLevel": 3.3333333333333335,
+            "failure": {
+              "materialsConsumed": true,
+              "energyConsumed": true,
+              "levelUnchanged": true,
+              "itemConsumed": false,
+              "downgrade": false
+            }
+          }
+        ],
+        "strawHatBench": [
+          {
+            "fromLevel": 0,
+            "toLevel": 1,
+            "energy": 85,
+            "materials": {
+              "leather": 2,
+              "bone": 1
+            },
+            "successProbability": 1,
+            "resultStats": {
+              "hp": 30,
+              "def": 6.9,
+              "atk": 3.1,
+              "regen": 0.7,
+              "crit": 0.015,
+              "speed": 0.022
+            }
+          },
+          {
+            "fromLevel": 1,
+            "toLevel": 2,
+            "energy": 160,
+            "materials": {
+              "leather": 3,
+              "bone": 1
+            },
+            "successProbability": 1,
+            "resultStats": {
+              "hp": 50,
+              "def": 10.8,
+              "atk": 6.2,
+              "regen": 1.4,
+              "crit": 0.03,
+              "speed": 0.044
+            }
+          },
+          {
+            "fromLevel": 2,
+            "toLevel": 3,
+            "energy": 260,
+            "materials": {
+              "leather": 4,
+              "bone": 2
+            },
+            "successProbability": 1,
+            "resultStats": {
+              "hp": 70,
+              "def": 14.7,
+              "atk": 9.3,
+              "regen": 2.1,
+              "crit": 0.045,
+              "speed": 0.066
+            }
+          },
+          {
+            "fromLevel": 3,
+            "toLevel": 4,
+            "energy": 395,
+            "materials": {
+              "leather": 5,
+              "bone": 2
+            },
+            "successProbability": 1,
+            "resultStats": {
+              "hp": 90,
+              "def": 18.6,
+              "atk": 12.4,
+              "regen": 2.8,
+              "crit": 0.06,
+              "speed": 0.088
+            }
+          },
+          {
+            "fromLevel": 4,
+            "toLevel": 5,
+            "energy": 550,
+            "materials": {
+              "leather": 6,
+              "bone": 3
+            },
+            "successProbability": 1,
+            "resultStats": {
+              "hp": 110,
+              "def": 22.5,
+              "atk": 15.5,
+              "regen": 3.5,
+              "crit": 0.075,
+              "speed": 0.11000000000000001
+            }
+          },
+          {
+            "fromLevel": 5,
+            "toLevel": 6,
+            "energy": 740,
+            "materials": {
+              "leather": 7,
+              "bone": 3,
+              "starshard": 1
+            },
+            "successProbability": 1,
+            "resultStats": {
+              "hp": 130,
+              "def": 26.4,
+              "atk": 18.6,
+              "regen": 4.2,
+              "crit": 0.09,
+              "speed": 0.132
+            }
+          },
+          {
+            "fromLevel": 6,
+            "toLevel": 7,
+            "energy": 960,
+            "materials": {
+              "leather": 8,
+              "bone": 4,
+              "starshard": 2
+            },
+            "successProbability": 1,
+            "resultStats": {
+              "hp": 150,
+              "def": 30.3,
+              "atk": 21.7,
+              "regen": 4.9,
+              "crit": 0.10500000000000001,
+              "speed": 0.154
+            }
+          },
+          {
+            "fromLevel": 7,
+            "toLevel": 8,
+            "energy": 1205,
+            "materials": {
+              "leather": 9,
+              "bone": 4,
+              "starshard": 3
+            },
+            "successProbability": 1,
+            "resultStats": {
+              "hp": 170,
+              "def": 34.2,
+              "atk": 24.8,
+              "regen": 5.6,
+              "crit": 0.12,
+              "speed": 0.176
+            }
+          },
+          {
+            "fromLevel": 8,
+            "toLevel": 9,
+            "energy": 1485,
+            "materials": {
+              "leather": 10,
+              "bone": 5,
+              "starshard": 4,
+              "moonstone": 1
+            },
+            "successProbability": 1,
+            "resultStats": {
+              "hp": 190,
+              "def": 38.1,
+              "atk": 27.9,
+              "regen": 6.3,
+              "crit": 0.13499999999999998,
+              "speed": 0.198
+            }
+          },
+          {
+            "fromLevel": 9,
+            "toLevel": 10,
+            "energy": 1790,
+            "materials": {
+              "leather": 11,
+              "bone": 5,
+              "starshard": 5,
+              "moonstone": 1
+            },
+            "successProbability": 1,
+            "resultStats": {
+              "hp": 210,
+              "def": 42,
+              "atk": 31,
+              "regen": 7,
+              "crit": 0.15,
+              "speed": 0.22
+            }
+          }
+        ]
+      },
+      "formulas": {
+        "forgeEnergy": "80 + 60*currentForgeLevel",
+        "forgeMaterials": "bone=leather=4+2n; starshard=1+floor(n/3); moonstone=1+floor((n-5)/4) when n>=5; firecore=n-8 when n>=10",
+        "forgeAttack": "Final attack includes multiplier 1 + heldWeaponForgeLevel/100; do not present it as only the Wood sword item +6 changing.",
+        "benchStat": "baseStat + (slotCeiling-baseStat)*gearLevel/10",
+        "benchEnergy": "round to nearest5 of (60+40n+10n^2)*max(0.5,1.5*itemGapShare), minimum5",
+        "benchMaterials": "leather=2+n; bone=1+floor(n/2); starshard=n-4 when n>=5; moonstone=1 when n>=8"
+      },
+      "totals": {
+        "strawHatTo10": {
+          "energy": 7630,
+          "materials": {
+            "leather": 65,
+            "bone": 30,
+            "starshard": 15,
+            "moonstone": 2
+          }
+        }
+      },
+      "caveats": [
+        "There is no Wood sword to Stone sword to Metal sword evolution recipe. Do not connect separate weapon catalog entries with upgrade arrows.",
+        "Forge failure spends the full attempt price/materials, leaves the same level, consumes no sword and never downgrades.",
+        "The shown compressed arrows cover several successful levels; each attempt has its own cost. Expand the full cost table on demand.",
+        "Weapon forging is offered from Strengthen weapons and the Upgrade bench. It is distinct from Ancient furnace recipes and does not require furnaceReady().",
+        "Bench gear levelling applies to non-keepsake hats, outfits, boots and pets, up to+10. Weapons use forging; disguises and rods are not this lane.",
+        "The Straw hat is only an example. Every hat converges to the same six-stat ceiling, but other slot ceilings and item-dependent energy costs differ. Pet attack abilities retain their own identity and +4% per bench level.",
+        "At home loose bag materials are spent first, then chest materials. The owned item must be in the bag record, including an equipped copy.",
+        "Online bench gear upgrades also require an active accepted indoor pose near the bench. Shared offline rules alone do not encode that server proximity condition.",
+        "These diagrams explain available systems, not mandatory chapter-one spending or a claim that all materials are naturally available then."
+      ],
+      "sources": [
+        {
+          "path": "src/content.ts",
+          "symbol": "ITEMS.sword_wood ITEMS.hat_straw RECIPES",
+          "evidence": "Code",
+          "executed": false
+        },
+        {
+          "path": "src/weapon-forge.ts",
+          "symbol": "forgeCost forgeChance canForge forgeWeapon",
+          "evidence": "Code",
+          "executed": false
+        },
+        {
+          "path": "src/model.ts",
+          "symbol": "attack weaponStats",
+          "evidence": "Code",
+          "executed": false
+        },
+        {
+          "path": "src/weapon-growth.ts",
+          "symbol": "growth reachBonus",
+          "evidence": "Code",
+          "executed": false
+        },
+        {
+          "path": "src/upgrades.ts",
+          "symbol": "gearCost upgradeGear levelledStat gearFactor",
+          "evidence": "Code",
+          "executed": false
+        },
+        {
+          "path": "src/gear-ceiling.ts",
+          "symbol": "SLOT_CEILING lineAtLevel gapShare",
+          "evidence": "Code",
+          "executed": false
+        },
+        {
+          "path": "src/upgrade-bench.ts",
+          "symbol": "benchGear gearRows",
+          "evidence": "Code",
+          "executed": false
+        },
+        {
+          "path": "src/story-gifts.ts",
+          "symbol": "STORY_GIFTS[2]",
+          "evidence": "Code",
+          "executed": false
+        },
+        {
+          "path": "server/action-service.mjs",
+          "symbol": "upgradeGear indoor bench validation",
+          "evidence": "Code",
+          "executed": false
+        }
+      ],
+      "subtitle": "How does forging a sword differ from levelling a hat",
+      "description": "The sword remains a Wood sword. Its random forge level is separate from a hat’s deterministic bench level.",
+      "notes": [
+        "There is no Wood sword to Stone sword to Metal sword evolution recipe. Do not connect separate weapon catalog entries with upgrade arrows.",
+        "Forge failure spends the full attempt price/materials, leaves the same level, consumes no sword and never downgrades.",
+        "The shown compressed arrows cover several successful levels; each attempt has its own cost. Expand the full cost table on demand.",
+        "Weapon forging is offered from Strengthen weapons and the Upgrade bench. It is distinct from Ancient furnace recipes and does not require furnaceReady().",
+        "Bench gear levelling applies to non-keepsake hats, outfits, boots and pets, up to+10. Weapons use forging; disguises and rods are not this lane.",
+        "The Straw hat is only an example. Every hat converges to the same six-stat ceiling, but other slot ceilings and item-dependent energy costs differ. Pet attack abilities retain their own identity and +4% per bench level.",
+        "At home loose bag materials are spent first, then chest materials. The owned item must be in the bag record, including an equipped copy.",
+        "Online bench gear upgrades also require an active accepted indoor pose near the bench. Shared offline rules alone do not encode that server proximity condition.",
+        "These diagrams explain available systems, not mandatory chapter-one spending or a claim that all materials are naturally available then."
+      ],
+      "sourcePaths": [
+        "src/content.ts",
+        "src/weapon-forge.ts",
+        "src/model.ts",
+        "src/weapon-growth.ts",
+        "src/upgrades.ts",
+        "src/gear-ceiling.ts",
+        "src/upgrade-bench.ts",
+        "src/story-gifts.ts",
+        "server/action-service.mjs"
+      ],
+      "steps": [
+        {
+          "lane": "woodSwordForge",
+          "fromLevel": 0,
+          "toLevel": 1,
+          "energy": 80,
+          "materials": {
+            "bone": 4,
+            "leather": 4,
+            "starshard": 1
+          },
+          "successProbability": 0.5,
+          "expectedAttemptsForThisLevel": 2,
+          "failure": {
+            "materialsConsumed": true,
+            "energyConsumed": true,
+            "levelUnchanged": true,
+            "itemConsumed": false,
+            "downgrade": false
+          }
+        },
+        {
+          "lane": "woodSwordForge",
+          "fromLevel": 1,
+          "toLevel": 2,
+          "energy": 140,
+          "materials": {
+            "bone": 6,
+            "leather": 6,
+            "starshard": 1
+          },
+          "successProbability": 0.5,
+          "expectedAttemptsForThisLevel": 2,
+          "failure": {
+            "materialsConsumed": true,
+            "energyConsumed": true,
+            "levelUnchanged": true,
+            "itemConsumed": false,
+            "downgrade": false
+          }
+        },
+        {
+          "lane": "woodSwordForge",
+          "fromLevel": 2,
+          "toLevel": 3,
+          "energy": 200,
+          "materials": {
+            "bone": 8,
+            "leather": 8,
+            "starshard": 1
+          },
+          "successProbability": 0.5,
+          "expectedAttemptsForThisLevel": 2,
+          "failure": {
+            "materialsConsumed": true,
+            "energyConsumed": true,
+            "levelUnchanged": true,
+            "itemConsumed": false,
+            "downgrade": false
+          }
+        },
+        {
+          "lane": "woodSwordForge",
+          "fromLevel": 3,
+          "toLevel": 4,
+          "energy": 260,
+          "materials": {
+            "bone": 10,
+            "leather": 10,
+            "starshard": 2
+          },
+          "successProbability": 0.5,
+          "expectedAttemptsForThisLevel": 2,
+          "failure": {
+            "materialsConsumed": true,
+            "energyConsumed": true,
+            "levelUnchanged": true,
+            "itemConsumed": false,
+            "downgrade": false
+          }
+        },
+        {
+          "lane": "woodSwordForge",
+          "fromLevel": 4,
+          "toLevel": 5,
+          "energy": 320,
+          "materials": {
+            "bone": 12,
+            "leather": 12,
+            "starshard": 2
+          },
+          "successProbability": 0.5,
+          "expectedAttemptsForThisLevel": 2,
+          "failure": {
+            "materialsConsumed": true,
+            "energyConsumed": true,
+            "levelUnchanged": true,
+            "itemConsumed": false,
+            "downgrade": false
+          }
+        },
+        {
+          "lane": "woodSwordForge",
+          "fromLevel": 5,
+          "toLevel": 6,
+          "energy": 380,
+          "materials": {
+            "bone": 14,
+            "leather": 14,
+            "starshard": 2,
+            "moonstone": 1
+          },
+          "successProbability": 0.3,
+          "expectedAttemptsForThisLevel": 3.3333333333333335,
+          "failure": {
+            "materialsConsumed": true,
+            "energyConsumed": true,
+            "levelUnchanged": true,
+            "itemConsumed": false,
+            "downgrade": false
+          }
+        },
+        {
+          "lane": "woodSwordForge",
+          "fromLevel": 6,
+          "toLevel": 7,
+          "energy": 440,
+          "materials": {
+            "bone": 16,
+            "leather": 16,
+            "starshard": 3,
+            "moonstone": 1
+          },
+          "successProbability": 0.3,
+          "expectedAttemptsForThisLevel": 3.3333333333333335,
+          "failure": {
+            "materialsConsumed": true,
+            "energyConsumed": true,
+            "levelUnchanged": true,
+            "itemConsumed": false,
+            "downgrade": false
+          }
+        },
+        {
+          "lane": "woodSwordForge",
+          "fromLevel": 7,
+          "toLevel": 8,
+          "energy": 500,
+          "materials": {
+            "bone": 18,
+            "leather": 18,
+            "starshard": 3,
+            "moonstone": 1
+          },
+          "successProbability": 0.3,
+          "expectedAttemptsForThisLevel": 3.3333333333333335,
+          "failure": {
+            "materialsConsumed": true,
+            "energyConsumed": true,
+            "levelUnchanged": true,
+            "itemConsumed": false,
+            "downgrade": false
+          }
+        },
+        {
+          "lane": "woodSwordForge",
+          "fromLevel": 8,
+          "toLevel": 9,
+          "energy": 560,
+          "materials": {
+            "bone": 20,
+            "leather": 20,
+            "starshard": 3,
+            "moonstone": 1
+          },
+          "successProbability": 0.3,
+          "expectedAttemptsForThisLevel": 3.3333333333333335,
+          "failure": {
+            "materialsConsumed": true,
+            "energyConsumed": true,
+            "levelUnchanged": true,
+            "itemConsumed": false,
+            "downgrade": false
+          }
+        },
+        {
+          "lane": "woodSwordForge",
+          "fromLevel": 9,
+          "toLevel": 10,
+          "energy": 620,
+          "materials": {
+            "bone": 22,
+            "leather": 22,
+            "starshard": 4,
+            "moonstone": 2
+          },
+          "successProbability": 0.3,
+          "expectedAttemptsForThisLevel": 3.3333333333333335,
+          "failure": {
+            "materialsConsumed": true,
+            "energyConsumed": true,
+            "levelUnchanged": true,
+            "itemConsumed": false,
+            "downgrade": false
+          }
+        },
+        {
+          "lane": "woodSwordForge",
+          "fromLevel": 10,
+          "toLevel": 11,
+          "energy": 680,
+          "materials": {
+            "bone": 24,
+            "leather": 24,
+            "starshard": 4,
+            "moonstone": 2,
+            "firecore": 2
+          },
+          "successProbability": 0.3,
+          "expectedAttemptsForThisLevel": 3.3333333333333335,
+          "failure": {
+            "materialsConsumed": true,
+            "energyConsumed": true,
+            "levelUnchanged": true,
+            "itemConsumed": false,
+            "downgrade": false
+          }
+        },
+        {
+          "lane": "woodSwordForge",
+          "fromLevel": 11,
+          "toLevel": 12,
+          "energy": 740,
+          "materials": {
+            "bone": 26,
+            "leather": 26,
+            "starshard": 4,
+            "moonstone": 2,
+            "firecore": 3
+          },
+          "successProbability": 0.3,
+          "expectedAttemptsForThisLevel": 3.3333333333333335,
+          "failure": {
+            "materialsConsumed": true,
+            "energyConsumed": true,
+            "levelUnchanged": true,
+            "itemConsumed": false,
+            "downgrade": false
+          }
+        },
+        {
+          "lane": "woodSwordForge",
+          "fromLevel": 12,
+          "toLevel": 13,
+          "energy": 800,
+          "materials": {
+            "bone": 28,
+            "leather": 28,
+            "starshard": 5,
+            "moonstone": 2,
+            "firecore": 4
+          },
+          "successProbability": 0.3,
+          "expectedAttemptsForThisLevel": 3.3333333333333335,
+          "failure": {
+            "materialsConsumed": true,
+            "energyConsumed": true,
+            "levelUnchanged": true,
+            "itemConsumed": false,
+            "downgrade": false
+          }
+        },
+        {
+          "lane": "woodSwordForge",
+          "fromLevel": 13,
+          "toLevel": 14,
+          "energy": 860,
+          "materials": {
+            "bone": 30,
+            "leather": 30,
+            "starshard": 5,
+            "moonstone": 3,
+            "firecore": 5
+          },
+          "successProbability": 0.3,
+          "expectedAttemptsForThisLevel": 3.3333333333333335,
+          "failure": {
+            "materialsConsumed": true,
+            "energyConsumed": true,
+            "levelUnchanged": true,
+            "itemConsumed": false,
+            "downgrade": false
+          }
+        },
+        {
+          "lane": "woodSwordForge",
+          "fromLevel": 14,
+          "toLevel": 15,
+          "energy": 920,
+          "materials": {
+            "bone": 32,
+            "leather": 32,
+            "starshard": 5,
+            "moonstone": 3,
+            "firecore": 6
+          },
+          "successProbability": 0.3,
+          "expectedAttemptsForThisLevel": 3.3333333333333335,
+          "failure": {
+            "materialsConsumed": true,
+            "energyConsumed": true,
+            "levelUnchanged": true,
+            "itemConsumed": false,
+            "downgrade": false
+          }
+        },
+        {
+          "lane": "strawHatBench",
+          "fromLevel": 0,
+          "toLevel": 1,
+          "energy": 85,
+          "materials": {
+            "leather": 2,
+            "bone": 1
+          },
+          "successProbability": 1,
+          "resultStats": {
+            "hp": 30,
+            "def": 6.9,
+            "atk": 3.1,
+            "regen": 0.7,
+            "crit": 0.015,
+            "speed": 0.022
+          }
+        },
+        {
+          "lane": "strawHatBench",
+          "fromLevel": 1,
+          "toLevel": 2,
+          "energy": 160,
+          "materials": {
+            "leather": 3,
+            "bone": 1
+          },
+          "successProbability": 1,
+          "resultStats": {
+            "hp": 50,
+            "def": 10.8,
+            "atk": 6.2,
+            "regen": 1.4,
+            "crit": 0.03,
+            "speed": 0.044
+          }
+        },
+        {
+          "lane": "strawHatBench",
+          "fromLevel": 2,
+          "toLevel": 3,
+          "energy": 260,
+          "materials": {
+            "leather": 4,
+            "bone": 2
+          },
+          "successProbability": 1,
+          "resultStats": {
+            "hp": 70,
+            "def": 14.7,
+            "atk": 9.3,
+            "regen": 2.1,
+            "crit": 0.045,
+            "speed": 0.066
+          }
+        },
+        {
+          "lane": "strawHatBench",
+          "fromLevel": 3,
+          "toLevel": 4,
+          "energy": 395,
+          "materials": {
+            "leather": 5,
+            "bone": 2
+          },
+          "successProbability": 1,
+          "resultStats": {
+            "hp": 90,
+            "def": 18.6,
+            "atk": 12.4,
+            "regen": 2.8,
+            "crit": 0.06,
+            "speed": 0.088
+          }
+        },
+        {
+          "lane": "strawHatBench",
+          "fromLevel": 4,
+          "toLevel": 5,
+          "energy": 550,
+          "materials": {
+            "leather": 6,
+            "bone": 3
+          },
+          "successProbability": 1,
+          "resultStats": {
+            "hp": 110,
+            "def": 22.5,
+            "atk": 15.5,
+            "regen": 3.5,
+            "crit": 0.075,
+            "speed": 0.11000000000000001
+          }
+        },
+        {
+          "lane": "strawHatBench",
+          "fromLevel": 5,
+          "toLevel": 6,
+          "energy": 740,
+          "materials": {
+            "leather": 7,
+            "bone": 3,
+            "starshard": 1
+          },
+          "successProbability": 1,
+          "resultStats": {
+            "hp": 130,
+            "def": 26.4,
+            "atk": 18.6,
+            "regen": 4.2,
+            "crit": 0.09,
+            "speed": 0.132
+          }
+        },
+        {
+          "lane": "strawHatBench",
+          "fromLevel": 6,
+          "toLevel": 7,
+          "energy": 960,
+          "materials": {
+            "leather": 8,
+            "bone": 4,
+            "starshard": 2
+          },
+          "successProbability": 1,
+          "resultStats": {
+            "hp": 150,
+            "def": 30.3,
+            "atk": 21.7,
+            "regen": 4.9,
+            "crit": 0.10500000000000001,
+            "speed": 0.154
+          }
+        },
+        {
+          "lane": "strawHatBench",
+          "fromLevel": 7,
+          "toLevel": 8,
+          "energy": 1205,
+          "materials": {
+            "leather": 9,
+            "bone": 4,
+            "starshard": 3
+          },
+          "successProbability": 1,
+          "resultStats": {
+            "hp": 170,
+            "def": 34.2,
+            "atk": 24.8,
+            "regen": 5.6,
+            "crit": 0.12,
+            "speed": 0.176
+          }
+        },
+        {
+          "lane": "strawHatBench",
+          "fromLevel": 8,
+          "toLevel": 9,
+          "energy": 1485,
+          "materials": {
+            "leather": 10,
+            "bone": 5,
+            "starshard": 4,
+            "moonstone": 1
+          },
+          "successProbability": 1,
+          "resultStats": {
+            "hp": 190,
+            "def": 38.1,
+            "atk": 27.9,
+            "regen": 6.3,
+            "crit": 0.13499999999999998,
+            "speed": 0.198
+          }
+        },
+        {
+          "lane": "strawHatBench",
+          "fromLevel": 9,
+          "toLevel": 10,
+          "energy": 1790,
+          "materials": {
+            "leather": 11,
+            "bone": 5,
+            "starshard": 5,
+            "moonstone": 1
+          },
+          "successProbability": 1,
+          "resultStats": {
+            "hp": 210,
+            "def": 42,
+            "atk": 31,
+            "regen": 7,
+            "crit": 0.15,
+            "speed": 0.22
+          }
+        }
+      ]
+    }
+  ],
+  "browserTooling": {
+    "chromiumPresent": true,
+    "webkitPresent": false,
+    "localRepoResolvesPlaywright": false,
+    "allowedExecution": "Browser UI automation must use cua_repl only; do not launch Playwright through CLI/Node. Availability metadata is not permission or execution evidence.",
+    "availabilitySnapshot": "Historical documentation preparation; local executable paths omitted for portability."
+  },
+  "legend": [
+    {
+      "kind": "acquire",
+      "label": "Acquire",
+      "meaning": "Obtain a separate item by purchase or a claimed reward; a previous item is not consumed unless listed."
+    },
+    {
+      "kind": "upgrade",
+      "label": "Improve the same entity",
+      "meaning": "Pay a next-level cost for the same bed/stat/item. Probability and failure cost remain visible."
+    },
+    {
+      "kind": "requires",
+      "label": "Requires",
+      "meaning": "Own or provide the listed resources before performing the action."
+    },
+    {
+      "kind": "unlock",
+      "label": "Unlock",
+      "meaning": "A prerequisite opens availability; it does not grant or strengthen an item."
+    }
+  ],
+  "staticValidationPlan": [
+    {
+      "id": "references",
+      "check": "Parse HTML and embedded data locally; every tab target, chapter anchor, asset ID and graph edge endpoint resolves exactly once; all relative resource paths exist."
+    },
+    {
+      "id": "graph-contract",
+      "check": "At most12nodes each; unique IDs; no self/dangling edges; edge labels include prices/probability as applicable; exact step tables match imported pure rules."
+    },
+    {
+      "id": "numeric-facts",
+      "check": "Bed0..5 cap and1/2/4/8/16/32speed; cost sum3720Easy/5580NormalHard. Rodrecipes20empty,150bone3sap2,900coral4pearl2. Forge15levels,50%first5and30%later; all failures spend cost with no downgrade. Hatbench10levels and imported per-step costs/stat ceilings."
+    },
+    {
+      "id": "search-filter",
+      "check": "Inspect pure filtering logic using inert example data in plain Node: case-insensitive expected matches, empty query restores all, zero results branch and combined filters. Do not execute a browser client through Node."
+    },
+    {
+      "id": "markup-access",
+      "check": "Static parser verifies buttons for actions, associated labels, valid aria-controls, alt text, dialog close control, Escape/focus-handling code and no duplicate IDs. This cannot establish actual focus behavior."
+    },
+    {
+      "id": "image-sizing",
+      "check": "Read image metadata and CSS: valid dimensions, aspect-preserving object-fit, defined max-width, responsive columns/overflow treatment. This is not visual acceptance."
+    },
+    {
+      "id": "offline-dependencies",
+      "check": "Search final HTML/CSS/JS for unexpected HTTP(S), protocol-relative URLs, remoteimports, fetch/XHR/WebSocket/EventSource and external fonts/scripts. Source links may be deliberate, but opening the book must not require them."
+    },
+    {
+      "id": "file-portability",
+      "check": "Ensure all contentdata is inline or statically embedded and resources are relative; no file-fetch/module-origin dependency for file-open. Root performs actual file-open behavior in permitted CUA if available."
+    },
+    {
+      "id": "print-contract",
+      "check": "Inspect @media print rules for navigation hiding, restored filtered content, sensible page breaks and nonclipped diagrams/tables. Actual print layout remains CUA or renderer verification."
+    }
+  ],
+  "uiAcceptanceHandoff": [
+    {
+      "id": "book-file-open",
+      "priority": "required",
+      "scenario": "Open the final index.html through file:/// with networking blocked.",
+      "accept": "First chapter, local images, diagrams, navigation, search/filter and detail controls work without a server. No fetch-based local JSON or remote module dependency.",
+      "evidence": "Record file URL, browser, build/artifact hash, console/page errors and failed requests.",
+      "execution": "Root may execute only through permitted cua_repl surface; otherwise mark Unrun."
+    },
+    {
+      "id": "book-navigation",
+      "priority": "required",
+      "scenario": "Use each first-chapter anchor/contents control, Back/Forward and keyboard Tab/Enter; refresh a deep link.",
+      "accept": "Only existing sections are reachable. Current section and focus are understandable. No blank section, invalid hash or hidden focused content.",
+      "execution": "Root may execute only through permitted cua_repl surface; otherwise mark Unrun."
+    },
+    {
+      "id": "book-search-filter",
+      "priority": "required",
+      "scenario": "Search for Wood sword, rod, Exchange, and a nonexistent token; combine/reset filters.",
+      "accept": "Matching current entities and counts are accurate; zero results explains recovery; reset restores all entries; no stale hidden details; user text is treated as text.",
+      "execution": "Root may execute only through permitted cua_repl surface; otherwise mark Unrun."
+    },
+    {
+      "id": "book-asset-detail",
+      "priority": "required",
+      "scenario": "Open/close details for crop, character, room/station, material and gear examples using mouse and keyboard/Escape.",
+      "accept": "Asset identity/source and current-vs-proposed text remain accurate; close restores focus; diagrams never imply a nonexistent sword or rod recipe.",
+      "execution": "Root may execute only through permitted cua_repl surface; otherwise mark Unrun."
+    },
+    {
+      "id": "book-images",
+      "priority": "required",
+      "scenario": "Inspect all embedded picture sizes and graph labels at 1440x900 and 360x740, plus a 768px tablet width.",
+      "accept": "No broken images or horizontal document overflow; full useful silhouettes remain visible; thumbnails preserve aspect; detail images can be enlarged; text never overlays key model details.",
+      "execution": "Root may execute only through permitted cua_repl surface; otherwise mark Unrun."
+    },
+    {
+      "id": "book-print",
+      "priority": "required",
+      "scenario": "Emulate print and inspect the generated PDF pages.",
+      "accept": "Current chapter, tables, graph semantics and source caveats remain readable; navigation/filter UI is hidden or unobtrusive; labels/rows are not clipped; references do not disappear.",
+      "execution": "Root may execute only through permitted cua_repl surface; otherwise mark Unrun."
+    },
+    {
+      "id": "book-network",
+      "priority": "required",
+      "scenario": "Capture requests from file-open and an optional localhost static preview.",
+      "accept": "No unexpected HTTP(S), analytics, fonts/CDNs, model fetches, or game account/socket requests. Local resources use relative paths and work after moving the whole book folder.",
+      "execution": "Root may execute only through permitted cua_repl surface; otherwise mark Unrun."
+    },
+    {
+      "id": "book-regression-scope",
+      "priority": "required",
+      "scenario": "Compare repository status and output manifest before/after generation.",
+      "accept": "Only authorized documentation/artifact files change; the game rules and player saves remain unchanged. Do not claim npm game tests validate the HTML book.",
+      "execution": "Root may execute only through permitted cua_repl surface; otherwise mark Unrun."
+    },
+    {
+      "id": "book-human-reading",
+      "priority": "recommended",
+      "scenario": "Ask a reader to find where selling occurs, explain one upgrade’s price, and distinguish a rod purchase from forging.",
+      "accept": "Report actual time/wrong turns and assistance. No broad usability claim from source inspection or a single scripted browser pass.",
+      "execution": "Root may execute only through permitted cua_repl surface; otherwise mark Unrun."
+    }
+  ]
+}

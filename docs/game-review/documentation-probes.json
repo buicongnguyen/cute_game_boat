@@ -1,0 +1,18 @@
+{
+  "kind": "In-memory documentation probes, not browser or player validation",
+  "welcomeCards": 6,
+  "firstCropMs": 20000,
+  "firstHarvestEnergy": 10000,
+  "firstFriend": "pepper",
+  "storyCredit": 1,
+  "defaultKeepsBag": true,
+  "explicitDropModeCreatesBag": true,
+  "normalCookingReplacement": {
+    "title": "Harvest ten crops",
+    "event": "harvest",
+    "target": 10,
+    "chapter": 1,
+    "icon": "🌾"
+  },
+  "harpoonIsNotRod": true
+}

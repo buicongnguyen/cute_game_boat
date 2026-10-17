@@ -1,0 +1,22 @@
+{
+  "kind": "Static concise-brief verification",
+  "generatedAt": "2026-10-17T08:08:22.906Z",
+  "output": "docs/game-review/design-book.html",
+  "outputBytes": 6411,
+  "sha256": "869a99b9bf7e1fcee756dc253538e36ff0eaea7344296e0705fda5cfc40342f3",
+  "source": "../DESIGN-BRIEF.md",
+  "sourceSha256": "5a927a65ca853b50fc9d187d3d84fe46d88674aa9734c24acc09737f18713476",
+  "wordCount": 335,
+  "sections": 5,
+  "checkpointGroups": 7,
+  "checks": [
+    "Source stays below 500 words",
+    "Five numbered sections and seven checkpoint groups",
+    "Markdown structure parsed and escaped",
+    "Section IDs unique",
+    "No scripts or external runtime assets"
+  ],
+  "limits": [
+    "Browser and print layout unrun"
+  ]
+}

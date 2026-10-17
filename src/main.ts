@@ -1,3 +1,5 @@
+import { mountPlaceNotices } from './place-notices.ts';
+import './place-notices.css';
 import { bankCatchSpot } from './bank-catch.ts';
 import { waterEdge } from './pond-shape.ts';
 import { loadOpeningArt } from './opening-art.ts';
@@ -89,7 +91,7 @@ import {clearSegment,WORLD_BOUNDS} from './navigation.ts';
 import { journalBadges, journalTabsHtml, groupTarget, badgeCount, type JournalGroup } from './journal-badges.ts';
 import { progressEntries, claimProgress, recordEvent, dailyRerollsUsed, rerollDaily, startChallenge, storyStep, challengeTitle, asHelper, type ProgressKind } from './progression.ts';
 import { STORY_STEPS } from './content.ts';
-import { refuelForHome, questPlace, wildRoute, wildDanger, shopTabMatches, rodShopTab, energyKicker, chooseOwnPathHint, surpriseOk, COLOSSUS_BANNER_LEVEL, priceButtonState, formatEnergy } from './guide.ts';
+import { guideFinished, refuelForHome, questPlace, wildRoute, wildDanger, shopTabMatches, rodShopTab, energyKicker, chooseOwnPathHint, surpriseOk, COLOSSUS_BANNER_LEVEL, priceButtonState, formatEnergy } from './guide.ts';
 import { mountGardenGuide, mountSpaceHome, watchTabScroll, type GuideGoal } from './guide-ui.ts';
 import { isTouch, GARDEN_GUIDE } from './guide.ts';
 import type { GameBridge, GameAction, NetworkHooks, NetworkDrop } from './game-bridge.ts';
@@ -302,7 +304,7 @@ const app = $('#app');
 app.innerHTML = `
   <div id="darkness" hidden></div><div id="world-labels" aria-label="Nearby places"></div>
   <div id="hud" hidden>
-    <header class="player-card"><div class="player-name"><strong id="player-name"></strong></div><div class="hero-face"><button class="avatar" data-action="bag" aria-label="Open character and backpack"><span>${hudIcon('sprout')}</span><img class="hero-pic" alt="" hidden draggable="false"></button><span class="level-badge" role="group" aria-label="Level"><b id="level-text">1</b></span></div><div class="player-details"><div class="hero-energy" role="group" aria-label="Energy"><span>${hudIcon('bolt')}</span><b id="energy">0</b></div><div class="meter health"><div id="hp-fill"></div><span id="hp-text">100 / 100</span></div><div class="meter experience"><div id="xp-fill"></div><span id="xp-text">EXP 0 / 32</span></div><div class="location"><span class="location-dot"></span><span id="zone-name">Clover Village</span></div></div></header>
+    <header class="player-card"><div class="player-name"><strong id="player-name"></strong><div class="hero-energy" role="group" aria-label="Energy"><span>${hudIcon('bolt')}</span><b id="energy">0</b></div></div><div class="hero-face"><button class="avatar" data-action="bag" aria-label="Open character and backpack"><span>${hudIcon('sprout')}</span><img class="hero-pic" alt="" hidden draggable="false"></button><span class="level-badge" role="group" aria-label="Level"><b id="level-text">1</b></span></div><div class="player-details"><div class="meter health"><div id="hp-fill"></div><span id="hp-text">100 / 100</span></div><div class="meter experience"><div id="xp-fill"></div><span id="xp-text">EXP 0 / 32</span></div><div class="location"><span class="location-dot"></span><span id="zone-name">Clover Village</span></div></div></header>
     <nav class="top-actions" aria-label="Game menu"><button class="icon-button" data-action="bag" title="Backpack · I" aria-label="Backpack">${hudIcon('bag')}</button><button class="icon-button" data-action="quests" title="Journal · J" aria-label="Quest journal">${hudIcon('journal')}<i id="quest-dot"></i></button><button class="icon-button inbox-button" data-action="news" title="News" aria-label="News">${hudIcon('news')}<i class="inbox-count" hidden></i></button><button class="icon-button more-button" data-action="more" title="More" aria-label="More" aria-haspopup="true" aria-expanded="false">${hudIcon('more')}<i class="more-count" hidden></i></button><div id="more-menu" role="menu" hidden></div><div id="more-stash" hidden><button class="icon-button" data-action="ranking" title="Ranking" aria-label="Ranking">${hudIcon('ranking')}<i id="news-count" class="news-count" hidden></i></button><div id="social-slot"></div><button class="icon-button" data-action="help" title="How to play" aria-label="How to play">${hudIcon('help')}</button><div id="platform-slot"></div><button class="icon-button" data-action="settings" title="Settings" aria-label="Settings">${hudIcon('settings')}</button></div></nav>
     <div class="tracker-stack"><button id="tracker-chip" class="tracker-chip" data-action="trackers" aria-label="Show quest and bounty" hidden><span id="chip-quest">🥕 0/3</span><span id="chip-chal"></span><span id="chip-bounty">🎯</span><i>▸</i></button><div class="tracker-panels"><aside class="quest-tracker"><button class="tracker-fold" data-action="trackers" aria-label="Fold quest and bounty">▾ Fold</button><div class="eyebrow">ADVENTURE <span id="quest-chapter">1 / 9</span></div><button id="quest-summary" data-action="quests"><span class="quest-icon" id="quest-icon">🥕</span><span><strong id="quest-title">A little green beginning</strong><small id="quest-task">Harvest 3 crops · 0 / 3</small></span><b class="tracker-count" id="quest-count"></b><span class="chevron">›</span></button><div class="quest-progress"><i id="quest-fill"></i></div><button id="quick-claim" data-action="claim" hidden>Collect your reward ✨</button></aside>
     <button id="challenge-tracker" class="challenge-tracker" data-action="journal-tab" data-kind="challenges" hidden><span class="ch-ring" aria-hidden="true"><span class="ch-icon">⏱️</span></span><div><strong>Quick challenge</strong><small></small></div><b class="tracker-count"></b></button>
@@ -489,6 +491,8 @@ const vibrate=(ms:number)=>{try{if(audioOf(state.settings).vibrate&&matchMedia('
 function save() { if(!started)return;if(persistence){persistence(state);return;}if(!saveGuard.canWrite(activeKey()))return;try { state.savedAt=Date.now();localStorage.setItem(activeKey(),JSON.stringify(contextGear.persisted(state)));saveGuard.wrote(activeKey(),state.savedAt);saveFailed=false;$('#save-status').textContent=t('● Saved on this device'); } catch { saveFailed=true;$('#save-status').textContent=t('○ Saving unavailable'); } }
 // Keep at most three messages on screen (two on phones, where they also leave sooner); older ones fade out instead of stacking up the view.
 const phoneScreen=matchMedia('(max-width: 600px), (max-height: 520px)');
+const placeNotices=mountPlaceNotices(app,activeKey);
+frameListeners.add(()=>placeNotices.sync(started&&!document.hidden));
 function toast(message: string, icon='✨') {
   message=t(message);
   const stack=$('#toasts'),el=document.createElement('div');el.className='toast';el.innerHTML=`<span>${icon}</span><div>${esc(message)}</div>`;stack.append(el);
@@ -553,6 +557,16 @@ function botActive(){return started&&!actionHandler&&!document.hidden&&!uiBlocke
 /** 'wardrobe' while the bag was opened from the bedroom wardrobe: it then lists only things to wear (house-stores.ts). */
 let bagMode:'bag'|'wardrobe'='bag';
 function openDialog(type:string,title:string,body:string,kicker='MAKE YOURSELF AT HOME',icon?:string) {
+  // Informational encounters use reminders; functional cabin menus remain available.
+  if(type==='fish-help'){
+    const reminder=t('Bring a fishing rod. Magic Mirror → Equipment → Supplies → Rods & tools (ϟ {price}).',{price:M.shopPrice(state,'rod')??20});
+    if(!placeNotices.first('fishing')){placeNotices.show('fishing',reminder,'🎣');return;}
+    title='Fishing';kicker='';icon='🎣';body=`<p>${esc(t('Keep a fishing rod in your backpack to cast your line.'))}</p><p>${esc(reminder)}</p><button class="primary" data-action="shop-rod">${esc(t('Visit the Magic Mirror'))}</button>`;
+  }
+  if(type==='cook'&&!M.kitchenOpen(state)&&!Tester.isTester(state)){placeNotices.show('kitchen-locked',t('Kitchen unlocks at level {level}.',{level:M.KITCHEN_LEVEL}),'🔒',true);return;}
+  if(type==='colossus-settings'&&(actionHandler||persistence)){placeNotices.show('well-shared','The Colossus follows the server’s clock and settings.','🪨',true);return;}
+  // The trophy wall also contains the missing-friends rescue board, even before the first trophy.
+  $('#dialog').dataset.notice=type==='fish-help'?'intro':'';
   if(fishGame)endFishing();if($('#dialog-layer').hidden)tone('open');
   // Inside the cottage the stove, workbench, globe, wardrobe and mirror are their own places, not the village shops (house-stores.ts).
   const store=indoorStore(type,!!world.interior,bagMode==='wardrobe');if(store){title=store.title;kicker=store.kicker;icon=store.icon;body=purposeHtml(store)+body;}$('#dialog').dataset.station=store?type:'';setDock(type);
@@ -585,7 +599,7 @@ function profilePicker(){
  */
 function pepperGift(){const show=()=>{if(modal||!started){setTimeout(show,700);return;}tone('quest');openDialog('welcome',t('Your first harvest!'),`<p class="intro">${esc(t('Hi boss! I am Pepper, the village cook. What a lovely first harvest!'))}</p><p>${esc(t('I won 10,000 energy in the lottery. It is yours: spend it on seeds and gear!'))}</p><div class="button-row"><button class="primary" data-action="close">${esc(t('Thank you, Pepper!'))}</button></div>`,t('YOUR COOK'),'🍳');};setTimeout(show,900);}
 /** The three welcome cards of an untouched save (welcome-cards.ts); closing them in any way saves them as seen. */
-const welcomeCards=initWelcomeCards({openDialog,closeDialog,go,modal:()=>modal||null,seen:()=>void perform('firstRunSeen',{id:'cards'},{quiet:true}),touch:isTouch,planets:()=>Object.keys(M.PLANETS).length,tone:kind=>tone(kind as Parameters<typeof tone>[0]),esc});
+const welcomeCards=initWelcomeCards({openDialog,closeDialog,go:kind=>{setGuideOff(false);go(kind);},modal:()=>modal||null,seen:()=>void perform('firstRunSeen',{id:'cards'},{quiet:true}),touch:isTouch,planets:()=>Object.keys(M.PLANETS).length,tone:kind=>tone(kind as Parameters<typeof tone>[0]),esc});
 async function start() {setTimeout(()=>void loadInsight().catch(()=>{}),5000);/* the Almanac's chunk, once play is under way: its scores join the save's snapshots and a waiting report card is offered */settle();showTrimNote();await migrateDogStays();const name=$<HTMLInputElement>('#name-input').value.trim().slice(0,20)||state.name;if(name!==state.name)await perform('settings',{name});started=true;house.resume();$('#title-screen').hidden=true;$('#hud').hidden=false;const cards=welcomeCardsDue(state);if(cards)welcomeCards.show();welcomeBack??=initWelcomeBack({state:()=>state,newSave:(pending=>()=>pending)(state.welcome==='pending'),calm:()=>started&&!modal&&!uiBlocked()&&!placement&&!visiting&&!fishGame&&state.hp>0&&!fightNear(world.enemies,world.position.x,world.position.z,16)&&!dungeonApi?.active&&!ctfApi?.active&&!rescueApi?.active,colossusAsleep:()=>colossusLid(state.level)==='asleep',openDialog,closeDialog,modal:()=>modal||null,perform:(type,payload)=>perform(type,payload),toast:(text,icon)=>toast(text,icon),tone:kind=>tone(kind as Parameters<typeof tone>[0]),esc,saveKey:activeKey});world.readyTrail(()=>void compileAsyncSafe(world.renderer,world.scene,world.camera)); // warm the village's shaders off the first walk, and the weapon trail's off the first swing
   applyMovePad();save();updateHud();updateLabels();if(saved||!cards)toast(saved?t('Welcome back, {name}. Your garden missed you!',{name:state.name}):isTouch()?'Start small: tap a garden bed to plant your first carrot.':'Start small: click a garden bed to plant your first carrot.','🌱');showZone('Clover Village');}
 
@@ -606,7 +620,7 @@ function updateHud() {
   setText($('#xp-text'),`EXP ${Math.floor(state.xp)} / ${M.xpNeeded(state.level)}`);
   {const xpTitle=t(`${Math.floor(state.xp)} / ${M.xpNeeded(state.level)} experience`),xpNode=$('.experience');if(xpNode.getAttribute('title')!==xpTitle)xpNode.setAttribute('title',xpTitle);}
   const q=progressEntries(state,'story')[0],progress=q?.progress??0;
-  setText($('#quest-chapter'),t(state.quest<M.QUESTS.length?`${state.quest+1} / ${M.QUESTS.length}`:'ONGOING'));setText($('#quest-icon'),t(q?.icon??'🚀'));setText($('#quest-title'),t(q?.title??'A world of possibilities'));setText($('#quest-task'),t(q?`${q.description} · ${progress} / ${q.target}`:'Your next chapter awaits.'));setText($('#quest-count'),t(q?`${progress}/${q.target}`:''));
+  setText($('#quest-chapter'),t(state.quest<M.QUESTS.length?`${state.quest+1} / ${M.QUESTS.length}`:'ONGOING'));setText($('#quest-icon'),t(q?.icon??'🚀'));setText($('#quest-title'),t(q?.title??'A world of possibilities'));setText($('#quest-task'),t(q?`${q.title} · ${progress} / ${q.target}`:'Your next chapter awaits.'));setText($('#quest-count'),t(q?`${progress}/${q.target}`:''));
   const walk=questTarget();$('#quest-summary').classList.toggle('can-walk',!!walk);document.body.classList.toggle('guide-low-level',state.level<COLOSSUS_BANNER_LEVEL);
   setWidth($('#quest-fill'),`${q?progress/q.target*100:100}%`);$('#quick-claim').hidden=!q?.complete;{const ready=journalBadges(state).total,dot=$('#quest-dot'),journal=$('.top-actions [data-action="quests"]'),label=ready?t('Quest journal, {n} to claim',{n:ready}):t('Quest journal');dot.hidden=!ready&&!q?.complete;dot.classList.toggle('journal-count',ready>0);setText(dot,badgeCount(ready));if(journal.getAttribute('aria-label')!==label)journal.setAttribute('aria-label',label);}
   const skills=skillList(),bindings=keyboardBindings(state.settings.keyboardLayout);
@@ -621,7 +635,8 @@ function updateHud() {
   const fight=fightNear(world.enemies,world.position.x,world.position.z);if(fight&&!wasFight&&trackerMode==='open')trackerMode='auto';wasFight=fight;
   const folded=trackerMode==='fold'||trackerMode==='auto'&&(fight||shown.boss||innerWidth<600&&(state.planet!=='home'||world.lastZone!=='Clover Village'));
   $('.tracker-stack').classList.toggle('folded',folded);$('#tracker-chip').hidden=!folded;
-  const one=oneGoal(state),bounty=one?undefined:progressEntries(state,'bounties')[0];$('#bounty-tracker').hidden=!bounty; // one goal at a time on a new save (first-run.ts oneGoal)if(bounty){$('#bounty-title').textContent=t(bounty.title);$('#bounty-task').textContent=t(`${bounty.progress}/${bounty.target} · ${bounty.claimed?'Complete':bounty.description}`);$('#bounty-count').textContent=t(bounty.claimed?'✓':`${bounty.progress}/${bounty.target}`);}
+  const one=oneGoal(state),bounty=one?undefined:progressEntries(state,'bounties')[0];$('#bounty-tracker').hidden=!bounty; // one goal at a time on a new save (first-run.ts oneGoal)
+  if(bounty){$('#bounty-title').textContent=t(bounty.title);$('#bounty-task').textContent=t(`${bounty.title} · ${bounty.progress}/${bounty.target}`);$('#bounty-count').textContent=t(bounty.claimed?'✓':`${bounty.progress}/${bounty.target}`);}
   const chal=one?null:challenges.view();renderChallenge($('#challenge-tracker'),chal);setText($('#chip-chal'),chal?chal.chip:'');keysGuide.render(state.settings.keyboardLayout,getLanguage(),airOn()?spaceKey:undefined,controls.customKeys());
   if(folded){$('#chip-quest').textContent=t(q?`${q.icon} ${progress}/${q.target}`:'🚀');$('#chip-bounty').textContent=t(bounty?`🎯 ${bounty.progress}/${bounty.target}`:'');}
   watchTasks(q,folded); // a row that moved on ticks (gain-feed-ui.ts)
@@ -1422,7 +1437,7 @@ world.onInteract=async(e)=>{
   else if(e.kind==='animal'){if(M.readyAnimals(state).some(a=>a.uid===e.animalUid))collectFarm(e.animalUid);else penDialog();}
   else if(e.kind==='home'){if(!await perform('rest'))return;toast('Home, sweet home. Your health is restored.','🏡');}
   else if(e.kind==='dropped')void deathBags.pick(e);
-  else if(e.kind==='mine'){const index=e.index;if(index===undefined||!M.mineAvailable(state,state.planet,index)){toast('This crystal needs a moment to regrow.','💎');return;}if(!await perform('claimMine',{index}))return;world.burst(e.x,e.z,'#d9c9f3');toast('A crystal for your crafting collection!','💎');}
+  else if(e.kind==='mine'){const index=e.index;if(index===undefined||!M.mineAvailable(state,state.planet,index)){placeNotices.show('mine-regrowing','This crystal needs a moment to regrow.','💎',true);return;}if(!await perform('claimMine',{index}))return;world.burst(e.x,e.z,'#d9c9f3');toast('A crystal for your crafting collection!','💎');}
   else if(e.kind==='gift'){if(e.index===undefined)return;const outcome=await perform<M.GiftOutcome>('claimGift',{index:e.index!});if(!outcome)return;e.mesh.visible=false;if(outcome.kind==='bomb'){for(const target of world.enemies)if(target.hp>0&&Math.hypot(target.x-e.x,target.z-e.z)<(outcome.radius??4.5))hit(target,Math.round(M.attack(state)*(outcome.damageMultiplier??3)));world.burst(e.x,e.z,'#ffb269',28);checkDefeat();}toast(outcome.label,'🎁');}
 };
 // Loot lands on the ground (drops.ts) and reaches the bag through the pickup magnet: a line in the pickup list by the backpack (gain-feed.ts).
@@ -1976,16 +1991,16 @@ world.onDecoyDamage=(owner,id,amount,source,enemyId)=>{
   if(owner===null)combat.hurtAlly(id,amount);
 };
 watchTabScroll($('#dialog-body'));
-const gardenGuide=mountGardenGuide({world,hud:$('#hud'),state:()=>state,bedAt:i=>M.bedPosition(state,i),active:()=>started&&!uiBlocked()&&!visiting&&state.hp>0&&world.state===state&&world.planet==='home'&&!fightNear(world.enemies,world.position.x,world.position.z),goal:()=>stationGoal()??chapterGoal,quiet:()=>!!momentTips?.shown,off:guideIsOff,setOff:()=>{setGuideOff(true);questWalk.point(null);}});frameListeners.add(dt=>gardenGuide.frame(dt)); // never during a fight near the explorer (creatures chasing a neighbour 40 m away used to hide it for good)
+const gardenGuide=mountGardenGuide({world,hud:$('#hud'),state:()=>state,bedAt:i=>M.bedPosition(state,i),active:()=>started&&!uiBlocked()&&!visiting&&state.hp>0&&world.state===state&&world.planet==='home'&&!fightNear(world.enemies,world.position.x,world.position.z),key:activeKey,restart:()=>guideRun,goal:()=>stationGoal()??chapterGoal,quiet:()=>!!momentTips?.shown,off:guideIsOff,setOff:()=>{setGuideOff(true);questWalk.point(null);}});frameListeners.add(dt=>gardenGuide.frame(dt)); // never during a fight near the explorer (creatures chasing a neighbour 40 m away used to hide it for good)
 /**
  * Chapter 1 of a new save points the way by itself (FIX-PLAN 4.6): the trail and the edge arrow go to the next step's
  * place, read five times a second; a ripe bed first while the step is the harvest; nothing while crops only grow or the
  * explorer is already there. The pointer's × turns it off for this save (kept in this browser); a tap on the quest tracker
  * turns it back on.
  */
-let chapterGoal:(GuideGoal&{radius:number})|null=null,goalClock=0,guideOff=false,guideOffKey='';
-function guideIsOff(){const key=`cute-game-boat:zoo-guide-off:${activeKey()}`;if(key!==guideOffKey){guideOffKey=key;try{guideOff=localStorage.getItem(key)==='1';}catch{guideOff=false;}}return guideOff;}
-function setGuideOff(off:boolean){guideOff=off;guideOffKey=`cute-game-boat:zoo-guide-off:${activeKey()}`;try{if(off)localStorage.setItem(guideOffKey,'1');else localStorage.removeItem(guideOffKey);}catch{/* lasts for this visit */}}
+let chapterGoal:(GuideGoal&{radius:number})|null=null,goalClock=0,guideOff=false,guideOffKey='',manualGuide=false,guideRun=0;
+function guideIsOff(){const key=`cute-game-boat:zoo-guide-off:${activeKey()}`;if(key!==guideOffKey){guideOffKey=key;manualGuide=false;try{guideOff=localStorage.getItem(key)==='1';}catch{guideOff=false;}}return guideOff||(!manualGuide&&guideFinished(state));}
+function setGuideOff(off:boolean,manual=!off){manualGuide=!off&&manual;guideOff=off;if(!off){guideRun++;try{localStorage.removeItem('cute-game-boat:zoo-guide-seconds:'+activeKey());}catch{/* session only */}}guideOffKey=`cute-game-boat:zoo-guide-off:${activeKey()}`;try{if(off)localStorage.setItem(guideOffKey,'1');else localStorage.removeItem(guideOffKey);}catch{/* lasts for this visit */}}
 const GOAL_LABEL:Record<string,string>={sell:'📦 Exchange box',shop:'🗡️ Buy or craft here',upgrade:'💎 Wishing cabinet',fish:'🎣 Fish here',cook:'🍳 Cook here',travel:'🚀 Your starship',enemy:'⚔️ Defeat creatures'};
 function findChapterGoal():(GuideGoal&{radius:number})|null{
   if(!started||!chapterOneGuide(state)||guideIsOff()||uiBlocked()||visiting||world.interior||world.planet!=='home'||world.state!==state)return null;
@@ -2328,7 +2343,7 @@ app.addEventListener('click',async event=>{
     case 'tester-buy':if(id&&testerDo(s=>Tester.testerBuy(s,id)))toast(t(M.ITEMS[id].name),M.ITEMS[id].icon);if(modal==='shop')shop();else testerShop();break;
     case 'tester-friend':if(id&&testerDo(s=>Tester.testerFriend(s,id as FriendId)))toast(t('{name} is home!',{name:t(FRIENDS[id as FriendId].name)}),'🏡');testerShop();break;
     case 'tester-planets':if(!button.dataset.sure){button.dataset.sure='1';button.textContent=t('Tap again to confirm');break;}if(testerDo(Tester.testerPlanets))toast(t('All planets unlocked'),'🪐');testerShop();break;
-    case 'cabin-guide':welcomeCards.show();break;
+    case 'cabin-guide':welcomeCards.showCabinGuide();break;
     case 'bookshelf':house.life.bookshelf();break;
     case 'bookshelf-colossus':colossusDialog();break;
     case 'well-sleep':setColossusLid('asleep');toast(t('Colossus disabled. The sky stays bright.'),'🪨');colossusDialog();break;
@@ -2367,7 +2382,7 @@ app.addEventListener('click',async event=>{
     case 'cook-dish':if(await perform('cookDish',{id})){tone('success');toast(`${t(M.ITEMS[id].name)} is ready. Enjoy!`,M.ITEMS[id].icon);cooking();}break;case 'camera-view':setCameraPitch(button.dataset.kind??'classic');saveCameraPitch();world.resize();settings();break;case 'graphics':graphics.choose(button.dataset.kind as QualitySetting);world.applyGraphics(graphics.profile,graphics.ratio);saveGraphics(graphics);await perform('settings',{settings:{lowGraphics:graphics.level==='low'}});settings();break;
     case 'zoom-in':case 'zoom-out':world.zoom=clampZoom(Math.round((world.zoom+(action==='zoom-in'?-ZOOM.button:ZOOM.button))*100)/100,'wheel');world.resize();$('#zoom-value').textContent=t(`${Math.round(world.zoom*100)}%`);break;
     case 'reset-confirm':openDialog('reset','Begin a brand-new story?',`<p class="intro">This replaces your ${persistence?'online account adventure':'offline adventure in this browser'}, including your garden, items, and levels.</p><div class="button-row"><button class="soft-button" data-action="settings">Keep my adventure</button><button class="primary danger-button" data-action="reset">Start fresh</button></div>`,'A FRESH START');break;
-    case 'reset':{const offline=!actionHandler;if(!await perform('reset'))break;if(offline)neighbours.reset();state=structuredClone(state);world.state=state;rebuildHomePresentation('home');world.refreshPlayer();resetCombat();selectedItem=null;save();closeDialog();if(welcomeCardsDue(state))welcomeCards.show();updateHud();toast('Every adventure starts with a little seed.','🌱');break;} // the new story's welcome cards at once, not on the next reload (Pepper comes with the first harvest)
+    case 'reset':{const offline=!actionHandler;if(!await perform('reset'))break;if(offline)neighbours.reset();state=structuredClone(state);world.state=state;rebuildHomePresentation('home');world.refreshPlayer();resetCombat();selectedItem=null;setGuideOff(false,false);save();closeDialog();if(welcomeCardsDue(state))welcomeCards.show();updateHud();toast('Every adventure starts with a little seed.','🌱');break;} // the new story's welcome cards at once, not on the next reload (Pepper comes with the first harvest)
   }
 });
 $('#dialog-layer').addEventListener('click',e=>{if(e.target===$('#dialog-layer'))closeDialog();});

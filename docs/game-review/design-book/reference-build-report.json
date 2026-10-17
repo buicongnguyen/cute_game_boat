@@ -1,0 +1,469 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-17T08:09:12.029Z",
+  "output": "docs/game-review/design-reference.html",
+  "outputBytes": 594261,
+  "sha256": "8504648e02fef6b7cb935daa4652da8626585ac222c7a96517e36ec15fb887e1",
+  "baselineCommit": "6c4477fdc795995fa5d7af6a58f83845591693af",
+  "counts": {
+    "chapters": 4,
+    "chapterMilestones": [
+      9,
+      6,
+      6,
+      8
+    ],
+    "milestones": 29,
+    "assets": 38,
+    "openingBeats": 29,
+    "worlds": 9,
+    "graphs": 6,
+    "graphNodes": 37,
+    "graphEdges": 27,
+    "uniqueImages": 42
+  },
+  "checks": [
+    "Browser JavaScript parses without execution",
+    "Four chapters cover all 29 ordered current milestones and 29 proposed scenes in groups 9 6 6 8",
+    "Every selected asset embeds an existing icon or rendered preview",
+    "Every graph node ID is unique and every edge resolves",
+    "Graph positions and costs are finite and valid",
+    "Catalog and verified-graph baseline commits agree",
+    "All referenced source files exist",
+    "Canonical backlog and chapter acceptance questions are extracted",
+    "Template placeholders resolve and styles scripts and images are inline"
+  ],
+  "sourceHashes": [
+    {
+      "path": "template.html",
+      "sha256": "ed9a5bee68889e001e028118d1ba5a7302bffdd8d11fc55cc13bba4636dfbc94"
+    },
+    {
+      "path": "book.css",
+      "sha256": "76b5cc2cd8b9d87eac84dafb8c028286dfae318143525cec64651f1597cfde3a"
+    },
+    {
+      "path": "book.js",
+      "sha256": "fff82c64dc51fc07173a7f9d8c48e8cdbc9c4040744b82de3419b5a44f81ae6a"
+    },
+    {
+      "path": "graph-spec.json",
+      "sha256": "78ab3eaa3f264207801081ea43679c09c23ad78b59f013208a8d0ad90c588cd9"
+    },
+    {
+      "path": "book-config.json",
+      "sha256": "282bec2706e782493fb44f781596fc2d2efc8eef7e1e096e4133c827d81c040a"
+    },
+    {
+      "path": "book-data.mjs",
+      "sha256": "a3463d7e6c34d2783755e07cfa49983f4f1094bd2cd1d5ffbc43d404a1bdf279"
+    },
+    {
+      "path": "chapters.mjs",
+      "sha256": "4231a90fbe8227a4156fd0d06c17f5c2d71b3128b0c4d175aa901af184eaa24d"
+    },
+    {
+      "path": "validate-graph-facts.mjs",
+      "sha256": "63edf5f04781b2b8f157b53f95f4d56bb8f2748f9325b03c9ad7e428cd1364f9"
+    },
+    {
+      "path": "asset-map.json",
+      "sha256": "93afd6ba07f105cefaf952f7d8942fe87b3462ff3fdc88ef498471ece31590ae"
+    },
+    {
+      "path": "BACKLOG.md",
+      "sha256": "04b4da0cd5197261c882b46b456bda5269d5756cdab11aa172e19d15e2921d26"
+    },
+    {
+      "path": "../ENGINEERING-MAP.md",
+      "sha256": "beec2aba693d5d2208f6c79907a8be8aa5ad11e1f659d6dfdb9b23f339d01771"
+    }
+  ],
+  "graphSourceHashes": [
+    {
+      "path": "src/model.ts",
+      "sha256": "7160e765dc654f4d9db45c54e307d8653da7fa1a42f5b107af8d6dbf773f91f2"
+    },
+    {
+      "path": "src/difficulty.ts",
+      "sha256": "08917a7bd84f2786bcfe4237ecacb58d9880c5addfd143c3162b9379c254e0c2"
+    },
+    {
+      "path": "tests/bed-upgrade.test.ts",
+      "sha256": "25fa3603b1c6e1409d44180d6f8cbbd33f7753e3df8de1523cc67f1df3ee0766"
+    },
+    {
+      "path": "src/content.ts",
+      "sha256": "f63005d56062a196a4d212143cd6bf3fe2331e424cc94205fbd76151d26abccb"
+    },
+    {
+      "path": "src/item-views.ts",
+      "sha256": "e1b5cc51c6f745e7fbabadab5ad0985382ed0abcb87a2fe49aa2765ad0321528"
+    },
+    {
+      "path": "src/house-activities.ts",
+      "sha256": "f0783c34401c5e5d01cd1658fa90b8bb88f92f129a7bad864fff44a853c99104"
+    },
+    {
+      "path": "src/level-gates.ts",
+      "sha256": "c060d77cf0a4e42fe43864682a14afab0aaa6006c3226964ae2dd9854711c2a7"
+    },
+    {
+      "path": "src/story-gifts.ts",
+      "sha256": "00b86062f0bd341d304d9d966135b31ae6080acc9995ffd62ddcd44c2b89f5f5"
+    },
+    {
+      "path": "src/context-gear.ts",
+      "sha256": "ddc50c4ebaa45680ca90c8f14220f00a2ab6c1378e677649f3e8386079fdeee5"
+    },
+    {
+      "path": "src/fishing.ts",
+      "sha256": "540661dbc465ce8dc25e676ce4c54c152827bffbe7d6271fcb7646b10196acfd"
+    },
+    {
+      "path": "src/weapon-forge.ts",
+      "sha256": "a7bc1593bec72602f4934b9af3910e3098108789807bd27dc2930e44943068aa"
+    },
+    {
+      "path": "src/upgrades.ts",
+      "sha256": "71bb73611585e10276c422ad7834967ffc958e34fe79416e48057201679e0c18"
+    },
+    {
+      "path": "src/weapon-growth.ts",
+      "sha256": "f5e1137f0b18268a709fd46051cf3d9d249a95173013e16a2aa310c274f8845b"
+    },
+    {
+      "path": "src/gear-ceiling.ts",
+      "sha256": "26413bf9c397b9b464a6c2a84d050678eddf1d18a18c6ed903ea2f439674a923"
+    },
+    {
+      "path": "src/upgrade-bench.ts",
+      "sha256": "7704155444d308e3be90e46417f1fe5517aae803a5282d3f1589d9bfcda12033"
+    },
+    {
+      "path": "server/action-service.mjs",
+      "sha256": "0076c554639e7093bf8c515b6e83d8b8142388bf0056094abc52d41abce9e4ac"
+    },
+    {
+      "path": "src/first-run.ts",
+      "sha256": "180e55fd7dcc193520841df31eda52c01b9d958a68f891ff29626225e64a4a2e"
+    }
+  ],
+  "chapterSourceHashes": [
+    {
+      "path": "docs/game-review/STORY.md",
+      "sha256": "1bf02e3f2118cbf87307fde279197cecb209500a92f257056143ae458b788a75"
+    },
+    {
+      "path": "src/content.ts",
+      "sha256": "f63005d56062a196a4d212143cd6bf3fe2331e424cc94205fbd76151d26abccb"
+    },
+    {
+      "path": "src/progression.ts",
+      "sha256": "14f17cb5f29176031c37d8b556344fb3fbdbacc5547f78e68da0d0f1afd84d83"
+    },
+    {
+      "path": "src/story-gifts.ts",
+      "sha256": "00b86062f0bd341d304d9d966135b31ae6080acc9995ffd62ddcd44c2b89f5f5"
+    },
+    {
+      "path": "src/friends.ts",
+      "sha256": "92d4d9e69ed2d87fd56b0ec847017fe5df055aa64cb07a5fd05da3effde5abb7"
+    },
+    {
+      "path": "src/friend-ui.ts",
+      "sha256": "1c67ee8a8994dd736d3119c77079b604d38f13f58f47c38a0c526afed844ac7c"
+    },
+    {
+      "path": "src/friends-state.ts",
+      "sha256": "219e7308908a001925c5b7b539de15ff2459306123c2e5ccd910a45b4c4b89f4"
+    },
+    {
+      "path": "src/difficulty.ts",
+      "sha256": "08917a7bd84f2786bcfe4237ecacb58d9880c5addfd143c3162b9379c254e0c2"
+    },
+    {
+      "path": "src/story-catchup.ts",
+      "sha256": "feaed4974720985e3d063ccb5467b499f717c7d0a3c7f56f0556f7da7beb4b26"
+    },
+    {
+      "path": "src/model.ts",
+      "sha256": "7160e765dc654f4d9db45c54e307d8653da7fa1a42f5b107af8d6dbf773f91f2"
+    },
+    {
+      "path": "src/space.ts",
+      "sha256": "2aa08a4310231debfe008dc60998b0a7e922e7bafb562f67988c22dbe3a36121"
+    },
+    {
+      "path": "src/world.ts",
+      "sha256": "b2fbffecc662c34c909a110ab62278ae2a21c7250b245d0b299c221110d21013"
+    },
+    {
+      "path": "src/environment-resources.ts",
+      "sha256": "1001af175ecee1d3709c7b6165d870fdf38242a4463fcf2f5ebde0d64128b68a"
+    },
+    {
+      "path": "src/special-offers.ts",
+      "sha256": "d86d9d7704fa29a7e4f8d46ee61239162e44dfff22bef27dfb28cc56954d5c1a"
+    }
+  ],
+  "visuals": [
+    {
+      "id": "carrot",
+      "file": "assets/carrot.webp",
+      "kind": "icon",
+      "sha256": "7d7b6c200c23943a0fe6c89150c6d7c28da01fd503fb46758cd1df4cec9994ef"
+    },
+    {
+      "id": "radish",
+      "file": "assets/radish.webp",
+      "kind": "icon",
+      "sha256": "745c347e07e68b5ef360e10731aff4533795c9c617e6ede0a43f4aa2aa1cc07a"
+    },
+    {
+      "id": "pumpkin",
+      "file": "assets/pumpkin.webp",
+      "kind": "icon",
+      "sha256": "7a43e85d65e14b2b652e695f4d8102b7fc68a0ef9caa6e29bd2c5a050cc7b949"
+    },
+    {
+      "id": "mint",
+      "file": "assets/mint.webp",
+      "kind": "icon",
+      "sha256": "668300a5a12f318e3e8d521b1da2b2f51d98c9817e9668f65797899dd2c770a2"
+    },
+    {
+      "id": "bean",
+      "file": "assets/bean.webp",
+      "kind": "icon",
+      "sha256": "30942504e6b7daefda32a140cdc124b0ba587cd4f7e43c76276287df200bfdfc"
+    },
+    {
+      "id": "sword_wood",
+      "file": "assets/sword_wood.webp",
+      "kind": "icon",
+      "sha256": "8dc372475689dd69a87879c24677120af51c5e8369e333d90bbe50f9d5a87bc5"
+    },
+    {
+      "id": "gun_pea",
+      "file": "assets/gun_pea.webp",
+      "kind": "icon",
+      "sha256": "8051ce33a4dffdfb1435e4bc6a62abccf720e64b917e7c496191e48eb14b3c70"
+    },
+    {
+      "id": "hat_straw",
+      "file": "assets/hat_straw.webp",
+      "kind": "icon",
+      "sha256": "8f2625dccbfcf50859cc599de5861f784c5352938ae944b21cb92a8bfe1d51a8"
+    },
+    {
+      "id": "rod",
+      "file": "assets/rod.webp",
+      "kind": "icon",
+      "sha256": "575265e86434844fdc4eded629ce6c25c6b6be5ad5d969ff6911884007792273"
+    },
+    {
+      "id": "armor_leather",
+      "file": "assets/armor_leather.webp",
+      "kind": "icon",
+      "sha256": "a1f924fc145a179bbf40efc245d5e868cf082960ce81f88f8c2c74928cf0a9bb"
+    },
+    {
+      "id": "manure",
+      "file": "assets/manure.webp",
+      "kind": "icon",
+      "sha256": "bb4a4748eb110062d478f9e3faaae7e98db8e3e79fedb769c38f77273f04c341"
+    },
+    {
+      "id": "spore",
+      "file": "assets/spore.webp",
+      "kind": "icon",
+      "sha256": "859ab620af7005bf5643437643c21e8bff2ea11df68ef7432f963180c265d995"
+    },
+    {
+      "id": "potion",
+      "file": "assets/potion.webp",
+      "kind": "icon",
+      "sha256": "f45ef3a0cf52111295100f1e29bd5514d78b78a67d2025cfa80d537d1d2d1f31"
+    },
+    {
+      "id": "worm",
+      "file": "assets/worm.webp",
+      "kind": "icon",
+      "sha256": "489ac8ba6b8d848cc8930cccce5f82120ff64aab2998a6a89fe78ef6f7e47ce8"
+    },
+    {
+      "id": "seed_star",
+      "file": "assets/seed_star.webp",
+      "kind": "icon",
+      "sha256": "7ab3c5e67eaf885148fb3fb93710280435a9c0d0949b066e67e322239f672f60"
+    },
+    {
+      "id": "plot_kit",
+      "file": "assets/plot_kit.webp",
+      "kind": "icon",
+      "sha256": "f6967db9a641f743e6103d927d608a423fbb88d1c5974945bb5194afff9c94e7"
+    },
+    {
+      "id": "leather",
+      "file": "assets/leather.webp",
+      "kind": "icon",
+      "sha256": "453125fd54f486fd28dbf9f8ff122ba9b65119d0b158c362fa3598b3991a6ea5"
+    },
+    {
+      "id": "fish_perch",
+      "file": "assets/fish_perch.webp",
+      "kind": "icon",
+      "sha256": "b158b325a31b99df5f553375b0f836ecc4862582f7bedf5c662429f47c55070b"
+    },
+    {
+      "id": "fish_clown",
+      "file": "assets/fish_clown.webp",
+      "kind": "icon",
+      "sha256": "29b6f949aa32b58531b44180aa819a5e33fbfd1985a10962072d22fdd33b988c"
+    },
+    {
+      "id": "garden-bed",
+      "file": "assets/garden-bed.png",
+      "kind": "model-preview",
+      "sha256": "1adf68d23394babc79f1cde74ff2b538d8e2a659e3ce72bf5af7259547f5c13f"
+    },
+    {
+      "id": "hatch",
+      "file": "assets/hatch.png",
+      "kind": "model-preview",
+      "sha256": "7d0fe2628c80b42f4738c794e1283a4f813ad8914decf0b5bba8cd7483fed80e"
+    },
+    {
+      "id": "exchange",
+      "file": "assets/exchange.png",
+      "kind": "model-preview",
+      "sha256": "515e48d6435fc8bb712a7a856f78e026c16d51f6a5edb5cf4b61f2ee9fd57412"
+    },
+    {
+      "id": "magic-mirror",
+      "file": "assets/magic-mirror.png",
+      "kind": "model-preview",
+      "sha256": "15cca6152bde3f1668c6becfd48d575b923e21bb61a054301b3662b3a5aef881"
+    },
+    {
+      "id": "wishing-cabinet",
+      "file": "assets/wishing-cabinet.png",
+      "kind": "model-preview",
+      "sha256": "f851c80dfec84ddb60e6eafe72d1e6fd4f5ef74dff0f54f29590807a7d72e43d"
+    },
+    {
+      "id": "workbench",
+      "file": "assets/workbench.png",
+      "kind": "model-preview",
+      "sha256": "27797b1be233b0fcfc8fbd2e8158759652e39290d2908bf7e4acc0189d59c0c8"
+    },
+    {
+      "id": "storage-chest",
+      "file": "assets/storage-chest.png",
+      "kind": "model-preview",
+      "sha256": "a90dc7e660ee9928429cc24e958378b3e4ad379c8756fabfb10ffef2618465c2"
+    },
+    {
+      "id": "pepper",
+      "file": "assets/pepper.png",
+      "kind": "model-preview",
+      "sha256": "5be32fbd30a7996b1309c73a90efce700c24cf9f1709a585621c9cf4c622d49c"
+    },
+    {
+      "id": "mushroom",
+      "file": "assets/mushroom.png",
+      "kind": "model-preview",
+      "sha256": "6fc7f5c17e85658198e18cf2353d1a68d085b25bfa998a846060cf24504287d3"
+    },
+    {
+      "id": "cooked_carrot",
+      "file": "public/assets/icons/items/cooked_carrot.webp",
+      "kind": "icon",
+      "sha256": "27d1a944a718688a7492e62edaa33373d97f099bb5593952b22689edd4d393fd"
+    },
+    {
+      "id": "pet_robot",
+      "file": "public/assets/icons/items/pet_robot.webp",
+      "kind": "icon",
+      "sha256": "38ed17d410ceb54c9d73121661bfac65414e4fbee4aaaa03e9de20ade91c40f3"
+    },
+    {
+      "id": "gear",
+      "file": "public/assets/icons/items/gear.webp",
+      "kind": "icon",
+      "sha256": "e9dd4c63649a5700a5ce7a25ff95542868bd1c61a5c12c68ee5d45e23b908c4f"
+    },
+    {
+      "id": "sugar",
+      "file": "public/assets/icons/items/sugar.webp",
+      "kind": "icon",
+      "sha256": "186839b98cd1ff2a152c9fe80013f1f7a5cbe9d99a5597cd6a420d52b2cd6ff8"
+    },
+    {
+      "id": "vine",
+      "file": "public/assets/icons/items/vine.webp",
+      "kind": "icon",
+      "sha256": "ac8e4672d01be86caa5748131bf8365479f174e8165baf16c347e94b69dadbf4"
+    },
+    {
+      "id": "icecrystal",
+      "file": "public/assets/icons/items/icecrystal.webp",
+      "kind": "icon",
+      "sha256": "344030a13bfd9894b510bb7914a720bee23bbd25ae5c8b6cf4bde08976712dca"
+    },
+    {
+      "id": "starshard",
+      "file": "public/assets/icons/items/starshard.webp",
+      "kind": "icon",
+      "sha256": "cda2215142562e1422066f6b8594e9022869ff54034b013e5ed0428658cdae3a"
+    },
+    {
+      "id": "dz_superhero",
+      "file": "public/assets/icons/items/dz_superhero.webp",
+      "kind": "icon",
+      "sha256": "7833627500caa963b3ae739430f86cc4622c5c41ae6f320664ab15b78001e382"
+    },
+    {
+      "id": "moonstone",
+      "file": "public/assets/icons/items/moonstone.webp",
+      "kind": "icon",
+      "sha256": "e7e851acfce0ad0c3965c8b9e064b9efe7b5ac70faf2b62745dc4902f6b53f6a"
+    },
+    {
+      "id": "thunderstone",
+      "file": "public/assets/icons/items/thunderstone.webp",
+      "kind": "icon",
+      "sha256": "cc753daa66b16ee0250eb4a0ed9b4cb09f6f8078cdca0a1a09458d37439f9d68"
+    },
+    {
+      "id": "keeper",
+      "file": "assets/hero.png",
+      "kind": "model-preview",
+      "sha256": "367ae09ff085296dbfdfba503cd4e589c2efda211ba4230559b780e97c2e6c50"
+    },
+    {
+      "id": "clover",
+      "file": "public/assets/icons/crops/clover.webp",
+      "kind": "icon",
+      "sha256": "907f09fc6384866b04b8f0c88bd04c73c3c8005ac6f9b4724ec7482ffda722a9"
+    },
+    {
+      "id": "rod_gold",
+      "file": "public/assets/icons/items/rod_gold.webp",
+      "kind": "icon",
+      "sha256": "3bfcef8c7da338a23144cbc2ee9bbc0d7fe36071c33c43bf5c10b60fa5ef7064"
+    },
+    {
+      "id": "rod_steady",
+      "file": "public/assets/icons/items/rod_steady.webp",
+      "kind": "icon",
+      "sha256": "d8e7fa6b004da3d233916868ff630d39e1d1878cd9f05b01850fa2c1fb4e267f"
+    }
+  ],
+  "limits": [
+    "No browser interaction layout print or physical-device acceptance was performed.",
+    "No gameplay test suite was run for this documentation build.",
+    "The proposed narrative remains unimplemented."
+  ]
+}

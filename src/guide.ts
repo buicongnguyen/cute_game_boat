@@ -31,6 +31,11 @@ export function refuelForHome(fuel: number, energy: number, launchCost: number):
 }
 
 // ---- The garden pointer ----
+/** Visible seconds before automatic pointing retires for this save. */
+export const GUIDE_SECONDS = 20;
+export function guideFinished(s: Pick<SaveState, 'plots' | 'counters' | 'firstRun'>): boolean {
+  return (s.firstRun?.plants ?? 0) > 0 || s.counters.harvests > 0 || s.plots.some(p => !!p.crop);
+}
 /** The pointer is for a beginner standing in the village: past this level, or this far from the bed, it stays away. */
 export const GARDEN_GUIDE = { maxLevel: 4, reach: 40 } as const;
 /** True until the first crop is planted or harvested: the pointer stays on the nearest empty bed. */

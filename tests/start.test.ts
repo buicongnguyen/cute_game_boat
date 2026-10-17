@@ -8,7 +8,7 @@ import * as F from '../src/friends.ts';
 import { applyGameAction } from '../src/actions.ts';
 import { freshStart, welcomeCardsDue, untouched, oneGoal, chapterOneGuide, hasSeen, markSeen, parseFirstRun, FIRST_SEEN, CALM_UNTIL_LEVEL } from '../src/first-run.ts';
 import { pickTip, type TipFacts } from '../src/moment-tips.ts';
-import { welcomeCards } from '../src/welcome-cards.ts';
+import { welcomeCards, cabinGuideCards } from '../src/welcome-cards.ts';
 import { FIRST_VI } from '../src/locales/vi-first.ts';
 import { VI_PACK } from '../src/locales/vi-pack.ts';
 import { STORY_STEPS } from '../src/content.ts';
@@ -36,8 +36,17 @@ test('welcome cards: only on an untouched new save, once, saved in the save thro
   assert.ok(markSeen(s, 'tip:fight') && FIRST_SEEN.every(id => markSeen(s, id)) && s.firstRun!.seen!.length === FIRST_SEEN.length);
 });
 
-test('the welcome guide introduces deck and cabin stations with device-specific planting instructions', () => {
+test('one compact welcome gives the first action on phones and desktop', () => {
   const phone = welcomeCards(true, 9), pc = welcomeCards(false, 9);
+  assert.equal(phone.length, 1); assert.equal(pc.length, 1);
+  assert.match(phone[0].title, /Welcome home/);
+  assert.match(phone[0].body, /^Tap a garden bed/); assert.match(pc[0].body, /^Click a garden bed/);
+  assert.ok(phone[0].body.length < 60);
+  assert.equal(phone[0].places, undefined, 'station choices wait for the requested cabin guide');
+});
+
+test('the requested cabin guide retains deck and cabin stations with their walking shortcuts', () => {
+  const phone = cabinGuideCards(true, 9), pc = cabinGuideCards(false, 9);
   assert.equal(phone.length, 6);
   assert.match(phone[0].title, /keeper of Clover Village/); assert.match(phone[1].body, /fly to \{n\} planets/); assert.equal(phone[1].params!.n, 9);
   assert.match(phone.at(-1)!.body, /^Tap a garden bed/); assert.match(pc.at(-1)!.body, /^Click a garden bed/);

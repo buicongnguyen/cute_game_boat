@@ -1,0 +1,367 @@
+{
+  "schemaVersion": 1,
+  "scope": "Four main-story chapters",
+  "chapterIndex": 0,
+  "title": "A place to begin",
+  "storyHeading": "### Proposed chapter 1 A place to begin",
+  "premiseHeading": "## Proposed story The Homeward Book",
+  "openingHeading": "## Proposed opening playable arc and sample copy",
+  "editorialNotes": [
+    "Current rules and the proposed story remain separate views.",
+    "Use the four maintained chapter sections in STORY.md as written; selectors do not introduce a competing plot.",
+    "Reward examples are arithmetic samples at the stated level, not a simulated route or a claim-time level prediction.",
+    "Recipe diagrams distinguish Magic Mirror material purchases from workbench crafting.",
+    "Station and character visuals need current model renders; old outdoor stall previews must not represent the cabin services."
+  ],
+  "assets": [
+    {
+      "id": "carrot",
+      "kind": "item",
+      "role": "Suggested first planting and early sale or snack"
+    },
+    {
+      "id": "radish",
+      "kind": "item",
+      "role": "Other level-one crop and useful timing comparison"
+    },
+    {
+      "id": "pumpkin",
+      "kind": "item",
+      "role": "Level-two crop choice"
+    },
+    {
+      "id": "mint",
+      "kind": "item",
+      "role": "Level-three crop with regeneration food effect"
+    },
+    {
+      "id": "bean",
+      "kind": "item",
+      "role": "Level-five crop opened by the chapter endpoint"
+    },
+    {
+      "id": "sword_wood",
+      "kind": "item",
+      "role": "Low-cost melee equipment choice"
+    },
+    {
+      "id": "gun_pea",
+      "kind": "item",
+      "role": "Low-cost ranged equipment choice"
+    },
+    {
+      "id": "hat_straw",
+      "kind": "item",
+      "role": "Step-three gift and a visible defensive change"
+    },
+    {
+      "id": "rod",
+      "kind": "item",
+      "role": "Step-five gift preparing the first fishing objective"
+    },
+    {
+      "id": "armor_leather",
+      "kind": "item",
+      "role": "Optional material-purchase example at the Magic Mirror"
+    },
+    {
+      "id": "manure",
+      "kind": "item",
+      "role": "Fertilizer gifted for steps one and seven"
+    },
+    {
+      "id": "spore",
+      "kind": "item",
+      "role": "Chapter-end growth supply"
+    },
+    {
+      "id": "potion",
+      "kind": "item",
+      "role": "Healing supply gifted before the first fight"
+    },
+    {
+      "id": "worm",
+      "kind": "item",
+      "role": "Bait supplied alongside the first rod"
+    },
+    {
+      "id": "seed_star",
+      "kind": "item",
+      "role": "Chapter-end seed gift whose crop has a later level gate"
+    },
+    {
+      "id": "plot_kit",
+      "kind": "item",
+      "role": "Chapter-end capacity gift for future home development"
+    },
+    {
+      "id": "leather",
+      "kind": "item",
+      "role": "Material input to the optional leather outfit recipe"
+    },
+    {
+      "id": "fish_perch",
+      "kind": "item",
+      "role": "Common home-water catch example"
+    },
+    {
+      "id": "fish_clown",
+      "kind": "item",
+      "role": "Another common home-water catch example"
+    },
+    {
+      "id": "garden-bed",
+      "kind": "station",
+      "role": "Plant harvest and improve a plot",
+      "modelCandidates": [
+        "public/assets/models/garden-bed.glb"
+      ],
+      "iconCandidates": []
+    },
+    {
+      "id": "hatch",
+      "kind": "station",
+      "role": "Route from deck to cabin",
+      "modelCandidates": [
+        "public/assets/models/boat-hatch.glb"
+      ]
+    },
+    {
+      "id": "exchange",
+      "kind": "station",
+      "activityId": "exchange",
+      "role": "Turn harvest or catch into energy",
+      "modelCandidates": [
+        "public/assets/models/house.glb"
+      ]
+    },
+    {
+      "id": "magic-mirror",
+      "kind": "station",
+      "activityId": "mirror",
+      "role": "Buy equipment and supplies or choose appearance",
+      "modelCandidates": [
+        "public/assets/models/house.glb"
+      ]
+    },
+    {
+      "id": "wishing-cabinet",
+      "kind": "station",
+      "activityId": "wishing",
+      "role": "Step-six permanent stat wish",
+      "modelCandidates": [
+        "public/assets/models/house.glb"
+      ]
+    },
+    {
+      "id": "workbench",
+      "kind": "station",
+      "activityId": "workbench",
+      "role": "Optional crafting alternative and separate weapon forging access",
+      "modelCandidates": [
+        "public/assets/models/house.glb"
+      ]
+    },
+    {
+      "id": "storage-chest",
+      "kind": "station",
+      "activityId": "storage",
+      "role": "Keep possessions and compare available storage",
+      "modelCandidates": [
+        "public/assets/models/house.glb"
+      ]
+    },
+    {
+      "id": "pepper",
+      "kind": "character",
+      "role": "First-hand-harvest welcome and proposed chapter-one anchor",
+      "modelCandidates": [
+        "public/assets/models/hero-girl.glb"
+      ]
+    },
+    {
+      "id": "mushroom",
+      "kind": "creature",
+      "role": "First-fight tutorial species with separate novice and ordinary values",
+      "modelCandidates": [
+        "public/assets/models/creatures.glb"
+      ]
+    },
+    {
+      "id": "cooked_carrot",
+      "kind": "item",
+      "role": "Selected reference for chapter 2 Room for someone else"
+    },
+    {
+      "id": "pet_robot",
+      "kind": "item",
+      "role": "Selected reference for chapter 2 Room for someone else"
+    },
+    {
+      "id": "gear",
+      "kind": "item",
+      "role": "Selected reference for chapter 3 Bring the world home"
+    },
+    {
+      "id": "sugar",
+      "kind": "item",
+      "role": "Selected reference for chapter 3 Bring the world home"
+    },
+    {
+      "id": "vine",
+      "kind": "item",
+      "role": "Selected reference for chapter 3 Bring the world home"
+    },
+    {
+      "id": "icecrystal",
+      "kind": "item",
+      "role": "Selected reference for chapter 3 Bring the world home"
+    },
+    {
+      "id": "starshard",
+      "kind": "item",
+      "role": "Selected reference for chapter 3 Bring the world home"
+    },
+    {
+      "id": "dz_superhero",
+      "kind": "item",
+      "role": "Selected reference for chapter 4 A home with an open door"
+    },
+    {
+      "id": "moonstone",
+      "kind": "item",
+      "role": "Selected reference for chapter 4 A home with an open door"
+    },
+    {
+      "id": "thunderstone",
+      "kind": "item",
+      "role": "Selected reference for chapter 4 A home with an open door"
+    }
+  ],
+  "recipes": [
+    "sword_wood",
+    "armor_leather"
+  ],
+  "diagramNotes": {
+    "milestones": "Solid sequence means explicit reward claims advance the active story. It is not a prerequisite graph for every free-play activity.",
+    "crop-unlocks": "Level gates are current crop rules. Reaching a level does not plant or harvest a crop automatically.",
+    "material-recipe": "The leather outfit is a Magic Mirror purchase that also spends materials, not an early workbench recipe.",
+    "stat-wishes": "Permanent wishes are the step-six upgrade. Gear bench levels, bed upgrades and chance-based forging are separate systems."
+  },
+  "chapters": [
+    {
+      "id": "chapter-1",
+      "title": "A place to begin",
+      "index": 0,
+      "stepRange": [
+        1,
+        9
+      ],
+      "subtitle": "Home purpose and first choices",
+      "coverAssetId": "pepper",
+      "assetIds": [
+        "carrot",
+        "radish",
+        "pumpkin",
+        "mint",
+        "bean",
+        "sword_wood",
+        "gun_pea",
+        "hat_straw",
+        "rod",
+        "armor_leather",
+        "manure",
+        "spore",
+        "potion",
+        "worm",
+        "seed_star",
+        "plot_kit",
+        "leather",
+        "fish_perch",
+        "fish_clown",
+        "garden-bed",
+        "hatch",
+        "exchange",
+        "magic-mirror",
+        "wishing-cabinet",
+        "workbench",
+        "storage-chest",
+        "pepper",
+        "mushroom"
+      ]
+    },
+    {
+      "id": "chapter-2",
+      "title": "Room for someone else",
+      "index": 1,
+      "stepRange": [
+        10,
+        15
+      ],
+      "subtitle": "Make room for company and choose when to venture farther",
+      "coverAssetId": "pepper",
+      "assetIds": [
+        "pepper",
+        "garden-bed",
+        "plot_kit",
+        "manure",
+        "potion",
+        "carrot",
+        "cooked_carrot",
+        "rod",
+        "worm",
+        "fish_perch",
+        "pet_robot",
+        "hat_straw"
+      ]
+    },
+    {
+      "id": "chapter-3",
+      "title": "Bring the world home",
+      "index": 2,
+      "stepRange": [
+        16,
+        21
+      ],
+      "subtitle": "Choose a starship route, gather something useful, and let the return change home.",
+      "coverAssetId": "workbench",
+      "assetIds": [
+        "workbench",
+        "storage-chest",
+        "magic-mirror",
+        "pepper",
+        "gear",
+        "sugar",
+        "vine",
+        "icecrystal",
+        "potion",
+        "starshard",
+        "carrot",
+        "rod"
+      ]
+    },
+    {
+      "id": "chapter-4",
+      "title": "A home with an open door",
+      "index": 3,
+      "stepRange": [
+        22,
+        29
+      ],
+      "subtitle": "Finish the shared book and choose what comes next",
+      "coverAssetId": "hat_straw",
+      "assetIds": [
+        "hat_straw",
+        "carrot",
+        "cooked_carrot",
+        "fish_perch",
+        "rod",
+        "dz_superhero",
+        "starshard",
+        "moonstone",
+        "thunderstone",
+        "seed_star"
+      ]
+    }
+  ]
+}

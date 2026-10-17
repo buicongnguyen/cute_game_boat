@@ -344,8 +344,8 @@ for (const size of Object.keys(SIZES)) for (const lang of ['en', 'vi']) {
         assert.ok(Math.abs(map.t - dockTop) <= 3 && map.t < 24, `the map stands in the top row, level with the dock's first button: ${map.t} vs ${dockTop}`);
         assert.ok(map.l >= hero.r + 8, `the map is clear of the hero plate: ${hero.r} then ${map.l}`);
         assert.ok(g.home[0].t >= map.t - .5 && g.home[0].t <= map.b + 12, 'Home follows the map (beside it, or right under it)');
-        // The hero plate (findings() already checked: every piece inside the plate, the badge on the tile's corner or before the
-        // name, the energy count over the health bar, nothing cut). Here: what the pieces say.
+        // The hero plate (findings() already checked: name and energy share a row, the badge stays on the tile's corner or
+        // before the name, every piece stays inside the plate, nothing cut). Here: what the pieces say.
         const live = await page.evaluate(() => ({ name: window.__zoo.state.name, level: window.__zoo.state.level, energy: window.__zoo.state.energy }));
         assert.equal(plate.level.text, String(live.level), 'the badge shows the level, the number alone');
         assert.equal(plate.energyText.text.replace(/\D/g, ''), String(live.energy), 'the plate shows the energy count');
@@ -385,8 +385,7 @@ for (const size of Object.keys(SIZES)) for (const lang of ['en', 'vi']) {
         assert.ok(look.radius < .3, `the map is a rounded panel (corner ${look.radius.toFixed(2)} of its width)`);
         assert.ok(look.inside, 'the place name is on a strip inside the map');
         assert.equal(look.emoji, 0, 'every dock button carries a drawing from the icon set');
-        if (width >= 601 && height >= 521) assert.ok(g.slips.every(s => s.t >= map.b && s.r <= dockLeft), 'on roomy screens the quest slips hang under the map');
-        else assert.ok(g.slips.every(s => s.r <= map.l && s.t >= g.hero[0].b - .5), 'on phones the quest chips stay under the hero plate, left of the map');
+        assert.ok(g.slips.every(s => s.r <= map.l && s.t >= hero.b - .5), 'compact tasks stay under the hero plate, left of the map');
       }
       if (process.env.HUD_SHOTS) await page.screenshot({ path: `${process.env.HUD_SHOTS}/ours-${size}-${lang}.png` });
     } finally { await browser.close(); }

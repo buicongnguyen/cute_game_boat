@@ -1,0 +1,123 @@
+{
+  "date": "2026-10-17",
+  "baselineCommit": "6c4477fdc795995fa5d7af6a58f83845591693af",
+  "method": "Read-only imports of maintained source rules plus graph/data/source-path assertions. No game suite, browser launch, save access or gameplay playtest.",
+  "result": "Pass",
+  "assertions": 294,
+  "graphSha256": "78ab3eaa3f264207801081ea43679c09c23ad78b59f013208a8d0ad90c588cd9",
+  "diagramCounts": [
+    {
+      "id": "bed-growth",
+      "nodes": 6,
+      "edges": 5
+    },
+    {
+      "id": "permanent-wishes",
+      "nodes": 5,
+      "edges": 4
+    },
+    {
+      "id": "fishing-tools",
+      "nodes": 5,
+      "edges": 4
+    },
+    {
+      "id": "owned-gear-strengthening",
+      "nodes": 8,
+      "edges": 6
+    }
+  ],
+  "sourceHashes": [
+    {
+      "path": "server/action-service.mjs",
+      "sha256": "0076c554639e7093bf8c515b6e83d8b8142388bf0056094abc52d41abce9e4ac",
+      "bytes": 29150
+    },
+    {
+      "path": "src/content.ts",
+      "sha256": "f63005d56062a196a4d212143cd6bf3fe2331e424cc94205fbd76151d26abccb",
+      "bytes": 124430
+    },
+    {
+      "path": "src/context-gear.ts",
+      "sha256": "ddc50c4ebaa45680ca90c8f14220f00a2ab6c1378e677649f3e8386079fdeee5",
+      "bytes": 4885
+    },
+    {
+      "path": "src/difficulty.ts",
+      "sha256": "08917a7bd84f2786bcfe4237ecacb58d9880c5addfd143c3162b9379c254e0c2",
+      "bytes": 6624
+    },
+    {
+      "path": "src/fishing.ts",
+      "sha256": "540661dbc465ce8dc25e676ce4c54c152827bffbe7d6271fcb7646b10196acfd",
+      "bytes": 21164
+    },
+    {
+      "path": "src/gear-ceiling.ts",
+      "sha256": "26413bf9c397b9b464a6c2a84d050678eddf1d18a18c6ed903ea2f439674a923",
+      "bytes": 5976
+    },
+    {
+      "path": "src/house-activities.ts",
+      "sha256": "f0783c34401c5e5d01cd1658fa90b8bb88f92f129a7bad864fff44a853c99104",
+      "bytes": 17959
+    },
+    {
+      "path": "src/item-views.ts",
+      "sha256": "e1b5cc51c6f745e7fbabadab5ad0985382ed0abcb87a2fe49aa2765ad0321528",
+      "bytes": 5220
+    },
+    {
+      "path": "src/level-gates.ts",
+      "sha256": "c060d77cf0a4e42fe43864682a14afab0aaa6006c3226964ae2dd9854711c2a7",
+      "bytes": 3978
+    },
+    {
+      "path": "src/model.ts",
+      "sha256": "7160e765dc654f4d9db45c54e307d8653da7fa1a42f5b107af8d6dbf773f91f2",
+      "bytes": 90604
+    },
+    {
+      "path": "src/story-gifts.ts",
+      "sha256": "00b86062f0bd341d304d9d966135b31ae6080acc9995ffd62ddcd44c2b89f5f5",
+      "bytes": 3204
+    },
+    {
+      "path": "src/upgrade-bench.ts",
+      "sha256": "7704155444d308e3be90e46417f1fe5517aae803a5282d3f1589d9bfcda12033",
+      "bytes": 11811
+    },
+    {
+      "path": "src/upgrades.ts",
+      "sha256": "71bb73611585e10276c422ad7834967ffc958e34fe79416e48057201679e0c18",
+      "bytes": 9852
+    },
+    {
+      "path": "src/weapon-forge.ts",
+      "sha256": "a7bc1593bec72602f4934b9af3910e3098108789807bd27dc2930e44943068aa",
+      "bytes": 3438
+    },
+    {
+      "path": "src/weapon-growth.ts",
+      "sha256": "f5e1137f0b18268a709fd46051cf3d9d249a95173013e16a2aa310c274f8845b",
+      "bytes": 3784
+    },
+    {
+      "path": "tests/bed-upgrade.test.ts",
+      "sha256": "25fa3603b1c6e1409d44180d6f8cbbd33f7753e3df8de1523cc67f1df3ee0766",
+      "bytes": 10762
+    }
+  ],
+  "sourceInspectionOnly": [
+    "forge failure pays full attempt without consuming weapon or downgrading",
+    "whole derived attack includes held-weapon forge multiplier",
+    "online gear upgrades require accepted indoor proximity to bench"
+  ],
+  "unrun": [
+    "full game automated suites",
+    "generated HTML structure/build checks owned by root",
+    "browser layout/navigation/search/dialog/print/file-open verification",
+    "designer comprehension and fresh-player acceptance"
+  ]
+}

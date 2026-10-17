@@ -1,5 +1,7 @@
 # Cute Game Boat
 
+For the current source-based game description, story proposal, rules, and improvement tracking, start with [the game review guide](docs/game-review/README.md). It distinguishes current behavior from proposed story changes and records which playtests remain open.
+
 Independent copy of [cute_game](https://github.com/buicongnguyen/cute_game), prepared for gradual asset replacement. The initial gameplay and in-game artwork are retained. See [the fork and asset replacement guide](docs/boat-fork.md).
 
 A browser adventure built against the gameplay of Zoo Pet, with independently authored Three.js code, original Blender assets, and local multiplayer services. The expanded build includes the reference crop, equipment, creature, progression and crafting catalogs, along with full-size worlds and their activities.

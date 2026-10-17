@@ -50,6 +50,19 @@ test('the garden pointer stays until the first crop, and picks the nearest empty
   assert.equal(G.nearestEmptyBed([{ crop: 'x' }], at, { x: 0, z: 0 }), null);
 });
 
+test('automatic guidance retires after planting and recognises older harvested or planted saves', () => {
+  const s = M.newGame('Retire');
+  assert.equal(G.guideFinished(s), false);
+  s.firstRun = { plants: 1 };
+  assert.equal(G.guideFinished(s), true);
+  s.firstRun = undefined;
+  s.counters.harvests = 1;
+  assert.equal(G.guideFinished(s), true, 'older saves need no firstRun marker');
+  s.counters.harvests = 0; s.plots[0].crop = 'carrot';
+  assert.equal(G.guideFinished(s), true, 'a crop already in the soil also counts');
+  assert.equal(G.GUIDE_SECONDS, 20);
+});
+
 test('an off-screen target becomes an arrow on the screen edge pointing at it', () => {
   const right = G.edgeArrow(2000, 400, 400, 800, 50), left = G.edgeArrow(-500, 400, 400, 800, 50), below = G.edgeArrow(200, 5000, 400, 800, 50);
   assert.equal(right.x, 350); assert.equal(left.x, 50); assert.equal(below.y, 750);

@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="An illustrated game design book for Cute Game Boat. Four chapters: story, assets, mechanics and progression.">
+<title>Cute Game Boat — Design Book</title>
+<style>/*__BOOK_CSS__*/</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to the design book</a>
+<div class="reading-line" aria-hidden="true"><i id="reading-progress"></i></div>
+<aside class="sidebar" id="sidebar">
+ <a class="brand" href="#cover"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M5 7c5-2 8-1 11 1 3-2 6-3 11-1v19c-5-2-8-1-11 1-3-2-6-3-11-1V7Z" stroke="currentColor" stroke-width="1.6"/><path d="M16 8v19M9 12l4 1M9 17l4 1M20 13l3-1M20 18l3-1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span><span>Cute Game Boat<small>DESIGN FIELD BOOK</small></span></a>
+ <div class="volume-label">DESIGN EDITION <span>·</span> MAIN STORY</div>
+ <div class="chapter-label"><span class="chapter-number">04</span><div>The Homeward Book<small>Four chapters · one home</small></div></div>
+ <nav class="book-nav" aria-label="Book contents"><a href="#engineering"><span>MAP</span> Engineering structure</a>
+  <a href="#cover" class="active"><span>00</span> The chapter at a glance</a>
+  <a href="#story"><span>01</span> The story chapters</a>
+  <a href="#structure"><span>02</span> How the game connects</a>
+  <a href="#assets"><span>03</span> Illustrated asset library</a>
+  <a href="#progression"><span>04</span> Progression & upgrades</a>
+  <a href="#review"><span>05</span> Designer’s notebook</a>
+  <a href="#sources"><span>06</span> Sources & maintenance</a>
+ </nav>
+ <div class="manuscript-nav"><span class="rail-kicker">READ THE FOUR CHAPTERS</span><a href="#story"><b>01</b> A place to begin</a><a href="#chapter-2"><b>02</b> Room for someone else</a><a href="#chapter-3"><b>03</b> Bring the world home</a><a href="#chapter-4"><b>04</b> A home with an open door</a><p>Proposed scenes alongside all 29 current milestones.</p></div>
+ <div class="sidebar-bottom"><span class="edition-dot"></span> Working design edition<small id="rail-baseline">Source-based · locally generated</small></div>
+</aside>
+<div class="book-shell">
+ <header class="topbar"><button class="icon-button menu-toggle" id="menu-toggle" aria-label="Open book contents" aria-expanded="false" aria-controls="sidebar">☰</button><div class="breadcrumb">THE HOMEWARD BOOK <span>/</span> <strong>All four chapters</strong></div><div class="top-actions"><a href="#assets" class="quiet-link">Find an asset <kbd>/</kbd></a><button id="print-book" class="small-button"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 7V2h10v5M5 14H2V7h16v7h-3M5 11h10v7H5z" stroke="currentColor" stroke-width="1.4"/></svg> Print book</button></div></header>
+ <main id="main"><section class="book-section engineering-section" id="engineering" aria-labelledby="engineering-heading"><p class="eyebrow">ENGINEERING VIEW / SYSTEMS → CHECKPOINTS → EVIDENCE</p><h2 id="engineering-heading">Game structure<br>at a glance.</h2>/*__ENGINEERING_MAP__*/</section>
+  <section class="cover" id="cover" aria-labelledby="cover-title">
+   <div class="cover-text"><p class="eyebrow"><span>DESIGN MANUSCRIPT</span> FOUR CHAPTERS</p><h1 id="cover-title">The<br>Homeward<br><em>Book.</em></h1><p class="cover-lead">A garden above, a cabin below,<br>and a reason to come home.</p><p class="cover-description">An illustrated guide from the first harvest to an open door: four proposed chapters, their current gameplay milestones, and the systems and assets that connect them.</p><div class="cover-buttons"><a class="primary-button" href="#story">Begin the story <span aria-hidden="true">↗</span></a><a class="text-button" href="#structure">Explore the structure <span aria-hidden="true">→</span></a></div><div class="cover-caption"><span class="fine-rule"></span> Four written chapters. A shared foundation for review.</div></div>
+   <figure class="cover-plate" id="cover-plate"><div class="plate-top"><span>A KEEPER’S LIFE</span><span>PLATE 01</span></div><div id="cover-composition" class="cover-composition"></div><figcaption>Existing game assets, presented as a designer’s reference.</figcaption><div class="plate-bottom"><span>GROW</span><i></i><span>PREPARE</span><i></i><span>VENTURE</span><i></i><span>RETURN</span></div></figure>
+  </section>
+  <section class="scope-strip" aria-label="Scope and evidence"><div><b>04</b><span>Main chapters written</span></div><div><b id="milestone-count">9</b><span>Current milestones</span></div><div><b id="asset-count">—</b><span>Illustrated references</span></div><div class="scope-status"><span class="status-tag current">Current mechanics</span><span class="status-tag proposal">Proposed story</span><small>Clearly separated throughout the book.</small></div></section>
+  <section class="book-section chapter-overview" id="chapter-map" aria-label="Four-chapter contents"></section>
+  <section class="book-section story-section" id="story" aria-labelledby="story-heading">
+   <div class="section-heading"><div><p class="eyebrow">CHAPTER 01 / STEPS 1–9</p><h2 id="story-heading">A place<br>to begin.</h2></div><p class="section-deck">The mechanics establish what happens. The story gives the player a reason to care.</p></div>
+   <div class="story-tabs" role="tablist" aria-label="Story view"><button class="selected" id="story-tab-proposal" role="tab" aria-selected="true" aria-controls="story-proposal" data-story-tab="proposal">The proposed chapter <span>PROPOSAL</span></button><button id="story-tab-current" role="tab" aria-selected="false" aria-controls="story-current" data-story-tab="current" tabindex="-1">What the game does now <span>CURRENT</span></button></div>
+   <div id="story-proposal" role="tabpanel" aria-labelledby="story-tab-proposal" data-story-panel="proposal"><div class="story-spread"><aside class="story-margin"><span class="page-number">01</span><p>THE HOMEWARD BOOK</p><h3>A place to begin</h3><span class="status-tag proposal">Story proposal</span><p class="margin-note">New scenes and dialogue are design material. They have not been added to the game.</p><div id="story-character"></div></aside><article class="story-prose" id="story-prose"></article></div><details class="scene-details"><summary><span>Read the playable scene outline</span><small>Action · consequence · implementation boundary</small><span class="expand-mark" aria-hidden="true">+</span></summary><div id="opening-scenes"></div></details></div>
+   <div id="story-current" role="tabpanel" aria-labelledby="story-tab-current" data-story-panel="current" hidden><div class="callout current-callout"><span class="status-tag current">Current behavior</span><p>These nine milestones are implemented. Their rewards must be claimed to advance the active step. Actions done early do not generally fill a later event goal.</p></div><ol class="milestone-list" id="milestone-list"></ol></div>
+  </section>
+  <div id="remaining-chapters"></div>
+  <section class="book-section" id="structure" aria-labelledby="structure-heading">
+   <div class="section-heading"><div><p class="eyebrow">02 / THE CONNECTED GAME</p><h2 id="structure-heading">Every system has<br>a place in the loop.</h2></div><p class="section-deck">Follow the player’s decisions from the garden to the wilds and back home. Select a stage to inspect its purpose.</p></div>
+   <div class="loop-path" id="loop-path" aria-label="Core gameplay loop"></div><div class="loop-inspector" id="loop-inspector" aria-live="polite"></div>
+   <div id="world-atlas" class="world-atlas"></div>
+   <div class="structure-note"><span class="note-index">DESIGN NOTE 01</span><p>A faster harvest changes income. Income changes equipment choices. Equipment changes combat and unlock pacing. Review the complete loop when tuning a single value.</p></div>
+  </section>
+  <section class="book-section" id="assets" aria-labelledby="assets-heading">
+   <div class="section-heading"><div><p class="eyebrow">03 / ILLUSTRATED ASSET LIBRARY</p><h2 id="assets-heading">Meet the story’s<br>building blocks.</h2></div><p class="section-deck">Pictures are existing icons or 2D previews of the actual models. Open a plate for its role, rules, source, and connections.</p></div>
+   <div class="library-toolbar"><label class="search-field"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="5.5" stroke="currentColor" stroke-width="1.5"/><path d="m12 12 5 5" stroke="currentColor" stroke-width="1.5"/></svg><input id="asset-search" type="search" aria-label="Search story assets" placeholder="Search assets, roles, or item IDs…" autocomplete="off"><kbd>/</kbd></label><label class="size-control">Picture size<input id="picture-size" type="range" min="88" max="180" value="128" step="4"><output id="picture-size-label">128 px</output></label></div>
+   <div class="library-filters" id="library-filters" role="group" aria-label="Filter assets by category"></div><p class="result-count" id="asset-results" aria-live="polite"></p><div class="asset-grid" id="asset-grid"></div><div class="empty-state" id="asset-empty" hidden>No matching assets. Try another name or category.</div>
+  </section>
+  <section class="book-section" id="progression" aria-labelledby="progression-heading">
+   <div class="section-heading"><div><p class="eyebrow">04 / PROGRESSION & UPGRADE PATHS</p><h2 id="progression-heading">See what leads<br>to what.</h2></div><p class="section-deck">An upgrade, an independent purchase, and a level requirement are different relationships. The maps make those differences visible.</p></div>
+   <div class="graph-tabs" id="graph-tabs" role="tablist" aria-label="Progression diagrams"></div>
+   <div class="graph-panel"><div class="graph-topline"><div><p class="graph-category">CURRENT RULES</p><h3 id="graph-title"></h3><p id="graph-description"></p></div><div class="graph-controls"><button class="small-button" id="graph-reset" aria-label="Reset diagram size">Reset view</button><label>Scale<input id="graph-scale" type="range" min="65" max="140" step="5" value="100"><output id="graph-scale-label">100%</output></label></div></div><div class="graph-legend" id="graph-legend"></div><div class="graph-scroll" id="graph-scroll" tabindex="0" aria-label="Scrollable progression diagram"><svg id="progression-svg" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="graph-title"></svg></div><div class="graph-bottom"><div class="graph-node-detail" id="graph-node-detail" aria-live="polite"></div><div class="graph-notes" id="graph-notes"></div></div><details class="graph-data"><summary>Open exact costs and rule notes</summary><div id="graph-data"></div></details></div><div class="print-only" id="print-graphs"></div>
+  </section>
+  <section class="book-section" id="review" aria-labelledby="review-heading">
+   <div class="section-heading"><div><p class="eyebrow">05 / DESIGNER’S NOTEBOOK</p><h2 id="review-heading">Turn observations<br>into better decisions.</h2></div><p class="section-deck">Keep the main story’s most useful questions close to the chapters and assets. Source findings and player evidence are separate.</p></div>
+   <div class="review-questions" id="review-questions"></div><div class="notes-panel"><div><p class="eyebrow">YOUR BOOK NOTES</p><h3>What should we test next?</h3><p>Working notes stay in this browser. Export a copy to keep or share them; the Markdown register remains the maintained work record.</p><button class="small-button" id="export-notes">Export my notes <span aria-hidden="true">↗</span></button></div><div><label class="sr-only" for="review-notes">Your book review notes</label><textarea id="review-notes" placeholder="An observation, a player question, or a change worth testing…"></textarea><p class="save-status" id="notes-status" role="status">Notes are optional.</p></div></div>
+  </section>
+  <section class="book-section source-section" id="sources" aria-labelledby="sources-heading"><div><p class="eyebrow">06 / SOURCES & MAINTENANCE</p><h2 id="sources-heading">A book that stays<br>connected to the game.</h2></div><div class="source-copy"><p>This HTML is generated from the story manuscript, game catalog, and curated chapter selections. Update those sources, then rebuild the book.</p><div class="source-links"><a href="STORY.md">Story manuscript ↗</a><a href="EXPERIENCE.md">Current game description ↗</a><a href="BACKLOG.md">Improvement register ↗</a><a href="COVERAGE.md">Review coverage ↗</a></div><div class="build-command"><span>REBUILD FROM THE REPOSITORY ROOT</span><code>node docs/game-review/design-book/build.mjs</code></div><p class="source-fine" id="source-meta"></p><p class="source-fine">All four proposed main-story chapters are included. Current post-story goals continue beyond step 29. Player playtests, story approval and remaining source review are tracked separately from this book’s completion.</p></div></section>
+  <footer class="book-footer"><a href="#cover" class="footer-title">Cute Game Boat <span>Design field book</span></a><span>The Homeward Book · Chapters 01–04</span><a href="#cover">Back to the beginning ↑</a></footer>
+ </main>
+</div>
+<dialog id="asset-dialog" aria-labelledby="asset-dialog-title"><div class="dialog-top"><span class="eyebrow">ASSET REFERENCE</span><button class="icon-button" id="close-asset" aria-label="Close asset detail">×</button></div><div id="asset-dialog-body"></div></dialog>
+<noscript><p class="noscript">Enable JavaScript to use this illustrated book, or open <a href="STORY.md">the story manuscript</a>.</p></noscript>
+<script id="book-data" type="application/json">/*__BOOK_DATA__*/</script>
+<script>/*__BOOK_JS__*/</script>
+</body>
+</html>
