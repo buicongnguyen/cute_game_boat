@@ -40,9 +40,9 @@ test('the army uniform pops toy corks with a puff, like the cork popgun of its k
 test("content.ts keeps no reference source strings as the disguises' internal names: they match the English labels", async () => {
   const { readFile } = await import('node:fs/promises');
   const { DISGUISES } = await import('../src/content.ts');
-  const source = await readFile(new URL('../src/content.ts', import.meta.url), 'utf8'), start = source.indexOf('const DISGUISE_FACTS'), block = source.slice(start, source.indexOf('\n};', start));
+  const source = await readFile(new URL('../src/content.ts', import.meta.url), 'utf8'), start = source.indexOf('const DISGUISE_FACTS'), block = source.slice(start, source.indexOf('const FISH_WEIGHTS_RAW', start));
   const names = [...block.matchAll(/"name": "([^"]*)"/g)].map(m => m[1]);
-  assert.equal(names.length, 17 * 5);
+  assert.equal(names.length, 21 * 5);
   for (const name of names) assert.doesNotMatch(name, /[À-ỹ]/u, name);
   for (const d of Object.values(DISGUISES)) for (const s of d.skills) assert.ok(names.includes(s.name), s.name);
 });

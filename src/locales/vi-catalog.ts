@@ -8,6 +8,7 @@ import { DAWNSTAR_ITEMS_VI } from './vi-dawnstar.ts';
 import { CTF_VI } from './vi-ctf.ts';
 import { RESCUE_VI } from './vi-rescue.ts';
 import { FLAGS_STORY_VI } from './vi-flags.ts';
+import { EVERYDAY_DISGUISES_VI } from './vi-everyday-disguises.ts';
 /** Vietnamese catalog labels. Short reference terms matched by stable item IDs;
  * original descriptions and farm additions translated for this game. IDs and game rules stay unchanged.
  * Exact English keys also cover generated cooked names and catalog stat descriptions.
@@ -839,6 +840,7 @@ Object.assign(VI_CATALOG, DAWNSTAR_ITEMS_VI);
 Object.assign(VI_CATALOG, CTF_VI);
 Object.assign(VI_CATALOG, FLAGS_STORY_VI);
 Object.assign(VI_CATALOG, RESCUE_VI);
+Object.assign(VI_CATALOG, EVERYDAY_DISGUISES_VI);
 
 Object.assign(VI_CATALOG, {'duck eggs':'trứng vịt','garden truffles':'nấm cục vườn','Bigger pen: +{chickens} chickens, +{ducks} ducks, +{cows} cows, +{pigs} pigs (ϟ {cost})':'Mở rộng chuồng: +{chickens} gà, +{ducks} vịt, +{cows} bò, +{pigs} heo (ϟ {cost})'});
 Object.assign(VI_CATALOG, {'Collect ×{count}':'Thu ×{count}','Collect from {name} {number}':'Thu sản phẩm từ {name} {number}'});

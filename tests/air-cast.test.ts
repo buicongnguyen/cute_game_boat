@@ -27,11 +27,11 @@ function arena(spots: Array<{ x: number; z: number; radius?: number; boss?: bool
 const kitOf = (effect: string) => { for (const [id, kit] of Object.entries(DISGUISE_KITS)) { const i = kit.indexOf(effect); if (i >= 0) return [id, i] as const; } throw new Error('no kit has ' + effect); };
 const all = Object.entries(DISGUISE_KITS).flatMap(([id, kit]) => kit.map((effect, index) => ({ id, index, effect })));
 
-test('every disguise skill has an air class: 17 disguises x 4, no skill without a row and no row without a skill', () => {
-  assert.equal(Object.keys(DISGUISE_KITS).length, 17); assert.equal(all.length, 68);
+test('every disguise slot has an air class, including kits that share proven effects', () => {
+  assert.equal(Object.keys(DISGUISE_KITS).length, 21); assert.equal(all.length, 84);
   assert.deepEqual(Object.keys(DISGUISE_KITS).sort(), Object.keys(DISGUISES).sort(), 'the kits are the disguises of content.ts');
   for (const { id, index, effect } of all) assert.ok(AIR_CAST[effect], `${id} skill ${index + 1} (${effect}) has no air class: add it to air-cast.ts AIR_CAST`);
-  const used = new Set(all.map(s => s.effect)); assert.equal(used.size, 68, 'no effect is in two kits');
+  const used = new Set(all.map(s => s.effect)); assert.equal(used.size, 68, 'the established effects remain available across shared kits');
   assert.deepEqual(Object.keys(AIR_CAST).filter(effect => !used.has(effect)), [], 'a row for a skill no disguise has');
   for (const [effect, rule] of Object.entries(AIR_CAST)) {
     assert.ok(['air', 'plunge', 'move'].includes(rule.cls), effect);

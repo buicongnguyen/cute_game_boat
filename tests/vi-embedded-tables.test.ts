@@ -17,6 +17,7 @@ import { BOT_LINE_PAIRS } from '../src/locales/vi-bot-lines.ts';
 import { FRIEND_MORE_VI } from '../src/locales/vi-friend-lines-more.ts';
 import { HELP_TOPICS_VI } from '../src/locales/vi-help-topics.ts';
 import { VI_MOBILE } from '../src/locales/vi-mobile.ts';
+import { EVERYDAY_DISGUISES_VI } from '../src/locales/vi-everyday-disguises.ts';
 
 const snapshot = JSON.parse(readFileSync(new URL('./fixtures/vi-snapshot.json', import.meta.url), 'utf8')) as { pack: Record<string, string>; tables: Record<string, Record<string, string>> };
 const plain = (table: Record<string, string>) => ({ ...table });
@@ -44,7 +45,14 @@ test('the whole Vietnamese pack is unchanged: same keys, same text (plus the ful
   const now = plain(VI_PACK), expected = { ...snapshot.pack, ...snapshot.tables.MOBILE_SUPPORT_VI } as Record<string, string>;
   for (const [key, value] of Object.entries(expected)) assert.equal(now[key], value, `changed or missing: ${key}`);
   const added = Object.keys(now).filter(key => !(key in expected));
-  assert.ok(added.length < 900, /* raised from 800: the context button verbs (vi-prompt.ts) on top of the controls, tips and pickup strings */ `unexpected growth of the pack: ${added.length} new strings`);
+  // Keep the existing add-on budget. The reviewed outfit module is accounted for explicitly, without allowing it
+  // to replace any original snapshot phrase or silently disappear from the lazy pack.
+  for (const [key, value] of Object.entries(EVERYDAY_DISGUISES_VI)) {
+    assert.ok(!Object.hasOwn(expected, key), `the new outfit module overrides an original phrase: ${key}`);
+    assert.equal(now[key], value, `missing or changed outfit phrase: ${key}`);
+  }
+  const existingAdditions = added.filter(key => !Object.hasOwn(EVERYDAY_DISGUISES_VI, key));
+  assert.ok(existingAdditions.length < 900, `unexpected growth outside the new outfit module: ${existingAdditions.length} strings`);
 });
 
 // Vietnamese letters: Latin-1 and Latin Extended accents plus the Latin Extended Additional block (all the tone marks).

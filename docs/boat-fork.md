@@ -73,3 +73,11 @@ Two review passes:
 - Pass 2 checked transitions, cooldowns, automatic targeting, saved-cabin resume and untargeted weapon behavior. Fixed doorway cooldown resets, outdoor auto-targeting, the one-frame outdoor resume and guns failing to fire during practice. Updated obsolete tests that expected hidden indoor controls or removed outdoor shops.
 
 Validation: full unit suite (2,169 passed), TypeScript and Pages production build. Targeted browser checks cover delayed opening art, cabin controls, all four skills, jumping, gun shots, matching-coordinate outdoor enemy protection, cooldown preservation and room transitions at 360 and 1440 pixels. Existing deck/cabin/shop/garden and asset-recovery browser checks also run before publication.
+
+## Cat ears and everyday disguises (2026-10-17)
+
+New explorers start with free, owned cat ears on the existing Girl/Tall body. Valid saved appearances and legacy no-ear defaults remain intact. Bear ears and fox ears are separate 150-energy choices in the Ears row; their ownership is independent of the similarly named hoods.
+
+The Magic Mirror adds Sporty swimmer, K-pop singer, Yoga teacher and Kindhearted nurse disguises. Each has a fitted model, its own portrait and four abilities assembled from existing combat effects. Descriptions state the actual effects, including self-healing. The swimmer uses the existing swimming controls. All older disguise prices and strength scores remain stable.
+
+Regenerate the appended models and their portraits with `node --experimental-strip-types art/build-boat-appearance.mjs`. Icon encoding requires Python with Pillow/WebP; select it with `--python PATH` or the `PYTHON` environment variable. `--models-only` and `--icons-only` support separate builds. The generator preserves the original model streams and records its append boundary so rerunning replaces its own additions. Portraits come from the real model geometry without browser automation.

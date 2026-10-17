@@ -35,7 +35,7 @@ export function disguiseChapterHtml(ui: PageUi, sort: DzSort): string {
   const sorted = [...all].sort((a, b) => score(b) - score(a) || DISGUISE_IDS.indexOf(a.id) - DISGUISE_IDS.indexOf(b.id));
   const sortButton = (key: DzSort, label: string, icon = '') => `<button class="${sort === key ? 'active' : ''}" aria-pressed="${sort === key}" data-insight="dz-sort" data-axis="${key}">${icon ? icon + ' ' : ''}${ui.esc(ui.t(label))}</button>`;
   const owned = all.filter(p => owns(ui.state, p.id)).length;
-  return `<p class="ins-lead">${ui.esc(ui.t('Seventeen disguises, seventeen ways to fight. Each picture is worked out from the real skill numbers, so you can choose with open eyes.'))}</p>`
+  return `<p class="ins-lead">${ui.esc(ui.t('Every disguise offers a different way to fight. Each picture is worked out from the real skill numbers, so you can choose with open eyes.'))}</p>`
     + `<p class="ins-note">${ui.esc(ui.t('You own {count} of {total}. A score of 100 is the best disguise at that strength.', { count: owned, total: all.length }))}</p>`
     + `<div class="ins-sort" role="group" aria-label="${ui.esc(ui.t('Sort by'))}"><span>${ui.esc(ui.t('Sort by'))}</span>${sortButton('total', 'All round')}${AXES.map(axis => sortButton(axis, AXIS_LABEL[axis], AXIS_ICON[axis])).join('')}</div>`
     + `<div class="dz-grid">${sorted.map((p, i) => { const mine = owns(ui.state, p.id), worn = ui.state.gear.disguise === p.id, item = ITEMS[p.id];

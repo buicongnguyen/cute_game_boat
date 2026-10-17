@@ -45,6 +45,11 @@ export const DISGUISE_KITS:Readonly<Record<string,readonly string[]>>={
   dz_aodai_man:['dragon','kite','ink','dragondance'],dz_usa:['eagle','starshield','torch','fireworks'],dz_vietnam:['goldstar','bamboo','drum','bigstar'],
   // Our own magical-girl kit (original: no borrowed names, phrases or attacks): slot 1 control, 2 support, 3 mobility, 4 the big one.
   dz_dawnstar:['lasso','dawnglow','sparklestep','starshower'],
+  // Everyday heroes reuse the same proven effect, air-cast, wind and profile rules in new combinations.
+  dz_swimmer:['surfride','energyshield','whistle','lighthouse'],
+  dz_kpop:['lotus','ribbon','torch','fireworks'],
+  dz_yoga:['fan','teleport','heal','ink'],
+  dz_nurse:['lotus','starshield','heal','airdrop'],
 };
 /** Disguise skill numbers: metres, seconds, damage factors (× attack). skill-info.ts builds the tooltips from this same table. */
 export const DZ={

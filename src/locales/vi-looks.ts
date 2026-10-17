@@ -11,6 +11,8 @@ export const VI_LOOKS: Record<string, string> = {
   'No ears': 'Không tai',
   'Cat ears': 'Tai mèo',
   'Bunny ears': 'Tai thỏ',
+  'Bear ears': 'Tai gấu',
+  'Fox ears': 'Tai cáo',
   'Buy': 'Mua',
   'Back to mine': 'Trở lại như cũ',
   'Wear': 'Dùng',

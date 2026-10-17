@@ -95,7 +95,10 @@ test('strength: a crowd controller in the middle of the table, and nobody else m
   assert.ok(rank >= 6 && rank <= 12, `rank ${rank} of ${all.length}`);
   // It is the best at nothing, so the 100 of every axis (and with it every other disguise's score and price) is what it was.
   for (const axis of AXES) { assert.ok(p.raw[axis] < axisBest()[axis], axis); assert.ok(p.scores[axis] < 100, axis); assert.ok(p.raw[axis] > 0, `${axis}: it does a little of everything`); }
-  assert.deepEqual(Object.fromEntries(all.filter(x => x.id !== ID).map(x => [x.id, ITEMS[x.id].price])), { dz_superhero: 600, dz_ninja: 550, dz_mage: 410, dz_knight: 480, dz_mecha: 530, dz_dino: 300, dz_fairy: 480, dz_army: 380, dz_navy: 400, dz_aodai: 420, dz_aodai_man: 310, dz_usa: 510, dz_vietnam: 320, dz_pirate: 300, dz_vampire: 440, dz_snowman: 530 });
+  const legacyPrices = { dz_superhero: 600, dz_ninja: 550, dz_mage: 410, dz_knight: 480, dz_mecha: 530, dz_dino: 300, dz_fairy: 480, dz_army: 380, dz_navy: 400, dz_aodai: 420, dz_aodai_man: 310, dz_usa: 510, dz_vietnam: 320, dz_pirate: 300, dz_vampire: 440, dz_snowman: 530 };
+  assert.deepEqual(Object.fromEntries(all.filter(x => Object.hasOwn(legacyPrices, x.id)).map(x => [x.id, ITEMS[x.id].price])), legacyPrices);
+  // The four later combinations have their own purchase, balance and legacy-chart regressions in everyday-disguises.test.ts.
+  assert.deepEqual(all.filter(x => x.id !== ID && !Object.hasOwn(legacyPrices, x.id)).map(x => x.id).sort(), ['dz_swimmer', 'dz_kpop', 'dz_yoga', 'dz_nurse'].sort());
   assert.equal(ITEMS[ID].price, Math.round(p.total / 6) * 10); assert.equal(ITEMS[ID].sell, Math.round(ITEMS[ID].price! * .55 / 10) * 10);
 });
 
@@ -110,7 +113,7 @@ test('the item: a rare disguise sold at the outfitters for energy and three mate
 test('the art: its pieces are in disguises.glb with a part tag each, within the triangle budget, and nothing in it glows', () => {
   const bytes = readFileSync(new URL('../public/assets/models/disguises.glb', import.meta.url)), length = bytes.readUInt32LE(12), doc = JSON.parse(bytes.toString('utf8', 20, 20 + length));
   assert.ok(bytes.length <= 900 * 1024, `disguises.glb is ${bytes.length} bytes (build_hero.py DZ_GLB_LIMIT)`);
-  const roots = doc.scenes[doc.scene ?? 0].nodes.map((i: number) => doc.nodes[i]); assert.equal(roots.length, 17);
+  const roots = doc.scenes[doc.scene ?? 0].nodes.map((i: number) => doc.nodes[i]); assert.equal(roots.length, Object.keys(DISGUISES).length);
   const root = roots.find((n: { name: string }) => n.name === ID); assert.ok(root, 'dz_dawnstar is in the kit');
   const pieces = root.children.map((i: number) => doc.nodes[i]) as { name: string; mesh: number }[], tags = pieces.map(p => p.name.split('@')[1]).sort();
   assert.deepEqual([...new Set(tags)], ['arm-left', 'arm-right', 'body', 'hand-right', 'head', 'leg-left', 'leg-right']);

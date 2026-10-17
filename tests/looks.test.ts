@@ -62,9 +62,10 @@ test('a grown friend is drawn at its stage, and the friend panel shows the stage
 // ----------------------------------------------------------------- looks
 test('looks: body, height, ears and head decoration combine; options are bought once, for every body, and switching is free', () => {
   const s = classic(M.newGame()); s.energy = 1000;
-  assert.equal(LOOK_IDS.length, 6 * 5 * 3 * 13); assert.equal(new Set(LOOK_IDS).size, LOOK_IDS.length);
+  assert.equal(LOOK_IDS.length, 6 * 5 * 5 * 13); assert.equal(new Set(LOOK_IDS).size, LOOK_IDS.length);
   assert.equal(lookOf(s), DEFAULT_LOOK); assert.equal(DEFAULT_LOOK, 'boy-chibi-none-bare');
   assert.deepEqual(ROWS.body, ['boy', 'girl', 'man', 'woman', 'sturdy', 'slim']); assert.deepEqual(ROWS.height, ['tiny', 'chibi', 'teen', 'tall', 'grown']);
+  assert.deepEqual(ROWS.ears, ['none', 'cat', 'bunny', 'bear_ears', 'fox_ears']);
   assert.equal(DECOS.length, 12); assert.deepEqual(ROWS.deco, ['bare', ...DECOS]);
   for (const id of LOOK_IDS) assert.equal(joinLook(splitLook(id)), id);
   for (const row of Object.values(ROWS)) for (const o of row) assert.equal(ROWS[rowOf(o)], row, `${o} belongs to one row`);
@@ -105,6 +106,48 @@ test('looks are saved; first-builder ids and old single looks migrate; tampered 
   assert.deepEqual(parseLooks({ owned: ['tall', 'x', 'tall', 'girl'], style: 'girl-chibi-bunny-bare' }), { owned: ['tall'], style: DEFAULT_LOOK }, 'a look not owned is not worn; free options are never stored');
   assert.deepEqual(parseLooks({ owned: ['fox'], style: 'boy-chibi-none-panda' }), { owned: ['fox'], style: DEFAULT_LOOK }, 'an unbought hood is not worn');
   assert.equal(parseLooks('tall'), undefined); assert.equal(lookOf({ looks: { owned: [], style: 'nonsense' as never } }), DEFAULT_LOOK);
+});
+
+test('starter cat ears are owned for free and can be removed and worn again without a purchase', () => {
+  const s = M.newGame();
+  assert.equal(lookOf(s), 'girl-tall-cat-bare'); assert.equal(s.energy, 0);
+  assert.equal(lookPrice(s, 'boy-tall-cat-bare'), 0);
+  assert.ok(act(s, 'wearLook', { id: 'girl-tall-none-bare' }));
+  assert.ok(act(s, 'wearLook', { id: 'boy-tall-cat-bare' }));
+  assert.equal(s.energy, 0); assert.deepEqual(s.looks!.owned, ['tall', 'cat']);
+  assert.deepEqual(M.parseSave(JSON.stringify(s))!.looks, s.looks);
+});
+
+test('bear and fox ears buy once across bodies, save correctly and remain separate from their hoods', () => {
+  for (const ears of ['bear_ears', 'fox_ears'] as const) {
+    const s = M.newGame(); s.energy = 149;
+    assert.equal(OPTIONS[ears].price, 150); assert.equal(rowOf(ears), 'ears');
+    assert.equal(buyLook(s, ears), false); assert.equal(s.energy, 149);
+    s.energy = 500; assert.ok(act(s, 'buyLook', { id: ears }));
+    assert.equal(s.energy, 350); assert.equal(splitLook(lookOf(s)).ears, ears);
+    assert.ok(act(s, 'wearLook', { id: `sturdy-tall-${ears}-bare` }));
+    assert.equal(s.energy, 350, 'owned ears transfer to another body without charge');
+    const back = M.parseSave(JSON.stringify(s))!; assert.deepEqual(back.looks, s.looks);
+    assert.equal(ownsLook(back, `girl-tall-${ears}-bare`), true);
+    const hood = ears === 'bear_ears' ? 'bear' : 'fox';
+    assert.equal(rowOf(hood), 'deco'); assert.equal(ownsLook(back, `girl-tall-none-${hood}`), false);
+    assert.ok(act(s, 'buyLook', { id: hood }));
+    assert.deepEqual(splitLook(lookOf(s)), { body: 'sturdy', height: 'tall', ears, deco: hood });
+    const hoodOnly = M.newGame(); hoodOnly.energy = 500; assert.ok(buyLook(hoodOnly, hood));
+    assert.equal(lookPrice(hoodOnly, `girl-tall-${ears}-${hood}`), 150, 'a hood never unlocks its matching ears');
+  }
+});
+
+test('existing saved appearances retain their exact style and ownership instead of receiving the new starter look', () => {
+  for (const looks of [
+    { owned: ['tall'], style: 'girl-tall-none-bare' },
+    { owned: ['teen', 'bunny', 'owl'], style: 'boy-teen-bunny-owl' },
+  ]) {
+    const old = { ...M.newGame(), looks };
+    const loaded = M.parseSave(JSON.stringify(old))!;
+    assert.deepEqual(loaded.looks, looks); assert.equal(loaded.looks!.owned.includes('cat'), false);
+  }
+  assert.deepEqual(parseLooks({ owned: ['tall', 'bear'], style: 'girl-tall-bear_ears-bare' }), { owned: ['tall', 'bear'], style: DEFAULT_LOOK }, 'a similarly named hood does not authorise new ears');
 });
 
 // -------------------------------------------- every wearable on every combination
@@ -192,12 +235,12 @@ test('every wearable (hats, outfits, boots, weapons, disguises) attaches to ever
 const partTris = (parts: ReturnType<typeof glb>, p: string) => { const n = parts.nodes[parts.index(p)], m = n.mesh ?? parts.nodes[n.children![0]].mesh!; return parts.doc.meshes[m].primitives.reduce((k: number, q: { indices: number }) => k + parts.doc.accessors[q.indices].count / 3, 0); };
 test('ears and hoods sit on the head and tails on the back at every height and build; triangles stay near the hero, 7 meshes per body', () => {
   const parts = glb('hero-parts.glb'), base = glb('hero.glb');
-  for (const name of ['ears-cat', 'ears-bunny', 'tail-cat', 'tail-bunny', ...DECOS.map(d => 'deco-' + d)]) assert.ok(parts.index(name) >= 0, name);
+  for (const name of [...ROWS.ears.filter(e => e !== 'none').flatMap(e => ['ears-' + e, 'tail-' + e]), ...DECOS.map(d => 'deco-' + d)]) assert.ok(parts.index(name) >= 0, name);
   const partBox = (name: string) => { const i = parts.index(name), b = new T.Box3(); for (const [j, n] of parts.nodes.entries()) if ((j === i || parts.parent.get(j) === i) && n.mesh !== undefined) b.union(parts.box(j)); return b; };
   const report: string[] = [];
   for (const { file, body, id } of BODIES) {
     const hero = built(file, body), fit = fitOf(id), headBox = hero.box('head'), bodyBox = hero.box('body');
-    for (const ears of ['cat', 'bunny']) {
+    for (const ears of ROWS.ears.filter(e => e !== 'none')) {
       const e = place(partBox('ears-' + ears), 'head', fit.head, hero.at('head'), hero.g.scale(hero.g.index('head'))), t = place(partBox('tail-' + ears), 'body', fit.tail ?? fit.body, hero.at('body'), hero.g.scale(hero.g.index('body')));
       assert.ok(e.intersectsBox(headBox) && e.max.y > headBox.max.y, `${id}: ${ears} ears rise from the head`);
       assert.ok(t.intersectsBox(bodyBox.clone().expandByScalar(.05)) && t.min.z < bodyBox.min.z - .02, `${id}: ${ears} tail pokes out at the back`);

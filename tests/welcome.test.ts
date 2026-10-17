@@ -28,9 +28,10 @@ test('three profile slots; the first keeps the original save key', () => {
   assert.equal(new Set([0, 1, 2].map(slotKey)).size, 3);
 });
 
-test('a new explorer is a tall girl; helpers are girls who start small and grow with time and jobs', async () => {
-  const s = M.newGame(); assert.equal(s.looks!.style, 'girl-tall-none-bare'); assert.deepEqual(s.looks!.owned, ['tall']);
-  assert.equal(M.parseSave(JSON.stringify(s))!.looks!.style, 'girl-tall-none-bare');
+test('a new explorer is a tall girl with freely owned cat ears; helpers keep their own appearances and growth', async () => {
+  const s = M.newGame(); assert.equal(s.looks!.style, 'girl-tall-cat-bare'); assert.deepEqual(s.looks!.owned, ['tall', 'cat']);
+  assert.equal(s.energy, 0, 'the starter appearance does not spend energy');
+  assert.deepEqual(M.parseSave(JSON.stringify(s))!.looks, s.looks);
   const old = JSON.parse(JSON.stringify(s)); delete old.looks; assert.equal(M.parseSave(JSON.stringify(old))!.looks, undefined, 'older saves keep the default hero');
   F.welcomeStart(s, false); const p = F.friendOf(s, 'pepper')!; assert.equal(p.look, 'girl-chibi-none-bare'); assert.equal(F.friendStage(p), 0);
   const { friendHeight } = await import('../src/growth.ts'); assert.ok(friendHeight(0) < friendHeight(1) && friendHeight(1) < friendHeight(2));

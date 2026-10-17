@@ -16,8 +16,8 @@ const read = (file: string) => readFileSync(new URL(`../${file}`, import.meta.ur
 const moves = Object.keys(DISGUISES).flatMap(id => [0, 1, 2, 3, 4].map(slot => ({ id, slot, effect: slot ? DISGUISE_KITS[id]?.[slot - 1] : undefined })));
 const buffers = (sections = GUST_SECTIONS + 4) => ({ position: new Float32Array(sections * 6), trail: new Float32Array(sections * 4), tint: new Float32Array(sections * 8) });
 
-test('every one of the 85 moves has a wind class: 17 disguises x (the basic attack + 4 skills), no skill without a row and no row without a skill', () => {
-  assert.equal(Object.keys(DISGUISES).length, 17); assert.equal(moves.length, 85);
+test('every disguise attack and skill has a wind class, including shared effect kits', () => {
+  assert.equal(Object.keys(DISGUISES).length, 21); assert.equal(moves.length, 105);
   for (const { id, slot, effect } of moves) {
     const cls = windClass(id, slot, DISGUISES[id].weapon.kind);
     assert.ok(cls && WIND_CLASSES.includes(cls), `${id} ${slot ? `skill ${slot} (${effect})` : 'basic attack'} has no wind class: add it to skill-wind.ts SKILL_WIND (a spell or a shot is 'none')`);
@@ -40,9 +40,11 @@ test('the audit: which moves swing, thrust, sweep, spin, slam or dash, and which
     dz_aodai: ['none', 'none', 'dash', 'sweep', 'none'], dz_aodai_man: ['swing', 'swing', 'none', 'spin', 'none'], dz_usa: ['none', 'dash', 'none', 'none', 'none'],
     dz_vietnam: ['none', 'none', 'dash', 'slam', 'none'], dz_pirate: ['none', 'none', 'thrust', 'none', 'none'], dz_vampire: ['swing', 'none', 'none', 'none', 'none'],
     dz_snowman: ['none', 'none', 'none', 'none', 'none'], dz_dawnstar: ['none', 'sweep', 'none', 'dash', 'none'],
+    dz_swimmer: ['thrust', 'dash', 'none', 'none', 'none'], dz_kpop: ['none', 'none', 'dash', 'none', 'none'],
+    dz_yoga: ['thrust', 'sweep', 'none', 'none', 'spin'], dz_nurse: ['none', 'none', 'none', 'none', 'none'],
   });
   const windy = moves.filter(m => windClass(m.id, m.slot, DISGUISES[m.id].weapon.kind) !== 'none');
-  assert.equal(windy.length, 25, '7 basic attacks and 18 skills'); assert.equal(windy.filter(m => m.slot).length, 18);
+  assert.equal(windy.length, 31, '9 basic attacks and 22 skills'); assert.equal(windy.filter(m => m.slot).length, 22);
 });
 
 test('the size rule: no wind is drawn past what its move hits (within 15%), and each lines up with its skill\'s own numbers', () => {

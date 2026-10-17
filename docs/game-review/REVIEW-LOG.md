@@ -161,3 +161,11 @@ Source: cute_game commit 2e027b33cd42a9d6904f41a4aa8f88e571719c56, applied over 
 Boat adaptations: fishing points to the cabin Magic Mirror; the actual shared Colossus settings route uses the reminder while offline lid controls remain available. The Trophy wall retains its missing-friends board even without trophies. Existing cabin station routing is preserved.
 
 Validation: 2,208 tests passed, zero failed; 77 skipped. TypeScript/Vite production build and offline-cache generation passed. Browser smoke at 1280 × 720 verified the first fishing introduction, repeated nonmodal reminders and unobstructed HUD placement. Optional browser suites, physical devices, authenticated multiplayer and player acceptance remain unrun.
+
+## Ears and everyday disguises for 2026 October 17
+
+Baseline: ba81fc7877eb77871c22d242f8d080828011cf51. New adventures start with owned, free cat ears; bear and fox ears are separate options from hoods. Added swimmer, K-pop singer, yoga teacher and nurse disguises, each with a model, portrait, four established skill effects and Vietnamese text. Old appearance parsing, disguise prices, radar maxima and recipe indices are preserved. The original compressed model streams and definitions remain intact; the appended art regenerates identically.
+
+Validation: 2,233 tests passed, zero failed; 77 skipped, with eight test processes. All 1,170 previous look combinations retain their saved styles; 1,950 combinations now exist. Pages production build passed. Desktop browser checks verified starter cat ears, owned status, both new ear previews, all four catalog offers and costume try-on switching. Purchase/equip/save, skill behavior, model fit and image contracts have automated coverage. Physical devices, a complete natural-input costume purchase journey, authenticated multiplayer and player acceptance remain unrun.
+
+The first broad run exposed two outdated catalog assertions, which were corrected while retaining the original price/translation protections. A later timing check under concurrent browser load exceeded its existing budget; it passed in isolation (0.686 ms load-adjusted) and in the final full run. No timing budget or AI behavior was changed.

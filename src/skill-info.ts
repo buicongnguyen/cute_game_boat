@@ -125,6 +125,12 @@ export const DISGUISE_INFO: Record<string, readonly string[]> = {
     `${DZ.starshower.count} stars fall in a ring ${DZ.starshower.ring} m around you, ×${DZ.starshower.power} damage within ${DZ.starshower.radius} m each; then a great dawn star bursts: ×${DZ.starshower.finalPower} damage within ${DZ.starshower.finalRadius} m, and enemies there are stunned ${DZ.starshower.stun} s.`],
 };
 
+// Shared effects share their number-derived descriptions and translations, including their actual visual theme.
+DISGUISE_INFO.dz_swimmer = [DISGUISE_INFO.dz_navy[1], DISGUISE_INFO.dz_mecha[3], DISGUISE_INFO.dz_navy[2], DISGUISE_INFO.dz_navy[3]];
+DISGUISE_INFO.dz_kpop = [DISGUISE_INFO.dz_aodai[0], DISGUISE_INFO.dz_aodai[1], DISGUISE_INFO.dz_usa[2], DISGUISE_INFO.dz_usa[3]];
+DISGUISE_INFO.dz_yoga = [DISGUISE_INFO.dz_aodai[2], DISGUISE_INFO.dz_mage[1], DISGUISE_INFO.dz_fairy[0], DISGUISE_INFO.dz_aodai_man[2]];
+DISGUISE_INFO.dz_nurse = [DISGUISE_INFO.dz_aodai[0], DISGUISE_INFO.dz_usa[1], DISGUISE_INFO.dz_fairy[0], DISGUISE_INFO.dz_army[3]];
+
 export interface SkillView { name: string; icon: string; cd: number }
 /** The Lob's splash and the Quake's ring at an upgrade level, as combat.ts casts them (the moves of moves.ts). */
 export const lobSplash = (level: number) => MOVES.lob.splash + skillTuning(0, level).radius;

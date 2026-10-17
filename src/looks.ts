@@ -2,7 +2,7 @@
  * The explorer's character builder ("looks"), at the bedroom mirror: four independent choices that combine.
  *   body   boy | girl | man | woman | sturdy | slim   (free: who you are is never paywalled)
  *   height tiny | chibi | teen | tall | grown  (tiny 80, teen 80, tall 120, grown 160 energy)
- *   ears   none | cat | bunny                  (cat 150, bunny 150; each comes with its tail)
+ *   ears   none | cat | bunny | bear_ears | fox_ears  (150 each; each comes with its tail)
  *   deco   bare | twelve animal hoods          (110-140 energy)
  * Builds: sturdy is the boy file made broader at load, slim the girl file made slender (BUILD), so a build reads from the
  * high game camera under every hat and hood (hair styles would hide under them) and costs no new files. Grown is the most
@@ -29,7 +29,7 @@ export type Body = 'boy' | 'girl' | 'man' | 'woman' | 'sturdy' | 'slim';
 /** The bodies that have their own Blender files (sturdy and slim are builds of the boy's and the girl's). */
 export type FileBody = 'boy' | 'girl' | 'man' | 'woman';
 export type Height = 'tiny' | 'chibi' | 'teen' | 'tall' | 'grown';
-export type Ears = 'none' | 'cat' | 'bunny';
+export type Ears = 'none' | 'cat' | 'bunny' | 'bear_ears' | 'fox_ears';
 export type Deco = 'bare' | 'bear' | 'panda' | 'fox' | 'kitty' | 'frog' | 'piggy' | 'chick' | 'koala' | 'tiger' | 'penguin' | 'monkey' | 'owl';
 export type LookId = `${Body}-${Height}-${Ears}-${Deco}`;
 export type LookOption = Body | Height | Ears | Deco;
@@ -39,7 +39,7 @@ export interface Looks { owned: LookOption[]; style: LookId }
 export interface Fit { scale: [number, number, number]; offset: [number, number, number] }
 
 export const DECOS = ['bear', 'panda', 'fox', 'kitty', 'frog', 'piggy', 'chick', 'koala', 'tiger', 'penguin', 'monkey', 'owl'] as const;
-export const ROWS: Record<LookRow, readonly LookOption[]> = { body: ['boy', 'girl', 'man', 'woman', 'sturdy', 'slim'], height: ['tiny', 'chibi', 'teen', 'tall', 'grown'], ears: ['none', 'cat', 'bunny'], deco: ['bare', ...DECOS] };
+export const ROWS: Record<LookRow, readonly LookOption[]> = { body: ['boy', 'girl', 'man', 'woman', 'sturdy', 'slim'], height: ['tiny', 'chibi', 'teen', 'tall', 'grown'], ears: ['none', 'cat', 'bunny', 'bear_ears', 'fox_ears'], deco: ['bare', ...DECOS] };
 export const ROW_NAMES: Record<LookRow, string> = { body: 'Body', height: 'Height', ears: 'Ears', deco: 'Hood' }; // every head decoration is an animal hood: the short name fits beside a phone's tiles
 /**
  * Every option has a Blender portrait at assets/icons/looks/<id>.webp (build_hero_styles.py render_option_icons: the
@@ -49,6 +49,7 @@ export const OPTIONS: Record<LookOption, { name: string; price: number; icon: st
   boy: { name: 'Boy', price: 0, icon: '👦' }, girl: { name: 'Girl', price: 0, icon: '👧' }, man: { name: 'Man', price: 0, icon: '👨' }, woman: { name: 'Woman', price: 0, icon: '👩' }, sturdy: { name: 'Sturdy', price: 0, icon: '💪' }, slim: { name: 'Slim', price: 0, icon: '🌿' },
   tiny: { name: 'Tiny', price: 80, icon: '👶' }, chibi: { name: 'Chibi', price: 0, icon: '🧒' }, teen: { name: 'Teen', price: 80, icon: '🧑' }, tall: { name: 'Tall', price: 120, icon: '🧍' }, grown: { name: 'Grown-up', price: 160, icon: '🚶' },
   none: { name: 'No ears', price: 0, icon: '🙂' }, cat: { name: 'Cat ears', price: 150, icon: '🐱' }, bunny: { name: 'Bunny ears', price: 150, icon: '🐰' },
+  bear_ears: { name: 'Bear ears', price: 150, icon: '🐻' }, fox_ears: { name: 'Fox ears', price: 150, icon: '🦊' },
   bare: { name: 'No hood', price: 0, icon: '✨' },
   bear: { name: 'Bear hood', price: 110, icon: '🐻' }, panda: { name: 'Panda hood', price: 130, icon: '🐼' }, fox: { name: 'Fox hood', price: 120, icon: '🦊' },
   kitty: { name: 'Kitty hood', price: 110, icon: '🐱' }, frog: { name: 'Frog hood', price: 110, icon: '🐸' }, piggy: { name: 'Piggy hood', price: 110, icon: '🐷' },

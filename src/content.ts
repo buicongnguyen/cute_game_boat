@@ -1387,6 +1387,22 @@ const ITEM_FACTS: Record<string, any> = {
             "speed": 0.1
         }
     },
+    "dz_swimmer": {
+        "name": "Sporty swimmer", "type": "disguise", "sell": 230, "rare": true,
+        "stats": { "atk": 6, "def": 8, "hp": 40, "speed": 0.08 }
+    },
+    "dz_kpop": {
+        "name": "K-pop singer", "type": "disguise", "sell": 280, "rare": true,
+        "stats": { "atk": 10, "crit": 0.06, "speed": 0.05 }
+    },
+    "dz_yoga": {
+        "name": "Yoga teacher", "type": "disguise", "sell": 170, "rare": true,
+        "stats": { "hp": 60, "def": 12, "regen": 2 }
+    },
+    "dz_nurse": {
+        "name": "Kindhearted nurse", "type": "disguise", "sell": 210, "rare": true,
+        "stats": { "hp": 80, "def": 8, "regen": 3 }
+    },
     "hat_cowboy": {
         "name": "Cowboy hat",
         "type": "hat",
@@ -3609,6 +3625,49 @@ const DISGUISE_FACTS: Record<string, any> = {
         ]
     }
 };
+// Four everyday heroes combine established effects; cooldowns keep the existing profile maxima and prices stable.
+Object.assign(DISGUISE_FACTS, {
+    "dz_swimmer": {
+        "name": "Sporty swimmer", "emoji": "🏊", "color": "#28b7c5",
+        "weapon": { "kind": "fist", "range": 1.4, "cd": 0.4 },
+        "skills": [
+            { "name": "Wave dash", "icon": "🌊", "cd": 7 },
+            { "name": "Safety shield", "icon": "🛟", "cd": 16 },
+            { "name": "Pool whistle", "icon": "📣", "cd": 12 },
+            { "name": "Guiding lighthouse", "icon": "🔦", "cd": 18 }
+        ]
+    },
+    "dz_kpop": {
+        "name": "K-pop singer", "emoji": "🎤", "color": "#b06edb",
+        "weapon": { "kind": "gun", "range": 9, "cd": 0.5, "shot": "star" },
+        "skills": [
+            { "name": "Petal opening", "icon": "🌸", "cd": 7 },
+            { "name": "Ribbon dance step", "icon": "🎀", "cd": 9 },
+            { "name": "Stage spotlight", "icon": "✨", "cd": 14 },
+            { "name": "Encore fireworks", "icon": "🎆", "cd": 18 }
+        ]
+    },
+    "dz_yoga": {
+        "name": "Yoga teacher", "emoji": "🧘", "color": "#91ba78",
+        "weapon": { "kind": "fist", "range": 1.4, "cd": 0.5 },
+        "skills": [
+            { "name": "Breathing breeze", "icon": "🍃", "cd": 7 },
+            { "name": "Mindful blink", "icon": "✨", "cd": 8 },
+            { "name": "Restorative flower ring", "icon": "🪷", "cd": 14 },
+            { "name": "Grounding ink circle", "icon": "⭕", "cd": 16 }
+        ]
+    },
+    "dz_nurse": {
+        "name": "Kindhearted nurse", "emoji": "💗", "color": "#68c1ba",
+        "weapon": { "kind": "gun", "range": 8, "cd": 0.6, "shot": "bubble" },
+        "skills": [
+            { "name": "Care petals", "icon": "🌸", "cd": 7 },
+            { "name": "Heart guard", "icon": "🛡️", "cd": 12 },
+            { "name": "Recovery flower ring", "icon": "💖", "cd": 15 },
+            { "name": "Care supply drop", "icon": "🪂", "cd": 18 }
+        ]
+    }
+});
 const FISH_WEIGHTS_RAW: Record<string, [
     string,
     number
@@ -4085,6 +4144,7 @@ for (const item of Object.values(ITEMS))
             delete item[key];
 // Original English labels keep the interface consistent without changing IDs or balance.
 const englishNames: Record<string, string> = {
+    dz_swimmer: 'Sporty swimmer', dz_kpop: 'K-pop singer', dz_yoga: 'Yoga teacher', dz_nurse: 'Kindhearted nurse',
     ...Object.fromEntries(Object.entries(FRUIT_FACTS).map(([id, fact]) => [id, fact.name])),
     radish: 'Radish', carrot: 'Carrot', pumpkin: 'Pumpkin', mint: 'Mint', chili: 'Chili', candy: 'Candy bloom', bean: 'Shield bean', star: 'Star fruit', berry: 'Berry', coffee: 'Coffee bean', moonflower: 'Moonflower', magnetmelon: 'Magnet melon', melon: 'Melon', clover: 'Lucky clover', glowshroom: 'Glow mushroom', iceberry: 'Ice berry', goldcorn: 'Golden corn', dragonfruit: 'Dragon fruit', rainbowrose: 'Rainbow rose',
     pet_dog: 'Garden guard dog',
@@ -4125,7 +4185,7 @@ for (const [id, planet] of Object.entries(PLANETS)) {
 const skillLabels: Record<string, string[]> = { dz_army: ['Cork popgun', 'Sandbag wall', 'Signal flare', 'Supply drop'], dz_navy: ['Anchor swing', 'Wave ride', "Bosun's whistle", 'Lighthouse beam'], dz_aodai: ['Lotus petals', 'Silk ribbon glide', 'Paper fan breeze', 'Lantern festival'], dz_aodai_man: ['Dragon fan', 'Kite glide', 'Ink circle', 'Dragon dance'], dz_usa: ['Eagle strike', 'Star shield', 'Liberty torch', 'Fireworks finale'], dz_vietnam: ['Golden star burst', 'Bamboo vault', 'Bronze drum', 'Great golden star'], dz_ninja: ['Shadow clones', 'Vanish', 'Shadow strike', 'Smoke bomb'], dz_mage: ['Great fireball', 'Blink', 'Sheep spell', 'Black hole'], dz_knight: ['Shield block', "Knight's charge", 'Challenge', 'Sky sword'], dz_mecha: ['Tank mode', 'Tesla turret', 'Homing missiles', 'Energy shield'], dz_dino: ['Devour', 'Tail sweep', 'Terrifying roar', 'Giant form'], dz_fairy: ['Healing flower ring', 'Butterfly float', 'Fairy charm', 'Binding tree'], dz_pirate: ['Deck cannon', 'Grappling hook', 'Scout parrot', 'Ship broadside'], dz_superhero: ['Take flight', 'Meteor dive', 'Laser gaze', 'Boulder throw'], dz_vampire: ['Life drain', 'Bat form', 'Bat swarm', 'Blood moon'], dz_snowman: ['Rolling snowball', 'Snow decoy', 'Ice rink', 'Ice age'], dz_dawnstar: ['Ribbon lasso', 'Morning glow', 'Sparkle step', 'Star shower'] };
 for (const [id, disguise] of Object.entries(DISGUISES)) {
     disguise.name = ITEMS[id].name;
-    disguise.skills.forEach((skill, i) => skill.name = skillLabels[id][i]);
+    disguise.skills.forEach((skill, i) => skill.name = skillLabels[id]?.[i] ?? skill.name);
 }
 for (const [id, collection] of Object.entries(COLLECTIONS))
     collection.name = planetLabels[sourcePlanet(id) as PlanetId];
@@ -4169,3 +4229,26 @@ LOOT_TABLES.forest_raptor=[['feather',1,1,2],['meat',.7,1,2]];
 for (const [id, role] of Object.entries(PET_ROLES)) { const item = ITEMS[id]; if (item?.pet) item.pet = { ...item.pet, dmg: role.dmg, cd: role.cd }; }
 // Dyes (dye-skins.ts): energy-priced recolours of existing gear, generated last so every base item exists.
 registerDyes(ITEMS);
+
+// Append rather than insert recipes: pending actions and older saves retain every prior recipe index.
+// Costs follow the existing all-round disguise strength formula (tests/disguise-price.test.ts).
+const everydayDisguises = [
+    { id: 'dz_swimmer', cost: 420, mats: { leather: 4, sugar: 3 } },
+    { id: 'dz_kpop', cost: 510, mats: { leather: 4, gear: 4 } },
+    { id: 'dz_yoga', cost: 310, mats: { leather: 3, vine: 4 } },
+    { id: 'dz_nurse', cost: 390, mats: { leather: 4, bone: 4 } },
+];
+const everydayDescriptions: Record<string, string> = {
+    dz_swimmer: 'Wave mobility and a guiding lighthouse. +6 attack · +8 defense · +40 health · +8% speed. Swimming and oxygen bonuses still come from flippers.',
+    dz_kpop: 'Petals, a ribbon step, a damage spotlight and fireworks. +10 attack · +6% critical chance · +5% speed.',
+    dz_yoga: 'A breeze, a blink, a healing flower ring and a binding ink circle. +12 defense · +60 health · +2 regeneration.',
+    dz_nurse: 'Healing petals, a shield, a recovery ring and supply crates. +8 defense · +80 health · +3 regeneration. Healing restores your health, not other explorers.',
+};
+const disguiseShop = SHOP_CATEGORIES.find(category => category.tab === 'Disguises')!;
+for (const offer of everydayDisguises) {
+    disguiseShop.items.push(offer);
+    ITEMS[offer.id].price = offer.cost;
+    ITEMS[offer.id].materials = offer.mats;
+    ITEMS[offer.id].desc = everydayDescriptions[offer.id];
+    RECIPES.push({ result: offer.id, energy: offer.cost, materials: offer.mats, category: 'Disguises', station: 'shop', count: 1 });
+}
