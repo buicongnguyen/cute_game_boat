@@ -92,8 +92,8 @@ function waterMaterial(key: string) {
 }
 
 /** The bank and water of a round pond of water radius `r` whose surface is at `surface`. */
-export function buildPond(r: number, surface: number, waterId: string, rectangleDepth?: number) {
-  if (rectangleDepth) return buildRectangularPond(r, rectangleDepth, surface, waterId);
+export function buildPond(r: number, surface: number, waterId: string, rectangleDepth?: number, frame?: T.Object3D) {
+  if (rectangleDepth) return buildRectangularPond(r, rectangleDepth, surface, waterId, frame);
   const look = pondLook(waterId), colour = (c: Ring[2]) => Array.isArray(c) ? scratch.set(look[c[0]]).lerp(other.set(look[c[1]]), c[2]).clone() : new T.Color(look[c]);
   const at = (o: number | ((r: number) => number)) => Math.max(0, r + (typeof o === 'function' ? o(r) : o));
   const bank = ringMesh(BANK.map(([o, y, c, alpha]) => ({ radius: at(o), y, color: colour(c), alpha })), bankMaterial(waterId));
@@ -110,11 +110,15 @@ export function buildPond(r: number, surface: number, waterId: string, rectangle
 }
 
 /** Rectangular family pond: clear turquoise water over a sandy bed, as in the reference game. */
-function buildRectangularPond(rx:number,rz:number,surface:number,waterId:string) {
+/** With the boat kit's timber `frame` (boat-deck.ts pondFrame) the bank is that frame and the water is clearer, so its teal
+ * floor shows; without it, the flat sand surround. */
+function buildRectangularPond(rx:number,rz:number,surface:number,waterId:string,frame?:T.Object3D) {
  const look=pondLook(waterId),group=new T.Group();group.name='pond';
- const bank=new T.Mesh(new T.PlaneGeometry(rx*2+.9,rz*2+.9).rotateX(-Math.PI/2),toonMaterial({color:look.sand}));
- bank.name='pond-bank';bank.position.y=.015;bank.receiveShadow=true;bank.raycast=()=>{};
- const water=new T.Mesh(new T.PlaneGeometry(rx*2,rz*2).rotateX(-Math.PI/2),toonMaterial({color:'#5fd0f5',transparent:true,opacity:.65,depthWrite:false}));
+ let bank:T.Object3D;
+ if(frame){bank=frame;}
+ else{const sand=new T.Mesh(new T.PlaneGeometry(rx*2+.9,rz*2+.9).rotateX(-Math.PI/2),toonMaterial({color:look.sand}));sand.position.y=.015;sand.receiveShadow=true;sand.raycast=()=>{};bank=sand;}
+ bank.name='pond-bank';
+ const water=new T.Mesh(new T.PlaneGeometry(rx*2,rz*2).rotateX(-Math.PI/2),toonMaterial({color:frame?'#4fd2f2':'#5fd0f5',transparent:true,opacity:frame?.5:.65,depthWrite:false}));
  water.name='pond-water';water.position.y=surface;water.renderOrder=1;group.add(bank,water);
  return {group,bank,water,look};
 }

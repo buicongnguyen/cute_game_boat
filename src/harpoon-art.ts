@@ -1,8 +1,20 @@
 import * as T from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
+import { boatDeckKit } from './boat-deck.ts';
 
-/** An 84-triangle three-pronged projectile, pointing along local +Z. Caller owns and disposes both resources. */
+/**
+ * The three-pronged harpoon, held and thrown, pointing along local +Z. Caller owns and disposes both resources. With the
+ * boat kit loaded it is the Blender model (198 triangles: red grip, brass collar and bar, white prongs, teal tips) merged
+ * into one vertex-coloured mesh; otherwise the original 84-triangle box fork.
+ */
 export function createHarpoonProjectile(): T.Mesh {
+  const part = boatDeckKit.ready ? boatDeckKit.mergedParts('harpoon')?.[0] : undefined;
+  if (part) {
+    const mesh = new T.Mesh(part.geometry.clone().applyMatrix4(part.matrix), part.material.clone()); mesh.name = 'harpoon-projectile';
+    // Owned copies: drop the kit's shared flag that clone() carries over, so disposal frees them.
+    delete mesh.geometry.userData.sharedKit; delete (mesh.material as T.Material).userData.sharedKit;
+    mesh.geometry.computeBoundingSphere(); mesh.castShadow = mesh.receiveShadow = false; return mesh;
+  }
   const pieces: T.BufferGeometry[] = [];
   const add = (geometry: T.BufferGeometry, color: string) => {
     const c = new T.Color(color), count = geometry.getAttribute('position').count, colors = new Float32Array(count * 3);

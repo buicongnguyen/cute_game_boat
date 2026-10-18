@@ -14,7 +14,7 @@ import { INDOOR_Y } from './house.ts';
 import {atHome,homeRecoveryBonus} from './home-care.ts';
 import { bakeCoverAtlas, coverCards, tickCoverCards, type CoverAtlas } from './cover-cards.ts';
 import { buildGround, shadeField, type GroundDetail } from './ground.ts';
-import { makeDeckHatch, HATCH_SCALE, woodenSafeDeck } from './boat-deck.ts';
+import { makeDeckHatch, HATCH_SCALE, woodenSafeDeck, deckFurniture, pondFrame } from './boat-deck.ts';
 import { inSafeZone, safeClearance, homeFence, HOME_GATES } from './safe-zone.ts';
 import { HOME_POND } from './pond-shape.ts';
 import { buildPond } from './pond-view.ts';
@@ -647,11 +647,13 @@ export class World {
       this.addEntity('travel','Starship station','🚀',this.rocket(),13.5,-3,2);this.obstacle(13.5,-3,1.5);
       for(let i=0;i<this.state.plots.length;i++)this.makePlot(i);
       this.buildPen();
+      // Boat kit rails, gates, cargo and lanterns, batched with the scenery (boat-deck.ts); the village pickets stand in until it loads.
+      const pieces=deckFurniture(),furniture=pieces.length>0;for(const piece of pieces)this.root.add(piece);
       for(const p of homeFence()){
-        const g=this.kit('fence')??group(box('#b18459',.16,1,.16,-1,.5),box('#b18459',.16,1,.16,1,.5),box('#edbe77',2.1,.12,.1,0,.4),box('#edbe77',2.1,.12,.1,0,.8));g.position.set(p.x,0,p.z);g.rotation.y=p.rot;this.root.add(g);
+        if(!furniture){const g=this.kit('fence')??group(box('#b18459',.16,1,.16,-1,.5),box('#b18459',.16,1,.16,1,.5),box('#edbe77',2.1,.12,.1,0,.4),box('#edbe77',2.1,.12,.1,0,.8));g.position.set(p.x,0,p.z);g.rotation.y=p.rot;this.root.add(g);}
         for(const d of [-.6,0,.6])this.obstacle(p.x+Math.cos(p.rot)*d,p.z-Math.sin(p.rot)*d,.42);
       }
-      for(const p of HOME_GATES){const g=this.kit('gate')??group(cyl('#b18c59',.14,.14,3.1,-1.7,1.55),cyl('#b18c59',.14,.14,3.1,1.7,1.55),box('#edc57a',3.75,.2,.2,0,3));g.name='village-gate';g.position.set(p.x,0,p.z);g.rotation.y=p.rot;this.root.add(g);}
+      if(!furniture)for(const p of HOME_GATES){const g=this.kit('gate')??group(cyl('#b18c59',.14,.14,3.1,-1.7,1.55),cyl('#b18c59',.14,.14,3.1,1.7,1.55),box('#edc57a',3.75,.2,.2,0,3));g.name='village-gate';g.position.set(p.x,0,p.z);g.rotation.y=p.rot;this.root.add(g);}
       this.villageTrees=[[-13,-8],[-14,7],[3,-13],[10,-11],[14,5],[-2,15]].map(([x,z])=>this.tree(x,z,.75,true,rng)); // kept: a swing shakes them (village-fun.ts)
       // The home pond first, so fence-side bushes keep off its water.
       this.makePond(HOME_POND.x,HOME_POND.z,HOME_POND.rx);
@@ -721,7 +723,7 @@ export class World {
     // sandy lip, sand fading into the grass) and a translucent water disc whose edge the lip hides (pond-view.ts).
     const id=waterId??(this.planet==='home'?Math.hypot(x,z)<18?'home':zoneAt({x,z})==='swamp'?'swamp':'lake':this.planet),surface=.3,r=radius;
     const rectangle=this.planet==='home'&&x===HOME_POND.x&&z===HOME_POND.z&&r===HOME_POND.rx, rz=rectangle?HOME_POND.rz:r;
-    const {group:pond}=buildPond(r,surface,id,rectangle?rz:undefined);
+    const {group:pond}=buildPond(r,surface,id,rectangle?rz:undefined,rectangle?pondFrame()??undefined:undefined);
     for(let i=0;i<5;i++){const a=i*2.4+.7,d=rz*(.38+(i%3)*.17),pad=cyl('#4fbf3a',.3,.3,.03,Math.cos(a)*d,surface+.02,Math.sin(a)*d,12);pad.scale.z=.85;pond.add(pad);if(i%2===0)pond.add(ball('#ff8fc4',.1,Math.cos(a)*d,surface+.08,Math.sin(a)*d));}
     // Keep the water unobstructed so fish remain visible; fishing takes place on the bank.
     pond.traverse(o=>{o.castShadow=false;});
